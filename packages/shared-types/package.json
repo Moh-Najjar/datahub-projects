@@ -2,7 +2,7 @@
   "name": "@datahub/shared-types",
   "version": "0.1.0",
   "private": true,
-  "description": "Common TypeScript types (locales, identifiers, generic helpers). Types only.",
+  "description": "TypeScript types shared by DataHub applications (types only, no runtime code).",
   "license": "UNLICENSED",
   "type": "module",
   "sideEffects": false,

@@ -14,7 +14,7 @@
     "doctor": "expo-doctor"
   },
   "dependencies": {
-    "@datahub/shared-types": "0.1.0",
+    "@datahub/shared-types": "*",
     "expo": "~58.0.23",
     "expo-constants": "~58.0.15",
     "expo-linking": "~58.0.16",
