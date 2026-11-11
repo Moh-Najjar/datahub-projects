@@ -3,14 +3,14 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { useInView } from 'framer-motion';
-import { AutoCarousel } from '@/components/common/AutoCarousel/AutoCarousel';
-import { Reveal } from '@/components/common/Reveal/Reveal';
-import { Rich } from '@/components/common/Rich/Rich';
+import { AutoCarousel } from '@/shared/components/ui/AutoCarousel';
+import { Reveal } from '@/shared/components/ui/Reveal';
+import { Rich } from '@/shared/components/ui/Rich';
 import { WaveSeparator } from '@/components/common/WaveSeparator/WaveSeparator';
 import type { Counter, HomeContent } from '@/content/home';
 import { CLIENT_LOGOS } from '@/data/logos';
-import { useCountUp } from '@/hooks/useCountUp';
-import { colors } from '@/theme/tokens';
+import { useCountUp } from '@/shared/hooks/useCountUp';
+import { colors } from '@/shared/theme/tokens';
 
 /** "tm-counter style-02": number counting up when scrolled into view, with an uppercase label. */
 function CounterItem({ counter }: { counter: Counter }) {

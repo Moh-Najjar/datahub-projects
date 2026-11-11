@@ -2,16 +2,13 @@ import type { ComponentType } from 'react';
 import { createBrowserRouter, Navigate, type RouteObject } from 'react-router-dom';
 import { ArabicPostRedirect } from '@/pages/Blog/ArabicPostRedirect';
 import { SiteLayout } from '@/components/layout/SiteLayout/SiteLayout';
-import { PAGES } from '@/data/pages';
-import type { RouteHandle } from '@/hooks/useAlternateLocale';
+import { PAGES } from '@/shared/config/pages';
+import type { RouteHandle } from '@/i18n/useAlternateHref';
 import { RouteError } from '@/pages/Errors/RouteError';
-import { LEGACY_REDIRECTS, ROUTES, type RouteKey } from './routes';
+import { LEGACY_REDIRECTS, ROUTES, type RouteKey } from '@/shared/config/routes';
+import type { PageHandle } from '@/shared/hooks/useRouteKey';
 
 type PageModule = Promise<{ default: ComponentType }>;
-
-export interface PageHandle extends RouteHandle {
-  routeKey: RouteKey;
-}
 
 /** Pages with dedicated React implementations. */
 const PAGE_MODULES: Partial<Record<RouteKey, () => PageModule>> = {

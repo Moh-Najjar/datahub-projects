@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
 import type { ReactNode } from 'react';
-import { Reveal } from '@/components/common/Reveal/Reveal';
+import { Reveal } from '@/shared/components/ui/Reveal';
 import { CONTACT_EMAIL, PRIMARY_PHONE } from '@/data/contact';
 import { useLocalized } from '@/i18n/LocaleContext';
 import { UI } from '@/i18n/ui';

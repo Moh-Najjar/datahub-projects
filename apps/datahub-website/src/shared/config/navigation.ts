@@ -1,6 +1,6 @@
-import { EXTERNAL_LINKS, industryAnchor, ROUTES } from '@/app/routes';
+import { EXTERNAL_LINKS, industryAnchor, ROUTES } from '@/shared/config/routes';
 import type { Localized } from '@/i18n/types';
-import type { NavColumn, NavItem, NavLink } from '@/types/navigation';
+import type { NavColumn, NavItem, NavLink } from '@/shared/types/navigation';
 
 /* -------------------------------------------------------------------------- */
 /* Service columns (shared by the mega menu and the footer)                   */

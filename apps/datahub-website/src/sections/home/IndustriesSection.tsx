@@ -1,13 +1,13 @@
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import { industryAnchor } from '@/app/routes';
-import { ButtonLink } from '@/components/common/ButtonLink/ButtonLink';
-import { Reveal } from '@/components/common/Reveal/Reveal';
-import { Rich } from '@/components/common/Rich/Rich';
+import { industryAnchor } from '@/shared/config/routes';
+import { ButtonLink } from '@/shared/components/ui/ButtonLink';
+import { Reveal } from '@/shared/components/ui/Reveal';
+import { Rich } from '@/shared/components/ui/Rich';
 import type { HomeContent } from '@/content/home';
 import { INDUSTRY_ICONS } from '@/data/industries';
-import { INDUSTRY_IDS } from '@/data/navigation';
+import { INDUSTRY_IDS } from '@/shared/config/navigation';
 
 /** "Industries We Impact" — shadowed pill links over a half-width tinted panel ("section-half-bg-01"). */
 export function IndustriesSection({ content }: { content: HomeContent['industries'] }) {

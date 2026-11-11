@@ -14,8 +14,8 @@ const width = Number(widthArg);
 const arabic = localeArg === 'ar';
 const ORIGIN = 'https://datahubanalytics.com';
 
-const routesSrc = await readFile(join(import.meta.dirname, '..', 'src', 'app', 'routes.ts'), 'utf8');
-const pagesSrc = await readFile(join(import.meta.dirname, '..', 'src', 'data', 'pages.ts'), 'utf8');
+const routesSrc = await readFile(join(import.meta.dirname, '..', 'src', 'shared', 'config', 'routes.ts'), 'utf8');
+const pagesSrc = await readFile(join(import.meta.dirname, '..', 'src', 'shared', 'config', 'pages.ts'), 'utf8');
 const routes = [...routesSrc.matchAll(/^\s+(\w+): '(\/[^']*)',/gm)]
   .map((m) => ({ key: m[1]!, path: m[2]! }))
   .filter((r) => !arabic || new RegExp(`\\n  ${r.key}: \\{\\n    locales: \\[[^\\]]*'ar'`).test(pagesSrc));

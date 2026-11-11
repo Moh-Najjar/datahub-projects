@@ -1,9 +1,9 @@
 import Box, { type BoxProps } from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import type { ElementType } from 'react';
-import type { RichText } from '@/types/content';
-import { Reveal } from '../Reveal/Reveal';
-import { Rich } from '../Rich/Rich';
+import type { RichText } from '@/shared/types/content';
+import { Reveal } from '@/shared/components/ui/Reveal';
+import { Rich } from '@/shared/components/ui/Rich';
 
 interface SectionHeadingProps extends Omit<BoxProps, 'title'> {
   /** Small uppercase label above the heading ("OUR SOLUTIONS & SERVICES"). */

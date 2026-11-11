@@ -1,7 +1,7 @@
 import Button, { type ButtonProps } from '@mui/material/Button';
 import EastIcon from '@mui/icons-material/East';
 import { useTheme } from '@mui/material/styles';
-import { SmartLink } from '../SmartLink/SmartLink';
+import { SmartLink } from './SmartLink';
 
 export type ButtonLinkProps = Omit<ButtonProps<typeof SmartLink>, 'component'>;
 

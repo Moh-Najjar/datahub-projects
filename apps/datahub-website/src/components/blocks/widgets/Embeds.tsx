@@ -5,7 +5,7 @@ import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import PlaceIcon from '@mui/icons-material/Place';
-import { VideoPoster } from '@/components/common/VideoPoster/VideoPoster';
+import { VideoPoster } from '@/shared/components/ui/VideoPoster';
 import { AppointmentForm } from '@/components/layout/AppointmentForm/AppointmentForm';
 import { useLocalized } from '@/i18n/LocaleContext';
 import { UI } from '@/i18n/ui';

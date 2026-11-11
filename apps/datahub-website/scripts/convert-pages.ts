@@ -36,8 +36,8 @@ interface Captured {
 /* ------------------------------------------------------------------ registry */
 
 async function loadRegistry(): Promise<Array<{ key: string; path: string; locales: string[] }>> {
-  const routesSrc = await readFile(join(ROOT, 'src', 'app', 'routes.ts'), 'utf8');
-  const pagesSrc = await readFile(join(ROOT, 'src', 'data', 'pages.ts'), 'utf8');
+  const routesSrc = await readFile(join(ROOT, 'src', 'shared', 'config', 'routes.ts'), 'utf8');
+  const pagesSrc = await readFile(join(ROOT, 'src', 'shared', 'config', 'pages.ts'), 'utf8');
   const routes = [...routesSrc.matchAll(/^\s+(\w+): '(\/[^']*)',/gm)].map((m) => ({ key: m[1]!, path: m[2]! }));
   return routes.map((r) => {
     const block = pagesSrc.match(new RegExp(`\\n  ${r.key}: \\{\\n    locales: \\[([^\\]]*)\\]`));

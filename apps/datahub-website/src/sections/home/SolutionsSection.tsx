@@ -9,13 +9,13 @@ import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme, type Theme } from '@mui/material/styles';
 import CheckIcon from '@mui/icons-material/Check';
-import { ButtonLink } from '@/components/common/ButtonLink/ButtonLink';
-import { Reveal } from '@/components/common/Reveal/Reveal';
+import { ButtonLink } from '@/shared/components/ui/ButtonLink';
+import { Reveal } from '@/shared/components/ui/Reveal';
 import { SectionHeading } from '@/components/common/SectionHeading/SectionHeading';
-import { SmartLink } from '@/components/common/SmartLink/SmartLink';
+import { SmartLink } from '@/shared/components/ui/SmartLink';
 import { WaveSeparator } from '@/components/common/WaveSeparator/WaveSeparator';
 import type { HomeContent, SolutionTab } from '@/content/home';
-import { colors } from '@/theme/tokens';
+import { colors } from '@/shared/theme/tokens';
 
 /** Shared look of a tab / accordion header (WPBakery "vc_tta" tabs on the original). */
 const headerSx = {

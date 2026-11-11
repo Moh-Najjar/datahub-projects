@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import { Link } from 'react-router-dom';
-import { useAlternateHref } from '@/hooks/useAlternateLocale';
+import { useAlternateHref } from '@/i18n/useAlternateHref';
 import { useLocale } from '@/i18n/LocaleContext';
 import { TopItem } from './DesktopNav';
 import { DropdownPanel, subLinkSx } from './DesktopNav.styles';

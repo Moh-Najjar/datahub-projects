@@ -3,7 +3,7 @@
  * original <title> / meta description / og:image (taken verbatim from datahubanalytics.com).
  * Generated from the live site on 2026-11-10; edit by hand from here on.
  */
-import type { RouteKey } from '@/app/routes';
+import type { RouteKey } from '@/shared/config/routes';
 import type { Locale } from '@/i18n/types';
 
 export interface PageMeta {

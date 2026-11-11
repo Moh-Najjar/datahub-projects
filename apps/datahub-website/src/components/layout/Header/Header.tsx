@@ -10,7 +10,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useLocation } from 'react-router-dom';
 import { useLocalized } from '@/i18n/LocaleContext';
 import { UI } from '@/i18n/ui';
-import { layout } from '@/theme/tokens';
+import { layout } from '@/shared/theme/tokens';
 import { MOBILE_MENU_WIDTH, MobileMenu } from '../MobileMenu/MobileMenu';
 import { DesktopNav } from '../Navigation/DesktopNav';
 import { Logo } from './Logo';

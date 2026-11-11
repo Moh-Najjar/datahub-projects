@@ -1,8 +1,8 @@
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import { ButtonLink } from '@/components/common/ButtonLink/ButtonLink';
-import { Seo } from '@/components/common/Seo/Seo';
-import { ROUTES } from '@/app/routes';
+import { ButtonLink } from '@/shared/components/ui/ButtonLink';
+import { Seo } from '@/shared/components/seo/Seo';
+import { ROUTES } from '@/shared/config/routes';
 import { useLocalized } from '@/i18n/LocaleContext';
 import { UI } from '@/i18n/ui';
 

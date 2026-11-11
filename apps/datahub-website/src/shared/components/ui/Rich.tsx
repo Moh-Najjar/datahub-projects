@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import type { RichText } from '@/types/content';
+import type { RichText } from '@/shared/types/content';
 
 /** Renders a `RichText` value, wrapping highlighted segments in `<mark>`. */
 export function Rich({ text }: { text: RichText }) {

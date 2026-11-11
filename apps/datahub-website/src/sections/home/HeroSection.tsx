@@ -3,9 +3,9 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import EastIcon from '@mui/icons-material/East';
 import { useTheme } from '@mui/material/styles';
-import { AutoCarousel } from '@/components/common/AutoCarousel/AutoCarousel';
-import { Reveal } from '@/components/common/Reveal/Reveal';
-import { SmartLink } from '@/components/common/SmartLink/SmartLink';
+import { AutoCarousel } from '@/shared/components/ui/AutoCarousel';
+import { Reveal } from '@/shared/components/ui/Reveal';
+import { SmartLink } from '@/shared/components/ui/SmartLink';
 import { WaveSeparator } from '@/components/common/WaveSeparator/WaveSeparator';
 import type { HomeContent, ServiceCard } from '@/content/home';
 

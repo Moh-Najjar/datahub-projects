@@ -8,7 +8,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useLocalized } from '@/i18n/LocaleContext';
 import { UI } from '@/i18n/ui';
-import type { ImageAsset } from '@/types/content';
+import type { ImageAsset } from '@/shared/types/content';
 
 const pulse = keyframes`
   0% { transform: translate(-50%, -50%) scale(.3); opacity: 0; }

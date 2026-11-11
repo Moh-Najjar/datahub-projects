@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { BlogCard } from '@/components/blog/BlogCard';
-import { Reveal } from '@/components/common/Reveal/Reveal';
+import { Reveal } from '@/shared/components/ui/Reveal';
 import { SectionHeading } from '@/components/common/SectionHeading/SectionHeading';
 import type { HomeContent } from '@/content/home';
 import latestPosts from '@/content/blog/latest.json';

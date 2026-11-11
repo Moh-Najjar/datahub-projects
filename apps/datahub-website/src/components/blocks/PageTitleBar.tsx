@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import { SmartLink } from '@/components/common/SmartLink/SmartLink';
+import { SmartLink } from '@/shared/components/ui/SmartLink';
 import type { PageDocument } from '@/types/blocks';
 
 type TitleBarData = NonNullable<PageDocument['titleBar']>;

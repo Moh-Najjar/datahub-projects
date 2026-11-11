@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import EastIcon from '@mui/icons-material/East';
 import { useTheme } from '@mui/material/styles';
-import { SmartLink } from '@/components/common/SmartLink/SmartLink';
+import { SmartLink } from '@/shared/components/ui/SmartLink';
 import { useLocale } from '@/i18n/LocaleContext';
 import type { BlogPostSummary } from '@/types/blog';
 import { formatPostDate, trimExcerpt } from '@/utils/date';

@@ -1,4 +1,4 @@
-import type { ImageAsset } from '@/types/content';
+import type { ImageAsset } from '@/shared/types/content';
 
 /** Client logos in the original homepage carousel order (intrinsic sizes from the originals). */
 export const CLIENT_LOGOS: readonly ImageAsset[] = [

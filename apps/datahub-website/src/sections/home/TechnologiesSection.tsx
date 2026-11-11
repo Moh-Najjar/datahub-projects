@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import { ButtonLink } from '@/components/common/ButtonLink/ButtonLink';
-import { Reveal } from '@/components/common/Reveal/Reveal';
+import { ButtonLink } from '@/shared/components/ui/ButtonLink';
+import { Reveal } from '@/shared/components/ui/Reveal';
 import { SectionHeading } from '@/components/common/SectionHeading/SectionHeading';
 import type { HomeContent } from '@/content/home';
 import { TECHNOLOGY_LOGOS } from '@/data/logos';

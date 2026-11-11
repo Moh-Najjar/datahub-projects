@@ -2,9 +2,9 @@ import Box from '@mui/material/Box';
 import { useTheme, type SxProps, type Theme } from '@mui/material/styles';
 import EastIcon from '@mui/icons-material/East';
 import type { ReactNode } from 'react';
-import { Reveal } from '@/components/common/Reveal/Reveal';
-import { Rich } from '@/components/common/Rich/Rich';
-import { SmartLink } from '@/components/common/SmartLink/SmartLink';
+import { Reveal } from '@/shared/components/ui/Reveal';
+import { Rich } from '@/shared/components/ui/Rich';
+import { SmartLink } from '@/shared/components/ui/SmartLink';
 import type { Block } from '@/types/blocks';
 import { mergeSx, rsx } from '../responsive';
 

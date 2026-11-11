@@ -1,4 +1,4 @@
-import { PageSeo } from '@/components/common/Seo/PageSeo';
+import { PageSeo } from '@/shared/components/seo/PageSeo';
 import { HOME_CONTENT } from '@/content/home';
 import { useLocalized } from '@/i18n/LocaleContext';
 import { AboutSection } from '@/sections/home/AboutSection';

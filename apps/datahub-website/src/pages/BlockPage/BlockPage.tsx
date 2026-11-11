@@ -1,9 +1,9 @@
 import { use } from 'react';
 import { Row } from '@/components/blocks/NodeRenderer';
 import { PageTitleBar } from '@/components/blocks/PageTitleBar';
-import { PageSeo } from '@/components/common/Seo/PageSeo';
-import { PAGES } from '@/data/pages';
-import { useRouteKey } from '@/hooks/useRouteKey';
+import { PageSeo } from '@/shared/components/seo/PageSeo';
+import { PAGES } from '@/shared/config/pages';
+import { useRouteKey } from '@/shared/hooks/useRouteKey';
 import { useLocale } from '@/i18n/LocaleContext';
 import type { PageDocument } from '@/types/blocks';
 

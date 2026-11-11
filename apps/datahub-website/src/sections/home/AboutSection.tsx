@@ -1,10 +1,10 @@
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import { ButtonLink } from '@/components/common/ButtonLink/ButtonLink';
-import { Reveal } from '@/components/common/Reveal/Reveal';
+import { ButtonLink } from '@/shared/components/ui/ButtonLink';
+import { Reveal } from '@/shared/components/ui/Reveal';
 import { SectionHeading } from '@/components/common/SectionHeading/SectionHeading';
-import { VideoPoster } from '@/components/common/VideoPoster/VideoPoster';
+import { VideoPoster } from '@/shared/components/ui/VideoPoster';
 import type { HomeContent } from '@/content/home';
 
 const INTRO_VIDEO_ID = 'K0jkCpkjfC0';

@@ -4,7 +4,7 @@ import { isRouteErrorResponse, useLocation, useRouteError } from 'react-router-d
 import { LocaleProvider } from '@/i18n/LocaleProvider';
 import { localeFromPath } from '@/i18n/paths';
 import { UI } from '@/i18n/ui';
-import { AppThemeProvider } from '@/theme/AppThemeProvider';
+import { AppThemeProvider } from '@/shared/theme/AppThemeProvider';
 
 /**
  * Router error boundary. It renders outside the normal layout, so it provides its own

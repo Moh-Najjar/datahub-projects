@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-import { easing } from '@/theme/tokens';
+import { easing } from '@/shared/theme/tokens';
 
 /**
  * Styles for the desktop menu (header-03 of the Mitech theme).

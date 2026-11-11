@@ -1,6 +1,11 @@
 import { useMatches } from 'react-router-dom';
-import type { PageHandle } from '@/app/router';
-import type { RouteKey } from '@/app/routes';
+import type { RouteHandle } from '@/i18n/useAlternateHref';
+import type { RouteKey } from '@/shared/config/routes';
+
+/** `handle` of every page route (set by the router). */
+export interface PageHandle extends RouteHandle {
+  routeKey: RouteKey;
+}
 
 /** Route key of the deepest matched page route (set in the router's `handle`). */
 export function useRouteKey(): RouteKey | undefined {
