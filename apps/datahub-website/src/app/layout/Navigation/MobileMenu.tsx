@@ -16,7 +16,7 @@ import { useAlternateHref } from '@/i18n/useAlternateHref';
 import { useLocale, useLocalized } from '@/i18n/LocaleContext';
 import { UI } from '@/i18n/ui';
 import type { NavItem, NavLink } from '@/shared/types/navigation';
-import { Logo } from '../Header/Logo';
+import { Logo } from '@/app/layout/Header/Logo';
 
 export const MOBILE_MENU_WIDTH = 'min(540px, 80vw)';
 

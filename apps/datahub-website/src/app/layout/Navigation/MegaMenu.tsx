@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { SmartLink } from '@/shared/components/ui/SmartLink';
 import type { NavColumn } from '@/shared/types/navigation';
-import { DropdownPanel, subLinkSx } from '../Navigation/DesktopNav.styles';
+import { DropdownPanel, subLinkSx } from './DesktopNav.styles';
 
 interface MegaMenuProps {
   columns: NavColumn[];

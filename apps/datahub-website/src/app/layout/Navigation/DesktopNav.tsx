@@ -3,11 +3,11 @@ import Box from '@mui/material/Box';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { SmartLink } from '@/shared/components/ui/SmartLink';
 import { PRIMARY_NAV } from '@/shared/config/navigation';
-import { useIsActive } from '@/hooks/useActivePath';
-import { useHoverMenu } from '@/hooks/useHoverMenu';
+import { useIsActive } from '@/app/layout/Navigation/useActivePath';
+import { useHoverMenu } from '@/app/layout/Navigation/useHoverMenu';
 import { useLocalized } from '@/i18n/LocaleContext';
 import type { NavItem, NavLink } from '@/shared/types/navigation';
-import { MegaMenu } from '../MegaMenu/MegaMenu';
+import { MegaMenu } from './MegaMenu';
 import { DropdownPanel, MenuItem, MenuList, subLinkSx } from './DesktopNav.styles';
 import { LanguageSwitcher } from './LanguageSwitcher';
 

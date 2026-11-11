@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
-import { Constellation } from '@/components/common/Constellation/Constellation';
+import { Constellation } from '@/app/layout/Footer/Constellation';
 import { LinkedInIcon } from '@/shared/components/ui/LinkedInIcon';
 import { SmartLink } from '@/shared/components/ui/SmartLink';
 import { ConsultationSection, CONTACT_EMAIL, OFFICES } from '@/features/contact';
@@ -13,7 +13,7 @@ import pageChrome from '@/content/pages/chrome.json';
 import { useLocale, useLocalized } from '@/i18n/LocaleContext';
 import { UI } from '@/i18n/ui';
 import { colors } from '@/shared/theme/tokens';
-import { Logo } from '../Header/Logo';
+import { Logo } from '@/app/layout/Header/Logo';
 
 const columnTitleSx = { mb: '18px', color: 'common.white', fontSize: 20, fontWeight: 400, lineHeight: 1.42, textDecoration: 'underline' } as const;
 

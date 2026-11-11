@@ -8,8 +8,8 @@ import { localeFromPath } from '@/i18n/paths';
 import { UI } from '@/i18n/ui';
 import { AppThemeProvider } from '@/shared/theme/AppThemeProvider';
 import { layout } from '@/shared/theme/tokens';
-import { Footer } from '../Footer/Footer';
-import { Header, SITE_SHELL_ID } from '../Header/Header';
+import { Footer } from '@/app/layout/Footer/Footer';
+import { Header, SITE_SHELL_ID } from '@/app/layout/Header/Header';
 
 function SkipLink() {
   const ui = useLocalized(UI);
