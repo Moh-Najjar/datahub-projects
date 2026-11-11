@@ -1,47 +1,30 @@
 {
-  "name": "datahub-website",
+  "name": "datahubprojects",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "description": "DataHub Analytics frontend monorepo: web and mobile applications plus shared packages.",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "preview": "vite preview",
-    "typecheck": "tsc -b",
-    "lint": "oxlint",
-    "assets": "node scripts/download-assets.ts",
-    "blog:export": "node scripts/export-blog.ts",
-    "screenshot": "node scripts/screenshot.ts",
-    "pages:convert": "node scripts/convert-pages.ts",
-    "compare": "node scripts/compare-pages.ts",
-    "check:links": "node scripts/check-links.ts"
+    "dev:website": "npm run dev --workspace=apps/datahub-website",
+    "build:website": "npm run build --workspace=apps/datahub-website",
+    "preview:website": "npm run preview --workspace=apps/datahub-website",
+    "lint:website": "npm run lint --workspace=apps/datahub-website",
+    "dev:hr": "npm run start --workspace=apps/datahub-hr",
+    "android:hr": "npm run android --workspace=apps/datahub-hr",
+    "ios:hr": "npm run ios --workspace=apps/datahub-hr",
+    "web:hr": "npm run web --workspace=apps/datahub-hr",
+    "lint:hr": "npm run lint --workspace=apps/datahub-hr",
+    "doctor:hr": "npm run doctor --workspace=apps/datahub-hr",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "typecheck:packages": "npm run typecheck --workspace=packages/* --if-present"
   },
-  "dependencies": {
-    "@emotion/cache": "^11.14.0",
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.1",
-    "@hookform/resolvers": "^7.0.5",
-    "@mui/icons-material": "^9.5.0",
-    "@mui/material": "^9.5.0",
-    "framer-motion": "^14.12.0",
-    "react": "^19.3.1",
-    "react-dom": "^19.3.1",
-    "react-hook-form": "^7.91.0",
-    "react-router-dom": "^7.18.5",
-    "stylis": "^4.2.0",
-    "stylis-plugin-rtl": "^2.1.1",
-    "zod": "^4.6.7"
+  "engines": {
+    "node": ">=20.19.4",
+    "npm": ">=10"
   },
   "devDependencies": {
-    "@types/node": "^24.19.2",
-    "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0",
-    "@types/stylis": "^4.2.7",
-    "@vitejs/plugin-react": "^6.1.2",
-    "oxlint": "^1.90.0",
-    "playwright": "^1.65.0",
-    "sharp": "^0.35.5",
-    "typescript": "~7.0.2",
-    "vite": "^8.3.6"
+    "typescript": "~6.0.3"
   }
 }

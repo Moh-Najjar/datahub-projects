@@ -1,87 +1,87 @@
-# CLAUDE.md — DataHub Website
+# CLAUDE.md — DataHubProjects monorepo
 
-Faithful recreation of <https://datahubanalytics.com/> (a WordPress/Mitech site) in React 19 + TypeScript + Vite + **Material UI**.
-This is a **recreation, not a redesign**: the live site is the source of truth for content, layout, spacing and behaviour.
-Full plan and decisions: [docs/PLAN.md](docs/PLAN.md).
+npm-workspaces monorepo for Datahub Analytics frontends. Read the app-level `CLAUDE.md` before working
+inside an app — it contains that app's own (stricter) rules.
 
-## Commands
+## Applications
 
-| Command | Purpose |
+| App | Path | Purpose | Its rules |
+| --- | --- | --- | --- |
+| DataHub Website | `apps/datahub-website/` | Faithful recreation of datahubanalytics.com (EN/AR, RTL). Recreation, **not** a redesign. | [apps/datahub-website/CLAUDE.md](apps/datahub-website/CLAUDE.md) |
+| DataHubHR | `apps/datahub-hr/` | HR management mobile app (future). Original DataHubHR branding — inspired by ZenHR's functionality, never its branding, logos, assets or exact screens. | [apps/datahub-hr/AGENTS.md](apps/datahub-hr/AGENTS.md) (Expo guidance) |
+
+All source code of an app lives inside its folder. Never put app code at the root or in another app.
+
+### Technology restrictions
+
+- **Website:** React + TypeScript + Vite + **Material UI** (Emotion, RTL via `stylis-plugin-rtl`), React Router,
+  Framer Motion, React Hook Form + Zod. No Tailwind/Bootstrap/other UI kits. Keep `stylis` at 4.2.0.
+- **DataHubHR:** Expo SDK 58 + React Native + TypeScript + **Expo Router** (routes in `src/app/`).
+  Install libraries with `npx expo install` from `apps/datahub-hr`. No web UI libraries, no MUI, no React DOM.
+  HR features have not been specified yet — don't add screens, mock data or business logic speculatively.
+
+## Shared packages (`packages/*`)
+
+| Package | Contains |
 | --- | --- |
-| `npm run dev` | Vite dev server (port 5173) |
-| `npm run build` | Type-check (`tsc -b`) + production build |
-| `npm run typecheck` / `npm run lint` | TypeScript (strict) / oxlint |
-| `npm run assets` | Download original public assets listed in `scripts/assets.manifest.ts` into `public/` (idempotent) |
-| `npm run blog:export` | Export blog posts from the original's WordPress REST API into `src/content/blog/` |
-| `npm run pages:convert -- [routeKey…]` | Re-generate inner-page documents from the live site (see "Content pipeline") |
-| `npm run screenshot -- <url> <outDir> [width]` | Playwright viewport-chunk screenshots for visual comparison |
+| `shared-types` | Types only (locales, ids, generic helpers). |
+| `shared-constants` | `as const` constants. Never secrets or environment values. |
+| `shared-utils` | Pure functions using ECMAScript + `Intl` only. |
+| `shared-i18n` | EN/AR resources + framework-free lookup; apps own their i18n integration. |
+| `shared-api` | API contracts and pure request helpers; apps own their HTTP clients. |
+| `shared-config` | TypeScript bases, ESLint fragment, oxlint base. Config only. |
 
-Run `npm run typecheck && npm run lint && npm run build` before considering any change done.
+Rules (mandatory):
 
-## Non-negotiable rules
+1. No dependency on React, React DOM, React Native, Expo or MUI — and no UI components.
+2. No DOM, `window`, Node-only or React-Native-only APIs.
+3. No `enum`/`namespace` — consumers compile with `erasableSyntaxOnly`; use `as const` + union types.
+4. Packages are consumed as TS source (`exports` → `src/index.ts`); keep `exports` and `types` correct.
+5. Only move code into a package when **two or more apps genuinely need it**. Don't copy website code into
+   packages "just in case", and don't refactor an app to use a package unless that is the task.
+6. Keep dependencies minimal; inter-package deps use the exact workspace version (`"0.1.0"`).
 
-1. **No invented content.** Every string, number, image and link must come from the original site. Keep the original's
-   wording verbatim (including its typos, e.g. "Big Data Analyics"). If something can't be obtained, say so — don't guess.
-2. **No fake assets.** Never draw, generate or substitute logos/images. Add new originals to `scripts/assets.manifest.ts`
-   and run `npm run assets`. Licensed icon fonts (Font Awesome Pro) are replaced by the closest `@mui/icons-material` icon.
-3. **Measure, don't eyeball.** Take sizes/colors from the original's computed styles (Playwright) and put shared values in
-   `src/theme/tokens.ts`.
-4. **Content is data.** Copy lives in `src/data/` and `src/content/` as typed `Localized<T>` records — never hard-coded in
-   components. Components receive typed props.
-5. **Forms never fake success.** Without `VITE_FORM_ENDPOINT` the form must say the message was not sent.
+## Working rules
 
-## Styling (MUI)
+- **Stay in scope:** when working on one app, do not modify another app. Shared-package changes must keep
+  every consumer building — run `npm run typecheck` (all workspaces) after touching `packages/*`.
+- Root-level files (`package.json`, lockfile, `.gitignore`, `.gitattributes`, docs) change only for
+  repository-wide concerns.
 
-- Theme: `src/theme/theme.ts` (`createAppTheme(direction)`), tokens in `src/theme/tokens.ts`, type augmentation in
-  `src/theme/augmentation.d.ts`. Custom palette lives under `palette.brand.*`; shadows under `theme.customShadows`.
-- Spacing unit is **5px** (`sx={{ p: 6 }}` = 30px). Pixel strings (`'30px'`) are fine when copying measured values.
-- Breakpoints mirror the original grid: `sm 544 · md 768 · lg 992 · xl 1200`. The desktop menu shows from `xl`.
-- Button variants: `solid`, `gradient`, `textArrow`, `pill` (use `ButtonLink` for links).
-- Style with the theme, `sx`, or `styled()` next to the component. No CSS Modules, Tailwind or Bootstrap. Avoid inline `style`.
-- **RTL:** Arabic uses an Emotion cache with `stylis-plugin-rtl`. Write styles with **physical** `left/right`
-  (they're flipped automatically). Don't use logical `inset-inline-*`/`margin-inline-*` in Emotion styles — they'd be
-  correct already and must not be double-handled. `translateX` and icons are **not** flipped: handle them with
-  `theme.direction`. Write gradients with angles (`90deg`), never `to right` — the plugin flips direction
-  keywords, but the original's Arabic pages keep gradients left-to-right.
-- `stylis` is pinned to 4.2.0 to match Emotion; a mismatched version crashes the RTL plugin.
+## Commands (run from the root)
 
-## Routing & i18n
+| Task | Command |
+| --- | --- |
+| Install everything | `npm install` |
+| Website dev / build / preview / lint | `npm run dev:website` · `npm run build:website` · `npm run preview:website` · `npm run lint:website` |
+| HR dev server / Android / iOS / web | `npm run dev:hr` · `npm run android:hr` · `npm run ios:hr` · `npm run web:hr` |
+| HR lint / doctor | `npm run lint:hr` · `npm run doctor:hr` |
+| Type-check all workspaces | `npm run typecheck` |
+| Any workspace script | `npm run <script> --workspace=<path>` |
 
-- Canonical URLs (identical to the original, trailing slash) are in `src/app/routes.ts` (`ROUTES`). Never hard-code paths.
-- Arabic = same path under `/ar`. `src/data/pages.ts` records which locales each page exists in (from the original) and its
-  original SEO title/description. Arabic URLs of English-only pages redirect to the English page.
-- Use `SmartLink`/`ButtonLink` for links: they add the locale prefix and handle external/`tel:`/`mailto:`/file links.
-- Each page renders `<PageSeo routeKey="…" />` (React 19 hoists `<title>`/`<meta>`).
-- Broken links on the original are redirected via `LEGACY_REDIRECTS`.
+## Dependency management
 
-## Structure
+- One lockfile at the root; never run `npm install` inside a workspace folder without `--workspace`
+  (use `npm install <pkg> --workspace=apps/<app>`), except `npx expo install` in the Expo app.
+- Each app declares its own dependencies; never add app dependencies to the root `package.json`
+  (the root only holds repository tooling: TypeScript 6).
+- **React:** website 19.3.1, Expo app 19.3.0 (pinned by SDK 58). `apps/datahub-hr/metro.config.js` pins the
+  mobile bundle to its own React — keep that resolver. Never add `react-dom` to the Expo app or
+  `react-native` to the website.
+- **TypeScript:** root/packages/Expo app use TS 6 (needed by ESLint tooling); the website keeps TS 7 nested in
+  its own `node_modules`. Don't hoist TS 7 to the root.
+- Git: `core.longpaths=true` is required on Windows (some blog content paths exceed 260 characters).
 
-```
-src/app         App, router, ROUTES        src/theme      MUI theme, tokens, RTL cache
-src/i18n        locale context, UI strings src/data       navigation, contact, page registry
-src/content     page copy per locale       src/components common/ + layout/ (Header, Footer, menus, form)
-src/sections    page sections              src/pages      route components
-src/hooks       reusable hooks             scripts/       assets, blog export, screenshots
-```
+## TypeScript & code quality
 
-## Content pipeline (inner pages)
+- `strict` everywhere, plus `noUncheckedIndexedAccess`; no `any`.
+- Shared packages extend `@datahub/shared-config/tsconfig/library.json`.
+- Linting: website → oxlint; Expo app → ESLint (`eslint-config-expo` + `@datahub/shared-config/eslint/base.mjs`).
+- Before finishing a change: `npm run typecheck` and the affected app's lint/build.
 
-- The homepage is hand-built (`src/sections/home`, copy in `src/content/home.ts`).
-- Every other page is a **page document** (`src/content/pages/<routeKey>.<locale>.json`, typed in
-  `src/types/blocks.ts`) generated by `scripts/convert-pages.ts`: it walks the original WPBakery DOM in Chromium
-  (rows → columns → widgets), captures each element's computed styles at 1440/800/390px, sanitizes HTML, rewrites
-  links to locale-neutral paths and downloads assets to `public/assets/uploads/` (original paths kept).
-- `src/pages/BlockPage` renders documents with `src/components/blocks` (one MUI component per theme widget).
-  Fix rendering issues in the widget components or the converter — **never hand-edit the JSON**, regenerate it.
-- Arabic documents are captured from the RTL pages and converted to LTR terms (`toLtr`), then mirrored by the
-  RTL cache.
-- `src/content/pages/chrome.json` (also generated) records per-page layout flags, e.g. whether the original shows
-  the footer's consultation band on that page (hidden on Contact and Internship).
-- Pages without a WPBakery hero use the theme's page-title bar (`titleBar` in the document → `PageTitleBar`).
-- Blog: `npm run blog:export` → `src/content/blog/` (index, latest 3, one JSON per post) + `public/assets/posts/`
-  (WebP resized to display size with `sharp`: 370×207 card, 370×230 grid, ≤1170px article image).
+## Adding a future application (e.g. DataHub CRM, Finance, Operations)
 
-## Visual comparison workflow
-
-`npm run screenshot -- https://datahubanalytics.com/<path> <dir>/orig 1440` and the same for `http://localhost:5173/<path>`,
-then compare chunk by chunk. Check 1920/1440/1280/1024/768/390/375 and both `/` and `/ar/`.
+1. `apps/<app-name>/` with its own `package.json` (`private`, unique name), tsconfig and `CLAUDE.md`.
+2. Use the shared packages through dependencies; keep UI inside the app.
+3. `npm install` at the root; add `dev:<app>`/`build:<app>` root scripts.
+4. Update the root `README.md` and this file. Don't create apps that haven't been requested.

@@ -1,0 +1,23 @@
+{
+  "name": "@datahub/shared-types",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Common TypeScript types (locales, identifiers, generic helpers). Types only.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "types": "./src/index.ts",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@datahub/shared-config": "0.1.0",
+    "typescript": "~6.0.3"
+  }
+}

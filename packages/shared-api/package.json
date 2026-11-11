@@ -1,0 +1,26 @@
+{
+  "name": "@datahub/shared-api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "API contracts and platform-independent request helpers (no HTTP client).",
+  "license": "UNLICENSED",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "types": "./src/index.ts",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@datahub/shared-types": "0.1.0"
+  },
+  "devDependencies": {
+    "@datahub/shared-config": "0.1.0",
+    "typescript": "~6.0.3"
+  }
+}

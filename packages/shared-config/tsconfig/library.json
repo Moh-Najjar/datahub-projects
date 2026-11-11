@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "DataHub shared library (platform-independent)",
+  "extends": "./base.json",
+  "compilerOptions": {
+    /* No DOM and no React Native globals: shared packages must run on every platform. */
+    "lib": ["ES2023"],
+    "types": [],
+    /* Packages are consumed as TypeScript source by both apps, so they must satisfy the strictest
+       consumer settings (the website uses `erasableSyntaxOnly`: no enums or namespaces). */
+    "erasableSyntaxOnly": true
+  }
+}
