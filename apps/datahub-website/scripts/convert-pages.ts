@@ -1,6 +1,6 @@
 /**
  * Converts the original site's WPBakery pages into typed JSON page documents
- * (`src/types/blocks.ts`) — real content, real assets, real computed styles.
+ * (`src/features/page-blocks/types/blocks.ts`) — real content, real assets, real computed styles.
  *
  * For every page (and its Arabic translation when one exists) it:
  *  1. loads the live page in Chromium at 1440px and walks the WPBakery DOM

@@ -19,5 +19,134 @@
         ]
       }
     ]
-  }
+  },
+  // Architecture layers (see CLAUDE.md): i18n <- shared <- features <- pages <- app.
+  // Each override repeats the app-boundary patterns because an override replaces the base rule's options.
+  "overrides": [
+    {
+      "files": ["src/i18n/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The website is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+              { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+              { "group": ["@/shared", "@/shared/**", "@/features", "@/features/**", "@/pages", "@/pages/**", "@/app", "@/app/**", "**/shared/**", "**/features/**", "**/pages/**", "**/app/**"], "message": "i18n is the base layer: it must not import shared, features, pages or app." }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/shared/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The website is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+              { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+              { "group": ["@/features", "@/features/**", "@/pages", "@/pages/**", "@/app", "@/app/**", "**/features/**", "**/pages/**", "**/app/**"], "message": "shared/ must stay feature-free: it may import only shared/ and i18n/." }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/features/blog/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The website is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+              { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+              { "group": ["@/pages", "@/pages/**", "@/app", "@/app/**"], "message": "Features must not import pages or app." },
+              { "group": ["@/features/*", "@/features/*/**", "!@/features/blog/**"], "message": "The blog feature must not depend on other features." }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/features/contact/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The website is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+              { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+              { "group": ["@/pages", "@/pages/**", "@/app", "@/app/**"], "message": "Features must not import pages or app." },
+              { "group": ["@/features/*", "@/features/*/**", "!@/features/contact/**"], "message": "The contact feature must not depend on other features." }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/features/home/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The website is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+              { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+              { "group": ["@/pages", "@/pages/**", "@/app", "@/app/**"], "message": "Features must not import pages or app." },
+              { "group": ["@/features/*", "@/features/*/**", "!@/features/home/**", "!@/features/blog"], "message": "home may use only the blog feature, and only through its public API (@/features/blog)." }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/features/page-blocks/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The website is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+              { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+              { "group": ["@/pages", "@/pages/**", "@/app", "@/app/**"], "message": "Features must not import pages or app." },
+              { "group": ["@/features/*", "@/features/*/**", "!@/features/page-blocks/**", "!@/features/blog", "!@/features/contact"], "message": "page-blocks may embed only the blog and contact features, and only through their public API (@/features/<name>)." }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/pages/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The website is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+              { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+              { "group": ["@/app", "@/app/**"], "message": "Pages must not import app (the composition root)." },
+              { "group": ["@/features/*/**"], "message": "Import features through their public API (@/features/<name>), not their internals." }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/app/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The website is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+              { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+              { "group": ["@/features/*/**"], "message": "Import features through their public API (@/features/<name>), not their internals." }
+            ]
+          }
+        ]
+      }
+    }
+  ]
 }
