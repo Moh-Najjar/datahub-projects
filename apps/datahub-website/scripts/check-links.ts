@@ -55,7 +55,7 @@ for (const file of await readdir(join(ROOT, 'src/content/pages'))) {
 for (const file of await readdir(join(ROOT, 'src/content/blog/posts'))) {
   scanHtml(`blog/${file}`, (JSON.parse(await read(`src/content/blog/posts/${file}`)) as { html: string }).html);
 }
-for (const file of ['src/shared/config/navigation.ts', 'src/content/home.ts', 'src/data/logos.ts']) {
+for (const file of ['src/shared/config/navigation.ts', 'src/features/home/data/homeContent.ts', 'src/features/home/data/logos.ts']) {
   const src = await read(file);
   for (const m of src.matchAll(/'(\/(?:assets|fonts)\/[^']+)'/g)) if (!isKnown(m[1]!)) report(file, m[1]!);
 }

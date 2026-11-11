@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Constellation } from '@/components/common/Constellation/Constellation';
 import { LinkedInIcon } from '@/shared/components/ui/LinkedInIcon';
 import { SmartLink } from '@/shared/components/ui/SmartLink';
-import { CONTACT_EMAIL, OFFICES } from '@/data/contact';
+import { ConsultationSection, CONTACT_EMAIL, OFFICES } from '@/features/contact';
 import { FOOTER_COLUMNS } from '@/shared/config/navigation';
 import { EXTERNAL_LINKS } from '@/shared/config/routes';
 import { useAlternateHref } from '@/i18n/useAlternateHref';
@@ -14,7 +14,6 @@ import { useLocale, useLocalized } from '@/i18n/LocaleContext';
 import { UI } from '@/i18n/ui';
 import { colors } from '@/shared/theme/tokens';
 import { Logo } from '../Header/Logo';
-import { ConsultationSection } from './ConsultationSection';
 
 const columnTitleSx = { mb: '18px', color: 'common.white', fontSize: 20, fontWeight: 400, lineHeight: 1.42, textDecoration: 'underline' } as const;
 

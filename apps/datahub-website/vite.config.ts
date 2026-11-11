@@ -20,6 +20,12 @@ export default defineConfig({
   build: {
     target: 'es2022',
     rollupOptions: {
+      // Feature barrels (src/features/*/index.ts) only re-export. Marking them side-effect free lets
+      // the bundler resolve each import to the module that defines it, so a barrel never drags a
+      // feature's other modules into the importing page's chunk.
+      treeshake: {
+        moduleSideEffects: (id) => !/[\\/]src[\\/]features[\\/][^\\/]+[\\/]index\.ts$/.test(id),
+      },
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {

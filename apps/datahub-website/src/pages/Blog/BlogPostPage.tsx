@@ -13,10 +13,8 @@ import { useParams } from 'react-router-dom';
 import { LinkedInIcon } from '@/shared/components/ui/LinkedInIcon';
 import { Seo, SITE_URL } from '@/shared/components/seo/Seo';
 import { SmartLink } from '@/shared/components/ui/SmartLink';
-import { loadBlogBody, loadBlogIndex } from '@/data/blog';
+import { type BlogPostSummary, formatPostDate, loadBlogBody, loadBlogIndex } from '@/features/blog';
 import { useLocale } from '@/i18n/LocaleContext';
-import type { BlogPostSummary } from '@/types/blog';
-import { formatPostDate } from '@/utils/date';
 import NotFoundPage from '../Errors/NotFoundPage';
 
 /** Typography for the article body (WordPress content styles of the original theme). */
