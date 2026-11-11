@@ -17,7 +17,6 @@
     "typecheck": "tsc -p tsconfig.json"
   },
   "devDependencies": {
-    "@datahub/shared-config": "0.1.0",
     "typescript": "~6.0.3"
   }
 }

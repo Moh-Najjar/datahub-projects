@@ -1,19 +1,17 @@
-import { getMessages } from '@datahub/shared-i18n';
-import { getLocales } from 'expo-localization';
 import { StyleSheet, Text, View } from 'react-native';
+import { getDeviceLocale } from '@/i18n/locales';
+import { getMessages } from '@/i18n/messages';
 
 /**
- * Entry route. Intentionally minimal until DataHubHR features are designed; it also verifies that
- * the shared packages resolve inside the mobile bundle.
+ * Entry route. Intentionally minimal until DataHubHR features are designed.
  */
 export default function Index() {
-  const locale = getLocales()[0]?.languageCode === 'ar' ? 'ar' : 'en';
-  const messages = getMessages(locale);
+  const messages = getMessages(getDeviceLocale());
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>DataHubHR</Text>
-      <Text style={styles.subtitle}>{messages.organization.name}</Text>
+      <Text style={styles.subtitle}>{messages.organizationName}</Text>
     </View>
   );
 }

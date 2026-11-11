@@ -1,6 +1,25 @@
 {
-  "extends": "@datahub/shared-config/tsconfig/library.json",
-  "include": [
-    "src"
-  ]
+  "compilerOptions": {
+    "target": "es2022",
+    /* Types only: no DOM, no React Native globals, no ambient @types packages. */
+    "lib": ["ES2023"],
+    "types": [],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    /* Consumed as source by both apps; the website compiles with `erasableSyntaxOnly` (no enums/namespaces). */
+    "erasableSyntaxOnly": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src"]
 }
