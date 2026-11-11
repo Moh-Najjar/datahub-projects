@@ -28,7 +28,7 @@ installed: the original site contains no data tables, so it would be an unused d
 4. Playwright for screenshot-based comparison.
 5. Arabic under a `/ar/...` prefix.
 
-## Theming (single source of truth: `src/theme/`)
+## Theming (single source of truth: `src/shared/theme/`)
 
 - `tokens.ts` — colors, shadows, radii, gradients measured from the original's computed styles.
 - `theme.ts` — `createAppTheme(direction)`:
@@ -61,25 +61,23 @@ installed: the original site contains no data tables, so it would be an unused d
 
 ## Architecture
 
+Feature-based (restructured 2026-11-11). The full tree, layer rules and import conventions are maintained in
+[../CLAUDE.md](../CLAUDE.md#structure); in short:
+
 ```
 src/
-  app/          App, router, route registry (ROUTES, redirects), page registry
-  theme/        tokens, createAppTheme, RTL caches, AppThemeProvider, type augmentation
-  i18n/         locale types, LocaleProvider/useLocale, path helpers, UI dictionary
-  data/         navigation, contact, services, industries, statistics, clients, technologies
-  content/      page copy per locale (typed `Localized<T>`), generated blog data
-  components/
-    common/     SmartLink, Rich (mark highlights), Reveal, Seo, SectionHeading, ButtonLink …
-    layout/     Header, DesktopNav, MegaMenu, MobileMenu, Footer, Consultation, AppointmentForm
-  sections/     homepage + shared page sections (Hero, Stats, Clients, Technologies …)
-  pages/        route components (Home, About, Contact, Blog, BlogPost, Industries, Service …)
-  hooks/        useScrolled, useCountUp, useHoverMenu, useIsActive, useAlternateHref …
-  types/        shared TypeScript types
-scripts/        download-assets, export-blog, screenshot (Playwright)
+  app/          composition root: App, router (+ RouteError), site shell layout (Header, Footer, menus)
+  pages/        route components (Home, BlockPage for every generated page, BlogPost, 404)
+  features/     home, blog, contact (appointment form), page-blocks (generated-page renderer)
+  shared/       ui + seo components, config (ROUTES, page/SEO registry, navigation), hooks, theme, types
+  i18n/         locale types, LocaleProvider/useLocale, path helpers, UI dictionary, useAlternateHref
+  content/      generated page documents and blog data (never hand-edited)
+scripts/        download-assets, export-blog, convert-pages, screenshot/compare (Playwright)
 public/         assets/ (logos, clients, technologies, backgrounds, blog, docs), fonts/
 ```
 
-Rules: business content lives in `data/` + `content/`, never inside components; components take typed props;
+Rules: business content lives in typed data modules (`shared/config/`, `features/*/data/`) and the generated
+`content/`, never inside components; components take typed props;
 styles live in the theme or in `sx`/`styled` next to the component; physical `left/right` in Emotion styles
 (they are flipped automatically by the RTL cache).
 
