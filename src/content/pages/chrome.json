@@ -1,0 +1,122 @@
+{
+ "about": {
+  "consultation": true
+ },
+ "contact": {
+  "consultation": false
+ },
+ "blog": {
+  "consultation": true
+ },
+ "industries": {
+  "consultation": true
+ },
+ "tools": {
+  "consultation": true
+ },
+ "careers": {
+  "consultation": true
+ },
+ "workCulture": {
+  "consultation": false
+ },
+ "internship": {
+  "consultation": false
+ },
+ "solutions": {
+  "consultation": true
+ },
+ "services": {
+  "consultation": true
+ },
+ "analytics": {
+  "consultation": true
+ },
+ "infrastructure": {
+  "consultation": true
+ },
+ "security": {
+  "consultation": true
+ },
+ "outsourcing": {
+  "consultation": true
+ },
+ "dwaas": {
+  "consultation": true
+ },
+ "daaas": {
+  "consultation": true
+ },
+ "bigData": {
+  "consultation": true
+ },
+ "modernDataWarehouse": {
+  "consultation": true
+ },
+ "businessIntelligence": {
+  "consultation": true
+ },
+ "dataVisualization": {
+  "consultation": true
+ },
+ "dataScience": {
+  "consultation": true
+ },
+ "rpa": {
+  "consultation": true
+ },
+ "bigDataInfrastructure": {
+  "consultation": true
+ },
+ "containerizedInfrastructure": {
+  "consultation": true
+ },
+ "devopsInfrastructure": {
+  "consultation": true
+ },
+ "hybridCloudInfrastructure": {
+  "consultation": true
+ },
+ "devSecOps": {
+  "consultation": true
+ },
+ "infrastructureAutomation": {
+  "consultation": true
+ },
+ "managedInfrastructure": {
+  "consultation": true
+ },
+ "cybersecurityAdvisory": {
+  "consultation": true
+ },
+ "cybersecurityAssessments": {
+  "consultation": true
+ },
+ "governanceRiskCompliance": {
+  "consultation": true
+ },
+ "dataManagementFramework": {
+  "consultation": true
+ },
+ "dataGovernance": {
+  "consultation": true
+ },
+ "staffAugmentation": {
+  "consultation": true
+ },
+ "aiMlEngineers": {
+  "consultation": true
+ },
+ "managedDataAnalytics": {
+  "consultation": true
+ },
+ "dataManagement": {
+  "consultation": true
+ },
+ "pmoServices": {
+  "consultation": true
+ },
+ "analyticsCoe": {
+  "consultation": true
+ }
+}
