@@ -1,8 +1,23 @@
 {
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "$schema": "../../node_modules/oxlint/configuration_schema.json",
   "plugins": ["react", "typescript", "oxc"],
   "rules": {
     "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
+    "react/only-export-components": ["warn", { "allowConstantExport": true }],
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"],
+            "message": "The website is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+          },
+          {
+            "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*"],
+            "message": "Apps must not import each other. Share types through @datahub/shared-types."
+          }
+        ]
+      }
+    ]
   }
 }

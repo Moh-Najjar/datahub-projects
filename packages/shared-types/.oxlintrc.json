@@ -1,0 +1,35 @@
+{
+  "$schema": "../../node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "oxc"],
+  "rules": {
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": [
+              "react",
+              "react/*",
+              "react-dom",
+              "react-dom/*",
+              "react-native",
+              "react-native/*",
+              "react-native-*",
+              "expo",
+              "expo/*",
+              "expo-*",
+              "@expo/*",
+              "@mui/*",
+              "@emotion/*"
+            ],
+            "message": "shared-types is platform-independent: no React, React DOM, React Native, Expo or MUI."
+          },
+          {
+            "group": ["**/apps/**", "datahub-website", "datahub-website/*", "datahub-hr", "datahub-hr/*"],
+            "message": "shared-types must not depend on application code."
+          }
+        ]
+      }
+    ]
+  }
+}

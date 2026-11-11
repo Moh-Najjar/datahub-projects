@@ -1,7 +1,7 @@
 {
   "name": "datahubprojects",
   "private": true,
-  "description": "DataHub Analytics frontend monorepo: web and mobile applications plus shared packages.",
+  "description": "DataHub Analytics frontend monorepo: web and mobile applications plus shared TypeScript types.",
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -14,11 +14,14 @@
     "dev:hr": "npm run start --workspace=apps/datahub-hr",
     "android:hr": "npm run android --workspace=apps/datahub-hr",
     "ios:hr": "npm run ios --workspace=apps/datahub-hr",
-    "web:hr": "npm run web --workspace=apps/datahub-hr",
     "lint:hr": "npm run lint --workspace=apps/datahub-hr",
+    "config:hr": "npm run config --workspace=apps/datahub-hr",
     "doctor:hr": "npm run doctor --workspace=apps/datahub-hr",
+    "lint:packages": "npm run lint --workspace=packages/shared-types",
+    "lint": "npm run lint:website && npm run lint:hr && npm run lint:packages",
     "typecheck": "npm run typecheck --workspaces --if-present",
-    "typecheck:packages": "npm run typecheck --workspace=packages/* --if-present"
+    "typecheck:packages": "npm run typecheck --workspace=packages/shared-types",
+    "verify": "npm run typecheck && npm run lint && npm run build:website && npm run config:hr && npm run doctor:hr"
   },
   "engines": {
     "node": ">=20.19.4",
@@ -26,5 +29,9 @@
   },
   "devDependencies": {
     "typescript": "~6.0.3"
+  },
+  "overrides": {
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
   }
 }

@@ -9,6 +9,8 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
+    // Monorepo safety: always bundle a single React, whatever npm hoists to the root.
+    dedupe: ['react', 'react-dom'],
   },
   css: {
     modules: {
