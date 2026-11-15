@@ -10,9 +10,9 @@ import { styled } from '@mui/material/styles';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Controller, useForm } from 'react-hook-form';
 import { useLocalized } from '@/i18n/LocaleContext';
-import { UI } from '@/i18n/ui';
-import { submitAppointment } from '@/features/contact/services/appointment';
-import { createAppointmentSchema, type AppointmentValues } from '@/features/contact/schemas/appointmentSchema';
+import { UI } from '@/i18n';
+import { submitAppointment } from '@/modules/contact/api/appointment';
+import { createAppointmentSchema, type AppointmentValues } from '@/modules/contact/schemas/appointmentSchema';
 
 /** Contact Form 7 field look on the original: grey filled box, 56px high, 5px radius. */
 const Field = styled(InputBase)(({ theme }) => ({

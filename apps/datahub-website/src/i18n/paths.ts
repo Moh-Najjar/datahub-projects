@@ -1,4 +1,4 @@
-import { DEFAULT_LOCALE, type Locale } from './types';
+import { DEFAULT_LOCALE, type Locale } from './languages';
 
 /** URL prefix for each locale. English lives at the root, Arabic under `/ar`. */
 const PREFIX: Record<Locale, string> = { en: '', ar: '/ar' };

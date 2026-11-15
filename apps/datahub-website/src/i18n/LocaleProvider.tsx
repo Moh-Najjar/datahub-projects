@@ -1,6 +1,6 @@
 import { useLayoutEffect, useMemo, type ReactNode } from 'react';
 import { LocaleContext, type LocaleContextValue } from './LocaleContext';
-import { LOCALE_DIRECTION, type Locale } from './types';
+import { LOCALE_DIRECTION, type Locale } from './languages';
 
 interface LocaleProviderProps {
   locale: Locale;

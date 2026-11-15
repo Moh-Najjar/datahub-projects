@@ -1,5 +1,5 @@
 import { RouterProvider } from 'react-router-dom';
-import { router } from '@/app/router/router';
+import { router } from '@/core/routes';
 
 /**
  * Application root. Providers that depend on the URL (locale, theme direction) live in

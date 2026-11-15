@@ -10,13 +10,13 @@ import CloseIcon from '@mui/icons-material/Close';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { Link } from 'react-router-dom';
-import { SmartLink } from '@/shared/components/ui/SmartLink';
-import { PRIMARY_NAV } from '@/shared/config/navigation';
+import { SmartLink } from '@/modules/shared/SmartLink';
+import { PRIMARY_NAV } from '@/core/config/navigation';
 import { useAlternateHref } from '@/i18n/useAlternateHref';
 import { useLocale, useLocalized } from '@/i18n/LocaleContext';
-import { UI } from '@/i18n/ui';
-import type { NavItem, NavLink } from '@/shared/types/navigation';
-import { Logo } from '@/app/layout/Header/Logo';
+import { UI } from '@/i18n';
+import type { NavItem, NavLink } from '@/core/types/navigation';
+import { Logo } from '@/modules/layout/Header/Logo';
 
 export const MOBILE_MENU_WIDTH = 'min(540px, 80vw)';
 

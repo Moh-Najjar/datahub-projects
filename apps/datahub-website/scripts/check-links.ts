@@ -11,7 +11,7 @@ import { join } from 'node:path';
 const ROOT = join(import.meta.dirname, '..');
 const read = (p: string) => readFile(join(ROOT, p), 'utf8');
 
-const routesSrc = await read('src/shared/config/routes.ts');
+const routesSrc = await read('src/core/routes/paths.ts');
 const routes = new Set([...routesSrc.matchAll(/^\s+\w+: '(\/[^']*)',/gm)].map((m) => m[1]!));
 const redirects = new Set([...routesSrc.matchAll(/^\s+'(\/[^']+)': ROUTES\.\w+,/gm)].map((m) => m[1]!));
 const posts = new Set((JSON.parse(await read('src/content/blog/index.json')) as Array<{ slug: string }>).map((p) => `/${p.slug}/`));
@@ -55,7 +55,7 @@ for (const file of await readdir(join(ROOT, 'src/content/pages'))) {
 for (const file of await readdir(join(ROOT, 'src/content/blog/posts'))) {
   scanHtml(`blog/${file}`, (JSON.parse(await read(`src/content/blog/posts/${file}`)) as { html: string }).html);
 }
-for (const file of ['src/shared/config/navigation.ts', 'src/features/home/data/homeContent.ts', 'src/features/home/data/logos.ts']) {
+for (const file of ['src/core/config/navigation.ts', 'src/modules/home/data/homeContent.ts', 'src/modules/home/data/logos.ts']) {
   const src = await read(file);
   for (const m of src.matchAll(/'(\/(?:assets|fonts)\/[^']+)'/g)) if (!isKnown(m[1]!)) report(file, m[1]!);
 }

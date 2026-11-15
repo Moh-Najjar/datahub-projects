@@ -1,5 +1,5 @@
 import type { SxProps, Theme } from '@mui/material/styles';
-import type { Responsive } from '@/features/page-blocks/types/blocks';
+import type { Responsive } from '@/modules/page-blocks/types/blocks';
 
 type SxObject = Record<string, unknown>;
 

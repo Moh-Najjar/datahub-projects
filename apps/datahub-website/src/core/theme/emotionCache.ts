@@ -1,7 +1,7 @@
 import createCache, { type EmotionCache } from '@emotion/cache';
 import { prefixer } from 'stylis';
 import rtlPlugin from 'stylis-plugin-rtl';
-import type { Direction } from '@/i18n/types';
+import type { Direction } from '@/i18n/languages';
 
 /**
  * One Emotion cache per direction. The RTL cache runs `stylis-plugin-rtl`, which flips

@@ -1,6 +1,6 @@
-import { EXTERNAL_LINKS, industryAnchor, ROUTES } from '@/shared/config/routes';
-import type { Localized } from '@/i18n/types';
-import type { NavColumn, NavItem, NavLink } from '@/shared/types/navigation';
+import { EXTERNAL_LINKS, industryAnchor, ROUTES } from '@/core/routes/paths';
+import type { Localized } from '@/i18n/languages';
+import type { NavColumn, NavItem, NavLink } from '@/core/types/navigation';
 
 /* -------------------------------------------------------------------------- */
 /* Service columns (shared by the mega menu and the footer)                   */
@@ -151,6 +151,7 @@ export const PRIMARY_NAV: Localized<NavItem[]> = {
   en: [
     { kind: 'link', label: 'Home', href: ROUTES.home },
     { kind: 'mega', label: 'Solutions & Services', columns: megaColumns.en },
+    { kind: 'link', label: 'Products', href: ROUTES.products },
     {
       kind: 'dropdown',
       label: 'XaaS',
@@ -176,6 +177,7 @@ export const PRIMARY_NAV: Localized<NavItem[]> = {
   ar: [
     { kind: 'link', label: 'الصفحة الرئيسية', href: ROUTES.home },
     { kind: 'mega', label: 'الحلول و الخدمات', columns: megaColumns.ar },
+    { kind: 'link', label: 'المنتجات', href: ROUTES.products },
     {
       kind: 'dropdown',
       label: 'الحلول كخدمة',

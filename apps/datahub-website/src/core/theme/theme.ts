@@ -1,5 +1,5 @@
 import { createTheme, type Theme } from '@mui/material/styles';
-import type { Direction } from '@/i18n/types';
+import type { Direction } from '@/i18n/languages';
 import { colors, easing, fonts, gradients, layout, shadows } from './tokens';
 
 /** Self-hosted Satoshi (Indian Type Foundry, ITF Free Font License) — see scripts/download-assets.ts. */

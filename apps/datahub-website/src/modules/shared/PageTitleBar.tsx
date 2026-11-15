@@ -2,10 +2,13 @@ import Box from '@mui/material/Box';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import { SmartLink } from '@/shared/components/ui/SmartLink';
-import type { PageDocument } from '@/features/page-blocks/types/blocks';
+import { SmartLink } from '@/modules/shared/SmartLink';
 
-type TitleBarData = NonNullable<PageDocument['titleBar']>;
+/** Same shape as a page document's `titleBar`. */
+interface TitleBarData {
+  title: string;
+  crumbs: Array<{ label: string; href?: string }>;
+}
 
 /** Theme "page-title-bar-01": beige band with the dotted globe, big blue title and breadcrumb. */
 export function PageTitleBar({ data }: { data: TitleBarData }) {

@@ -3,8 +3,8 @@ import Typography from '@mui/material/Typography';
 import { isRouteErrorResponse, useLocation, useRouteError } from 'react-router-dom';
 import { LocaleProvider } from '@/i18n/LocaleProvider';
 import { localeFromPath } from '@/i18n/paths';
-import { UI } from '@/i18n/ui';
-import { AppThemeProvider } from '@/shared/theme/AppThemeProvider';
+import { UI } from '@/i18n';
+import { AppThemeProvider } from '@/core/theme/AppThemeProvider';
 
 /**
  * Router error boundary. It renders outside the normal layout, so it provides its own

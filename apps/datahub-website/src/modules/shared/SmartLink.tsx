@@ -2,7 +2,7 @@ import type { AnchorHTMLAttributes, ReactNode, Ref } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocale } from '@/i18n/LocaleContext';
 import { localizePath } from '@/i18n/paths';
-import type { Locale } from '@/i18n/types';
+import type { Locale } from '@/i18n/languages';
 
 export interface SmartLinkProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
   /** Locale-neutral internal path (`/about-us/`), external URL, `mailto:`/`tel:` or a file path. */

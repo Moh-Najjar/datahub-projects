@@ -1,4 +1,4 @@
-import type { Localized } from '@/i18n/types';
+import type { Localized } from '@/i18n/languages';
 
 export interface Office {
   /** Bold label before the address ("Jordan Office:"); the Arabic footer has none. */

@@ -9,10 +9,10 @@ import { keyframes, useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useLocation } from 'react-router-dom';
 import { useLocalized } from '@/i18n/LocaleContext';
-import { UI } from '@/i18n/ui';
-import { layout } from '@/shared/theme/tokens';
-import { MOBILE_MENU_WIDTH, MobileMenu } from '@/app/layout/Navigation/MobileMenu';
-import { DesktopNav } from '@/app/layout/Navigation/DesktopNav';
+import { UI } from '@/i18n';
+import { layout } from '@/core/theme/tokens';
+import { MOBILE_MENU_WIDTH, MobileMenu } from '@/modules/layout/Navigation/MobileMenu';
+import { DesktopNav } from '@/modules/layout/Navigation/DesktopNav';
 import { Logo } from './Logo';
 
 const slideDown = keyframes`from { transform: translateY(-100%); } to { transform: none; }`;

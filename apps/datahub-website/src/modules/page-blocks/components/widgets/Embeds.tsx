@@ -5,12 +5,12 @@ import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import PlaceIcon from '@mui/icons-material/Place';
-import { VideoPoster } from '@/shared/components/ui/VideoPoster';
-import { AppointmentForm } from '@/features/contact';
+import { VideoPoster } from '@/modules/shared/VideoPoster';
+import { AppointmentForm } from '@/modules/contact';
 import { useLocalized } from '@/i18n/LocaleContext';
-import { UI } from '@/i18n/ui';
-import type { Block } from '@/features/page-blocks/types/blocks';
-import { youtubeId } from '@/features/page-blocks/utils/responsive';
+import { UI } from '@/i18n';
+import type { Block } from '@/modules/page-blocks/types/blocks';
+import { youtubeId } from '@/modules/page-blocks/utils/responsive';
 
 type BlockOf<K extends Block['kind']> = Extract<Block, { kind: K }>;
 

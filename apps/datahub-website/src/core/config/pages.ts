@@ -3,8 +3,8 @@
  * original <title> / meta description / og:image (taken verbatim from datahubanalytics.com).
  * Generated from the live site on 2026-11-10; edit by hand from here on.
  */
-import type { RouteKey } from '@/shared/config/routes';
-import type { Locale } from '@/i18n/types';
+import type { RouteKey } from '@/core/routes/paths';
+import type { Locale } from '@/i18n/languages';
 
 export interface PageMeta {
   title: string;
@@ -213,6 +213,14 @@ export const PAGES: Record<RouteKey, PageEntry> = {
     seo: {
       en: { title: 'Datahub Solutions - Datahub Analytics', description: 'We at Datahub Analytics provides solutions for analytics, cloud, security, and outsourcing. We help businesses grow with smart data, modern tools, and trusted support.' },
       ar: { title: 'خدمات داتا هب - Datahub Analytics', description: undefined },
+    },
+  },
+  // DataHub's own page (not on the original site): metadata written by DataHub, not copied.
+  products: {
+    locales: ['en', 'ar'],
+    seo: {
+      en: { title: 'Products - Datahub Analytics', description: 'Discover the software products DataHub is building: DataHub HR, BI Custom Visuals and DataHub Trainee.' },
+      ar: { title: 'المنتجات - Datahub Analytics', description: 'تعرّف على المنتجات البرمجية التي تعمل داتا هب على تطويرها: DataHub HR وBI Custom Visuals وDataHub Trainee.' },
     },
   },
   careers: {

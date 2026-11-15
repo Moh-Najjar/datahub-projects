@@ -28,7 +28,7 @@ installed: the original site contains no data tables, so it would be an unused d
 4. Playwright for screenshot-based comparison.
 5. Arabic under a `/ar/...` prefix.
 
-## Theming (single source of truth: `src/shared/theme/`)
+## Theming (single source of truth: `src/core/theme/`)
 
 - `tokens.ts` — colors, shadows, radii, gradients measured from the original's computed styles.
 - `theme.ts` — `createAppTheme(direction)`:
@@ -61,23 +61,25 @@ installed: the original site contains no data tables, so it would be an unused d
 
 ## Architecture
 
-Feature-based (restructured 2026-11-11). The full tree, layer rules and import conventions are maintained in
-[../CLAUDE.md](../CLAUDE.md#structure); in short:
+`core` / `i18n` / `modules`, following the ASEZA project's layout (restructured 2026-11-11). The full tree, the
+"where is…?" table, rules, import conventions and examples are maintained in [../CLAUDE.md](../CLAUDE.md#structure);
+in short:
 
 ```
 src/
-  app/          composition root: App, router (+ RouteError), site shell layout (Header, Footer, menus)
-  pages/        route components (Home, BlockPage for every generated page, BlogPost, 404)
-  features/     home, blog, contact (appointment form), page-blocks (generated-page renderer)
-  shared/       ui + seo components, config (ROUTES, page/SEO registry, navigation), hooks, theme, types
-  i18n/         locale types, LocaleProvider/useLocale, path helpers, UI dictionary, useAlternateHref
+  App.tsx, main.tsx
+  core/         routes (router + paths/ROUTES), config (page SEO registry, navigation), theme, hooks, types
+  i18n/         locales/en.json + ar.json (UI strings), LocaleProvider/useLocale, languages, path helpers
+  modules/      shared (reusable components), layout (header/footer/menus), home, blog, contact (incl. api/),
+                page-blocks (renders every generated page), products (DataHub's own catalogue page,
+                api → mock data), errors (404, route error)
   content/      generated page documents and blog data (never hand-edited)
 scripts/        download-assets, export-blog, convert-pages, screenshot/compare (Playwright)
 public/         assets/ (logos, clients, technologies, backgrounds, blog, docs), fonts/
 ```
 
-Rules: business content lives in typed data modules (`shared/config/`, `features/*/data/`) and the generated
-`content/`, never inside components; components take typed props;
+Rules: business content lives in typed data files (`core/config/`, `modules/*/data/`), the UI translations
+(`i18n/locales/`) and the generated `content/`, never inside components; components take typed props;
 styles live in the theme or in `sx`/`styled` next to the component; physical `left/right` in Emotion styles
 (they are flipped automatically by the RTL cache).
 

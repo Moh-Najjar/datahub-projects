@@ -5,11 +5,11 @@ import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
 import EastIcon from '@mui/icons-material/East';
 import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
-import { Reveal } from '@/shared/components/ui/Reveal';
-import { Rich } from '@/shared/components/ui/Rich';
-import { SmartLink } from '@/shared/components/ui/SmartLink';
-import type { Block, ButtonData } from '@/features/page-blocks/types/blocks';
-import { mergeSx, rsx } from '@/features/page-blocks/utils/responsive';
+import { Reveal } from '@/modules/shared/Reveal';
+import { Rich } from '@/modules/shared/Rich';
+import { SmartLink } from '@/modules/shared/SmartLink';
+import type { Block, ButtonData } from '@/modules/page-blocks/types/blocks';
+import { mergeSx, rsx } from '@/modules/page-blocks/utils/responsive';
 
 type BlockOf<K extends Block['kind']> = Extract<Block, { kind: K }>;
 

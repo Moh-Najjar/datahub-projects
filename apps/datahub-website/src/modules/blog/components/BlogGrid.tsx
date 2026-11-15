@@ -5,12 +5,12 @@ import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import EastIcon from '@mui/icons-material/East';
-import { Reveal } from '@/shared/components/ui/Reveal';
-import { SmartLink } from '@/shared/components/ui/SmartLink';
-import { BLOG_PAGE_SIZE, loadBlogIndex } from '@/features/blog/data/blog';
+import { Reveal } from '@/modules/shared/Reveal';
+import { SmartLink } from '@/modules/shared/SmartLink';
+import { BLOG_PAGE_SIZE, loadBlogIndex } from '@/modules/blog/data/blog';
 import { useLocale } from '@/i18n/LocaleContext';
-import type { BlogPostSummary } from '@/features/blog/types/blog';
-import { formatPostDate, trimExcerpt } from '@/features/blog/utils/date';
+import type { BlogPostSummary } from '@/modules/blog/types/blog';
+import { formatPostDate, trimExcerpt } from '@/modules/blog/utils/date';
 
 /** Blog index card ("grid-classic" style): image, date, title, excerpt, underlined "Read more". */
 function ClassicCard({ post }: { post: BlogPostSummary }) {

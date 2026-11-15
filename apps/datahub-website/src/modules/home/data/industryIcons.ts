@@ -9,7 +9,7 @@ import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined
 import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import SportsEsportsOutlinedIcon from '@mui/icons-material/SportsEsportsOutlined';
-import type { IndustryId } from '@/shared/config/navigation';
+import type { IndustryId } from '@/core/config/navigation';
 
 /**
  * Industry icons. The original uses Font Awesome 5 Pro *Light* icons (licensed); each is mapped

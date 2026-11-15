@@ -15,6 +15,9 @@ export const ROUTES = {
   solutions: '/solutions/',
   services: '/services/',
 
+  // DataHub's own pages (not on the original site)
+  products: '/products/',
+
   // Category hubs
   analytics: '/solutions/datahub-analytics/',
   infrastructure: '/solutions/datahub-infrastructure/',

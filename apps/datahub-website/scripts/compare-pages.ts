@@ -14,10 +14,12 @@ const width = Number(widthArg);
 const arabic = localeArg === 'ar';
 const ORIGIN = 'https://datahubanalytics.com';
 
-const routesSrc = await readFile(join(import.meta.dirname, '..', 'src', 'shared', 'config', 'routes.ts'), 'utf8');
-const pagesSrc = await readFile(join(import.meta.dirname, '..', 'src', 'shared', 'config', 'pages.ts'), 'utf8');
+const routesSrc = await readFile(join(import.meta.dirname, '..', 'src', 'core', 'routes', 'paths.ts'), 'utf8');
+const pagesSrc = await readFile(join(import.meta.dirname, '..', 'src', 'core', 'config', 'pages.ts'), 'utf8');
 const routes = [...routesSrc.matchAll(/^\s+(\w+): '(\/[^']*)',/gm)]
   .map((m) => ({ key: m[1]!, path: m[2]! }))
+  // DataHub's own pages do not exist on the original site, so there is nothing to compare.
+  .filter((r) => r.key !== 'products')
   .filter((r) => !arabic || new RegExp(`\\n  ${r.key}: \\{\\n    locales: \\[[^\\]]*'ar'`).test(pagesSrc));
 
 interface Measure {

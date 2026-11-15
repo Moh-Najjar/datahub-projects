@@ -1,6 +1,6 @@
 import { useLocation, useMatches } from 'react-router-dom';
 import { localizePath, stripLocale } from '@/i18n/paths';
-import { LOCALES, type Locale } from '@/i18n/types';
+import { LOCALES, type Locale } from '@/i18n/languages';
 
 export interface RouteHandle {
   /** Locales in which the original site publishes this page. */

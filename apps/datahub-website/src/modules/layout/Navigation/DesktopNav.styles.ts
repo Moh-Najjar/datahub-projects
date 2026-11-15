@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-import { easing } from '@/shared/theme/tokens';
+import { easing } from '@/core/theme/tokens';
 
 /**
  * Styles for the desktop menu (header-03 of the Mitech theme).
@@ -39,6 +39,12 @@ export const MenuItem = styled('li', { shouldForwardProp: noForward('active', 'o
       border: 0,
       cursor: 'pointer',
       '&:hover, &:focus-visible': { color: theme.palette.primary.main },
+      // Narrow desktops (1200–1439px): tighter items so the full menu (incl. Products) fits in both
+      // languages. From 1440px up the original spacing applies unchanged.
+      [theme.breakpoints.between('xl', 1440)]: {
+        margin: 0,
+        padding: '22px 6px',
+      },
     },
     '& .nav-wrap': {
       position: 'relative',

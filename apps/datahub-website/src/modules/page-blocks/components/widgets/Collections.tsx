@@ -10,13 +10,13 @@ import CheckIcon from '@mui/icons-material/Check';
 import EastIcon from '@mui/icons-material/East';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useInView } from 'framer-motion';
-import { AutoCarousel } from '@/shared/components/ui/AutoCarousel';
-import { Reveal } from '@/shared/components/ui/Reveal';
-import { SmartLink } from '@/shared/components/ui/SmartLink';
-import { useCountUp } from '@/shared/hooks/useCountUp';
-import type { Block, Node, Responsive } from '@/features/page-blocks/types/blocks';
-import { mergeSx, rsx } from '@/features/page-blocks/utils/responsive';
-import { NodeRenderer } from '@/features/page-blocks/components/NodeRenderer';
+import { AutoCarousel } from '@/modules/shared/AutoCarousel';
+import { Reveal } from '@/modules/shared/Reveal';
+import { SmartLink } from '@/modules/shared/SmartLink';
+import { useCountUp } from '@/core/hooks/useCountUp';
+import type { Block, Node, Responsive } from '@/modules/page-blocks/types/blocks';
+import { mergeSx, rsx } from '@/modules/page-blocks/utils/responsive';
+import { NodeRenderer } from '@/modules/page-blocks/components/NodeRenderer';
 
 type BlockOf<K extends Block['kind']> = Extract<Block, { kind: K }>;
 

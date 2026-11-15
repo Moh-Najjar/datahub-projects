@@ -1,4 +1,4 @@
-import type { BlogPostBody, BlogPostSummary } from '@/features/blog/types/blog';
+import type { BlogPostBody, BlogPostSummary } from '@/modules/blog/types/blog';
 
 /*
  * Blog data access. The full index (~253 posts) and each article body are separate

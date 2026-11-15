@@ -5,11 +5,11 @@ import { Outlet, ScrollRestoration, useLocation } from 'react-router-dom';
 import { LocaleProvider } from '@/i18n/LocaleProvider';
 import { useLocalized } from '@/i18n/LocaleContext';
 import { localeFromPath } from '@/i18n/paths';
-import { UI } from '@/i18n/ui';
-import { AppThemeProvider } from '@/shared/theme/AppThemeProvider';
-import { layout } from '@/shared/theme/tokens';
-import { Footer } from '@/app/layout/Footer/Footer';
-import { Header, SITE_SHELL_ID } from '@/app/layout/Header/Header';
+import { UI } from '@/i18n';
+import { AppThemeProvider } from '@/core/theme/AppThemeProvider';
+import { layout } from '@/core/theme/tokens';
+import { Footer } from '@/modules/layout/Footer/Footer';
+import { Header, SITE_SHELL_ID } from '@/modules/layout/Header/Header';
 
 function SkipLink() {
   const ui = useLocalized(UI);

@@ -1,4 +1,4 @@
-import type { AppointmentValues } from '@/features/contact/schemas/appointmentSchema';
+import type { AppointmentValues } from '@/modules/contact/schemas/appointmentSchema';
 
 export type SubmissionResult = 'sent' | 'not-configured';
 

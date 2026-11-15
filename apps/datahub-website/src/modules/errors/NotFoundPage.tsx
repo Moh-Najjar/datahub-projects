@@ -1,10 +1,10 @@
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import { ButtonLink } from '@/shared/components/ui/ButtonLink';
-import { Seo } from '@/shared/components/seo/Seo';
-import { ROUTES } from '@/shared/config/routes';
+import { ButtonLink } from '@/modules/shared/ButtonLink';
+import { Seo } from '@/modules/shared/Seo';
+import { ROUTES } from '@/core/routes/paths';
 import { useLocalized } from '@/i18n/LocaleContext';
-import { UI } from '@/i18n/ui';
+import { UI } from '@/i18n';
 
 export default function NotFoundPage() {
   const ui = useLocalized(UI);

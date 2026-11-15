@@ -1,7 +1,7 @@
-import { ROUTES } from '@/shared/config/routes';
-import type { IndustryId } from '@/shared/config/navigation';
-import type { Localized } from '@/i18n/types';
-import type { LinkAction, RichText } from '@/shared/types/content';
+import { ROUTES } from '@/core/routes/paths';
+import type { IndustryId } from '@/core/config/navigation';
+import type { Localized } from '@/i18n/languages';
+import type { LinkAction, RichText } from '@/core/types/content';
 
 export interface ServiceCard {
   title: string;

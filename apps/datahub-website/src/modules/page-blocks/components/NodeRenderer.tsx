@@ -1,12 +1,12 @@
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import { BlogGrid } from '@/features/blog';
-import type { ColumnNode, ColumnWidths, Node, RowNode } from '@/features/page-blocks/types/blocks';
-import { mergeSx, rsx } from '@/features/page-blocks/utils/responsive';
-import { ButtonsBlock, HeadingBlock, HtmlBlock, ImageBlock, SeparatorBlock, SpacerBlock, TextBlock } from '@/features/page-blocks/components/widgets/Basic';
-import { BoxBlock } from '@/features/page-blocks/components/widgets/Boxes';
-import { AccordionBlock, ClientsBlock, CounterBlock, GalleryBlock, GradationBlock, GridBlock, ListBlock, SliderBlock, TabsBlock } from '@/features/page-blocks/components/widgets/Collections';
-import { ContactFormBlock, MapBlock, VideoBlock } from '@/features/page-blocks/components/widgets/Embeds';
+import { BlogGrid } from '@/modules/blog';
+import type { ColumnNode, ColumnWidths, Node, RowNode } from '@/modules/page-blocks/types/blocks';
+import { mergeSx, rsx } from '@/modules/page-blocks/utils/responsive';
+import { ButtonsBlock, HeadingBlock, HtmlBlock, ImageBlock, SeparatorBlock, SpacerBlock, TextBlock } from '@/modules/page-blocks/components/widgets/Basic';
+import { BoxBlock } from '@/modules/page-blocks/components/widgets/Boxes';
+import { AccordionBlock, ClientsBlock, CounterBlock, GalleryBlock, GradationBlock, GridBlock, ListBlock, SliderBlock, TabsBlock } from '@/modules/page-blocks/components/widgets/Collections';
+import { ContactFormBlock, MapBlock, VideoBlock } from '@/modules/page-blocks/components/widgets/Embeds';
 
 /** 12-column widths → CSS widths per MUI breakpoint (WPBakery sm/md/lg = 768/992/1200). */
 function columnSx(width: ColumnWidths, offset?: ColumnWidths) {

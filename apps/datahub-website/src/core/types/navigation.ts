@@ -1,4 +1,4 @@
-import type { Locale } from '@/i18n/types';
+import type { Locale } from '@/i18n/languages';
 
 export interface NavLink {
   label: string;

@@ -5,7 +5,7 @@
  * Styles are the original's *computed* styles captured at three viewport widths:
  * `xl` (1440px), `md` (800px) and `xs` (390px). `md`/`xs` only contain values that differ.
  */
-import type { RichText } from '@/shared/types/content';
+import type { RichText } from '@/core/types/content';
 
 export type StyleMap = Record<string, string>;
 

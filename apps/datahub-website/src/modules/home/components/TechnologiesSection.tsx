@@ -1,10 +1,10 @@
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import { ButtonLink } from '@/shared/components/ui/ButtonLink';
-import { Reveal } from '@/shared/components/ui/Reveal';
-import { SectionHeading } from '@/features/home/components/SectionHeading';
-import type { HomeContent } from '@/features/home/data/homeContent';
-import { TECHNOLOGY_LOGOS } from '@/features/home/data/logos';
+import { ButtonLink } from '@/modules/shared/ButtonLink';
+import { Reveal } from '@/modules/shared/Reveal';
+import { SectionHeading } from '@/modules/home/components/SectionHeading';
+import type { HomeContent } from '@/modules/home/data/homeContent';
+import { TECHNOLOGY_LOGOS } from '@/modules/home/data/logos';
 
 /** "Tools & Technologies We Use" — logo grid over the geometric texture (95% white overlay). */
 export function TechnologiesSection({ content }: { content: HomeContent['technologies'] }) {

@@ -4,10 +4,10 @@ import Typography from '@mui/material/Typography';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import EastIcon from '@mui/icons-material/East';
 import { useTheme } from '@mui/material/styles';
-import { SmartLink } from '@/shared/components/ui/SmartLink';
+import { SmartLink } from '@/modules/shared/SmartLink';
 import { useLocale } from '@/i18n/LocaleContext';
-import type { BlogPostSummary } from '@/features/blog/types/blog';
-import { formatPostDate, trimExcerpt } from '@/features/blog/utils/date';
+import type { BlogPostSummary } from '@/modules/blog/types/blog';
+import { formatPostDate, trimExcerpt } from '@/modules/blog/utils/date';
 
 interface BlogCardProps {
   post: BlogPostSummary;

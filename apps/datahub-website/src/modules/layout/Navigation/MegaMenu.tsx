@@ -1,8 +1,8 @@
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { SmartLink } from '@/shared/components/ui/SmartLink';
-import type { NavColumn } from '@/shared/types/navigation';
+import { SmartLink } from '@/modules/shared/SmartLink';
+import type { NavColumn } from '@/core/types/navigation';
 import { DropdownPanel, subLinkSx } from './DesktopNav.styles';
 
 interface MegaMenuProps {

@@ -1,6 +1,6 @@
 /**
  * Converts the original site's WPBakery pages into typed JSON page documents
- * (`src/features/page-blocks/types/blocks.ts`) — real content, real assets, real computed styles.
+ * (`src/modules/page-blocks/types/blocks.ts`) — real content, real assets, real computed styles.
  *
  * For every page (and its Arabic translation when one exists) it:
  *  1. loads the live page in Chromium at 1440px and walks the WPBakery DOM
@@ -24,8 +24,8 @@ const OUT_DIR = join(ROOT, 'src', 'content', 'pages');
 const PUBLIC = join(ROOT, 'public');
 const WIDTHS = { xl: 1440, md: 800, xs: 390 } as const;
 
-/* Pages rendered by dedicated React components instead of block documents. */
-const SKIP = new Set(['home']);
+/* Pages rendered by dedicated React components instead of block documents (products is DataHub's own page, not on the original site). */
+const SKIP = new Set(['home', 'products']);
 
 type StyleMap = Record<string, string>;
 interface Captured {
@@ -36,8 +36,8 @@ interface Captured {
 /* ------------------------------------------------------------------ registry */
 
 async function loadRegistry(): Promise<Array<{ key: string; path: string; locales: string[] }>> {
-  const routesSrc = await readFile(join(ROOT, 'src', 'shared', 'config', 'routes.ts'), 'utf8');
-  const pagesSrc = await readFile(join(ROOT, 'src', 'shared', 'config', 'pages.ts'), 'utf8');
+  const routesSrc = await readFile(join(ROOT, 'src', 'core', 'routes', 'paths.ts'), 'utf8');
+  const pagesSrc = await readFile(join(ROOT, 'src', 'core', 'config', 'pages.ts'), 'utf8');
   const routes = [...routesSrc.matchAll(/^\s+(\w+): '(\/[^']*)',/gm)].map((m) => ({ key: m[1]!, path: m[2]! }));
   return routes.map((r) => {
     const block = pagesSrc.match(new RegExp(`\\n  ${r.key}: \\{\\n    locales: \\[([^\\]]*)\\]`));

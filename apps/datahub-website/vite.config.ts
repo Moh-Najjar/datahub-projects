@@ -20,11 +20,11 @@ export default defineConfig({
   build: {
     target: 'es2022',
     rollupOptions: {
-      // Feature barrels (src/features/*/index.ts) only re-export. Marking them side-effect free lets
+      // Module barrels (src/modules/*/index.ts) only re-export. Marking them side-effect free lets
       // the bundler resolve each import to the module that defines it, so a barrel never drags a
-      // feature's other modules into the importing page's chunk.
+      // module's other files into the importing page's chunk.
       treeshake: {
-        moduleSideEffects: (id) => !/[\\/]src[\\/]features[\\/][^\\/]+[\\/]index\.ts$/.test(id),
+        moduleSideEffects: (id) => !/[\\/]src[\\/]modules[\\/][^\\/]+[\\/]index\.ts$/.test(id),
       },
       output: {
         manualChunks(id) {

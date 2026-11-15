@@ -2,11 +2,11 @@ import Box from '@mui/material/Box';
 import { useTheme, type SxProps, type Theme } from '@mui/material/styles';
 import EastIcon from '@mui/icons-material/East';
 import type { ReactNode } from 'react';
-import { Reveal } from '@/shared/components/ui/Reveal';
-import { Rich } from '@/shared/components/ui/Rich';
-import { SmartLink } from '@/shared/components/ui/SmartLink';
-import type { Block } from '@/features/page-blocks/types/blocks';
-import { mergeSx, rsx } from '@/features/page-blocks/utils/responsive';
+import { Reveal } from '@/modules/shared/Reveal';
+import { Rich } from '@/modules/shared/Rich';
+import { SmartLink } from '@/modules/shared/SmartLink';
+import type { Block } from '@/modules/page-blocks/types/blocks';
+import { mergeSx, rsx } from '@/modules/page-blocks/utils/responsive';
 
 type BoxBlockData = Extract<Block, { kind: 'box' }>;
 

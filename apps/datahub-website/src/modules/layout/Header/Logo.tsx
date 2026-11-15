@@ -1,7 +1,7 @@
-import { SmartLink } from '@/shared/components/ui/SmartLink';
+import { SmartLink } from '@/modules/shared/SmartLink';
 import { useLocalized } from '@/i18n/LocaleContext';
-import { UI } from '@/i18n/ui';
-import { ROUTES } from '@/shared/config/routes';
+import { UI } from '@/i18n';
+import { ROUTES } from '@/core/routes/paths';
 
 interface LogoProps {
   variant?: 'dark' | 'white';

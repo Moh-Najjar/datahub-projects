@@ -1,9 +1,9 @@
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import { BlogCard, type BlogPostSummary } from '@/features/blog';
-import { Reveal } from '@/shared/components/ui/Reveal';
-import { SectionHeading } from '@/features/home/components/SectionHeading';
-import type { HomeContent } from '@/features/home/data/homeContent';
+import { BlogCard, type BlogPostSummary } from '@/modules/blog';
+import { Reveal } from '@/modules/shared/Reveal';
+import { SectionHeading } from '@/modules/home/components/SectionHeading';
+import type { HomeContent } from '@/modules/home/data/homeContent';
 import latestPosts from '@/content/blog/latest.json';
 
 const POSTS = latestPosts as BlogPostSummary[];

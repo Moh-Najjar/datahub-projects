@@ -10,12 +10,14 @@ import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import XIcon from '@mui/icons-material/X';
 import { useParams } from 'react-router-dom';
-import { LinkedInIcon } from '@/shared/components/ui/LinkedInIcon';
-import { Seo, SITE_URL } from '@/shared/components/seo/Seo';
-import { SmartLink } from '@/shared/components/ui/SmartLink';
-import { type BlogPostSummary, formatPostDate, loadBlogBody, loadBlogIndex } from '@/features/blog';
+import { LinkedInIcon } from '@/modules/shared/LinkedInIcon';
+import { Seo, SITE_URL } from '@/modules/shared/Seo';
+import { SmartLink } from '@/modules/shared/SmartLink';
+import { loadBlogBody, loadBlogIndex } from '@/modules/blog/data/blog';
+import type { BlogPostSummary } from '@/modules/blog/types/blog';
+import { formatPostDate } from '@/modules/blog/utils/date';
 import { useLocale } from '@/i18n/LocaleContext';
-import NotFoundPage from '../Errors/NotFoundPage';
+import { NotFoundPage } from '@/modules/errors';
 
 /** Typography for the article body (WordPress content styles of the original theme). */
 const articleSx = {

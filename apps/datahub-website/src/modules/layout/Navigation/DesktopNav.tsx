@@ -1,12 +1,12 @@
 import { memo, type ReactNode } from 'react';
 import Box from '@mui/material/Box';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { SmartLink } from '@/shared/components/ui/SmartLink';
-import { PRIMARY_NAV } from '@/shared/config/navigation';
-import { useIsActive } from '@/app/layout/Navigation/useActivePath';
-import { useHoverMenu } from '@/app/layout/Navigation/useHoverMenu';
+import { SmartLink } from '@/modules/shared/SmartLink';
+import { PRIMARY_NAV } from '@/core/config/navigation';
+import { useIsActive } from '@/modules/layout/Navigation/useActivePath';
+import { useHoverMenu } from '@/modules/layout/Navigation/useHoverMenu';
 import { useLocalized } from '@/i18n/LocaleContext';
-import type { NavItem, NavLink } from '@/shared/types/navigation';
+import type { NavItem, NavLink } from '@/core/types/navigation';
 import { MegaMenu } from './MegaMenu';
 import { DropdownPanel, MenuItem, MenuList, subLinkSx } from './DesktopNav.styles';
 import { LanguageSwitcher } from './LanguageSwitcher';

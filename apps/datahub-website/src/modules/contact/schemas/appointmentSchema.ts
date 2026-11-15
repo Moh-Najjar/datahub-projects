@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { UiStrings } from '@/i18n/ui';
+import type { UiStrings } from '@/i18n';
 
 /** Field names match the original Contact Form 7 form (`your-name`, `your-email`, `inquiry`). */
 export interface AppointmentValues {

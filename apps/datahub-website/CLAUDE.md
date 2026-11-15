@@ -2,7 +2,8 @@
 
 Faithful recreation of <https://datahubanalytics.com/> (a WordPress/Mitech site) in React 19 + TypeScript + Vite + **Material UI**.
 This is a **recreation, not a redesign**: the live site is the source of truth for content, layout, spacing and behaviour.
-Full plan and decisions: [docs/PLAN.md](docs/PLAN.md).
+DataHub is also adding **its own pages** that the original site doesn't have (starting with **Products**, `/products/`),
+built in the same visual identity. Full plan and decisions: [docs/PLAN.md](docs/PLAN.md).
 
 ## Commands
 
@@ -20,22 +21,28 @@ Run `npm run typecheck && npm run lint && npm run build` before considering any 
 
 ## Non-negotiable rules
 
-1. **No invented content.** Every string, number, image and link must come from the original site. Keep the original's
-   wording verbatim (including its typos, e.g. "Big Data Analyics"). If something can't be obtained, say so — don't guess.
+1. **No invented content.** Every string, number, image and link on a **recreated** page must come from the original site.
+   Keep the original's wording verbatim (including its typos, e.g. "Big Data Analyics"). If something can't be obtained,
+   say so — don't guess. **Exception — DataHub's own pages** (currently only Products): their copy is written by
+   DataHub, not copied. It must never claim that an unfinished product is available or has features that don't exist,
+   and placeholder copy must be marked as such in its data file. Recreated pages keep following the original-content rule.
 2. **No fake assets.** Never draw, generate or substitute logos/images. Add new originals to `scripts/assets.manifest.ts`
    and run `npm run assets`. Licensed icon fonts (Font Awesome Pro) are replaced by the closest `@mui/icons-material` icon.
 3. **Measure, don't eyeball.** Take sizes/colors from the original's computed styles (Playwright) and put shared values in
-   `src/shared/theme/tokens.ts`.
-4. **Content is data.** Copy lives in typed data modules (`src/shared/config/`, `src/features/*/data/`) and the generated
-   `src/content/`, as typed `Localized<T>` records — never hard-coded in components. Components receive typed props.
+   `src/core/theme/tokens.ts`.
+4. **Content is data.** Copy lives in typed data files (`src/core/config/`, `src/modules/*/data/`), the UI translations
+   (`src/i18n/locales/`) and the generated `src/content/` — never hard-coded in components. Components receive typed props.
 5. **Forms never fake success.** Without `VITE_FORM_ENDPOINT` the form must say the message was not sent.
 
 ## Styling (MUI)
 
-- Theme: `src/shared/theme/theme.ts` (`createAppTheme(direction)`), tokens in `src/shared/theme/tokens.ts`, type
-  augmentation in `src/shared/theme/augmentation.d.ts`. Custom palette lives under `palette.brand.*`; shadows under `theme.customShadows`.
+- Theme: `src/core/theme/theme.ts` (`createAppTheme(direction)`), tokens in `src/core/theme/tokens.ts`, type
+  augmentation in `src/core/theme/augmentation.d.ts`. Custom palette lives under `palette.brand.*`; shadows under `theme.customShadows`.
 - Spacing unit is **5px** (`sx={{ p: 6 }}` = 30px). Pixel strings (`'30px'`) are fine when copying measured values.
 - Breakpoints mirror the original grid: `sm 544 · md 768 · lg 992 · xl 1200`. The desktop menu shows from `xl`.
+  With the added Products item, top-level menu items use tighter spacing between 1200px and 1439px
+  (`Navigation/DesktopNav.styles.ts`) so the menu fits in both languages; from 1440px the original spacing applies.
+  Re-check the fit (EN and AR, 1200–1440px) whenever a top-level menu item is added.
 - Button variants: `solid`, `gradient`, `textArrow`, `pill` (use `ButtonLink` for links).
 - Style with the theme, `sx`, or `styled()` next to the component. No CSS Modules, Tailwind or Bootstrap. Avoid inline `style`.
 - **RTL:** Arabic uses an Emotion cache with `stylis-plugin-rtl`. Write styles with **physical** `left/right`
@@ -47,78 +54,131 @@ Run `npm run typecheck && npm run lint && npm run build` before considering any 
 
 ## Routing & i18n
 
-- Canonical URLs (identical to the original, trailing slash) are in `src/shared/config/routes.ts` (`ROUTES`). Never hard-code paths.
-- Arabic = same path under `/ar`. `src/shared/config/pages.ts` records which locales each page exists in (from the original) and its
+- Canonical URLs (identical to the original, trailing slash) are in `src/core/routes/paths.ts` (`ROUTES`). Never hard-code paths.
+- Arabic = same path under `/ar`. `src/core/config/pages.ts` records which locales each page exists in (from the original) and its
   original SEO title/description. Arabic URLs of English-only pages redirect to the English page.
+- Interface strings (header, footer, form, buttons) are in `src/i18n/locales/en.json` and `ar.json`, typed by `UiStrings`
+  in `src/i18n/index.ts` — both files must have every key (`tsc` fails otherwise). Use them with `useLocalized(UI)`.
+  There is no i18next: the locale comes from the URL (`LocaleProvider`), and RTL is handled by the theme's Emotion cache.
 - Use `SmartLink`/`ButtonLink` for links: they add the locale prefix and handle external/`tel:`/`mailto:`/file links.
 - Each page renders `<PageSeo routeKey="…" />` (React 19 hoists `<title>`/`<meta>`).
 - Broken links on the original are redirected via `LEGACY_REDIRECTS`.
 
 ## Structure
 
-Feature-based. Layers, lowest first — each may import only from layers to its left:
-**`i18n` ← `shared` ← `features` ← `pages` ← `app`**. Enforced by `no-restricted-imports` overrides in `.oxlintrc.json`.
+Three top-level areas (same layout as the ASEZA project): **`core`** = application infrastructure, **`i18n`** =
+translations and localization, **`modules`** = all website functionality.
 
 ```
 src/
-├── main.tsx
-├── app/                 composition root — nothing imports it (except main.tsx)
-│   ├── App.tsx
-│   ├── router/          router (lazy routes, LEGACY_REDIRECTS, /ar tree), RouteError (errorElement)
-│   └── layout/          site shell: SiteLayout, Header/, Footer/, Navigation/ (desktop/mobile menus,
-│                        language switcher, nav-only hooks)
-├── pages/               route components: Home, BlockPage (all generated pages), Blog post, 404
-├── features/            one folder per feature with real code; each exposes its public API in index.ts
-│   ├── home/            homepage sections + home copy (data/homeContent.ts), logos, industry icons
-│   ├── blog/            BlogCard, BlogGrid, lazy blog loader, blog types, date helpers
-│   ├── contact/         AppointmentForm (+ Zod schema, submit service), consultation band, contact details
-│   └── page-blocks/     renderer for generated page documents (NodeRenderer, PageTitleBar, widgets/)
-├── shared/              generic, feature-free building blocks
-│   ├── components/ui/   SmartLink, ButtonLink, Rich, Reveal, AutoCarousel, VideoPoster, LinkedInIcon
-│   ├── components/seo/  Seo, PageSeo
-│   ├── config/          site registries: routes (ROUTES), pages (locales + SEO), navigation
-│   ├── hooks/           useCountUp, useRouteKey (+ PageHandle)
-│   ├── theme/           MUI theme, tokens, RTL Emotion cache, AppThemeProvider
-│   └── types/           RichText, ImageAsset, navigation types
-├── i18n/                locale context/provider, path helpers, UI strings, useAlternateHref
-└── content/             GENERATED only (pages/*.json, chrome.json, blog/**) — never hand-edit
+├── main.tsx                 mounts <App />
+├── App.tsx                  <RouterProvider router={router} />
+├── core/                    application infrastructure — never imports modules (except the router)
+│   ├── routes/
+│   │   ├── index.tsx        the router: lazy-loads each module's page, /ar tree, legacy redirects, 404
+│   │   └── paths.ts         ROUTES (every URL), LEGACY_REDIRECTS, EXTERNAL_LINKS
+│   ├── config/              pages.ts (locales + SEO per route), navigation.ts (menus, footer columns)
+│   ├── theme/               MUI theme, tokens, RTL Emotion cache, AppThemeProvider
+│   ├── hooks/               useCountUp, useRouteKey
+│   └── types/               RichText, ImageAsset, navigation types
+├── i18n/                    translations and localization
+│   ├── locales/en.json      interface strings (English)
+│   ├── locales/ar.json      interface strings (Arabic)
+│   ├── index.ts             UI (typed by UiStrings)
+│   ├── languages.ts         Locale/Direction (from @datahub/shared-types), LOCALES, LOCALE_DIRECTION
+│   └── LocaleContext.ts, LocaleProvider.tsx, paths.ts (localizePath…), useAlternateHref.ts
+├── modules/                 all website functionality
+│   ├── shared/              reusable components: SmartLink, ButtonLink, Rich, Reveal, AutoCarousel,
+│   │                        VideoPoster, LinkedInIcon, Seo, PageSeo, PageTitleBar
+│   ├── layout/              site shell: SiteLayout, Header/, Footer/, Navigation/ (menus, language switcher)
+│   ├── home/                HomePage.tsx, components/ (sections), data/ (home copy, logos, industry icons)
+│   ├── blog/                BlogPostPage.tsx, ArabicPostRedirect.tsx, components/, data/ (loader), types/, utils/
+│   ├── contact/             api/appointment.ts, components/ (AppointmentForm, ConsultationSection), schemas/, data/
+│   ├── page-blocks/         BlockPage.tsx — renders every generated page (about-us, services, solutions, contact,
+│   │                        careers, blog list…) from src/content/pages; components/ + widgets/, types/, utils/
+│   ├── products/            ProductsPage.tsx (DataHub's own page) — api/productsApi.ts, hooks/useProducts.ts,
+│   │                        data/mockProducts.ts, types/product.ts, components/ (ProductCard, ProductGrid)
+│   └── errors/              NotFoundPage.tsx, RouteError.tsx
+└── content/                 GENERATED only (pages/*.json, chrome.json, blog/**) — never hand-edit
 ```
 
-Inside a feature: `components/`, `data/`, `types/`, `utils/`, `services/`, `schemas/` — create a folder only when it
-has content. Images and fonts stay in `public/` (generated content references them by URL).
+Images and fonts stay in `public/` (generated content references them by URL). Create a folder only when it has files.
 
-### Where code goes
+### Where is…?
 
-- **Used by one feature** → inside that feature. Used by **two or more** features/pages and free of business data →
-  `shared/`. Don't move something to `shared/` "in case".
-- **`shared/` never imports `features/`, `pages/` or `app/`** and holds no business logic (static registries in
-  `shared/config/` are data, not logic).
-- **Features don't import each other.** Allowed composition edges (embedding another feature's widget):
-  `home → blog`, `page-blocks → blog, contact`. Anything new needs a real reason and an update to `.oxlintrc.json`.
-- **Pages** compose features and shared components; keep business logic in features.
-- **Site shell** (header, footer, menus) lives in `app/layout/` because it composes features and site navigation data.
-- **A new page** of the original site: add its route to `shared/config/routes.ts` + `pages.ts`, then generate its
-  document (`npm run pages:convert -- <routeKey>`); `BlockPage` renders it — no new feature needed. Create a feature
-  only for a page with hand-built code (like `home`).
-- **A new feature**: `src/features/<name>/` + `index.ts` exporting only what other layers use, and an oxlint override
-  copied from an existing feature.
+| I want to… | Go to |
+| --- | --- |
+| Find or add a URL | `src/core/routes/paths.ts` (`ROUTES`) + `src/core/config/pages.ts` (locales, SEO title/description) |
+| See how a URL is rendered | `src/core/routes/index.tsx`: `home` → `modules/home/HomePage`, `products` → `modules/products/ProductsPage`, every other route → `modules/page-blocks/BlockPage` (document `src/content/pages/<routeKey>.<locale>.json`), `/<slug>/` → `modules/blog/BlogPostPage` |
+| Add or change a product | `src/modules/products/data/mockProducts.ts` (until a backend exists) — see "Products" below |
+| Write an API call | `src/modules/<module>/api/` — e.g. `modules/contact/api/appointment.ts` (`submitAppointment`) |
+| Change a translation | `src/i18n/locales/en.json` + `ar.json` (same key in both; add new keys to `UiStrings` in `i18n/index.ts`) |
+| Change page copy | Generated pages: regenerate (`npm run pages:convert`). Homepage: `modules/home/data/homeContent.ts` |
+| Change the menus / footer links | `src/core/config/navigation.ts` (data) and `src/modules/layout/` (components) |
+| Change colors, fonts, breakpoints | `src/core/theme/` |
+
+### Rules
+
+- **A module owns everything only it uses**: components, `api/`, `data/`, `types/`, `utils/`, `hooks/`, `schemas/`.
+- **`modules/shared`** holds components used by two or more modules; it never imports another module. Don't move
+  something there "in case".
+- **Modules use each other only through `index.ts`** (`import { BlogCard } from '@/modules/blog'`), never through
+  internal paths. A module has an `index.ts` only if another module needs something from it: today `blog` (BlogCard,
+  BlogGrid), `contact` (form, consultation band, contact data) and `errors` (NotFoundPage).
+- **Routed pages are explicit files** (`HomePage.tsx`, `BlockPage.tsx`, `BlogPostPage.tsx`, `NotFoundPage.tsx`) with a
+  default export, lazy-loaded by `core/routes/index.tsx`. Never route to a module's `index.ts` — a lazy import of a
+  barrel pulls everything it exports into that page's chunk.
+- **`core` never imports `modules`**, except `core/routes/index.tsx`. Only `App.tsx` imports the router; everything
+  else imports URLs from `@/core/routes/paths` (this prevents import cycles).
+- **`i18n` imports nothing from `core` or `modules`.**
+- **API calls** live in the owning module's `api/`. There is no shared HTTP client (the site makes one request); add one
+  to `core/helpers/` only when two modules need the same request handling.
+- All boundaries are enforced by `no-restricted-imports` overrides in `.oxlintrc.json` (`npm run lint`).
 
 ### Import conventions
 
-- Use the `@/` alias for anything outside the current folder; relative imports (`./x`) only within a folder.
-- Outside a feature, import it **only through its public API**: `@/features/blog`, never `@/features/blog/components/…`.
-  Inside a feature, import its own modules directly.
-- Barrels exist only at feature roots. They're marked side-effect free in `vite.config.ts`, so importing one never
-  pulls a feature's other modules into a page's chunk — keep them pure re-exports.
+- Use the `@/` alias for anything outside the current folder; `./x` only within a folder.
+- Inside a module, import its own files directly (`@/modules/blog/data/blog`).
+- `index.ts` files are pure re-exports. `vite.config.ts` marks them side-effect free, so importing one never pulls the
+  module's other files into the importing page's chunk.
+
+### Adding things — examples
+
+- **A page of the original site** (most common): add the key + URL to `ROUTES` in `core/routes/paths.ts` and its
+  locales/SEO to `core/config/pages.ts`, then `npm run pages:convert -- <routeKey>`. `BlockPage` renders it — no new
+  module or route code.
+- **A hand-built page**: create `modules/<name>/<Name>Page.tsx` (default export, renders `<PageSeo routeKey="…" />`),
+  add its key to `ROUTES`/`PAGES`, declare `const NamePage = lazy(() => import('@/modules/<name>/<Name>Page'))`,
+  and map it in `DEDICATED_PAGES` in `core/routes/index.tsx`: `<key>: NamePage`.
+- **An API call**: `modules/<module>/api/<thing>.ts` exporting a plain async function (read env vars with
+  `import.meta.env`); call it from the module's components. Keep it out of components and `data/`.
+- **A translation**: add the key to `UiStrings` in `i18n/index.ts`, then to both `locales/en.json` and `locales/ar.json`.
+- **A reusable component**: `modules/shared/<Name>.tsx` once a second module needs it; until then keep it in its module.
+- **A new module**: `modules/<name>/`; add an `index.ts` only when another module needs it, and copy an existing
+  module's override in `.oxlintrc.json` (replace the module name).
+
+## Products (`modules/products`)
+
+- **Data flow:** `ProductsPage` / `ProductCard` → `hooks/useProducts` (loading, error, one shared request) →
+  `api/productsApi` (`getProducts`, `getProductBySlug`) → `data/mockProducts`. Components never import the mock data;
+  `productsApi.ts` is the only file that knows where products come from. Moving to a backend = replace its function
+  bodies with HTTP calls returning the same `Product` type.
+- **Add a product:** append an entry to `MOCK_PRODUCTS` (`types/product.ts` describes every field; all text is
+  `Localized<string>`, i.e. `{ en, ar }`). It appears on the page automatically, ordered by `displayOrder`. Add `logo`
+  only with real artwork (cards show an initials badge until then) and `links` only with real destinations.
+- **Status** (`available` / `in-development` / `coming-soon`) drives the card's chip; only `available` products may be
+  described as usable. Page labels (title, intro, status names) are in `i18n/locales/*.json` under `products`.
+- **Not products:** administrative portals (e.g. the future DataHub HR Admin Portal) stay out of the catalogue; their
+  access will be added separately when the portal exists.
 
 ## Content pipeline (inner pages)
 
-- The homepage is hand-built (`src/features/home`, copy in `src/features/home/data/homeContent.ts`).
+- The homepage is hand-built (`src/modules/home`, copy in `src/modules/home/data/homeContent.ts`).
 - Every other page is a **page document** (`src/content/pages/<routeKey>.<locale>.json`, typed in
-  `src/features/page-blocks/types/blocks.ts`) generated by `scripts/convert-pages.ts`: it walks the original WPBakery DOM in Chromium
+  `src/modules/page-blocks/types/blocks.ts`) generated by `scripts/convert-pages.ts`: it walks the original WPBakery DOM in Chromium
   (rows → columns → widgets), captures each element's computed styles at 1440/800/390px, sanitizes HTML, rewrites
   links to locale-neutral paths and downloads assets to `public/assets/uploads/` (original paths kept).
-- `src/pages/BlockPage` renders documents with `src/features/page-blocks` (one MUI component per theme widget).
+- `src/modules/page-blocks/BlockPage.tsx` renders documents with the module's widgets (one MUI component per theme widget).
   Fix rendering issues in the widget components or the converter — **never hand-edit the JSON**, regenerate it.
 - Arabic documents are captured from the RTL pages and converted to LTR terms (`toLtr`), then mirrored by the
   RTL cache.

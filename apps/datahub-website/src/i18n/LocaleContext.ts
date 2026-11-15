@@ -1,5 +1,5 @@
 import { createContext, use } from 'react';
-import type { Direction, Locale, Localized } from './types';
+import type { Direction, Locale, Localized } from './languages';
 
 export interface LocaleContextValue {
   locale: Locale;

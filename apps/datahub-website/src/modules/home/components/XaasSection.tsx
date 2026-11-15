@@ -2,9 +2,9 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import { ButtonLink } from '@/shared/components/ui/ButtonLink';
-import { Reveal } from '@/shared/components/ui/Reveal';
-import type { XaasCard } from '@/features/home/data/homeContent';
+import { ButtonLink } from '@/modules/shared/ButtonLink';
+import { Reveal } from '@/modules/shared/Reveal';
+import type { XaasCard } from '@/modules/home/data/homeContent';
 
 /** DWaaS / DAaaS call-to-action boxes (WPBakery "vc_cta3" with a black background). */
 export function XaasSection({ cards }: { cards: XaasCard[] }) {

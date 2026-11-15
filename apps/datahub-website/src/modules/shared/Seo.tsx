@@ -1,6 +1,6 @@
 import { useLocale } from '@/i18n/LocaleContext';
 import { localizePath } from '@/i18n/paths';
-import type { Locale } from '@/i18n/types';
+import type { Locale } from '@/i18n/languages';
 
 export const SITE_URL = 'https://datahubanalytics.com';
 const SITE_NAME = 'Datahub Analytics';

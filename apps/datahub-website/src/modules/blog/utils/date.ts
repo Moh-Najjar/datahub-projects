@@ -1,4 +1,4 @@
-import type { Locale } from '@/i18n/types';
+import type { Locale } from '@/i18n/languages';
 
 const MONTHS: Record<Locale, readonly string[]> = {
   en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],

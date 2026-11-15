@@ -1,0 +1,66 @@
+{
+  "siteName": "Datahub Analytics",
+  "skipToContent": "Skip to content",
+  "openMenu": "Open menu",
+  "closeMenu": "Close menu",
+  "toggleSubmenu": "Toggle submenu",
+  "languageName": "English",
+  "languageBarLabel": "English",
+  "consultation": {
+    "heading": "Book a free consultation with our technology experts.",
+    "callLabel": "Call for advice now!",
+    "emailLabel": "Say hello"
+  },
+  "appointment": {
+    "title": "Book appointment",
+    "description": "Let's collaborate.",
+    "name": "Name*",
+    "email": "Email*",
+    "inquiry": "Your inquiry about*",
+    "inquiryOptions": [
+      "Datahub Analytics",
+      "Datahub Infrastructure",
+      "Datahub Security"
+    ],
+    "submit": "Submit",
+    "sending": "Sending…"
+  },
+  "validation": {
+    "required": "Please fill out this field.",
+    "email": "Please enter an email address.",
+    "summary": "One or more fields have an error. Please check and try again."
+  },
+  "submission": {
+    "notConfigured": "Your message was not sent: this site has no form backend configured yet. Please email info@datahubanalytics.com or call (+962) 78 1005100.",
+    "success": "Thank you for your message. It has been sent.",
+    "failure": "There was an error trying to send your message. Please try again later."
+  },
+  "footer": {
+    "connect": "Connect With Us",
+    "phone": "Phone",
+    "copyright": "© 2023 Datahub Analytics. All Rights Reserved"
+  },
+  "readMore": "Read More",
+  "viewAll": "View All",
+  "discoverNow": "Discover now",
+  "playVideo": "Play video",
+  "closeVideo": "Close video",
+  "notFound": {
+    "title": "Page not found",
+    "text": "The page you are looking for does not exist or has been moved.",
+    "backHome": "Go back to homepage"
+  },
+  "products": {
+    "title": "Products",
+    "breadcrumbHome": "Home",
+    "introHeading": "Products built by DataHub",
+    "introText": "Alongside our data and analytics services, we are building our own software products. Here you can follow what we are working on.",
+    "status": {
+      "available": "Available",
+      "inDevelopment": "In development",
+      "comingSoon": "Coming soon"
+    },
+    "loading": "Loading products",
+    "error": "The products could not be loaded. Please try again later."
+  }
+}

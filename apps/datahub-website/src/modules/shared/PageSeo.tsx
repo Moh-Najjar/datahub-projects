@@ -1,5 +1,5 @@
-import { ROUTES, type RouteKey } from '@/shared/config/routes';
-import { PAGES } from '@/shared/config/pages';
+import { ROUTES, type RouteKey } from '@/core/routes/paths';
+import { PAGES } from '@/core/config/pages';
 import { useLocale } from '@/i18n/LocaleContext';
 import { Seo } from './Seo';
 

@@ -5,10 +5,10 @@ import Typography from '@mui/material/Typography';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
 import type { ReactNode } from 'react';
-import { Reveal } from '@/shared/components/ui/Reveal';
-import { CONTACT_EMAIL, PRIMARY_PHONE } from '@/features/contact/data/contact';
+import { Reveal } from '@/modules/shared/Reveal';
+import { CONTACT_EMAIL, PRIMARY_PHONE } from '@/modules/contact/data/contact';
 import { useLocalized } from '@/i18n/LocaleContext';
-import { UI } from '@/i18n/ui';
+import { UI } from '@/i18n';
 import { AppointmentForm } from './AppointmentForm';
 
 interface ContactLineProps {

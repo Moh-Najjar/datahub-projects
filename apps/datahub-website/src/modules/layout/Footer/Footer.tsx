@@ -1,19 +1,19 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
-import { Constellation } from '@/app/layout/Footer/Constellation';
-import { LinkedInIcon } from '@/shared/components/ui/LinkedInIcon';
-import { SmartLink } from '@/shared/components/ui/SmartLink';
-import { ConsultationSection, CONTACT_EMAIL, OFFICES } from '@/features/contact';
-import { FOOTER_COLUMNS } from '@/shared/config/navigation';
-import { EXTERNAL_LINKS } from '@/shared/config/routes';
+import { Constellation } from '@/modules/layout/Footer/Constellation';
+import { LinkedInIcon } from '@/modules/shared/LinkedInIcon';
+import { SmartLink } from '@/modules/shared/SmartLink';
+import { ConsultationSection, CONTACT_EMAIL, OFFICES } from '@/modules/contact';
+import { FOOTER_COLUMNS } from '@/core/config/navigation';
+import { EXTERNAL_LINKS } from '@/core/routes/paths';
 import { useAlternateHref } from '@/i18n/useAlternateHref';
-import { useRouteKey } from '@/shared/hooks/useRouteKey';
+import { useRouteKey } from '@/core/hooks/useRouteKey';
 import pageChrome from '@/content/pages/chrome.json';
 import { useLocale, useLocalized } from '@/i18n/LocaleContext';
-import { UI } from '@/i18n/ui';
-import { colors } from '@/shared/theme/tokens';
-import { Logo } from '@/app/layout/Header/Logo';
+import { UI } from '@/i18n';
+import { colors } from '@/core/theme/tokens';
+import { Logo } from '@/modules/layout/Header/Logo';
 
 const columnTitleSx = { mb: '18px', color: 'common.white', fontSize: 20, fontWeight: 400, lineHeight: 1.42, textDecoration: 'underline' } as const;
 
