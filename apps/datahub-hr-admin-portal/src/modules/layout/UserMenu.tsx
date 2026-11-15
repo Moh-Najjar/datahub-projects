@@ -1,0 +1,79 @@
+import { useState } from 'react';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
+import AccountCircleOutlined from '@mui/icons-material/AccountCircleOutlined';
+import LogoutOutlined from '@mui/icons-material/LogoutOutlined';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/core/context/authContext';
+import { useLanguage } from '@/i18n/useLanguage';
+
+const initials = (name: string) =>
+  name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join('');
+
+/** Avatar menu: who is signed in (name, role, email), profile link, sign out. */
+export function UserMenu() {
+  const { t } = useTranslation();
+  const { language } = useLanguage();
+  const { user, can, signOut } = useAuth();
+  const navigate = useNavigate();
+  const [anchor, setAnchor] = useState<HTMLElement | null>(null);
+  if (!user) return null;
+  const name = user.name[language];
+
+  const go = (path: string) => {
+    setAnchor(null);
+    navigate(path);
+  };
+
+  return (
+    <>
+      <IconButton onClick={(e) => setAnchor(e.currentTarget)} aria-label={t('shell.userMenu', { name })} aria-haspopup="menu" aria-expanded={!!anchor}>
+        <Avatar sx={{ width: 34, height: 34, fontSize: 14, bgcolor: 'primary.main', color: 'primary.contrastText' }}>{initials(name)}</Avatar>
+      </IconButton>
+      <Menu anchorEl={anchor} open={!!anchor} onClose={() => setAnchor(null)} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} transformOrigin={{ vertical: 'top', horizontal: 'right' }}>
+        <Box sx={{ px: 2, py: 1, minWidth: 220 }}>
+          <Typography sx={{ fontWeight: 600 }}>{name}</Typography>
+          <Typography variant="body2" color="text.secondary">
+            {t(`roles.${user.role}`)}
+          </Typography>
+          <Typography variant="caption" color="text.secondary" dir="ltr" sx={{ display: 'block' }}>
+            {user.email}
+          </Typography>
+        </Box>
+        <Divider />
+        {can('profile:view') && (
+          <MenuItem onClick={() => go('/profile')}>
+            <ListItemIcon>
+              <AccountCircleOutlined fontSize="small" />
+            </ListItemIcon>
+            {t('nav.items.profile')}
+          </MenuItem>
+        )}
+        <MenuItem
+          onClick={() => {
+            setAnchor(null);
+            signOut();
+            navigate('/login', { replace: true });
+          }}
+        >
+          <ListItemIcon>
+            <LogoutOutlined fontSize="small" sx={{ transform: (theme) => (theme.direction === 'rtl' ? 'scaleX(-1)' : undefined) }} />
+          </ListItemIcon>
+          {t('actions.signOut')}
+        </MenuItem>
+      </Menu>
+    </>
+  );
+}

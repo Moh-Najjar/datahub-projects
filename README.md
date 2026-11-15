@@ -10,7 +10,8 @@ containing only TypeScript types both apps genuinely use.
 DataHubProjects/
 ├── apps/
 │   ├── datahub-website/   React + Vite + MUI website (own CLAUDE.md, docs, scripts)
-│   └── datahub-hr/        Expo + React Native app (routes in src/app/)
+│   ├── datahub-hr/        Expo + React Native app (routes in src/app/)
+│   └── datahub-hr-admin-portal/   React + Vite + MUI admin web app for DataHubHR (own CLAUDE.md)
 ├── packages/
 │   └── shared-types/      @datahub/shared-types — shared TypeScript types only
 ├── package.json           workspaces, root scripts, React version policy
@@ -25,6 +26,7 @@ DataHubProjects/
 | --- | --- | --- | --- |
 | **DataHub Website** | `apps/datahub-website` | React 19.3.0 · TypeScript 7 · Vite 8 · Material UI 9 · React Router 7 · Emotion (RTL) | Production-ready recreation of datahubanalytics.com (EN + AR) |
 | **DataHubHR** | `apps/datahub-hr` | Expo SDK 58 · React Native 0.88 · React 19.3.0 · Expo Router · TypeScript 6 | Configured foundation; HR features not started |
+| **DataHub HR Admin Portal** | `apps/datahub-hr-admin-portal` | React 19.3.0 · TypeScript 6 · Vite 8 · Material UI 9 · Apache ECharts 6 · React Router 7 · TanStack Query 5 · i18next (EN + AR, RTL) | Phase 4: app shell, demo sign-in per role (mock — not real authentication), role-based navigation, HR dashboard (KPIs, Apache ECharts charts). Mock data only — no backend yet |
 
 Each app owns its UI, routing, styling, i18n, services, utilities and configuration. Apps never import
 each other, and **UI code is never shared** — lint rules enforce this (see *Application boundaries*).
@@ -92,13 +94,25 @@ npm run doctor:hr          # expo-doctor dependency/config checks
 Add native-compatible libraries with `npx expo install <pkg>` **inside `apps/datahub-hr`** so versions match
 Expo SDK 58. There is no web target for DataHubHR yet.
 
+### DataHub HR Admin Portal
+
+```bash
+npm run dev:admin          # Vite dev server → http://localhost:5174
+npm run build:admin        # type-check + production build → apps/datahub-hr-admin-portal/dist
+npm run lint:admin         # oxlint (incl. architecture boundaries)
+npm run test:admin         # Vitest
+```
+
+Runs on a **simulated (mock) backend** with fictional data — see
+[apps/datahub-hr-admin-portal/CLAUDE.md](apps/datahub-hr-admin-portal/CLAUDE.md).
+
 ### Whole repository
 
 ```bash
 npm run typecheck          # TypeScript for every workspace
 npm run typecheck:packages # TypeScript for shared-types
-npm run lint               # website + HR + shared-types
-npm run verify             # typecheck → lint → website build → Expo config → expo-doctor
+npm run lint               # website + HR + admin portal + shared-types
+npm run verify             # typecheck → lint → website build → admin build + tests → Expo config → expo-doctor
 ```
 
 ## Dependency policy

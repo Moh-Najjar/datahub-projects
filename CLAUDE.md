@@ -9,6 +9,7 @@ Read the app-level `CLAUDE.md` before working inside an app — it contains that
 | --- | --- | --- | --- |
 | DataHub Website | `apps/datahub-website/` | Faithful recreation of datahubanalytics.com (EN/AR, RTL). Recreation, **not** a redesign. | [apps/datahub-website/CLAUDE.md](apps/datahub-website/CLAUDE.md) |
 | DataHubHR | `apps/datahub-hr/` | HR management mobile app. Original DataHubHR branding — inspired by ZenHR's functionality only, never its branding, logos, assets or exact screens. | [apps/datahub-hr/CLAUDE.md](apps/datahub-hr/CLAUDE.md) |
+| DataHub HR Admin Portal | `apps/datahub-hr-admin-portal/` | Admin web app for DataHubHR (React + MUI, EN/AR, RTL). Original product — never copies other HR vendors' code, branding, text or exact screens. Mock backend until the shared HR backend exists. | [apps/datahub-hr-admin-portal/CLAUDE.md](apps/datahub-hr-admin-portal/CLAUDE.md) |
 | Shared types | `packages/shared-types/` | `@datahub/shared-types`: TypeScript types used by **both** apps. | this file |
 
 Each app owns its source, UI, routing, styling, i18n, services, utilities, constants and configuration —
@@ -18,6 +19,7 @@ all inside its own folder. There is deliberately **no** shared runtime package.
 
 - Website must not import React Native, Expo or DataHubHR code (oxlint `no-restricted-imports`).
 - DataHubHR must not import MUI, Emotion, React DOM, React Router or website code (ESLint).
+- Admin Portal must not import React Native, Expo, website or DataHubHR code (oxlint `no-restricted-imports`).
 - shared-types must not import React, React DOM, React Native, Expo, MUI or app code (oxlint).
 - **Stay in scope:** when working on one app, do not modify the other. A change to shared-types must keep both
   apps building: run `npm run typecheck` afterwards.
@@ -38,6 +40,8 @@ all inside its own folder. There is deliberately **no** shared runtime package.
 - **DataHubHR:** Expo SDK 58 + React Native + TypeScript + **Expo Router** (routes in `src/app/`).
   Install libraries with `npx expo install` from `apps/datahub-hr`. No web UI libraries, MUI or React DOM.
   HR features are not specified yet — don't add screens, mock data or business logic speculatively.
+- **Admin Portal:** React + TypeScript (TS 6) + Vite + **Material UI** (+ MUI X), Apache ECharts, React Router, TanStack Query,
+  i18next, React Hook Form + Zod. Same React 19.3.0 / `stylis` 4.2.0 rules as the website. Built in approved phases.
 - **React:** exactly 19.3.0 in both apps (Expo SDK 58's pin). The root `overrides` enforces a single
   React/React DOM; the website's `vite.config.ts` dedupes React. Change React only with an Expo SDK upgrade.
 - **TypeScript:** root, shared-types and HR use TS 6 (ESLint tooling needs its JS API); the website keeps TS 7
@@ -50,9 +54,10 @@ all inside its own folder. There is deliberately **no** shared runtime package.
 | Install everything | `npm install` |
 | Website | `npm run dev:website` · `build:website` · `preview:website` · `lint:website` |
 | DataHubHR | `npm run dev:hr` · `android:hr` · `ios:hr` · `lint:hr` · `config:hr` · `doctor:hr` |
+| Admin Portal | `npm run dev:admin` · `build:admin` · `lint:admin` · `test:admin` |
 | TypeScript | `npm run typecheck` (all) · `npm run typecheck:packages` (shared-types) |
 | Lint everything | `npm run lint` |
-| Full verification | `npm run verify` (typecheck → lint → website build → Expo config → expo-doctor) |
+| Full verification | `npm run verify` (typecheck → lint → website build → admin build + tests → Expo config → expo-doctor) |
 | Any workspace script | `npm run <script> --workspace=<path>` |
 
 Run `npm run verify` before declaring repository-wide work done.

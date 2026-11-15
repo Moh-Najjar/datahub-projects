@@ -1,0 +1,118 @@
+{
+  "appName": "بوابة إدارة DataHub HR",
+  "appShortName": "إدارة الموارد البشرية",
+  "languages": {
+    "en": "English",
+    "ar": "العربية"
+  },
+  "actions": {
+    "switchLanguage": "التبديل إلى {{language}}",
+    "backHome": "العودة إلى الصفحة الرئيسية",
+    "reload": "إعادة تحميل الصفحة",
+    "retry": "إعادة المحاولة",
+    "signOut": "تسجيل الخروج"
+  },
+  "shell": {
+    "openNavigation": "فتح قائمة التنقل",
+    "closeNavigation": "إغلاق قائمة التنقل",
+    "mainNavigation": "التنقل الرئيسي",
+    "breadcrumb": "مسار التنقل",
+    "home": "الرئيسية",
+    "userMenu": "قائمة حساب {{name}}",
+    "comingSoon": "قريباً",
+    "comingSoonHint": "مخطط له في إصدار لاحق",
+    "loading": "جارٍ التحميل…"
+  },
+  "theme": {
+    "switchToDark": "التبديل إلى الوضع الداكن",
+    "switchToLight": "التبديل إلى الوضع الفاتح"
+  },
+  "demo": {
+    "badge": "وضع تجريبي",
+    "title": "وضع تجريبي — ليست مصادقة حقيقية",
+    "text": "تعمل هذه البوابة على بيانات محاكاة. تسجيل الدخول يختار حساباً تجريبياً فقط: تُقبل أي كلمة مرور، ولا يتم التحقق من أي شيء ولا تُخزَّن أي كلمة مرور. سيتولى الخادم لاحقاً المصادقة والتفويض الفعليين."
+  },
+  "nav": {
+    "groups": {
+      "overview": "نظرة عامة",
+      "people": "الموظفون",
+      "time": "الدوام والإجازات",
+      "talent": "المواهب",
+      "finance": "المالية",
+      "administration": "الإدارة"
+    },
+    "items": {
+      "dashboard": "لوحة المعلومات",
+      "profile": "ملفي الشخصي",
+      "employees": "الموظفون",
+      "organization": "الهيكل التنظيمي",
+      "attendance": "الحضور",
+      "leave": "الإجازات",
+      "payroll": "الرواتب",
+      "recruitment": "التوظيف",
+      "performance": "الأداء",
+      "documents": "المستندات",
+      "reports": "التقارير",
+      "settings": "الإعدادات",
+      "users": "المستخدمون والأدوار"
+    }
+  },
+  "roles": {
+    "system-admin": "مدير النظام",
+    "hr-admin": "مسؤول الموارد البشرية",
+    "hr-manager": "مدير الموارد البشرية",
+    "department-manager": "مدير القسم",
+    "employee": "موظف",
+    "recruiter": "مسؤول التوظيف",
+    "payroll-officer": "مسؤول الرواتب"
+  },
+  "permissions": {
+    "dashboard_view": "عرض لوحة المعلومات",
+    "profile_view": "عرض الملف الشخصي",
+    "employees_read": "عرض جميع الموظفين",
+    "employees_read_team": "عرض موظفي فريقه",
+    "employees_write": "إضافة الموظفين وتعديلهم",
+    "organization_read": "عرض الهيكل التنظيمي",
+    "organization_write": "إدارة الهيكل التنظيمي",
+    "attendance_read": "عرض حضور الجميع",
+    "attendance_read_team": "عرض حضور فريقه",
+    "attendance_read_own": "عرض حضوره الشخصي",
+    "attendance_write": "إدارة سجلات الحضور",
+    "leave_read": "عرض جميع الإجازات",
+    "leave_read_team": "عرض إجازات فريقه",
+    "leave_read_own": "عرض إجازاته الشخصية",
+    "leave_request": "تقديم طلب إجازة",
+    "leave_approve": "الموافقة على الإجازات أو رفضها",
+    "leave_approve_team": "الموافقة على إجازات فريقه أو رفضها",
+    "leave_manage-policies": "إدارة أنواع الإجازات وسياساتها",
+    "payroll_read": "عرض الرواتب",
+    "payroll_write": "إدارة الرواتب",
+    "recruitment_read": "عرض التوظيف",
+    "recruitment_write": "إدارة التوظيف",
+    "performance_read": "عرض الأداء",
+    "performance_write": "إدارة الأداء",
+    "documents_read": "عرض المستندات",
+    "documents_write": "إدارة المستندات",
+    "reports_view": "عرض التقارير",
+    "settings_manage": "إدارة إعدادات الموارد البشرية",
+    "users_manage": "إدارة المستخدمين والأدوار"
+  },
+  "errors": {
+    "notFoundTitle": "الصفحة غير موجودة",
+    "notFoundText": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
+    "routeErrorTitle": "حدث خطأ ما",
+    "routeErrorText": "حدث خطأ غير متوقع أثناء عرض هذه الصفحة.",
+    "accessDeniedTitle": "تم رفض الوصول",
+    "accessDeniedText": "دورك لا يتضمن صلاحية الوصول إلى هذه الصفحة. إذا كنت بحاجة إليها، فتواصل مع مدير النظام."
+  },
+  "apiErrors": {
+    "BAD_REQUEST": "تعذّرت معالجة الطلب.",
+    "VALIDATION": "بعض الحقول غير صالحة. يرجى مراجعتها والمحاولة مرة أخرى.",
+    "UNAUTHORIZED": "انتهت جلستك. يرجى تسجيل الدخول مرة أخرى.",
+    "FORBIDDEN": "ليست لديك صلاحية لتنفيذ هذا الإجراء.",
+    "NOT_FOUND": "السجل المطلوب غير موجود.",
+    "CONFLICT": "تم تعديل هذا السجل من قبل مستخدم آخر. يرجى التحديث والمحاولة مرة أخرى.",
+    "SERVER": "تعذّر على الخادم إكمال الطلب. يرجى المحاولة لاحقاً.",
+    "NETWORK": "فشل الاتصال. يرجى التحقق من الشبكة والمحاولة مرة أخرى."
+  }
+}

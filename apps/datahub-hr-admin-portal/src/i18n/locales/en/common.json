@@ -1,0 +1,118 @@
+{
+  "appName": "DataHub HR Admin",
+  "appShortName": "HR Admin",
+  "languages": {
+    "en": "English",
+    "ar": "العربية"
+  },
+  "actions": {
+    "switchLanguage": "Switch to {{language}}",
+    "backHome": "Back to home",
+    "reload": "Reload the page",
+    "retry": "Try again",
+    "signOut": "Sign out"
+  },
+  "shell": {
+    "openNavigation": "Open navigation",
+    "closeNavigation": "Close navigation",
+    "mainNavigation": "Main navigation",
+    "breadcrumb": "Breadcrumb",
+    "home": "Home",
+    "userMenu": "Account menu for {{name}}",
+    "comingSoon": "Soon",
+    "comingSoonHint": "Planned for a later release",
+    "loading": "Loading…"
+  },
+  "theme": {
+    "switchToDark": "Switch to dark mode",
+    "switchToLight": "Switch to light mode"
+  },
+  "demo": {
+    "badge": "Demo mode",
+    "title": "Demo Mode — Not Real Authentication",
+    "text": "This portal runs on simulated data. Sign-in only selects a demo account: any password is accepted, nothing is verified and no password is stored. Real authentication and authorization will be enforced by the backend."
+  },
+  "nav": {
+    "groups": {
+      "overview": "Overview",
+      "people": "People",
+      "time": "Time & leave",
+      "talent": "Talent",
+      "finance": "Finance",
+      "administration": "Administration"
+    },
+    "items": {
+      "dashboard": "Dashboard",
+      "profile": "My profile",
+      "employees": "Employees",
+      "organization": "Organization",
+      "attendance": "Attendance",
+      "leave": "Leave",
+      "payroll": "Payroll",
+      "recruitment": "Recruitment",
+      "performance": "Performance",
+      "documents": "Documents",
+      "reports": "Reports",
+      "settings": "Settings",
+      "users": "Users & roles"
+    }
+  },
+  "roles": {
+    "system-admin": "System Administrator",
+    "hr-admin": "HR Administrator",
+    "hr-manager": "HR Manager",
+    "department-manager": "Department Manager",
+    "employee": "Employee",
+    "recruiter": "Recruiter",
+    "payroll-officer": "Payroll Officer"
+  },
+  "permissions": {
+    "dashboard_view": "View the dashboard",
+    "profile_view": "View own profile",
+    "employees_read": "View all employees",
+    "employees_read_team": "View own team's employees",
+    "employees_write": "Create and edit employees",
+    "organization_read": "View organization structure",
+    "organization_write": "Manage organization structure",
+    "attendance_read": "View all attendance",
+    "attendance_read_team": "View own team's attendance",
+    "attendance_read_own": "View own attendance",
+    "attendance_write": "Manage attendance records",
+    "leave_read": "View all leave",
+    "leave_read_team": "View own team's leave",
+    "leave_read_own": "View own leave",
+    "leave_request": "Request leave",
+    "leave_approve": "Approve or reject leave",
+    "leave_approve_team": "Approve or reject own team's leave",
+    "leave_manage-policies": "Manage leave types and policies",
+    "payroll_read": "View payroll",
+    "payroll_write": "Manage payroll",
+    "recruitment_read": "View recruitment",
+    "recruitment_write": "Manage recruitment",
+    "performance_read": "View performance",
+    "performance_write": "Manage performance",
+    "documents_read": "View documents",
+    "documents_write": "Manage documents",
+    "reports_view": "View reports",
+    "settings_manage": "Manage HR settings",
+    "users_manage": "Manage users and roles"
+  },
+  "errors": {
+    "notFoundTitle": "Page not found",
+    "notFoundText": "The page you are looking for does not exist or has been moved.",
+    "routeErrorTitle": "Something went wrong",
+    "routeErrorText": "An unexpected error occurred while displaying this page.",
+    "accessDeniedTitle": "Access denied",
+    "accessDeniedText": "Your role does not include access to this page. If you need it, contact your system administrator."
+  },
+  "apiErrors": {
+    "BAD_REQUEST": "The request could not be processed.",
+    "VALIDATION": "Some fields are invalid. Please review them and try again.",
+    "UNAUTHORIZED": "Your session has ended. Please sign in again.",
+    "FORBIDDEN": "You do not have permission to perform this action.",
+    "NOT_FOUND": "The requested record was not found.",
+    "CONFLICT": "This record was changed by someone else. Please refresh and try again.",
+    "SERVER": "The server could not complete the request. Please try again later.",
+    "NETWORK": "The connection failed. Please check your network and try again."
+  }
+}

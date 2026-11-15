@@ -1,0 +1,139 @@
+{
+  "title": "Dashboard",
+  "greeting": {
+    "morning": "Good morning, {{name}}",
+    "afternoon": "Good afternoon, {{name}}",
+    "evening": "Good evening, {{name}}"
+  },
+  "description": {
+    "organization": "An overview of HR operations across the organization.",
+    "team": "An overview of your team in {{department}}."
+  },
+  "demoDataNote": "All figures are fictional demonstration data.",
+  "asOf": "Updated {{date}}",
+  "kpis": {
+    "title": "Key indicators",
+    "info": "About this indicator",
+    "totalEmployees": {
+      "label": "Total employees",
+      "tooltip": "All employees on record, including inactive employees (for example on unpaid leave). Compared with the end of last month."
+    },
+    "activeEmployees": {
+      "label": "Active employees",
+      "tooltip": "Employees currently working (total employees minus inactive). Compared with the end of last month."
+    },
+    "newHires": {
+      "label": "New hires this month",
+      "tooltip": "Employees who joined since the start of this month. Compared with the whole of last month."
+    },
+    "onLeaveToday": {
+      "label": "On leave today",
+      "tooltip": "Active employees on approved leave today. Compared with yesterday."
+    },
+    "attendanceRate": {
+      "label": "Attendance today",
+      "tooltip": "Employees present today, including late arrivals, as a share of employees expected at work (active employees not on leave). Compared with yesterday."
+    },
+    "openPositions": {
+      "label": "Open positions",
+      "tooltip": "Vacancies currently open for hiring. Compared with the end of last month."
+    }
+  },
+  "trend": {
+    "vsLastMonth": "vs last month",
+    "vsYesterday": "vs yesterday",
+    "points": "{{value}} pts",
+    "noComparison": "No comparison",
+    "up": "Increase",
+    "down": "Decrease",
+    "flat": "No change"
+  },
+  "charts": {
+    "employeeGrowth": {
+      "title": "Employee growth",
+      "subtitle": "Headcount at the end of each month, last 12 months",
+      "headcount": "Headcount",
+      "previousYear": "Same month last year"
+    },
+    "attendance": {
+      "title": "Attendance today",
+      "subtitle": "Active employees by attendance status",
+      "present": "Present",
+      "late": "Late",
+      "absent": "Absent",
+      "onLeave": "On leave"
+    },
+    "departments": {
+      "title": "Employees by department",
+      "subtitle": "Employees on record in each department",
+      "series": "Employees"
+    },
+    "leave": {
+      "title": "Leave requests",
+      "subtitle": "Requests submitted each month, by current status",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "cancelled": "Cancelled",
+      "total": "Total"
+    },
+    "empty": "No data to display yet.",
+    "error": "This chart could not be loaded."
+  },
+  "activity": {
+    "title": "Recent activity",
+    "empty": "No recent activity you can view.",
+    "error": "Recent activity could not be loaded.",
+    "by": "by {{actor}}",
+    "types": {
+      "employeeAdded": "{{subject}} was added as a new employee",
+      "employeeUpdated": "{{subject}}'s employee details were updated",
+      "leaveSubmitted": "{{subject}} submitted a leave request",
+      "leaveApproved": "{{subject}}'s leave request was approved",
+      "attendanceUpdated": "{{subject}}'s attendance record was corrected",
+      "positionCreated": "New position opened: {{subject}}",
+      "userRoleChanged": "{{subject}}'s portal role was changed"
+    },
+    "typeLabels": {
+      "employeeAdded": "New employee",
+      "employeeUpdated": "Employee update",
+      "leaveSubmitted": "Leave request",
+      "leaveApproved": "Leave approval",
+      "attendanceUpdated": "Attendance",
+      "positionCreated": "Recruitment",
+      "userRoleChanged": "Access control"
+    }
+  },
+  "pending": {
+    "title": "Pending actions",
+    "subtitle": "Items that need attention",
+    "empty": "Nothing needs your attention right now.",
+    "error": "Pending actions could not be loaded.",
+    "items": {
+      "leaveApprovals": {
+        "label": "Leave requests awaiting approval",
+        "hint": "Submitted and not yet approved or rejected"
+      },
+      "probationReviews": {
+        "label": "Probation reviews due",
+        "hint": "Employees whose probation period ends this month"
+      },
+      "documentsExpiring": {
+        "label": "Documents expiring soon",
+        "hint": "Employee documents that expire within 30 days"
+      },
+      "attendanceCorrections": {
+        "label": "Attendance corrections to review",
+        "hint": "Correction requests for missing or incorrect records"
+      },
+      "openPositions": {
+        "label": "Open positions",
+        "hint": "Vacancies still being recruited for"
+      },
+      "payrollChanges": {
+        "label": "Joiners and leavers for payroll",
+        "hint": "Employees who joined or left this month"
+      }
+    }
+  }
+}
