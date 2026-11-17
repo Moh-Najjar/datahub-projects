@@ -1,13 +1,14 @@
 // Route elements live beside the router export, so fast-refresh's component-only rule does not apply here.
 /* oxlint-disable react/only-export-components */
-import { lazy, type ComponentType, type LazyExoticComponent } from 'react';
+import { lazy, Suspense, type ComponentType, type LazyExoticComponent } from 'react';
 import { createBrowserRouter, Navigate, type RouteObject } from 'react-router-dom';
 import { ArabicPostRedirect } from '@/modules/blog/ArabicPostRedirect';
 import { SiteLayout } from '@/modules/layout/SiteLayout';
+import { ADMIN_ENABLED } from '@/core/config/admin';
 import { PAGES } from '@/core/config/pages';
 import type { RouteHandle } from '@/i18n/useAlternateHref';
 import { RouteError } from '@/modules/errors/RouteError';
-import { LEGACY_REDIRECTS, ROUTES, type RouteKey } from '@/core/routes/paths';
+import { ADMIN_ROUTES, LEGACY_REDIRECTS, ROUTES, type RouteKey } from '@/core/routes/paths';
 import type { PageHandle } from '@/core/hooks/useRouteKey';
 
 /** A page file loaded only when its route renders. `SiteLayout` supplies the Suspense boundary. */
@@ -23,6 +24,12 @@ const BlogPostPage: LazyPage = lazy(() => import('@/modules/blog/BlogPostPage'))
 const NotFoundPage: LazyPage = lazy(() => import('@/modules/errors/NotFoundPage'));
 
 const ProductsPage: LazyPage = lazy(() => import('@/modules/products/ProductsPage'));
+
+/** Admin area (blog management): its own layout and lazy pages, never loaded by public pages. */
+const AdminLayout: LazyPage = lazy(() => import('@/modules/admin/AdminLayout'));
+const AdminLoginPage: LazyPage = lazy(() => import('@/modules/admin/AdminLoginPage'));
+const AdminBlogsPage: LazyPage = lazy(() => import('@/modules/admin/AdminBlogsPage'));
+const AdminBlogEditorPage: LazyPage = lazy(() => import('@/modules/admin/AdminBlogEditorPage'));
 
 /** Pages with dedicated React implementations. */
 const DEDICATED_PAGES: Partial<Record<RouteKey, LazyPage>> = {
@@ -62,12 +69,36 @@ const blogPost: RouteObject = {
   element: <BlogPostPage />,
 };
 
+/** `/admin/…` (English only, outside the site layout). The layout guards every page except sign-in. */
+const adminRoutes: RouteObject[] = ADMIN_ENABLED
+  ? [
+      {
+        path: toRelative(ADMIN_ROUTES.root),
+        errorElement: <RouteError />,
+        element: (
+          <Suspense fallback={null}>
+            <AdminLayout />
+          </Suspense>
+        ),
+        children: [
+          { index: true, element: <Navigate to={ADMIN_ROUTES.blogs} replace /> },
+          { path: 'login', element: <AdminLoginPage /> },
+          { path: 'blogs', element: <AdminBlogsPage /> },
+          { path: 'blogs/new', element: <AdminBlogEditorPage /> },
+          { path: 'blogs/:postId/edit', element: <AdminBlogEditorPage /> },
+          { path: '*', element: <Navigate to={ADMIN_ROUTES.blogs} replace /> },
+        ],
+      },
+    ]
+  : [];
+
 const notFound: RouteObject = {
   path: '*',
   element: <NotFoundPage />,
 };
 
 export const router = createBrowserRouter([
+  ...adminRoutes,
   {
     element: <SiteLayout />,
     errorElement: <RouteError />,

@@ -1,28 +1,34 @@
+import { blogVersion, getPublishedPostBody, getPublishedPosts } from '@/modules/blog/api/blogApi';
 import type { BlogPostBody, BlogPostSummary } from '@/modules/blog/types/blog';
 
 /*
- * Blog data access. The full index (~253 posts) and each article body are separate
- * lazy chunks, so neither the homepage nor the blog grid ships article HTML.
+ * Cached readers for the public blog pages (React 19 `use()` needs the same promise across renders). They read
+ * PUBLISHED posts through the blog service; the cache is dropped whenever the blog changes (admin, other tab),
+ * so the next page that renders gets fresh data.
  */
 
-let indexPromise: Promise<BlogPostSummary[]> | undefined;
+let cache: { version: number; index?: Promise<BlogPostSummary[]>; bodies: Map<string, Promise<BlogPostBody | null>> } = { version: -1, bodies: new Map() };
 
-/** All posts, newest first. */
-export function loadBlogIndex(): Promise<BlogPostSummary[]> {
-  indexPromise ??= import('@/content/blog/index.json').then((m) => m.default as BlogPostSummary[]);
-  return indexPromise;
+function current() {
+  const version = blogVersion();
+  if (cache.version !== version) cache = { version, bodies: new Map() };
+  return cache;
 }
 
-const BODIES = import.meta.glob<BlogPostBody>('/src/content/blog/posts/*.json', { import: 'default' });
-const bodyCache = new Map<string, Promise<BlogPostBody | null>>();
+/** Published posts, newest first. */
+export function loadBlogIndex(): Promise<BlogPostSummary[]> {
+  const c = current();
+  c.index ??= getPublishedPosts();
+  return c.index;
+}
 
-/** Sanitized article HTML for a post, or `null` if the slug doesn't exist. */
+/** Article HTML of a published post, or `null` if the slug doesn't exist or is a draft. */
 export function loadBlogBody(slug: string): Promise<BlogPostBody | null> {
-  let promise = bodyCache.get(slug);
+  const c = current();
+  let promise = c.bodies.get(slug);
   if (!promise) {
-    const loader = BODIES[`/src/content/blog/posts/${slug}.json`];
-    promise = loader ? loader() : Promise.resolve(null);
-    bodyCache.set(slug, promise);
+    promise = getPublishedPostBody(slug);
+    c.bodies.set(slug, promise);
   }
   return promise;
 }

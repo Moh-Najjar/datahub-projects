@@ -90,3 +90,15 @@ export const LEGACY_REDIRECTS: Readonly<Record<string, AppPath>> = {
   '/services/data-management/': ROUTES.dataManagement,
   '/services/data-analytics-centre-of-excellence/': ROUTES.analyticsCoe,
 };
+
+/**
+ * Admin area (blog management). English only, outside the public site layout, and not part of `ROUTES`
+ * (public pages are generated from `ROUTES`). Available only when `ADMIN_ENABLED` (core/config/admin.ts).
+ */
+export const ADMIN_ROUTES = {
+  root: '/admin/',
+  login: '/admin/login/',
+  blogs: '/admin/blogs/',
+  newBlog: '/admin/blogs/new/',
+  editBlog: (postId: string) => `/admin/blogs/${encodeURIComponent(postId)}/edit/`,
+} as const;

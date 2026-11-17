@@ -15,27 +15,10 @@ import { Seo, SITE_URL } from '@/modules/shared/Seo';
 import { SmartLink } from '@/modules/shared/SmartLink';
 import { loadBlogBody, loadBlogIndex } from '@/modules/blog/data/blog';
 import type { BlogPostSummary } from '@/modules/blog/types/blog';
+import { articleSx } from '@/modules/blog/utils/articleStyles';
 import { formatPostDate } from '@/modules/blog/utils/date';
 import { useLocale } from '@/i18n/LocaleContext';
 import { NotFoundPage } from '@/modules/errors';
-
-/** Typography for the article body (WordPress content styles of the original theme). */
-const articleSx = {
-  '& p': { mb: '1.5em' },
-  '& h2': { mt: '40px', mb: '18px', fontSize: { xs: 30, md: 42 }, lineHeight: 1.42, color: 'brand.heading' },
-  '& h3': { mt: '32px', mb: '18px', fontSize: { xs: 24, md: 32 }, lineHeight: 1.42, color: 'brand.heading' },
-  '& h4, & h5, & h6': { mt: '24px', mb: '14px', color: 'brand.heading' },
-  '& ul': { listStyle: 'disc', pl: '20px', mb: '1.5em' },
-  '& ol': { listStyle: 'decimal', pl: '20px', mb: '1.5em' },
-  '& li': { mb: '8px' },
-  '& strong, & b': { color: 'brand.heading' },
-  '& a': { color: 'info.main', textDecoration: 'underline' },
-  '& blockquote': { m: '30px 0', pl: '20px', borderLeft: '4px solid', borderColor: 'info.main', fontSize: 18, color: 'brand.heading' },
-  '& img': { maxWidth: '100%', height: 'auto', borderRadius: '5px' },
-  '& table': { width: '100%', mb: '1.5em', borderCollapse: 'collapse' },
-  '& th, & td': { p: '10px', border: '1px solid #ededed', textAlign: 'left' },
-  '& hr': { my: '30px', border: 0, borderTop: '1px solid #ededed' },
-} as const;
 
 function NavCard({ post, label, align }: { post: BlogPostSummary; label: string; align: 'left' | 'right' }) {
   return (
@@ -54,7 +37,7 @@ function NavCard({ post, label, align }: { post: BlogPostSummary; label: string;
         textAlign: align,
         color: 'common.white',
         bgcolor: 'brand.dark',
-        backgroundImage: post.image ? `linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)), url(${post.image.grid})` : undefined,
+        backgroundImage: post.image ? `linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)), url("${post.image.grid}")` : undefined,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         '&:hover': { color: 'common.white', opacity: 0.92 },
@@ -88,7 +71,7 @@ export default function BlogPostPage() {
 
   return (
     <>
-      <Seo title={`${post.title} Datahub Analytics`} description={post.excerpt} path={`/${post.slug}/`} image={post.image?.large} type="article" locales={['en']} />
+      <Seo title={`${post.title} Datahub Analytics`} description={post.excerpt} path={`/${post.slug}/`} image={post.image && !post.image.large.startsWith('data:') ? post.image.large : undefined} type="article" locales={['en']} />
       <Box component="article" dir="ltr" sx={{ pt: { xs: '60px', md: '120px' }, pb: '100px' }}>
         <Container>
           {post.image && (

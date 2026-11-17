@@ -93,7 +93,10 @@ src/
 │   │                        VideoPoster, LinkedInIcon, Seo, PageSeo, PageTitleBar
 │   ├── layout/              site shell: SiteLayout, Header/, Footer/, Navigation/ (menus, language switcher)
 │   ├── home/                HomePage.tsx, components/ (sections), data/ (home copy, logos, industry icons)
-│   ├── blog/                BlogPostPage.tsx, ArabicPostRedirect.tsx, components/, data/ (loader), types/, utils/
+│   ├── blog/                BlogPostPage.tsx, ArabicPostRedirect.tsx, components/, api/blogApi.ts (blog service),
+│   │                        data/ (seed, blogStore, cached readers), hooks/, types/, utils/ (sanitizeHtml, articleStyles)
+│   ├── admin/               /admin/ area (blog management prototype): AdminLayout + pages, api/authService.ts,
+│   │                        components/ (BlogForm, RichTextEditor, CoverField), schemas/, hooks/, data/, utils/
 │   ├── contact/             api/appointment.ts, components/ (AppointmentForm, ConsultationSection), schemas/, data/
 │   ├── page-blocks/         BlockPage.tsx — renders every generated page (about-us, services, solutions, contact,
 │   │                        careers, blog list…) from src/content/pages; components/ + widgets/, types/, utils/
@@ -111,6 +114,7 @@ Images and fonts stay in `public/` (generated content references them by URL). C
 | --- | --- |
 | Find or add a URL | `src/core/routes/paths.ts` (`ROUTES`) + `src/core/config/pages.ts` (locales, SEO title/description) |
 | See how a URL is rendered | `src/core/routes/index.tsx`: `home` → `modules/home/HomePage`, `products` → `modules/products/ProductsPage`, every other route → `modules/page-blocks/BlockPage` (document `src/content/pages/<routeKey>.<locale>.json`), `/<slug>/` → `modules/blog/BlogPostPage` |
+| Manage blog posts | `/admin/` (see "Blog & admin" below); data access only through `modules/blog/api/blogApi.ts` |
 | Add or change a product | `src/modules/products/data/mockProducts.ts` (until a backend exists) — see "Products" below |
 | Write an API call | `src/modules/<module>/api/` — e.g. `modules/contact/api/appointment.ts` (`submitAppointment`) |
 | Change a translation | `src/i18n/locales/en.json` + `ar.json` (same key in both; add new keys to `UiStrings` in `i18n/index.ts`) |
@@ -125,7 +129,7 @@ Images and fonts stay in `public/` (generated content references them by URL). C
   something there "in case".
 - **Modules use each other only through `index.ts`** (`import { BlogCard } from '@/modules/blog'`), never through
   internal paths. A module has an `index.ts` only if another module needs something from it: today `blog` (BlogCard,
-  BlogGrid), `contact` (form, consultation band, contact data) and `errors` (NotFoundPage).
+  BlogGrid, useLatestPosts, the blog service for the admin), `contact` (form, consultation band, contact data) and `errors` (NotFoundPage).
 - **Routed pages are explicit files** (`HomePage.tsx`, `BlockPage.tsx`, `BlogPostPage.tsx`, `NotFoundPage.tsx`) with a
   default export, lazy-loaded by `core/routes/index.tsx`. Never route to a module's `index.ts` — a lazy import of a
   barrel pulls everything it exports into that page's chunk.
@@ -157,6 +161,26 @@ Images and fonts stay in `public/` (generated content references them by URL). C
 - **A reusable component**: `modules/shared/<Name>.tsx` once a second module needs it; until then keep it in its module.
 - **A new module**: `modules/<name>/`; add an `index.ts` only when another module needs it, and copy an existing
   module's override in `.oxlintrc.json` (replace the module name).
+
+## Blog & admin (`modules/blog`, `modules/admin`)
+
+- **One data source:** every blog read and write goes through `modules/blog/api/blogApi.ts`. Public functions
+  (`getPublishedPosts`, `getPublishedPostBody`, `getLatestPublishedPostsNow`) return **published** posts only; admin
+  functions: `getAllPosts`, `getPostById`, `createPost`, `updatePost`, `deletePost`, `setPostStatus`, `getCoverLibrary`,
+  `getTaxonomy`. Moving to a backend = replace these bodies with REST calls returning the same types.
+- **Mock storage (temporary):** the exported posts (`src/content/blog`, never edited) are the initial data; admin
+  changes are stored in this browser's localStorage (`data/blogStore.ts`: new/edited posts, deleted ids, draft
+  status). Uploaded images are resized to ≤1170px WebP data URLs; a full storage is reported, never silently ignored.
+- **Public pages are unchanged:** `BlogGrid`, `BlogPostPage` (via `data/blog.ts`, cached per blog change) and the
+  homepage's `BlogSection` (`useLatestPosts`) read through the service. Card images keep the 370×207 / 370×230 ratio
+  for any upload. Drafts and deleted posts are 404s. Article HTML from the editor is sanitized (`utils/sanitizeHtml.ts`).
+- **Slugs** are unique and may not reuse a site URL's first segment (posts live at `/<slug>/`).
+- **Admin** (`/admin/login/`, `/admin/blogs/`, `/admin/blogs/new/`, `/admin/blogs/:id/edit/`, `ADMIN_ROUTES`): English only,
+  own layout (not `SiteLayout`), lazy-loaded, `noindex`. `AdminLayout` guards every page but sign-in. Mock
+  sign-in lives only in `modules/admin/api/authService.ts` (dev credentials, 8-hour session in localStorage) — to be
+  replaced by the backend. Available in development; production builds only with `VITE_ENABLE_ADMIN=true`.
+- **Editor:** TipTap (`@tiptap/*`, admin chunk only — excluded from the `react` manual chunk in `vite.config.ts`) with
+  headings, lists, quotes, links, images, tables and an HTML source mode; it uses the article page's `articleSx`.
 
 ## Products (`modules/products`)
 

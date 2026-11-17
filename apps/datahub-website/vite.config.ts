@@ -29,6 +29,8 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
+            // The admin's rich-text editor (TipTap, incl. `@tiptap/react`) stays in the admin editor's lazy chunk.
+            if (/[\\/](@tiptap|prosemirror-[^\\/]+)[\\/]/.test(id)) return undefined;
             if (/[\\/](react|react-dom|react-router|react-router-dom|scheduler)[\\/]/.test(id)) return 'react';
             if (/[\\/](@mui|@emotion|stylis|stylis-plugin-rtl)[\\/]/.test(id)) return 'mui';
             if (id.includes('framer-motion') || id.includes('motion-')) return 'motion';

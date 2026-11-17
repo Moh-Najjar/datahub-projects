@@ -132,6 +132,17 @@
           { "group": ["@/core/routes", "@/core/routes/index"], "message": "Import route paths from @/core/routes/paths. Only App.tsx imports the router." }
         ] }]
       }
+    },
+    {
+      "files": ["src/modules/admin/**"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": [
+          { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The website is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+          { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+          { "group": ["@/modules/*/**", "!@/modules/admin/**", "!@/modules/shared/**"], "message": "Use another module only through its index.ts: import from '@/modules/<name>'." },
+          { "group": ["@/core/routes", "@/core/routes/index"], "message": "Import route paths from @/core/routes/paths. Only App.tsx imports the router." }
+        ] }]
+      }
     }
   ]
 }

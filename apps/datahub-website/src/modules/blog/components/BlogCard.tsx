@@ -43,7 +43,7 @@ export function BlogCard({ post, readMore }: BlogCardProps) {
             height={207}
             loading="lazy"
             decoding="async"
-            sx={{ display: 'block', width: '100%', height: 'auto', borderRadius: '5px 5px 0 0' }}
+            sx={{ display: 'block', width: '100%', height: 'auto', aspectRatio: '370 / 207', objectFit: 'cover', borderRadius: '5px 5px 0 0' }}
           />
         </SmartLink>
       )}

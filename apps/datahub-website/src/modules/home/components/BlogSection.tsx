@@ -1,15 +1,13 @@
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import { BlogCard, type BlogPostSummary } from '@/modules/blog';
+import { BlogCard, useLatestPosts } from '@/modules/blog';
 import { Reveal } from '@/modules/shared/Reveal';
 import { SectionHeading } from '@/modules/home/components/SectionHeading';
 import type { HomeContent } from '@/modules/home/data/homeContent';
-import latestPosts from '@/content/blog/latest.json';
 
-const POSTS = latestPosts as BlogPostSummary[];
-
-/** The three newest blog posts (masonry cards). */
+/** The three newest published blog posts (masonry cards). */
 export function BlogSection({ content }: { content: HomeContent['blog'] }) {
+  const posts = useLatestPosts(3);
   return (
     <Box component="section" aria-label={content.label} sx={{ pt: '50px', pb: '106px' }}>
       <Container>
@@ -23,7 +21,7 @@ export function BlogSection({ content }: { content: HomeContent['blog'] }) {
             gap: { xs: '30px', lg: '50px' },
           }}
         >
-          {POSTS.map((post, i) => (
+          {posts.map((post, i) => (
             <Reveal key={post.slug} delay={i * 0.1}>
               <BlogCard post={post} readMore={content.readMore} />
             </Reveal>

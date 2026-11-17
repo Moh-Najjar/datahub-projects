@@ -21,7 +21,7 @@ function ClassicCard({ post }: { post: BlogPostSummary }) {
     <Box component="article" sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       {post.image && (
         <Box component={SmartLink} href={href} tabIndex={-1} aria-hidden="true" sx={{ display: 'block', mb: '20px', transition: 'transform .3s', '&:hover': { transform: 'translateY(-5px)' } }}>
-          <Box component="img" src={post.image.grid} alt={post.image.alt || post.title} width={370} height={230} loading="lazy" decoding="async" sx={{ display: 'block', width: '100%', height: 'auto', borderRadius: '5px' }} />
+          <Box component="img" src={post.image.grid} alt={post.image.alt || post.title} width={370} height={230} loading="lazy" decoding="async" sx={{ display: 'block', width: '100%', height: 'auto', aspectRatio: '370 / 230', objectFit: 'cover', borderRadius: '5px' }} />
         </Box>
       )}
       <Typography component="div" sx={{ mb: '7px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: 14 }}>
