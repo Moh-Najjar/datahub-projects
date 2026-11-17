@@ -1,5 +1,9 @@
 import { memo, type ReactNode } from 'react';
 import Box from '@mui/material/Box';
+import Tooltip from '@mui/material/Tooltip';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { SmartLink } from '@/modules/shared/SmartLink';
 import { PRIMARY_NAV } from '@/core/config/navigation';
@@ -8,7 +12,7 @@ import { useHoverMenu } from '@/modules/layout/Navigation/useHoverMenu';
 import { useLocalized } from '@/i18n/LocaleContext';
 import type { NavItem, NavLink } from '@/core/types/navigation';
 import { MegaMenu } from './MegaMenu';
-import { DropdownPanel, MenuItem, MenuList, subLinkSx } from './DesktopNav.styles';
+import { APP_ITEM_LABEL_FROM, DropdownPanel, MenuItem, MenuList, subLinkSx } from './DesktopNav.styles';
 import { LanguageSwitcher } from './LanguageSwitcher';
 
 /**
@@ -16,7 +20,7 @@ import { LanguageSwitcher } from './LanguageSwitcher';
  * is a widget area on the original, not real child items, so it is never highlighted.
  */
 function hrefsOf(item: NavItem): string[] {
-  if (item.kind === 'link') return [item.href];
+  if (item.kind === 'link' || item.kind === 'app') return [item.href];
   if (item.kind === 'dropdown') return [item.href ?? '', ...item.items.map((i) => i.href)];
   return [];
 }
@@ -66,6 +70,32 @@ export function TopItem({ label, href, active, mega, lang, renderMenu }: TopItem
   );
 }
 
+/**
+ * Link to another DataHub application (HR Portal). Same tab, plain URL — no session is shared.
+ * On narrow desktops it is an icon with the label as tooltip and accessible name; from
+ * APP_ITEM_LABEL_FROM it shows the label like every other item.
+ */
+function AppItem({ label, href }: { label: string; href: string }) {
+  const theme = useTheme();
+  const compact = useMediaQuery(theme.breakpoints.down(APP_ITEM_LABEL_FROM), { noSsr: true });
+  const link = (
+    <SmartLink href={href} className="nav-link" aria-label={compact ? label : undefined}>
+      <span className="nav-wrap">{compact ? <AdminPanelSettingsOutlinedIcon aria-hidden sx={{ fontSize: 22 }} /> : label}</span>
+    </SmartLink>
+  );
+  return (
+    <MenuItem active={false} open={false}>
+      {compact ? (
+        <Tooltip title={label}>
+          {link}
+        </Tooltip>
+      ) : (
+        link
+      )}
+    </MenuItem>
+  );
+}
+
 interface DropdownProps {
   items: NavLink[];
   open: boolean;
@@ -107,6 +137,8 @@ function DesktopNavComponent() {
           switch (item.kind) {
             case 'link':
               return <TopItem key={item.label} label={item.label} href={item.href} active={active} />;
+            case 'app':
+              return <AppItem key={item.label} label={item.label} href={item.href} />;
             case 'dropdown':
               return (
                 <TopItem

@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { employeeGrowthOption } from '@/modules/dashboard/charts/options';
-import { useChartContext } from '@/modules/dashboard/hooks/useChartContext';
+import { useChartContext } from '@/modules/shared/charts/useChartContext';
 import { useEmployeeGrowth } from '@/modules/dashboard/hooks/useDashboard';
 import type { DashboardScope } from '@/modules/dashboard/types/dashboard';
-import { CHART_HEIGHT } from '@/modules/dashboard/charts/layout';
-import { ChartCard } from './ChartCard';
-import { EChart } from './EChart';
+import { CHART_HEIGHT } from '@/modules/shared/charts/layout';
+import { ChartCard } from '@/modules/shared/charts/ChartCard';
+import { EChart } from '@/modules/shared/charts/EChart';
 
 /** Headcount over the last 12 months (line), with the previous year for comparison. */
 export function EmployeeGrowthChart({ scope }: { scope: DashboardScope }) {

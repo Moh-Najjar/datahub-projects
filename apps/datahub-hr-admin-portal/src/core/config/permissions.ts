@@ -26,6 +26,8 @@ export const PERMISSIONS = [
   'profile:view',
   'employees:read',
   'employees:read:team',
+  /** Personal details (birth date, gender, nationality, marital status, personal contact, address, emergency contact, identity documents). */
+  'employees:read:personal',
   'employees:write',
   'organization:read',
   'organization:write',
@@ -43,9 +45,19 @@ export const PERMISSIONS = [
   'payroll:read',
   'payroll:write',
   'recruitment:read',
+  /** Requisitions of the departments the user manages (or where they are the hiring manager) and those candidates — read-only, no salaries or offers. */
+  'recruitment:read:team',
   'recruitment:write',
   'performance:read',
+  /** The team's goals, reviews and development plans (departments the user manages). */
+  'performance:read:team',
+  /** Own goals, self-assessments, review results and development plans. */
+  'performance:read:own',
   'performance:write',
+  /** Write manager reviews, goals and development plans for the user's team. */
+  'performance:review:team',
+  /** Review cycles, templates, competencies and the rating scale (performance configuration). */
+  'performance:manage-config',
   'documents:read',
   'documents:write',
   'reports:view',
@@ -56,12 +68,13 @@ export const PERMISSIONS = [
 export type Permission = (typeof PERMISSIONS)[number];
 
 /** What every staff member can do for themselves (all roles are also employees). */
-const SELF_SERVICE: readonly Permission[] = ['profile:view', 'attendance:read:own', 'leave:read:own', 'leave:request'];
+const SELF_SERVICE: readonly Permission[] = ['profile:view', 'attendance:read:own', 'leave:read:own', 'leave:request', 'performance:read:own'];
 
 /** Full read/write on the HR areas. */
 const HR_CORE: readonly Permission[] = [
   'dashboard:view',
   'employees:read',
+  'employees:read:personal',
   'employees:write',
   'organization:read',
   'organization:write',
@@ -82,11 +95,11 @@ export const ROLE_PERMISSIONS: Readonly<Record<Role, readonly Permission[]>> = {
   /** Everything, including system settings and user/role management. */
   'system-admin': PERMISSIONS,
   /** All HR modules (read/write) and HR settings — not user/role management. */
-  'hr-admin': [...SELF_SERVICE, ...HR_CORE, 'leave:manage-policies', 'payroll:read', 'payroll:write', 'settings:manage'],
+  'hr-admin': [...SELF_SERVICE, ...HR_CORE, 'leave:manage-policies', 'performance:manage-config', 'payroll:read', 'payroll:write', 'settings:manage'],
   /** HR modules (read/write) and leave approval; payroll read-only; no settings. */
   'hr-manager': [...SELF_SERVICE, ...HR_CORE, 'payroll:read'],
-  /** Their own team only: employees, attendance and leave (incl. approving the team's leave). */
-  'department-manager': [...SELF_SERVICE, 'dashboard:view', 'employees:read:team', 'attendance:read:team', 'leave:read:team', 'leave:approve:team'],
+  /** Their own team only: employees, attendance and leave (incl. approving the team's leave), their team's recruitment (read-only) and performance (incl. manager reviews). */
+  'department-manager': [...SELF_SERVICE, 'dashboard:view', 'employees:read:team', 'attendance:read:team', 'leave:read:team', 'leave:approve:team', 'recruitment:read:team', 'performance:read:team', 'performance:review:team'],
   /** Self-service only: own profile, attendance and leave. */
   employee: SELF_SERVICE,
   /** Recruitment (read/write) and positions (read). */

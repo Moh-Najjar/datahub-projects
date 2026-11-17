@@ -40,9 +40,10 @@ Run `npm run typecheck && npm run lint && npm run build` before considering any 
   augmentation in `src/core/theme/augmentation.d.ts`. Custom palette lives under `palette.brand.*`; shadows under `theme.customShadows`.
 - Spacing unit is **5px** (`sx={{ p: 6 }}` = 30px). Pixel strings (`'30px'`) are fine when copying measured values.
 - Breakpoints mirror the original grid: `sm 544 · md 768 · lg 992 · xl 1200`. The desktop menu shows from `xl`.
-  With the added Products item, top-level menu items use tighter spacing between 1200px and 1439px
-  (`Navigation/DesktopNav.styles.ts`) so the menu fits in both languages; from 1440px the original spacing applies.
-  Re-check the fit (EN and AR, 1200–1440px) whenever a top-level menu item is added.
+  With the added Products and HR Portal items, top-level menu items use tighter spacing from 1200px until the
+  menu fits with the original spacing (`ROOMY_FROM` in `Navigation/DesktopNav.styles.ts`: 1540px EN, 1800px AR),
+  and the HR Portal item is an icon (label as tooltip/accessible name) below 1440px. Re-check the fit (EN and AR,
+  1200–1920px) whenever a top-level menu item is added.
 - Button variants: `solid`, `gradient`, `textArrow`, `pill` (use `ButtonLink` for links).
 - Style with the theme, `sx`, or `styled()` next to the component. No CSS Modules, Tailwind or Bootstrap. Avoid inline `style`.
 - **RTL:** Arabic uses an Emotion cache with `stylis-plugin-rtl`. Write styles with **physical** `left/right`
@@ -168,8 +169,15 @@ Images and fonts stay in `public/` (generated content references them by URL). C
   only with real artwork (cards show an initials badge until then) and `links` only with real destinations.
 - **Status** (`available` / `in-development` / `coming-soon`) drives the card's chip; only `available` products may be
   described as usable. Page labels (title, intro, status names) are in `i18n/locales/*.json` under `products`.
-- **Not products:** administrative portals (e.g. the future DataHub HR Admin Portal) stay out of the catalogue; their
-  access will be added separately when the portal exists.
+- **Not products:** administrative portals (e.g. the DataHub HR Admin Portal) stay out of the catalogue.
+
+## HR Admin Portal link
+
+- The header (desktop and mobile) has an **HR Portal / بوابة الموارد البشرية** item (`kind: 'app'` in
+  `core/config/navigation.ts`) that opens `<VITE_HR_ADMIN_PORTAL_URL>/login` in the same tab
+  (`core/config/hrAdminPortal.ts`). Dev default: `http://localhost:5174`. A production build without the variable
+  **hides** the item. See `.env.example`.
+- Navigation only: no SSO, tokens or session data are shared with the portal (that comes with the shared backend).
 
 ## Content pipeline (inner pages)
 

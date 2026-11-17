@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { attendanceOption } from '@/modules/dashboard/charts/options';
-import { useChartContext } from '@/modules/dashboard/hooks/useChartContext';
+import { useChartContext } from '@/modules/shared/charts/useChartContext';
 import { useAttendanceOverview } from '@/modules/dashboard/hooks/useDashboard';
 import type { DashboardScope } from '@/modules/dashboard/types/dashboard';
-import { CHART_HEIGHT } from '@/modules/dashboard/charts/layout';
-import { ChartCard } from './ChartCard';
-import { EChart } from './EChart';
+import { CHART_HEIGHT } from '@/modules/shared/charts/layout';
+import { ChartCard } from '@/modules/shared/charts/ChartCard';
+import { EChart } from '@/modules/shared/charts/EChart';
 
 /** Today's attendance split as a doughnut (present / late / absent / on leave). */
 export function AttendanceChart({ scope }: { scope: DashboardScope }) {

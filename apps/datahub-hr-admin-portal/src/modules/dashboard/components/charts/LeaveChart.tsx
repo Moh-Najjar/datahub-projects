@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { leaveOption } from '@/modules/dashboard/charts/options';
-import { useChartContext } from '@/modules/dashboard/hooks/useChartContext';
+import { useChartContext } from '@/modules/shared/charts/useChartContext';
 import { useLeaveOverview } from '@/modules/dashboard/hooks/useDashboard';
 import type { DashboardScope } from '@/modules/dashboard/types/dashboard';
-import { CHART_HEIGHT } from '@/modules/dashboard/charts/layout';
-import { ChartCard } from './ChartCard';
-import { EChart } from './EChart';
+import { CHART_HEIGHT } from '@/modules/shared/charts/layout';
+import { ChartCard } from '@/modules/shared/charts/ChartCard';
+import { EChart } from '@/modules/shared/charts/EChart';
 
 /** Leave requests per month (last 6 months), stacked by current status. */
 export function LeaveChart({ scope }: { scope: DashboardScope }) {

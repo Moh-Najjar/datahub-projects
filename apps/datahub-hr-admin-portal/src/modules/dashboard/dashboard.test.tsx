@@ -26,8 +26,8 @@ const chartsShown = () => CHARTS.filter((name) => screen.queryByRole('img', { na
 
 async function openDashboard(role: Role) {
   const utils = renderApp('/dashboard', { as: role });
-  // The first render also loads the lazy dashboard + ECharts modules.
-  await screen.findByRole('heading', { level: 1 }, { timeout: 5000 });
+  // The first render also loads the lazy dashboard + ECharts modules (slow while other test files run in parallel).
+  await screen.findByRole('heading', { level: 1 }, { timeout: 10_000 });
   await waitFor(() => expect(screen.queryAllByRole('status')).toHaveLength(0));
   return utils;
 }

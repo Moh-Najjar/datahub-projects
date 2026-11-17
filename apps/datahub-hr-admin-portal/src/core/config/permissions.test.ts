@@ -29,12 +29,27 @@ describe('role/permission matrix (Phase 1)', () => {
 
   it('Department Manager: team scope only', () => {
     const p = grants('department-manager');
-    for (const x of ['employees:read:team', 'attendance:read:team', 'leave:read:team', 'leave:approve:team'] as const) expect(p.has(x), x).toBe(true);
-    for (const x of ['employees:read', 'attendance:read', 'leave:read', 'leave:approve', 'employees:write', 'payroll:read'] as const) expect(p.has(x), x).toBe(false);
+    for (const x of ['employees:read:team', 'attendance:read:team', 'leave:read:team', 'leave:approve:team', 'recruitment:read:team', 'performance:read:team', 'performance:review:team'] as const) expect(p.has(x), x).toBe(true);
+    for (const x of ['employees:read', 'attendance:read', 'leave:read', 'leave:approve', 'employees:write', 'payroll:read', 'recruitment:read', 'recruitment:write', 'performance:read', 'performance:write', 'performance:manage-config'] as const) expect(p.has(x), x).toBe(false);
+  });
+
+  it("employees' personal information: only System Administrator, HR Administrator and HR Manager", () => {
+    expect(ROLES.filter((role) => hasPermission(role, 'employees:read:personal'))).toEqual(['system-admin', 'hr-admin', 'hr-manager']);
+    // Roles that read employee records without personal details keep their existing access.
+    expect(hasPermission('payroll-officer', 'employees:read')).toBe(true);
+    expect(hasPermission('department-manager', 'employees:read:team')).toBe(true);
+    // Every role that may write employees can also read what it edits.
+    for (const role of ROLES) if (hasPermission(role, 'employees:write')) expect(hasPermission(role, 'employees:read:personal'), role).toBe(true);
+  });
+
+  it('performance configuration: System Administrator and HR Administrator only; own performance for every role', () => {
+    expect(ROLES.filter((role) => hasPermission(role, 'performance:manage-config'))).toEqual(['system-admin', 'hr-admin']);
+    for (const role of ROLES) expect(hasPermission(role, 'performance:read:own'), role).toBe(true);
+    expect(hasPermission('hr-manager', 'performance:write')).toBe(true);
   });
 
   it('Employee: self-service only (no dashboard, no other people)', () => {
-    expect(grants('employee')).toEqual(new Set(['profile:view', 'attendance:read:own', 'leave:read:own', 'leave:request']));
+    expect(grants('employee')).toEqual(new Set(['profile:view', 'attendance:read:own', 'leave:read:own', 'leave:request', 'performance:read:own']));
   });
 
   it('Recruiter: recruitment read/write and positions read; no employee records', () => {

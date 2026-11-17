@@ -19,5 +19,7 @@ export interface NavColumn {
 
 export type NavItem =
   | { kind: 'link'; label: string; href: string }
+  /** Link to another DataHub application (absolute URL, same tab). Shown as an icon on narrow desktops. */
+  | { kind: 'app'; label: string; href: string }
   | { kind: 'dropdown'; label: string; href?: string; items: NavLink[] }
   | { kind: 'mega'; label: string; columns: NavColumn[] };

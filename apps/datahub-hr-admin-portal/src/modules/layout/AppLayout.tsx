@@ -5,6 +5,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
+import { BreadcrumbProvider } from '@/core/context/BreadcrumbProvider';
 import { AppBreadcrumbs } from './AppBreadcrumbs';
 import { Sidebar } from './Sidebar';
 import { TopBar } from './TopBar';
@@ -25,10 +26,12 @@ export function AppLayout() {
       <Box sx={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
         <TopBar onOpenNavigation={isDesktop ? undefined : () => setOpenedOn(pathname)} />
         <Box component="main" sx={{ flex: 1, p: { xs: 2, md: 4 }, maxWidth: 1440, width: '100%', mx: 'auto' }}>
-          <AppBreadcrumbs />
-          <Suspense fallback={<LinearProgress aria-label={t('shell.loading')} />}>
-            <Outlet />
-          </Suspense>
+          <BreadcrumbProvider>
+            <AppBreadcrumbs />
+            <Suspense fallback={<LinearProgress aria-label={t('shell.loading')} />}>
+              <Outlet />
+            </Suspense>
+          </BreadcrumbProvider>
         </Box>
       </Box>
     </Box>

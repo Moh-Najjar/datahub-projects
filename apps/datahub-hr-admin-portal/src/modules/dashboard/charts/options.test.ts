@@ -2,7 +2,7 @@ import type { EChartsOption } from 'echarts';
 import { describe, expect, it } from 'vitest';
 import { chartColors } from '@/core/theme/tokens';
 import * as mock from '@/modules/dashboard/mock/dashboardMock';
-import { echarts } from './echarts';
+import { echarts } from '@/modules/shared/charts/echarts';
 import { attendanceOption, departmentOption, employeeGrowthOption, formatMonth, leaveOption, type ChartContext } from './options';
 
 const NOW = new Date('2026-06-15T10:30:00');

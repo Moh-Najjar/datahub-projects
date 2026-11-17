@@ -10,7 +10,36 @@
     "backHome": "العودة إلى الصفحة الرئيسية",
     "reload": "إعادة تحميل الصفحة",
     "retry": "إعادة المحاولة",
-    "signOut": "تسجيل الخروج"
+    "signOut": "تسجيل الخروج",
+    "cancel": "إلغاء",
+    "saving": "جارٍ الحفظ…"
+  },
+  "pagination": {
+    "first": "الانتقال إلى الصفحة الأولى",
+    "last": "الانتقال إلى الصفحة الأخيرة",
+    "next": "الانتقال إلى الصفحة التالية",
+    "previous": "الانتقال إلى الصفحة السابقة"
+  },
+  "list": {
+    "search": "بحث",
+    "allStatuses": "جميع الحالات",
+    "clearFilters": "مسح عوامل التصفية",
+    "rowsPerPage": "عدد الصفوف في الصفحة",
+    "displayedRows": "{{from}}–{{to}} من {{value}}",
+    "actionsFor": "إجراءات {{name}}",
+    "actions": "الإجراءات",
+    "empty": "لم تتم إضافة أي سجل بعد.",
+    "noResults": "لا توجد نتائج مطابقة للبحث أو عوامل التصفية.",
+    "loadError": "تعذّر تحميل هذه القائمة.",
+    "none": "—"
+  },
+  "status": {
+    "active": "نشط",
+    "inactive": "غير نشط"
+  },
+  "charts": {
+    "error": "تعذّر تحميل هذا الرسم البياني.",
+    "empty": "لا توجد بيانات لعرضها بعد."
   },
   "shell": {
     "openNavigation": "فتح قائمة التنقل",
@@ -70,6 +99,7 @@
     "dashboard_view": "عرض لوحة المعلومات",
     "profile_view": "عرض الملف الشخصي",
     "employees_read": "عرض جميع الموظفين",
+    "employees_read_personal": "عرض المعلومات الشخصية للموظفين",
     "employees_read_team": "عرض موظفي فريقه",
     "employees_write": "إضافة الموظفين وتعديلهم",
     "organization_read": "عرض الهيكل التنظيمي",
@@ -88,8 +118,13 @@
     "payroll_read": "عرض الرواتب",
     "payroll_write": "إدارة الرواتب",
     "recruitment_read": "عرض التوظيف",
+    "recruitment_read_team": "عرض توظيف فريقه",
     "recruitment_write": "إدارة التوظيف",
     "performance_read": "عرض الأداء",
+    "performance_read_team": "عرض أداء فريقه",
+    "performance_read_own": "عرض أدائه",
+    "performance_review_team": "تقييم أداء فريقه",
+    "performance_manage-config": "إعداد مراجعات الأداء",
     "performance_write": "إدارة الأداء",
     "documents_read": "عرض المستندات",
     "documents_write": "إدارة المستندات",

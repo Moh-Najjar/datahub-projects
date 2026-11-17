@@ -18,7 +18,13 @@ type LazyPage = LazyExoticComponent<ComponentType>;
 
 const LoginPage: LazyPage = lazy(() => import('@/modules/auth/LoginPage'));
 const ProfilePage: LazyPage = lazy(() => import('@/modules/auth/ProfilePage'));
+const AttendancePage: LazyPage = lazy(() => import('@/modules/attendance/AttendancePage'));
+const LeavePage: LazyPage = lazy(() => import('@/modules/leave/LeavePage'));
+const RecruitmentPage: LazyPage = lazy(() => import('@/modules/recruitment/RecruitmentPage'));
+const PerformancePage: LazyPage = lazy(() => import('@/modules/performance/PerformancePage'));
 const DashboardPage: LazyPage = lazy(() => import('@/modules/dashboard/DashboardPage'));
+const EmployeesPage: LazyPage = lazy(() => import('@/modules/employees/EmployeesPage'));
+const OrganizationPage: LazyPage = lazy(() => import('@/modules/organization/OrganizationPage'));
 const AccessDeniedPage: LazyPage = lazy(() => import('@/modules/errors/AccessDeniedPage'));
 const NotFoundPage: LazyPage = lazy(() => import('@/modules/errors/NotFoundPage'));
 
@@ -28,11 +34,14 @@ const page = (Page: LazyPage): ReactNode => (
   </Suspense>
 );
 
-/** A signed-in page from the navigation map: breadcrumb + permission guard (access denied otherwise). */
-function navRoute(key: NavKey, Page: LazyPage): RouteObject {
+/**
+ * A signed-in page from the navigation map: breadcrumb + permission guard (access denied otherwise).
+ * `nested` pages own their sub-routes (`/organization/*` → departments, positions…) with `<Routes>`.
+ */
+function navRoute(key: NavKey, Page: LazyPage, { nested = false } = {}): RouteObject {
   const item = navItem(key);
   return {
-    path: item.path.slice(1),
+    path: nested ? `${item.path.slice(1)}/*` : item.path.slice(1),
     handle: { navKey: key },
     element: (
       <RequirePermission anyOf={item.anyOf} fallback={page(AccessDeniedPage)}>
@@ -69,6 +78,12 @@ export const routes: RouteObject[] = [
           { index: true, element: <LandingRedirect /> },
           navRoute('dashboard', DashboardPage),
           navRoute('profile', ProfilePage),
+          navRoute('employees', EmployeesPage, { nested: true }),
+          navRoute('organization', OrganizationPage, { nested: true }),
+          navRoute('attendance', AttendancePage, { nested: true }),
+          navRoute('leave', LeavePage, { nested: true }),
+          navRoute('recruitment', RecruitmentPage, { nested: true }),
+          navRoute('performance', PerformancePage, { nested: true }),
           { path: '*', element: page(NotFoundPage) },
         ],
       },

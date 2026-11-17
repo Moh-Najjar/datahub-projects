@@ -1,1 +1,1705 @@
-{"routeKey":"containerizedInfrastructure","locale":"ar","source":"https://datahubanalytics.com/solutions/containerized-infrastructure/?lang=ar","generatedAt":"2026-11-10","rows":[{"kind":"row","id":"tm-row-6af317afc7305","fullWidth":true,"stretchContent":false,"style":{"xl":{"backgroundImage":"url(/assets/uploads/2023/09/Containerized-Infrastructure-2-scaled.jpeg)","backgroundSize":"cover","backgroundRepeat":"no-repeat"}},"overlay":{"xl":{"backgroundColor":"rgb(0, 0, 0)","opacity":"0.5"}},"separators":[{"position":"bottom","viewBox":"0 0 4.66666 0.333331","paths":["M-7.87402e-006 0.0148858l0.00234646 0c0.052689,0.0154094 0.554437,0.154539 1.51807,0.166524l0.267925 0c0.0227165,-0.00026378 0.0456102,-0.000582677 0.0687992,-0.001 1.1559,-0.0208465 2.34191,-0.147224 2.79148,-0.165524l0.0180591 0 0 0.166661 -7.87402e-006 0 0 0.151783 -4.66666 0 0 -0.151783 -7.87402e-006 0 0 -0.166661z"],"color":"rgb(255, 255, 255)","height":{"xl":{"height":"90px"}}}],"align":"middle","columns":[{"kind":"column","width":{"md":12},"style":{"xl":{"paddingLeft":"15px","paddingRight":"15px"},"xs":{"paddingLeft":"initial","paddingRight":"initial"}},"children":[{"kind":"spacer","height":{"xl":{"height":"200px"},"md":{"height":"125px"}}},{"kind":"heading","tag":"h1","text":"البنية التحتية للحاويات","style":{"xl":{"fontSize":"60px","fontWeight":"400","lineHeight":"65.4px","color":"rgb(255, 255, 255)","textAlign":"left","maxWidth":"100%"},"md":{"fontSize":"50px","lineHeight":"54.5px"}}},{"kind":"spacer","height":{"xl":{"height":"15px"}}},{"kind":"heading","tag":"h6","text":"تبسيط تعقيدات النشر لضمان القدرة على المرونة والتوسع","style":{"xl":{"fontSize":"30px","fontWeight":"400","lineHeight":"36px","color":"rgb(255, 255, 255)","textAlign":"left","maxWidth":"100%"},"md":{"fontSize":"25px","lineHeight":"30px"},"xs":{"fontSize":"20px","lineHeight":"24px"}}},{"kind":"spacer","height":{"xl":{"height":"35px"}}},{"kind":"heading","tag":"h5","text":"الحاويات وتنظيم الحاويات / البنية القائمة على الأحداث / تطبيق أوبن شفت / تطبيق ريد هات لينكس","style":{"xl":{"fontSize":"18px","fontWeight":"400","lineHeight":"25.56px","color":"rgb(255, 255, 255)","textAlign":"left","maxWidth":"100%","display":"inline-block"}}},{"kind":"spacer","height":{"xl":{"height":"56px"}}},{"kind":"buttons","buttons":[{"label":"احجز استشارة مجانية","href":"#section-consultation","variant":"flat","icon":null,"iconPosition":"right","style":{"xl":{"fontSize":"14px","fontWeight":"400","lineHeight":"56px","color":"rgb(255, 255, 255)","backgroundColor":"rgb(15, 86, 213)","borderRadius":"5px","height":"56px","minWidth":"175px","paddingLeft":"36px","paddingRight":"36px"}},"newTab":false}],"align":"start"},{"kind":"spacer","height":{"xl":{"height":"200px"}}}]}]},{"kind":"row","id":"tm-row-6af317afc88de","fullWidth":true,"stretchContent":false,"style":{"xl":{"paddingBottom":"120px"},"md":{"paddingBottom":"100px"}},"separators":[{"position":"bottom","viewBox":"0 0 4.66666 0.333331","paths":["M-7.87402e-006 0.0148858l0.00234646 0c0.052689,0.0154094 0.554437,0.154539 1.51807,0.166524l0.267925 0c0.0227165,-0.00026378 0.0456102,-0.000582677 0.0687992,-0.001 1.1559,-0.0208465 2.34191,-0.147224 2.79148,-0.165524l0.0180591 0 0 0.166661 -7.87402e-006 0 0 0.151783 -4.66666 0 0 -0.151783 -7.87402e-006 0 0 -0.166661z"],"color":"rgb(0, 68, 147)","height":{"xl":{"height":"100px"}}}],"align":"middle","columns":[{"kind":"column","width":{"md":12},"style":{"xl":{"paddingLeft":"15px","paddingRight":"15px"},"xs":{"paddingLeft":"initial","paddingRight":"initial"}},"children":[{"kind":"heading","tag":"h3","text":[{"mark":"امكانية التوسع في احتياجات البنية التحتية المتزايدة لديك بدون أي جهد"}],"style":{"xl":{"fontSize":"50px","fontWeight":"400","lineHeight":"64.5px","color":"rgb(51, 51, 51)","textAlign":"left","marginBottom":"25px","maxWidth":"100%"},"md":{"fontSize":"40px","lineHeight":"51.6px"}},"markStyle":{"xl":{"fontSize":"50px","fontWeight":"400","lineHeight":"64.5px","color":"rgb(0, 68, 147)","textAlign":"left","display":"inline"},"md":{"fontSize":"40px","lineHeight":"51.6px"}}}]},{"kind":"column","width":{"md":12,"lg":5},"style":{"xl":{"paddingLeft":"15px","paddingRight":"15px"},"xs":{"paddingLeft":"initial","paddingRight":"initial"}},"children":[{"kind":"spacer","height":{"xl":{"height":"50px"},"md":{"height":"30px"}}},{"kind":"heading","tag":"h3","text":"أثبتت حلول البنية التحتية للحاويات قدرتها على التوفير في تكاليف البنية التحتية تصل إلى 30٪ بفضل طبيعتها الخفيفة وامكانيتها في التوسع.","style":{"xl":{"fontSize":"24px","fontWeight":"800","lineHeight":"40.08px","color":"rgb(51, 51, 51)","textAlign":"left","marginBottom":"25px","maxWidth":"400px","paddingLeft":"34px"},"md":{"fontSize":"18px","lineHeight":"30.06px"}}},{"kind":"spacer","height":{"xl":{"height":"100px"},"md":{"height":"30px"}}}]},{"kind":"column","width":{"md":12,"lg":7},"style":{"xl":{"paddingLeft":"15px","paddingRight":"15px"},"xs":{"paddingLeft":"initial","paddingRight":"initial"}},"children":[{"kind":"heading","tag":"div","text":"في ساحة العمل السريعة التطور هذه الأيام، تواجه المؤسسات ضغوطًا متزايدة لتقديم التطبيقات والخدمات التي ليس لها مثيل. ومع ذلك، فإن إعدادات البنية التحتية التقليدية في كثير من الأحيان تحتاج إلى مساعدة فيما يتعلق بتوزيع الموارد والقابلية للتوسع وكفاءة النشر. وتؤدي عملية الحفاظ على بيئات متعددة معزولة لتطبيقات مختلفة إلى هدر الموارد وتعقيدات في التشغيل. علاوة على ذلك، فإن عدم وجود المرونة يعرقل القدرة على الابتكار السريع والاستجابة لمتطلبات السوق. من خلال الاستفادة من تقنيات الحاويات مثل دوكر وكوبرنيتس، يمكن للمؤسسات تجريد التطبيقات من البنية التحتية الأساسية لضمان التوافق في بيئات التطوير والاختبار والإنتاج. كما تمكن حلول البنية التحتية للحاويات الشركات من تعزيز فكرة التأقلم والكفاءة المطلوبة للنجاح في السوق الديناميكي الحالي، مما يفتح آفاقا جديدة للإنتاجية والابتكار.","style":{"xl":{"fontSize":"17px","fontWeight":"400","lineHeight":"28.39px","color":"rgb(105, 105, 105)","textAlign":"left","maxWidth":"100%"}}},{"kind":"spacer","height":{"xl":{"height":"50px"},"md":{"height":"30px"}}},{"kind":"heading","tag":"div","text":"تعتبر البنية التحتية للحاويات في داتاهب من طليعة الحلول، فهي تستند على الخبرة لدعم التحول الرقمي للعملاء. موظفونا محترفون ومن ذوو الخبرة المتعمقة في تقنيات الحاويات، مما يمكّنهم من تصميم ونشر إعدادات بنية تحتية مرنة وقابلة للتوسع. ندمج دوكر وكوبرنيتس بسلاسة في البيئات القائمة، الأمر الذي يحسن استخدام الموارد ويبسط عملية إدارة التطبيقات. كما تقوم حلول البنية التحتية للحاويات التي نوفرها بمساعدة المؤسسات في ضمان امكانية التسليم المستمر، والتوسيع، وتنظيم الحاويات، مما يضمن التطور السريع للعمل ويعزز مصداقية التطبيق.","style":{"xl":{"fontSize":"17px","fontWeight":"400","lineHeight":"28.39px","color":"rgb(105, 105, 105)","textAlign":"left","maxWidth":"100%"}}},{"kind":"spacer","height":{"xl":{"height":"32px"}}},{"kind":"heading","tag":"h4","text":"انضم إلى داتاهب لضمان الكفاءة والإبداع.","style":{"xl":{"fontSize":"20px","fontWeight":"400","lineHeight":"28px","color":"rgb(0, 68, 147)","textAlign":"left","maxWidth":"100%"}}}]}]},{"kind":"row","id":"tm-row-6af317afca8e0","fullWidth":true,"stretchContent":false,"style":{"xl":{"backgroundColor":"rgb(248, 248, 248)"}},"separators":[{"position":"bottom","viewBox":"0 0 2.23333 0.1","paths":["M2.23281 0.0372047c0,0 -0.0261929,-0.000389764 -0.0423307,-0.00584252 0,0 -0.0356181,0.0278268 -0.0865354,0.0212205 0,0 -0.0347835,-0.00524803 -0.0579094,-0.0283701 0,0 -0.0334252,0.0112677 -0.0773425,-0.00116929 0,0 -0.0590787,0.0524724 -0.141472,0.000779528 0,0 -0.0288189,0.0189291 -0.0762362,0.0111535 -0.00458268,0.0141024 -0.0150945,0.040122 -0.0656811,0.0432598 -0.0505866,0.0031378 -0.076126,-0.0226614 -0.0808425,-0.0308228 -0.00806299,0.000854331 -0.0819961,0.0186969 -0.111488,-0.022815 -0.0076378,0.0114843 -0.059185,0.0252598 -0.083563,-0.000385827 -0.0295945,0.0508661 -0.111996,0.0664843 -0.153752,0.019 -0.0179843,0.00227559 -0.0571181,0.00573622 -0.0732795,-0.0152953 -0.027748,0.0419646 -0.110602,0.0366654 -0.138701,0.00688189 0,0 -0.0771732,0.0395709 -0.116598,-0.0147677 0,0 -0.0497598,0.02 -0.0773346,-0.00166929 0,0 -0.0479646,0.0302756 -0.0998937,0.00944094 0,0 -0.0252638,0.0107874 -0.0839488,0.00884646 0,0 -0.046252,0.000775591 -0.0734567,-0.0237087 0,0 -0.046252,0.0101024 -0.0769567,-0.00116929 0,0 -0.0450827,0.0314843 -0.118543,0.0108858 0,0 -0.0715118,0.0609803 -0.144579,0.00423228 0,0 -0.0385787,0.00770079 -0.0646299,0.000102362 0,0 -0.0387559,0.0432205 -0.125039,0.0206811 0,0 -0.0324409,0.0181024 -0.0621457,0.0111063l-3.93701e-005 0.0412205 2.2323 0 0 -0.0627953z"],"color":"rgb(255, 255, 255)","height":{"xl":{"height":"100px"}}}],"columns":[{"kind":"column","width":{"md":12},"style":{"xl":{"paddingLeft":"15px","paddingRight":"15px"},"xs":{"paddingLeft":"initial","paddingRight":"initial"}},"children":[{"kind":"spacer","height":{"xl":{"height":"100px"},"md":{"height":"50px"}}},{"kind":"heading","tag":"h2","text":[{"mark":"مجموعة حلول البنية التحتية للحاويات"}],"style":{"xl":{"fontSize":"48px","fontWeight":"400","lineHeight":"56.16px","color":"rgb(51, 51, 51)","textAlign":"center","maxWidth":"930px"},"md":{"fontSize":"36px","lineHeight":"42.12px"}},"markStyle":{"xl":{"fontSize":"48px","fontWeight":"400","lineHeight":"56.16px","color":"rgb(0, 68, 147)","textAlign":"center","display":"inline"},"md":{"fontSize":"36px","lineHeight":"42.12px"}}},{"kind":"spacer","height":{"xl":{"height":"20px"},"md":{"height":"10px"}}},{"kind":"heading","tag":"h4","text":"مدفوعة بخبرة حلول المؤسسات بقطاعات مختلفة","style":{"xl":{"fontSize":"17px","fontWeight":"400","lineHeight":"23.8px","color":"rgb(112, 112, 112)","textTransform":"uppercase","textAlign":"center","maxWidth":"100%"}}},{"kind":"spacer","height":{"xl":{"height":"100px"},"md":{"height":"50px"}}},{"kind":"grid","columns":{"xl":{"gridTemplateColumns":"2","columnGap":"30px","rowGap":"30px"},"xs":{"gridTemplateColumns":"1"}},"gap":{"xl":{"gridTemplateColumns":"2","columnGap":"30px","rowGap":"30px"},"xs":{"gridTemplateColumns":"1"}},"children":[{"kind":"box","variant":"image-04","heading":"حلول الحاويات وتنظيم الحاويات","textHtml":"تقوم حلول الحاويات وتنظيم الحاويات للبنية التحتية من داتاهب بتحويل طريقة تطوير ونشر البرمجيات من خلال قوتها التقنية. باستخدام تقنيات الحاويات الحديثة مثل دوكر، نمكّن المؤسسات من تجميع التطبيقات والتبعيات في وحدات محمولة خفيفة الوزن. مع ميزاتنا المتقدمة مثل التوسيع التلقائي والتوازن في الحمل والتعافي الذاتي، تقوم حلول تنظيم الحاويات لدينا بحل مشاكل استخدام الموارد بشكل خاطئ وضمان توفرا دائم، حتى في البيئات الديناميكية والمعقدة.\n<p>مع حلول الحاويات وتنظيم الحاويات التي نوفرها، تحصل الشركات على هندسة معمارية تستند على الخدمات الصغيرة، مما يقلل من دورات التطوير، ويحقق النشر السريع، ويدير بشكل فعال بيئات التطبيقات متعددة الحاويات.</p>","style":{"xl":{}},"parts":{"wrap":{"xl":{"paddingTop":"50px","paddingBottom":"56px","backgroundColor":"rgb(255, 255, 255)","borderRadius":"5px","boxShadow":"rgba(51, 51, 51, 0.1) 0px 0px 25px 0px","textAlign":"left","paddingLeft":"42px","paddingRight":"42px"}},"image":{"xl":{"width":"486px"},"md":{"width":"246px"},"xs":{"width":"276px"}},"heading":{"xl":{"fontSize":"28px","fontWeight":"500","lineHeight":"35px","color":"rgb(0, 0, 0)","textAlign":"left","marginBottom":"9px"}},"text":{"xl":{"fontSize":"16px","fontWeight":"400","lineHeight":"27.84px","color":"rgb(105, 105, 105)","textAlign":"left"}},"content":{"xl":{"fontSize":"16px","fontWeight":"400","lineHeight":"27.84px","color":"rgb(105, 105, 105)","textAlign":"left"}}}},{"kind":"box","variant":"image-04","heading":"البنية القائمة على الأحداث","textHtml":"تقوم حلول البنية القائمة على الأحداث في داتاهب بتمكين المؤسسات من اعتماد نهج مرن ومتجاوب لتصميم الأنظمة الحديثة. من خلال حلولنا للبنية القائمة على الأحداث، يمكن للشركات معالجة الأحداث في الوقت الفعلي والاستجابة لها بكفاءة، مما يسهل العمليات المرنة واتخاذ القرارات في الوقت المناسب. باستخدام أنظمة الرسائل القائمة على الأحداث مثل أباتشي كافكا، نساعد الشركات على تطبيق إدارة تدفق الأحداث بشكل سلس وفصل مكونات النظام عن بعضها البعض. خبرتنا في تصميم الأنظمة القائمة على الأحداث تضمن تسليم الأحداث بشكل موثوق وتساهم في قابليتها للتوسع، مما يدعم تصميم الخدمات الصغيرة القائمة على الأحداث.\n<p>مع حلول البنية القائمة على الأحداث التي نوفرها، تحصل المؤسسات على ميزة تنافسية، مستفيدةً من إمكانيات معالجة البيانات في الوقت الفعلي وتحقيق تحول رقمي فعلي.</p>","style":{"xl":{}},"parts":{"wrap":{"xl":{"paddingTop":"50px","paddingBottom":"56px","backgroundColor":"rgb(255, 255, 255)","borderRadius":"5px","boxShadow":"rgba(51, 51, 51, 0.1) 0px 0px 25px 0px","textAlign":"left","paddingLeft":"42px","paddingRight":"42px"}},"image":{"xl":{"width":"486px"},"md":{"width":"246px"},"xs":{"width":"276px"}},"heading":{"xl":{"fontSize":"28px","fontWeight":"500","lineHeight":"35px","color":"rgb(0, 0, 0)","textAlign":"left","marginBottom":"9px"}},"text":{"xl":{"fontSize":"16px","fontWeight":"400","lineHeight":"27.84px","color":"rgb(105, 105, 105)","textAlign":"left"}},"content":{"xl":{"fontSize":"16px","fontWeight":"400","lineHeight":"27.84px","color":"rgb(105, 105, 105)","textAlign":"left"}}}},{"kind":"box","variant":"image-04","heading":"تطبيق أوبن شفت","textHtml":"تقدم خدمة تطبيق أوبن شفت للبنية التحتية من داتاهب نهجًا قويًا تقنيًا لتعظيم إمكانيات أوبن شفت، وهي منصة حاويات قوية من ريد هات. يقوم محترفونا الماهرون بتصميم ونشر مجموعات أوبن شفت بعناية، بالإضافة إلى التركيز على امكانية التخزين لتحقيق أفضل أداء وإدارة للبيانات. بالإضافة إلى ذلك، نضمن عملية إعادة نسخ البيانات، والأمان، والتسجيل لحماية البيانات ومراقبة صحة النظام بفعالية. بالاعتماد على خبرتنا المكتسبة، يمكننا دمج أوبن شفت بسهولة مع مختلف خدمات السحابة، مما يتيح للمؤسسات الاستفادة من موارد السحابة لتحقيق التوسع وضمان مرونة أكبر.\n<p>يمكنك الاعتماد على نهجنا الشامل لتنفيذ تطبيق أوبن شفت لتسريع تطوير التطبيقات، وتعزيز التعاون، وتحقيق التأقلم والمرونة في رحلتكم للتحول الرقمي.</p>","style":{"xl":{}},"parts":{"wrap":{"xl":{"paddingTop":"50px","paddingBottom":"56px","backgroundColor":"rgb(255, 255, 255)","borderRadius":"5px","boxShadow":"rgba(51, 51, 51, 0.1) 0px 0px 25px 0px","textAlign":"left","paddingLeft":"42px","paddingRight":"42px"}},"image":{"xl":{"width":"486px"},"md":{"width":"246px"},"xs":{"width":"276px"}},"heading":{"xl":{"fontSize":"28px","fontWeight":"500","lineHeight":"35px","color":"rgb(0, 0, 0)","textAlign":"left","marginBottom":"9px"}},"text":{"xl":{"fontSize":"16px","fontWeight":"400","lineHeight":"27.84px","color":"rgb(105, 105, 105)","textAlign":"left"}},"content":{"xl":{"fontSize":"16px","fontWeight":"400","lineHeight":"27.84px","color":"rgb(105, 105, 105)","textAlign":"left"}}}},{"kind":"box","variant":"image-04","heading":"تطبيق ريد هات لينكس","textHtml":"تقدم خدمة تطبيق ريد هات لينكس في البنية التحتية من داتاهب نهجًا متطورًا تقنيًا للاستفادة الكاملة من ريد هات إنتربرايز لينكس. بالتركيز على الأمان والأداء والاستقرار، نضمن التكامل السلس لتطبيق ريد هات لينكس داخل البنية التحتية القائمة بالفعل، وتكوين الشبكات والتخزين، وميزات الأمان لتلبية أعلى المعايير. تتضمن عملية التنفيذ لدينا ضبطًا دقيقًا لمعلمات النواة، وتحسين موارد النظام، ونشر حلول مراقبة وتسجيل قوية. باستخدام قوتنا التقنية، نسهل عملية الهجرة السلسة من الأنظمة التقليدية إلى تطبيق ريد هات لينكس، مع ضمان التوافق بين التطبيقات وتحقيق الأداء الأمثل.\n<p>مع خدمة تطبيق ريد هات لينكس لدينا، تحصل الشركات على بيئة لينكس متينة وآمنة وقابلة للتوسع، مما يمكّنها من دفع الابتكار، وتحقيق كفاءة في التكلفة، والبقاء في مقدمة المنافسة في المنظر التكنولوجي الديناميكي الحالي.</p>","style":{"xl":{}},"parts":{"wrap":{"xl":{"paddingTop":"50px","paddingBottom":"56px","backgroundColor":"rgb(255, 255, 255)","borderRadius":"5px","boxShadow":"rgba(51, 51, 51, 0.1) 0px 0px 25px 0px","textAlign":"left","paddingLeft":"42px","paddingRight":"42px"}},"image":{"xl":{"width":"486px"},"md":{"width":"246px"},"xs":{"width":"276px"}},"heading":{"xl":{"fontSize":"28px","fontWeight":"500","lineHeight":"35px","color":"rgb(0, 0, 0)","textAlign":"left","marginBottom":"9px"}},"text":{"xl":{"fontSize":"16px","fontWeight":"400","lineHeight":"27.84px","color":"rgb(105, 105, 105)","textAlign":"left"}},"content":{"xl":{"fontSize":"16px","fontWeight":"400","lineHeight":"27.84px","color":"rgb(105, 105, 105)","textAlign":"left"}}}}]},{"kind":"spacer","height":{"xl":{"height":"100px"},"md":{"height":"50px"}}}]}]},{"kind":"row","id":"tm-row-6af317afcc70c","fullWidth":true,"stretchContent":false,"style":{"xl":{"paddingTop":"50px","paddingBottom":"50px"}},"separators":[],"columns":[{"kind":"column","width":{"md":12},"style":{"xl":{"paddingLeft":"15px","paddingRight":"15px"},"xs":{"paddingLeft":"initial","paddingRight":"initial"}},"children":[{"kind":"heading","tag":"h2","text":[{"mark":"فوائد حلول البنية التحتية للحاويات"}],"style":{"xl":{"fontSize":"48px","fontWeight":"400","lineHeight":"56.16px","color":"rgb(51, 51, 51)","textAlign":"center","maxWidth":"930px"},"md":{"fontSize":"36px","lineHeight":"42.12px"}},"markStyle":{"xl":{"fontSize":"48px","fontWeight":"400","lineHeight":"56.16px","color":"rgb(0, 68, 147)","textAlign":"center","display":"inline"},"md":{"fontSize":"36px","lineHeight":"42.12px"}}},{"kind":"spacer","height":{"xl":{"height":"50px"}}},{"kind":"grid","columns":{"xl":{"gridTemplateColumns":"3","columnGap":"20px","rowGap":"40px"},"md":{"gridTemplateColumns":"2"},"xs":{"gridTemplateColumns":"1"}},"gap":{"xl":{"gridTemplateColumns":"3","columnGap":"20px","rowGap":"40px"},"md":{"gridTemplateColumns":"2"},"xs":{"gridTemplateColumns":"1"}},"children":[{"kind":"box","variant":"icon-05","heading":"تحسين قابلية التوسع","subHeading":"01","textHtml":"قم بتوسيع تطبيقاتك بسهولة حسب الطلب، مما يحسّن استخدام الموارد ويعزز الأداء لتلبية متطلبات العمل بكفاءة.","style":{"xl":{"paddingTop":"19px","paddingBottom":"30px","backgroundColor":"rgb(250, 246, 243)","borderRadius":"5px","paddingLeft":"24px","paddingRight":"24px"}},"parts":{"wrap":{"xl":{"textAlign":"left"}},"heading":{"xl":{"fontSize":"18px","fontWeight":"700","lineHeight":"22.5px","color":"rgb(51, 51, 51)","textAlign":"left"}},"subHeading":{"xl":{"fontSize":"15px","fontWeight":"500","lineHeight":"21.3px","color":"rgb(210, 169, 142)","textAlign":"left","marginBottom":"7px"}},"text":{"xl":{"fontSize":"15px","fontWeight":"400","lineHeight":"26.1px","color":"rgb(105, 105, 105)","textAlign":"left","marginTop":"10px"}},"content":{"xl":{"fontSize":"15px","fontWeight":"400","lineHeight":"26.1px","color":"rgb(105, 105, 105)","textAlign":"left"}}}},{"kind":"box","variant":"icon-05","heading":"تبسيط عمليات النشر والإدارة","subHeading":"02","textHtml":"قم بتبسيط عمليات نشر التطبيقات وإدارتها، مما يقلل من التعقيدات ويمكّن فريق العمل من التركيز على الابتكار والنمو.","style":{"xl":{"paddingTop":"19px","paddingBottom":"30px","backgroundColor":"rgb(237, 242, 254)","borderRadius":"5px","paddingLeft":"24px","paddingRight":"24px"}},"parts":{"wrap":{"xl":{"textAlign":"left"}},"heading":{"xl":{"fontSize":"18px","fontWeight":"700","lineHeight":"22.5px","color":"rgb(51, 51, 51)","textAlign":"left"}},"subHeading":{"xl":{"fontSize":"15px","fontWeight":"500","lineHeight":"21.3px","color":"rgb(78, 132, 250)","textAlign":"left","marginBottom":"7px"}},"text":{"xl":{"fontSize":"15px","fontWeight":"400","lineHeight":"26.1px","color":"rgb(105, 105, 105)","textAlign":"left","marginTop":"10px"}},"content":{"xl":{"fontSize":"15px","fontWeight":"400","lineHeight":"26.1px","color":"rgb(105, 105, 105)","textAlign":"left"}}}},{"kind":"box","variant":"icon-05","heading":"معالجة الأحداث في الوقت الحقيقي","subHeading":"03","textHtml":"احصل على معلومات يمكن استخدامها لتنفيذ الأحداث في الوقت الحقيقي، مما يسمح باتخاذ قرارات مستنيرة وبسرعة للحصول على ميزة تنافسية في الأسواق الديناميكية.","style":{"xl":{"paddingTop":"19px","paddingBottom":"30px","backgroundColor":"rgb(240, 245, 244)","borderRadius":"5px","paddingLeft":"24px","paddingRight":"24px"}},"parts":{"wrap":{"xl":{"textAlign":"left"}},"heading":{"xl":{"fontSize":"18px","fontWeight":"700","lineHeight":"22.5px","color":"rgb(51, 51, 51)","textAlign":"left"}},"subHeading":{"xl":{"fontSize":"15px","fontWeight":"500","lineHeight":"21.3px","color":"rgb(114, 164, 153)","textAlign":"left","marginBottom":"7px"}},"text":{"xl":{"fontSize":"15px","fontWeight":"400","lineHeight":"26.1px","color":"rgb(105, 105, 105)","textAlign":"left","marginTop":"10px"}},"content":{"xl":{"fontSize":"15px","fontWeight":"400","lineHeight":"26.1px","color":"rgb(105, 105, 105)","textAlign":"left"}}}},{"kind":"box","variant":"icon-05","heading":"تطوير التطبيقات القابلة للتأقلم","subHeading":"04","textHtml":"قم بتسليم التطبيقات بسرعة أكبر مع بيئة تطوير متأقلمة، لضمان التكامل السلس مع خدمات السحابة وللتكيف مع احتياجات العمل المتغيرة.","style":{"xl":{"paddingTop":"19px","paddingBottom":"30px","backgroundColor":"rgb(255, 245, 246)","borderRadius":"5px","paddingLeft":"24px","paddingRight":"24px"}},"parts":{"wrap":{"xl":{"textAlign":"left"}},"heading":{"xl":{"fontSize":"18px","fontWeight":"700","lineHeight":"22.5px","color":"rgb(51, 51, 51)","textAlign":"left"}},"subHeading":{"xl":{"fontSize":"15px","fontWeight":"500","lineHeight":"21.3px","color":"rgb(231, 68, 91)","textAlign":"left","marginBottom":"7px"}},"text":{"xl":{"fontSize":"15px","fontWeight":"400","lineHeight":"26.1px","color":"rgb(105, 105, 105)","textAlign":"left","marginTop":"10px"}},"content":{"xl":{"fontSize":"15px","fontWeight":"400","lineHeight":"26.1px","color":"rgb(105, 105, 105)","textAlign":"left"}}}},{"kind":"box","variant":"icon-05","heading":"أمان واستقرار قويان","subHeading":"05","textHtml":"حافظ على سلامة البيانات الحرجة واضمن استقرار البنية التحتية من خلال تعديلات دقيقة ومراقبة مستمرة.","style":{"xl":{"paddingTop":"19px","paddingBottom":"30px","backgroundColor":"rgb(252, 247, 238)","borderRadius":"5px","paddingLeft":"24px","paddingRight":"24px"}},"parts":{"wrap":{"xl":{"textAlign":"left"}},"heading":{"xl":{"fontSize":"18px","fontWeight":"700","lineHeight":"22.5px","color":"rgb(51, 51, 51)","textAlign":"left"}},"subHeading":{"xl":{"fontSize":"15px","fontWeight":"500","lineHeight":"21.3px","color":"rgb(229, 179, 93)","textAlign":"left","marginBottom":"7px"}},"text":{"xl":{"fontSize":"15px","fontWeight":"400","lineHeight":"26.1px","color":"rgb(105, 105, 105)","textAlign":"left","marginTop":"10px"}},"content":{"xl":{"fontSize":"15px","fontWeight":"400","lineHeight":"26.1px","color":"rgb(105, 105, 105)","textAlign":"left"}}}},{"kind":"box","variant":"icon-05","heading":"تحسين التكلفة","subHeading":"06","textHtml":"قم باستفادة من استخدام الموارد وتقليل تكاليف البنية التحتية من خلال اتباع نهج فعال لنشر التطبيقات وإدارتها.","style":{"xl":{"paddingTop":"19px","paddingBottom":"30px","backgroundColor":"rgb(244, 238, 252)","borderRadius":"5px","paddingLeft":"24px","paddingRight":"24px"}},"parts":{"wrap":{"xl":{"textAlign":"left"}},"heading":{"xl":{"fontSize":"18px","fontWeight":"700","lineHeight":"22.5px","color":"rgb(51, 51, 51)","textAlign":"left"}},"subHeading":{"xl":{"fontSize":"15px","fontWeight":"500","lineHeight":"21.3px","color":"rgb(130, 36, 227)","textAlign":"left","marginBottom":"7px"}},"text":{"xl":{"fontSize":"15px","fontWeight":"400","lineHeight":"26.1px","color":"rgb(105, 105, 105)","textAlign":"left","marginTop":"10px"}},"content":{"xl":{"fontSize":"15px","fontWeight":"400","lineHeight":"26.1px","color":"rgb(105, 105, 105)","textAlign":"left"}}}}]}]}]},{"kind":"row","id":"tm-row-6af317afcff43","fullWidth":true,"stretchContent":false,"style":{"xl":{"paddingBottom":"50px"}},"separators":[],"columns":[{"kind":"column","width":{"md":12},"style":{"xl":{"paddingLeft":"15px","paddingRight":"15px"},"xs":{"paddingLeft":"initial","paddingRight":"initial"}},"children":[{"kind":"spacer","height":{"xl":{"height":"50px"}}},{"kind":"row","id":"tm-row-inner-6af317afd0c88","fullWidth":false,"stretchContent":false,"style":{"xl":{}},"separators":[],"align":"middle","columns":[{"kind":"column","width":{"md":6},"style":{"xl":{"paddingLeft":"15px","paddingRight":"15px"},"xs":{"paddingLeft":"initial","paddingRight":"initial"}},"children":[{"kind":"heading","tag":"h4","text":"لماذا","style":{"xl":{"fontSize":"40px","fontWeight":"400","lineHeight":"56px","color":"rgb(51, 51, 51)","textAlign":"center","maxWidth":"570px","display":"inline-block"},"md":{"fontSize":"28px","lineHeight":"39.2px"}}},{"kind":"spacer","height":{"xl":{"height":"32px"}}},{"kind":"image","image":{"src":"/assets/uploads/2023/07/databubanalytics_logo_2.png","alt":"databubanalytics_logo_2","width":746,"height":136},"style":{"xl":{"textAlign":"right"}},"imageStyle":{"xl":{"width":"570px","maxWidth":"100%"},"md":{"width":"330px"},"xs":{"width":"360px"}}},{"kind":"spacer","height":{"xl":{"height":"32px"}}}]},{"kind":"column","width":{"md":6},"style":{"xl":{"paddingLeft":"15px","paddingRight":"15px"},"xs":{"paddingLeft":"initial","paddingRight":"initial"}},"children":[{"kind":"heading","tag":"h4","text":"شركاءك الموثوق بهم لتحليل البيانات والبنية التحتية والأمان","style":{"xl":{"fontSize":"20px","fontWeight":"600","lineHeight":"28px","color":"rgb(51, 51, 51)","textAlign":"left","maxWidth":"100%","paddingLeft":"34px"}}},{"kind":"spacer","height":{"xl":{"height":"32px"}}},{"kind":"list","variant":"check","items":[{"title":"يمتلك فريقنا المتمرس معرفة وخبرة واسعة في حلول البنية التحتية للحاويات، بما في ذلك تقنيات الحاويات وتنظيم الحاويات والنهج السحابية"},{"title":"سجلنا حافل بالنجاحات، فقد قدمنا حلول البنية التحتية للحاويات للعديد من العملاء في قطاعات مختلفة، حيث نفهم التحديات الفريدة لكل شركة ونقدم حلولاً مصممة خصيصًا لها."},{"title":"من خلال الاطلاع على أحدث الاتجاهات والتقنيات، نقدم حلول البنية التحتية للحاويات تتحدى المستقبل، مما يساعد على التكامل السلس للابتكارات الناشئة وتسهيل النمو المستدام لعملائنا."},{"title":"تشمل خبرتنا تنفيذ تدابير أمان قوية، مما يضمن حماية البيانات والامتثال للتشريعات في جميع بيئات الحاويات."},{"title":"يقوم فريق الدعم المخصص لدينا بالمتابعة والمراقبة على مدار الساعة، لحل المشكلات في الوقت المناسب، وبشكل استباقي لضمان سلاسة العمليات."}],"style":{"xl":{"textAlign":"left"}},"columns":{"xl":{"gridTemplateColumns":"1","columnGap":"30px","rowGap":"12px"}},"parts":{"item":{"xl":{"fontSize":"15px","fontWeight":"400","lineHeight":"26.1px","color":"rgb(105, 105, 105)","textAlign":"left","paddingLeft":"32px"}},"marker":{"xl":{"fontSize":"15px","fontWeight":"400","lineHeight":"26.1px","color":"rgb(42, 146, 67)","textAlign":"left"}},"title":{"xl":{"fontSize":"16px","fontWeight":"400","lineHeight":"27.84px","color":"rgb(105, 105, 105)","textAlign":"left"}}}}]}]},{"kind":"spacer","height":{"xl":{"height":"80px"}}}]}]},{"kind":"row","id":"tm-row-6af317afec021","fullWidth":false,"stretchContent":false,"style":{"xl":{}},"separators":[],"columns":[{"kind":"column","width":{"md":12},"style":{"xl":{"paddingLeft":"15px","paddingRight":"15px"},"xs":{"paddingLeft":"initial","paddingRight":"initial"}},"children":[{"kind":"spacer","height":{"xl":{"height":"80px"}}},{"kind":"heading","tag":"h3","text":"الأسئلة المتكررة","style":{"xl":{"fontSize":"32px","fontWeight":"400","lineHeight":"45.44px","color":"rgb(51, 51, 51)","textAlign":"left","maxWidth":"100%"}}},{"kind":"spacer","height":{"xl":{"height":"30px"}}},{"kind":"accordion","items":[{"title":"ما هي عملية التحويل للحاويات وكيف تعود بالفائدة على بنيتنا التحتية؟","html":"التحويل للحاويات هي تقنية تسمح بتعبئة التطبيقات وتبعياتها معًا في شكل موحد، والمعروفة باسم الحاويات. هذه الحاويات معزولة وخفيفة الوزن وقابلة للنقل، مما يتيح للشركات عملية النشر السلس عبر بيئات مختلفة. تشمل فوائد البنية التحتية للحاويات تحسين استخدام الموارد، وتقليل زمن النشر، وتبسيط الإدارة، وتطبيق مستمر في السلوك عبر بيئات التطوير والاختبار والإنتاج."},{"title":"كيف تضمن حلول البنية التحتية للحاويات الأمان والعزلة؟","html":"تعتمد حلول البنية التحتية للحاويات التي نوفرها على تدابير أمنية قوية لضمان إمكانية عزل الحاويات وحماية البيانات الحساسة. نحن نطبق المعايير العالمية في نسخ وتشغيل الحاويات ونتبع ضوابط شديدة لمنع الوصول غير المصرح به إلى الحاويات. بالإضافة إلى ذلك، نقوم بتحديث صور الحاويات بانتظام لنضمن أحدث التصحيحات الأمنية، ونراقب الحاويات بحثًا عن أي استثناءات أو اختراقات أمنية محتملة."},{"title":"هل يمكن دمج حلول البنية التحتية للحاويات مع أنظمتنا وأدواتنا الحالية؟","html":"نعم، تم تصميم حلول البنية التحتية للحاويات التي نوفرها لتكون مرنة ويمكن دمجها بسهولة مع أنظمتك وأدواتك الحالية. سواء كنت تستخدم بنية تحتية في الموقع أو تعتمد على نظام السحابة، يمكنك دمج حلولنا مع مكونات البنية التحتية المختلفة، وأدوات الرصد، وCI/CD، وحلول إدارة الاعدادات."},{"title":"كيف تتعامل حلول البنية التحتية للحاويات مع التوسع والتوفر؟","html":"تقوم حلول البنية التحتية للحاويات التي نوفرها باستغلال منصات تنظيم الحاويات مثل Kubernetes لتوفير التوسع والتوفر. تدير منصة Kubernetes أعباء العمل المعزولة ديناميكيًا، وتقوم بتكييف تلقائي لها بناءً على حاجة الموارد. كما تضمن التوفر العالي من خلال توزيع الحاويات عبر عدة عقد، مع ضمان الوصول إلى التطبيقات حتى في حالة فشل بعض العقد."},{"title":"ما مستوى الدعم والصيانة الذي نقدمه لحلول البنية التحتية للحاويات؟","html":"نحن نقدم خدمات دعم وصيانة شاملة لحلول البنية التحتية للحاويات التي نوفرها. لدينا فريق من الخبراء لمساعدتك في حالة وجود أي مشاكل تقنية أو تحديثات أو تحسينات. نقدم فحوصات صحية منتظمة، وضبط أداء، ورصد الأنشطة لضمان عمل بنيتك التحتية للحاويات. بالإضافة إلى ذلك، نقوم بتحديث حلولنا بأحدث تقنيات الحاويات وأفضل الممارسات الأمنية لضمان بقاء بيئتك آمنة وفعالة."}],"style":{"xl":{}},"parts":{"section":{"xl":{"fontSize":"16px","fontWeight":"400","lineHeight":"27.84px","color":"rgb(105, 105, 105)","backgroundColor":"rgb(255, 255, 255)"}},"title":{"xl":{"fontSize":"18px","fontWeight":"500","lineHeight":"22.14px","color":"rgb(255, 255, 255)","paddingTop":"18px","paddingBottom":"18px","backgroundColor":"rgb(0, 68, 147)","borderBottom":"1px solid rgba(0, 0, 0, 0)","paddingLeft":"30px","paddingRight":"30px"}},"content":{"xl":{"fontSize":"16px","fontWeight":"400","lineHeight":"27.84px","color":"rgb(105, 105, 105)","paddingTop":"23px","paddingBottom":"29px","paddingLeft":"30px","paddingRight":"30px"}}}},{"kind":"spacer","height":{"xl":{"height":"100px"},"md":{"height":"50px"}}}]}]}]}
+{
+    "routeKey": "containerizedInfrastructure",
+    "locale": "ar",
+    "source": "https://datahubanalytics.com/solutions/containerized-infrastructure/?lang=ar",
+    "generatedAt": "2026-11-10",
+    "rows": [
+        {
+            "kind": "row",
+            "id": "tm-row-6af317afc7305",
+            "fullWidth": true,
+            "stretchContent": false,
+            "style": {
+                "xl": {
+                    "backgroundImage": "url(/assets/uploads/2023/09/Containerized-Infrastructure-2-scaled.jpeg)",
+                    "backgroundSize": "cover",
+                    "backgroundRepeat": "no-repeat"
+                }
+            },
+            "overlay": {
+                "xl": {
+                    "backgroundColor": "rgb(0, 0, 0)",
+                    "opacity": "0.5"
+                }
+            },
+            "separators": [
+                {
+                    "position": "bottom",
+                    "viewBox": "0 0 4.66666 0.333331",
+                    "paths": [
+                        "M-7.87402e-006 0.0148858l0.00234646 0c0.052689,0.0154094 0.554437,0.154539 1.51807,0.166524l0.267925 0c0.0227165,-0.00026378 0.0456102,-0.000582677 0.0687992,-0.001 1.1559,-0.0208465 2.34191,-0.147224 2.79148,-0.165524l0.0180591 0 0 0.166661 -7.87402e-006 0 0 0.151783 -4.66666 0 0 -0.151783 -7.87402e-006 0 0 -0.166661z"
+                    ],
+                    "color": "rgb(255, 255, 255)",
+                    "height": {
+                        "xl": {
+                            "height": "90px"
+                        }
+                    }
+                }
+            ],
+            "align": "middle",
+            "columns": [
+                {
+                    "kind": "column",
+                    "width": {
+                        "md": 12
+                    },
+                    "style": {
+                        "xl": {
+                            "paddingLeft": "15px",
+                            "paddingRight": "15px"
+                        },
+                        "xs": {
+                            "paddingLeft": "initial",
+                            "paddingRight": "initial"
+                        }
+                    },
+                    "children": [
+                        {
+                            "kind": "spacer",
+                            "height": {
+                                "xl": {
+                                    "height": "200px"
+                                },
+                                "md": {
+                                    "height": "125px"
+                                }
+                            }
+                        },
+                        {
+                            "kind": "heading",
+                            "tag": "h1",
+                            "text": "البنية التحتية للحاويات",
+                            "style": {
+                                "xl": {
+                                    "fontSize": "60px",
+                                    "fontWeight": "400",
+                                    "lineHeight": "65.4px",
+                                    "color": "rgb(255, 255, 255)",
+                                    "textAlign": "left",
+                                    "maxWidth": "100%"
+                                },
+                                "md": {
+                                    "fontSize": "50px",
+                                    "lineHeight": "54.5px"
+                                }
+                            }
+                        },
+                        {
+                            "kind": "spacer",
+                            "height": {
+                                "xl": {
+                                    "height": "15px"
+                                }
+                            }
+                        },
+                        {
+                            "kind": "heading",
+                            "tag": "h6",
+                            "text": "تبسيط تعقيدات النشر لضمان القدرة على المرونة والتوسع",
+                            "style": {
+                                "xl": {
+                                    "fontSize": "30px",
+                                    "fontWeight": "400",
+                                    "lineHeight": "36px",
+                                    "color": "rgb(255, 255, 255)",
+                                    "textAlign": "left",
+                                    "maxWidth": "100%"
+                                },
+                                "md": {
+                                    "fontSize": "25px",
+                                    "lineHeight": "30px"
+                                },
+                                "xs": {
+                                    "fontSize": "20px",
+                                    "lineHeight": "24px"
+                                }
+                            }
+                        },
+                        {
+                            "kind": "spacer",
+                            "height": {
+                                "xl": {
+                                    "height": "35px"
+                                }
+                            }
+                        },
+                        {
+                            "kind": "heading",
+                            "tag": "h5",
+                            "text": "الحاويات وتنظيم الحاويات / البنية القائمة على الأحداث / تطبيق أوبن شفت / تطبيق ريد هات لينكس",
+                            "style": {
+                                "xl": {
+                                    "fontSize": "18px",
+                                    "fontWeight": "400",
+                                    "lineHeight": "25.56px",
+                                    "color": "rgb(255, 255, 255)",
+                                    "textAlign": "left",
+                                    "maxWidth": "100%",
+                                    "display": "inline-block"
+                                }
+                            }
+                        },
+                        {
+                            "kind": "spacer",
+                            "height": {
+                                "xl": {
+                                    "height": "56px"
+                                }
+                            }
+                        },
+                        {
+                            "kind": "buttons",
+                            "buttons": [
+                                {
+                                    "label": "احجز استشارة مجانية",
+                                    "href": "#section-consultation",
+                                    "variant": "flat",
+                                    "icon": null,
+                                    "iconPosition": "right",
+                                    "style": {
+                                        "xl": {
+                                            "fontSize": "14px",
+                                            "fontWeight": "400",
+                                            "lineHeight": "56px",
+                                            "color": "rgb(255, 255, 255)",
+                                            "backgroundColor": "rgb(15, 86, 213)",
+                                            "borderRadius": "5px",
+                                            "height": "56px",
+                                            "minWidth": "175px",
+                                            "paddingLeft": "36px",
+                                            "paddingRight": "36px"
+                                        }
+                                    },
+                                    "newTab": false
+                                }
+                            ],
+                            "align": "start"
+                        },
+                        {
+                            "kind": "spacer",
+                            "height": {
+                                "xl": {
+                                    "height": "200px"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "kind": "row",
+            "id": "tm-row-6af317afc88de",
+            "fullWidth": true,
+            "stretchContent": false,
+            "style": {
+                "xl": {
+                    "paddingBottom": "120px"
+                },
+                "md": {
+                    "paddingBottom": "100px"
+                }
+            },
+            "separators": [
+                {
+                    "position": "bottom",
+                    "viewBox": "0 0 4.66666 0.333331",
+                    "paths": [
+                        "M-7.87402e-006 0.0148858l0.00234646 0c0.052689,0.0154094 0.554437,0.154539 1.51807,0.166524l0.267925 0c0.0227165,-0.00026378 0.0456102,-0.000582677 0.0687992,-0.001 1.1559,-0.0208465 2.34191,-0.147224 2.79148,-0.165524l0.0180591 0 0 0.166661 -7.87402e-006 0 0 0.151783 -4.66666 0 0 -0.151783 -7.87402e-006 0 0 -0.166661z"
+                    ],
+                    "color": "rgb(0, 68, 147)",
+                    "height": {
+                        "xl": {
+                            "height": "100px"
+                        }
+                    }
+                }
+            ],
+            "align": "middle",
+            "columns": [
+                {
+                    "kind": "column",
+                    "width": {
+                        "md": 12
+                    },
+                    "style": {
+                        "xl": {
+                            "paddingLeft": "15px",
+                            "paddingRight": "15px"
+                        },
+                        "xs": {
+                            "paddingLeft": "initial",
+                            "paddingRight": "initial"
+                        }
+                    },
+                    "children": [
+                        {
+                            "kind": "heading",
+                            "tag": "h3",
+                            "text": [
+                                {
+                                    "mark": "امكانية التوسع في احتياجات البنية التحتية المتزايدة لديك بدون أي جهد"
+                                }
+                            ],
+                            "style": {
+                                "xl": {
+                                    "fontSize": "50px",
+                                    "fontWeight": "400",
+                                    "lineHeight": "64.5px",
+                                    "color": "rgb(51, 51, 51)",
+                                    "textAlign": "left",
+                                    "marginBottom": "25px",
+                                    "maxWidth": "100%"
+                                },
+                                "md": {
+                                    "fontSize": "40px",
+                                    "lineHeight": "51.6px"
+                                }
+                            },
+                            "markStyle": {
+                                "xl": {
+                                    "fontSize": "50px",
+                                    "fontWeight": "400",
+                                    "lineHeight": "64.5px",
+                                    "color": "rgb(0, 68, 147)",
+                                    "textAlign": "left",
+                                    "display": "inline"
+                                },
+                                "md": {
+                                    "fontSize": "40px",
+                                    "lineHeight": "51.6px"
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "kind": "column",
+                    "width": {
+                        "md": 12,
+                        "lg": 5
+                    },
+                    "style": {
+                        "xl": {
+                            "paddingLeft": "15px",
+                            "paddingRight": "15px"
+                        },
+                        "xs": {
+                            "paddingLeft": "initial",
+                            "paddingRight": "initial"
+                        }
+                    },
+                    "children": [
+                        {
+                            "kind": "spacer",
+                            "height": {
+                                "xl": {
+                                    "height": "50px"
+                                },
+                                "md": {
+                                    "height": "30px"
+                                }
+                            }
+                        },
+                        {
+                            "kind": "heading",
+                            "tag": "h3",
+                            "text": "أثبتت حلول البنية التحتية للحاويات قدرتها على التوفير في تكاليف البنية التحتية تصل إلى 30٪ بفضل طبيعتها الخفيفة وامكانيتها في التوسع.",
+                            "style": {
+                                "xl": {
+                                    "fontSize": "24px",
+                                    "fontWeight": "800",
+                                    "lineHeight": "40.08px",
+                                    "color": "rgb(51, 51, 51)",
+                                    "textAlign": "left",
+                                    "marginBottom": "25px",
+                                    "maxWidth": "400px",
+                                    "paddingLeft": "34px"
+                                },
+                                "md": {
+                                    "fontSize": "18px",
+                                    "lineHeight": "30.06px"
+                                }
+                            }
+                        },
+                        {
+                            "kind": "spacer",
+                            "height": {
+                                "xl": {
+                                    "height": "100px"
+                                },
+                                "md": {
+                                    "height": "30px"
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "kind": "column",
+                    "width": {
+                        "md": 12,
+                        "lg": 7
+                    },
+                    "style": {
+                        "xl": {
+                            "paddingLeft": "15px",
+                            "paddingRight": "15px"
+                        },
+                        "xs": {
+                            "paddingLeft": "initial",
+                            "paddingRight": "initial"
+                        }
+                    },
+                    "children": [
+                        {
+                            "kind": "heading",
+                            "tag": "div",
+                            "text": "في ساحة العمل السريعة التطور هذه الأيام، تواجه المؤسسات ضغوطًا متزايدة لتقديم التطبيقات والخدمات التي ليس لها مثيل. ومع ذلك، فإن إعدادات البنية التحتية التقليدية في كثير من الأحيان تحتاج إلى مساعدة فيما يتعلق بتوزيع الموارد والقابلية للتوسع وكفاءة النشر. وتؤدي عملية الحفاظ على بيئات متعددة معزولة لتطبيقات مختلفة إلى هدر الموارد وتعقيدات في التشغيل. علاوة على ذلك، فإن عدم وجود المرونة يعرقل القدرة على الابتكار السريع والاستجابة لمتطلبات السوق. من خلال الاستفادة من تقنيات الحاويات مثل دوكر وكوبرنيتس، يمكن للمؤسسات تجريد التطبيقات من البنية التحتية الأساسية لضمان التوافق في بيئات التطوير والاختبار والإنتاج. كما تمكن حلول البنية التحتية للحاويات الشركات من تعزيز فكرة التأقلم والكفاءة المطلوبة للنجاح في السوق الديناميكي الحالي، مما يفتح آفاقا جديدة للإنتاجية والابتكار.",
+                            "style": {
+                                "xl": {
+                                    "fontSize": "17px",
+                                    "fontWeight": "400",
+                                    "lineHeight": "28.39px",
+                                    "color": "rgb(105, 105, 105)",
+                                    "textAlign": "left",
+                                    "maxWidth": "100%"
+                                }
+                            }
+                        },
+                        {
+                            "kind": "spacer",
+                            "height": {
+                                "xl": {
+                                    "height": "50px"
+                                },
+                                "md": {
+                                    "height": "30px"
+                                }
+                            }
+                        },
+                        {
+                            "kind": "heading",
+                            "tag": "div",
+                            "text": "تعتبر البنية التحتية للحاويات في داتاهب من طليعة الحلول، فهي تستند على الخبرة لدعم التحول الرقمي للعملاء. موظفونا محترفون ومن ذوو الخبرة المتعمقة في تقنيات الحاويات، مما يمكّنهم من تصميم ونشر إعدادات بنية تحتية مرنة وقابلة للتوسع. ندمج دوكر وكوبرنيتس بسلاسة في البيئات القائمة، الأمر الذي يحسن استخدام الموارد ويبسط عملية إدارة التطبيقات. كما تقوم حلول البنية التحتية للحاويات التي نوفرها بمساعدة المؤسسات في ضمان امكانية التسليم المستمر، والتوسيع، وتنظيم الحاويات، مما يضمن التطور السريع للعمل ويعزز مصداقية التطبيق.",
+                            "style": {
+                                "xl": {
+                                    "fontSize": "17px",
+                                    "fontWeight": "400",
+                                    "lineHeight": "28.39px",
+                                    "color": "rgb(105, 105, 105)",
+                                    "textAlign": "left",
+                                    "maxWidth": "100%"
+                                }
+                            }
+                        },
+                        {
+                            "kind": "spacer",
+                            "height": {
+                                "xl": {
+                                    "height": "32px"
+                                }
+                            }
+                        },
+                        {
+                            "kind": "heading",
+                            "tag": "h4",
+                            "text": "انضم إلى داتاهب لضمان الكفاءة والإبداع.",
+                            "style": {
+                                "xl": {
+                                    "fontSize": "20px",
+                                    "fontWeight": "400",
+                                    "lineHeight": "28px",
+                                    "color": "rgb(0, 68, 147)",
+                                    "textAlign": "left",
+                                    "maxWidth": "100%"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "kind": "row",
+            "id": "tm-row-6af317afca8e0",
+            "fullWidth": true,
+            "stretchContent": false,
+            "style": {
+                "xl": {
+                    "backgroundColor": "rgb(248, 248, 248)"
+                }
+            },
+            "separators": [
+                {
+                    "position": "bottom",
+                    "viewBox": "0 0 2.23333 0.1",
+                    "paths": [
+                        "M2.23281 0.0372047c0,0 -0.0261929,-0.000389764 -0.0423307,-0.00584252 0,0 -0.0356181,0.0278268 -0.0865354,0.0212205 0,0 -0.0347835,-0.00524803 -0.0579094,-0.0283701 0,0 -0.0334252,0.0112677 -0.0773425,-0.00116929 0,0 -0.0590787,0.0524724 -0.141472,0.000779528 0,0 -0.0288189,0.0189291 -0.0762362,0.0111535 -0.00458268,0.0141024 -0.0150945,0.040122 -0.0656811,0.0432598 -0.0505866,0.0031378 -0.076126,-0.0226614 -0.0808425,-0.0308228 -0.00806299,0.000854331 -0.0819961,0.0186969 -0.111488,-0.022815 -0.0076378,0.0114843 -0.059185,0.0252598 -0.083563,-0.000385827 -0.0295945,0.0508661 -0.111996,0.0664843 -0.153752,0.019 -0.0179843,0.00227559 -0.0571181,0.00573622 -0.0732795,-0.0152953 -0.027748,0.0419646 -0.110602,0.0366654 -0.138701,0.00688189 0,0 -0.0771732,0.0395709 -0.116598,-0.0147677 0,0 -0.0497598,0.02 -0.0773346,-0.00166929 0,0 -0.0479646,0.0302756 -0.0998937,0.00944094 0,0 -0.0252638,0.0107874 -0.0839488,0.00884646 0,0 -0.046252,0.000775591 -0.0734567,-0.0237087 0,0 -0.046252,0.0101024 -0.0769567,-0.00116929 0,0 -0.0450827,0.0314843 -0.118543,0.0108858 0,0 -0.0715118,0.0609803 -0.144579,0.00423228 0,0 -0.0385787,0.00770079 -0.0646299,0.000102362 0,0 -0.0387559,0.0432205 -0.125039,0.0206811 0,0 -0.0324409,0.0181024 -0.0621457,0.0111063l-3.93701e-005 0.0412205 2.2323 0 0 -0.0627953z"
+                    ],
+                    "color": "rgb(255, 255, 255)",
+                    "height": {
+                        "xl": {
+                            "height": "100px"
+                        }
+                    }
+                }
+            ],
+            "columns": [
+                {
+                    "kind": "column",
+                    "width": {
+                        "md": 12
+                    },
+                    "style": {
+                        "xl": {
+                            "paddingLeft": "15px",
+                            "paddingRight": "15px"
+                        },
+                        "xs": {
+                            "paddingLeft": "initial",
+                            "paddingRight": "initial"
+                        }
+                    },
+                    "children": [
+                        {
+                            "kind": "spacer",
+                            "height": {
+                                "xl": {
+                                    "height": "100px"
+                                },
+                                "md": {
+                                    "height": "50px"
+                                }
+                            }
+                        },
+                        {
+                            "kind": "heading",
+                            "tag": "h2",
+                            "text": [
+                                {
+                                    "mark": "مجموعة حلول البنية التحتية للحاويات"
+                                }
+                            ],
+                            "style": {
+                                "xl": {
+                                    "fontSize": "48px",
+                                    "fontWeight": "400",
+                                    "lineHeight": "56.16px",
+                                    "color": "rgb(51, 51, 51)",
+                                    "textAlign": "center",
+                                    "maxWidth": "930px"
+                                },
+                                "md": {
+                                    "fontSize": "36px",
+                                    "lineHeight": "42.12px"
+                                }
+                            },
+                            "markStyle": {
+                                "xl": {
+                                    "fontSize": "48px",
+                                    "fontWeight": "400",
+                                    "lineHeight": "56.16px",
+                                    "color": "rgb(0, 68, 147)",
+                                    "textAlign": "center",
+                                    "display": "inline"
+                                },
+                                "md": {
+                                    "fontSize": "36px",
+                                    "lineHeight": "42.12px"
+                                }
+                            }
+                        },
+                        {
+                            "kind": "spacer",
+                            "height": {
+                                "xl": {
+                                    "height": "20px"
+                                },
+                                "md": {
+                                    "height": "10px"
+                                }
+                            }
+                        },
+                        {
+                            "kind": "heading",
+                            "tag": "h4",
+                            "text": "مدفوعة بخبرة حلول المؤسسات بقطاعات مختلفة",
+                            "style": {
+                                "xl": {
+                                    "fontSize": "17px",
+                                    "fontWeight": "400",
+                                    "lineHeight": "23.8px",
+                                    "color": "rgb(112, 112, 112)",
+                                    "textTransform": "uppercase",
+                                    "textAlign": "center",
+                                    "maxWidth": "100%"
+                                }
+                            }
+                        },
+                        {
+                            "kind": "spacer",
+                            "height": {
+                                "xl": {
+                                    "height": "100px"
+                                },
+                                "md": {
+                                    "height": "50px"
+                                }
+                            }
+                        },
+                        {
+                            "kind": "grid",
+                            "columns": {
+                                "xl": {
+                                    "gridTemplateColumns": "2",
+                                    "columnGap": "30px",
+                                    "rowGap": "30px"
+                                },
+                                "xs": {
+                                    "gridTemplateColumns": "1"
+                                }
+                            },
+                            "gap": {
+                                "xl": {
+                                    "gridTemplateColumns": "2",
+                                    "columnGap": "30px",
+                                    "rowGap": "30px"
+                                },
+                                "xs": {
+                                    "gridTemplateColumns": "1"
+                                }
+                            },
+                            "children": [
+                                {
+                                    "kind": "box",
+                                    "variant": "image-04",
+                                    "heading": "حلول الحاويات وتنظيم الحاويات",
+                                    "textHtml": "تقوم حلول الحاويات وتنظيم الحاويات للبنية التحتية من داتاهب بتحويل طريقة تطوير ونشر البرمجيات من خلال قوتها التقنية. باستخدام تقنيات الحاويات الحديثة مثل دوكر، نمكّن المؤسسات من تجميع التطبيقات والتبعيات في وحدات محمولة خفيفة الوزن. مع ميزاتنا المتقدمة مثل التوسيع التلقائي والتوازن في الحمل والتعافي الذاتي، تقوم حلول تنظيم الحاويات لدينا بحل مشاكل استخدام الموارد بشكل خاطئ وضمان توفرا دائم، حتى في البيئات الديناميكية والمعقدة.\n<p>مع حلول الحاويات وتنظيم الحاويات التي نوفرها، تحصل الشركات على هندسة معمارية تستند على الخدمات الصغيرة، مما يقلل من دورات التطوير، ويحقق النشر السريع، ويدير بشكل فعال بيئات التطبيقات متعددة الحاويات.</p>",
+                                    "style": {
+                                        "xl": {}
+                                    },
+                                    "parts": {
+                                        "wrap": {
+                                            "xl": {
+                                                "paddingTop": "50px",
+                                                "paddingBottom": "56px",
+                                                "backgroundColor": "rgb(255, 255, 255)",
+                                                "borderRadius": "5px",
+                                                "boxShadow": "rgba(51, 51, 51, 0.1) 0px 0px 25px 0px",
+                                                "textAlign": "left",
+                                                "paddingLeft": "42px",
+                                                "paddingRight": "42px"
+                                            }
+                                        },
+                                        "image": {
+                                            "xl": {
+                                                "width": "486px"
+                                            },
+                                            "md": {
+                                                "width": "246px"
+                                            },
+                                            "xs": {
+                                                "width": "276px"
+                                            }
+                                        },
+                                        "heading": {
+                                            "xl": {
+                                                "fontSize": "28px",
+                                                "fontWeight": "500",
+                                                "lineHeight": "35px",
+                                                "color": "rgb(0, 0, 0)",
+                                                "textAlign": "left",
+                                                "marginBottom": "9px"
+                                            }
+                                        },
+                                        "text": {
+                                            "xl": {
+                                                "fontSize": "16px",
+                                                "fontWeight": "400",
+                                                "lineHeight": "27.84px",
+                                                "color": "rgb(105, 105, 105)",
+                                                "textAlign": "left"
+                                            }
+                                        },
+                                        "content": {
+                                            "xl": {
+                                                "fontSize": "16px",
+                                                "fontWeight": "400",
+                                                "lineHeight": "27.84px",
+                                                "color": "rgb(105, 105, 105)",
+                                                "textAlign": "left"
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "kind": "box",
+                                    "variant": "image-04",
+                                    "heading": "البنية القائمة على الأحداث",
+                                    "textHtml": "تقوم حلول البنية القائمة على الأحداث في داتاهب بتمكين المؤسسات من اعتماد نهج مرن ومتجاوب لتصميم الأنظمة الحديثة. من خلال حلولنا للبنية القائمة على الأحداث، يمكن للشركات معالجة الأحداث في الوقت الفعلي والاستجابة لها بكفاءة، مما يسهل العمليات المرنة واتخاذ القرارات في الوقت المناسب. باستخدام أنظمة الرسائل القائمة على الأحداث مثل أباتشي كافكا، نساعد الشركات على تطبيق إدارة تدفق الأحداث بشكل سلس وفصل مكونات النظام عن بعضها البعض. خبرتنا في تصميم الأنظمة القائمة على الأحداث تضمن تسليم الأحداث بشكل موثوق وتساهم في قابليتها للتوسع، مما يدعم تصميم الخدمات الصغيرة القائمة على الأحداث.\n<p>مع حلول البنية القائمة على الأحداث التي نوفرها، تحصل المؤسسات على ميزة تنافسية، مستفيدةً من إمكانيات معالجة البيانات في الوقت الفعلي وتحقيق تحول رقمي فعلي.</p>",
+                                    "style": {
+                                        "xl": {}
+                                    },
+                                    "parts": {
+                                        "wrap": {
+                                            "xl": {
+                                                "paddingTop": "50px",
+                                                "paddingBottom": "56px",
+                                                "backgroundColor": "rgb(255, 255, 255)",
+                                                "borderRadius": "5px",
+                                                "boxShadow": "rgba(51, 51, 51, 0.1) 0px 0px 25px 0px",
+                                                "textAlign": "left",
+                                                "paddingLeft": "42px",
+                                                "paddingRight": "42px"
+                                            }
+                                        },
+                                        "image": {
+                                            "xl": {
+                                                "width": "486px"
+                                            },
+                                            "md": {
+                                                "width": "246px"
+                                            },
+                                            "xs": {
+                                                "width": "276px"
+                                            }
+                                        },
+                                        "heading": {
+                                            "xl": {
+                                                "fontSize": "28px",
+                                                "fontWeight": "500",
+                                                "lineHeight": "35px",
+                                                "color": "rgb(0, 0, 0)",
+                                                "textAlign": "left",
+                                                "marginBottom": "9px"
+                                            }
+                                        },
+                                        "text": {
+                                            "xl": {
+                                                "fontSize": "16px",
+                                                "fontWeight": "400",
+                                                "lineHeight": "27.84px",
+                                                "color": "rgb(105, 105, 105)",
+                                                "textAlign": "left"
+                                            }
+                                        },
+                                        "content": {
+                                            "xl": {
+                                                "fontSize": "16px",
+                                                "fontWeight": "400",
+                                                "lineHeight": "27.84px",
+                                                "color": "rgb(105, 105, 105)",
+                                                "textAlign": "left"
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "kind": "box",
+                                    "variant": "image-04",
+                                    "heading": "تطبيق أوبن شفت",
+                                    "textHtml": "تقدم خدمة تطبيق أوبن شفت للبنية التحتية من داتاهب نهجًا قويًا تقنيًا لتعظيم إمكانيات أوبن شفت، وهي منصة حاويات قوية من ريد هات. يقوم محترفونا الماهرون بتصميم ونشر مجموعات أوبن شفت بعناية، بالإضافة إلى التركيز على امكانية التخزين لتحقيق أفضل أداء وإدارة للبيانات. بالإضافة إلى ذلك، نضمن عملية إعادة نسخ البيانات، والأمان، والتسجيل لحماية البيانات ومراقبة صحة النظام بفعالية. بالاعتماد على خبرتنا المكتسبة، يمكننا دمج أوبن شفت بسهولة مع مختلف خدمات السحابة، مما يتيح للمؤسسات الاستفادة من موارد السحابة لتحقيق التوسع وضمان مرونة أكبر.\n<p>يمكنك الاعتماد على نهجنا الشامل لتنفيذ تطبيق أوبن شفت لتسريع تطوير التطبيقات، وتعزيز التعاون، وتحقيق التأقلم والمرونة في رحلتكم للتحول الرقمي.</p>",
+                                    "style": {
+                                        "xl": {}
+                                    },
+                                    "parts": {
+                                        "wrap": {
+                                            "xl": {
+                                                "paddingTop": "50px",
+                                                "paddingBottom": "56px",
+                                                "backgroundColor": "rgb(255, 255, 255)",
+                                                "borderRadius": "5px",
+                                                "boxShadow": "rgba(51, 51, 51, 0.1) 0px 0px 25px 0px",
+                                                "textAlign": "left",
+                                                "paddingLeft": "42px",
+                                                "paddingRight": "42px"
+                                            }
+                                        },
+                                        "image": {
+                                            "xl": {
+                                                "width": "486px"
+                                            },
+                                            "md": {
+                                                "width": "246px"
+                                            },
+                                            "xs": {
+                                                "width": "276px"
+                                            }
+                                        },
+                                        "heading": {
+                                            "xl": {
+                                                "fontSize": "28px",
+                                                "fontWeight": "500",
+                                                "lineHeight": "35px",
+                                                "color": "rgb(0, 0, 0)",
+                                                "textAlign": "left",
+                                                "marginBottom": "9px"
+                                            }
+                                        },
+                                        "text": {
+                                            "xl": {
+                                                "fontSize": "16px",
+                                                "fontWeight": "400",
+                                                "lineHeight": "27.84px",
+                                                "color": "rgb(105, 105, 105)",
+                                                "textAlign": "left"
+                                            }
+                                        },
+                                        "content": {
+                                            "xl": {
+                                                "fontSize": "16px",
+                                                "fontWeight": "400",
+                                                "lineHeight": "27.84px",
+                                                "color": "rgb(105, 105, 105)",
+                                                "textAlign": "left"
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "kind": "box",
+                                    "variant": "image-04",
+                                    "heading": "تطبيق ريد هات لينكس",
+                                    "textHtml": "تقدم خدمة تطبيق ريد هات لينكس في البنية التحتية من داتاهب نهجًا متطورًا تقنيًا للاستفادة الكاملة من ريد هات إنتربرايز لينكس. بالتركيز على الأمان والأداء والاستقرار، نضمن التكامل السلس لتطبيق ريد هات لينكس داخل البنية التحتية القائمة بالفعل، وتكوين الشبكات والتخزين، وميزات الأمان لتلبية أعلى المعايير. تتضمن عملية التنفيذ لدينا ضبطًا دقيقًا لمعلمات النواة، وتحسين موارد النظام، ونشر حلول مراقبة وتسجيل قوية. باستخدام قوتنا التقنية، نسهل عملية الهجرة السلسة من الأنظمة التقليدية إلى تطبيق ريد هات لينكس، مع ضمان التوافق بين التطبيقات وتحقيق الأداء الأمثل.\n<p>مع خدمة تطبيق ريد هات لينكس لدينا، تحصل الشركات على بيئة لينكس متينة وآمنة وقابلة للتوسع، مما يمكّنها من دفع الابتكار، وتحقيق كفاءة في التكلفة، والبقاء في مقدمة المنافسة في المنظر التكنولوجي الديناميكي الحالي.</p>",
+                                    "style": {
+                                        "xl": {}
+                                    },
+                                    "parts": {
+                                        "wrap": {
+                                            "xl": {
+                                                "paddingTop": "50px",
+                                                "paddingBottom": "56px",
+                                                "backgroundColor": "rgb(255, 255, 255)",
+                                                "borderRadius": "5px",
+                                                "boxShadow": "rgba(51, 51, 51, 0.1) 0px 0px 25px 0px",
+                                                "textAlign": "left",
+                                                "paddingLeft": "42px",
+                                                "paddingRight": "42px"
+                                            }
+                                        },
+                                        "image": {
+                                            "xl": {
+                                                "width": "486px"
+                                            },
+                                            "md": {
+                                                "width": "246px"
+                                            },
+                                            "xs": {
+                                                "width": "276px"
+                                            }
+                                        },
+                                        "heading": {
+                                            "xl": {
+                                                "fontSize": "28px",
+                                                "fontWeight": "500",
+                                                "lineHeight": "35px",
+                                                "color": "rgb(0, 0, 0)",
+                                                "textAlign": "left",
+                                                "marginBottom": "9px"
+                                            }
+                                        },
+                                        "text": {
+                                            "xl": {
+                                                "fontSize": "16px",
+                                                "fontWeight": "400",
+                                                "lineHeight": "27.84px",
+                                                "color": "rgb(105, 105, 105)",
+                                                "textAlign": "left"
+                                            }
+                                        },
+                                        "content": {
+                                            "xl": {
+                                                "fontSize": "16px",
+                                                "fontWeight": "400",
+                                                "lineHeight": "27.84px",
+                                                "color": "rgb(105, 105, 105)",
+                                                "textAlign": "left"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "kind": "spacer",
+                            "height": {
+                                "xl": {
+                                    "height": "100px"
+                                },
+                                "md": {
+                                    "height": "50px"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "kind": "row",
+            "id": "tm-row-6af317afcc70c",
+            "fullWidth": true,
+            "stretchContent": false,
+            "style": {
+                "xl": {
+                    "paddingTop": "50px",
+                    "paddingBottom": "50px"
+                }
+            },
+            "separators": [],
+            "columns": [
+                {
+                    "kind": "column",
+                    "width": {
+                        "md": 12
+                    },
+                    "style": {
+                        "xl": {
+                            "paddingLeft": "15px",
+                            "paddingRight": "15px"
+                        },
+                        "xs": {
+                            "paddingLeft": "initial",
+                            "paddingRight": "initial"
+                        }
+                    },
+                    "children": [
+                        {
+                            "kind": "heading",
+                            "tag": "h2",
+                            "text": [
+                                {
+                                    "mark": "فوائد حلول البنية التحتية للحاويات"
+                                }
+                            ],
+                            "style": {
+                                "xl": {
+                                    "fontSize": "48px",
+                                    "fontWeight": "400",
+                                    "lineHeight": "56.16px",
+                                    "color": "rgb(51, 51, 51)",
+                                    "textAlign": "center",
+                                    "maxWidth": "930px"
+                                },
+                                "md": {
+                                    "fontSize": "36px",
+                                    "lineHeight": "42.12px"
+                                }
+                            },
+                            "markStyle": {
+                                "xl": {
+                                    "fontSize": "48px",
+                                    "fontWeight": "400",
+                                    "lineHeight": "56.16px",
+                                    "color": "rgb(0, 68, 147)",
+                                    "textAlign": "center",
+                                    "display": "inline"
+                                },
+                                "md": {
+                                    "fontSize": "36px",
+                                    "lineHeight": "42.12px"
+                                }
+                            }
+                        },
+                        {
+                            "kind": "spacer",
+                            "height": {
+                                "xl": {
+                                    "height": "50px"
+                                }
+                            }
+                        },
+                        {
+                            "kind": "grid",
+                            "columns": {
+                                "xl": {
+                                    "gridTemplateColumns": "3",
+                                    "columnGap": "20px",
+                                    "rowGap": "40px"
+                                },
+                                "md": {
+                                    "gridTemplateColumns": "2"
+                                },
+                                "xs": {
+                                    "gridTemplateColumns": "1"
+                                }
+                            },
+                            "gap": {
+                                "xl": {
+                                    "gridTemplateColumns": "3",
+                                    "columnGap": "20px",
+                                    "rowGap": "40px"
+                                },
+                                "md": {
+                                    "gridTemplateColumns": "2"
+                                },
+                                "xs": {
+                                    "gridTemplateColumns": "1"
+                                }
+                            },
+                            "children": [
+                                {
+                                    "kind": "box",
+                                    "variant": "icon-05",
+                                    "heading": "تحسين قابلية التوسع",
+                                    "subHeading": "01",
+                                    "textHtml": "قم بتوسيع تطبيقاتك بسهولة حسب الطلب، مما يحسّن استخدام الموارد ويعزز الأداء لتلبية متطلبات العمل بكفاءة.",
+                                    "style": {
+                                        "xl": {
+                                            "paddingTop": "19px",
+                                            "paddingBottom": "30px",
+                                            "backgroundColor": "rgb(250, 246, 243)",
+                                            "borderRadius": "5px",
+                                            "paddingLeft": "24px",
+                                            "paddingRight": "24px"
+                                        }
+                                    },
+                                    "parts": {
+                                        "wrap": {
+                                            "xl": {
+                                                "textAlign": "left"
+                                            }
+                                        },
+                                        "heading": {
+                                            "xl": {
+                                                "fontSize": "18px",
+                                                "fontWeight": "700",
+                                                "lineHeight": "22.5px",
+                                                "color": "rgb(51, 51, 51)",
+                                                "textAlign": "left"
+                                            }
+                                        },
+                                        "subHeading": {
+                                            "xl": {
+                                                "fontSize": "15px",
+                                                "fontWeight": "500",
+                                                "lineHeight": "21.3px",
+                                                "color": "rgb(210, 169, 142)",
+                                                "textAlign": "left",
+                                                "marginBottom": "7px"
+                                            }
+                                        },
+                                        "text": {
+                                            "xl": {
+                                                "fontSize": "15px",
+                                                "fontWeight": "400",
+                                                "lineHeight": "26.1px",
+                                                "color": "rgb(105, 105, 105)",
+                                                "textAlign": "left",
+                                                "marginTop": "10px"
+                                            }
+                                        },
+                                        "content": {
+                                            "xl": {
+                                                "fontSize": "15px",
+                                                "fontWeight": "400",
+                                                "lineHeight": "26.1px",
+                                                "color": "rgb(105, 105, 105)",
+                                                "textAlign": "left"
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "kind": "box",
+                                    "variant": "icon-05",
+                                    "heading": "تبسيط عمليات النشر والإدارة",
+                                    "subHeading": "02",
+                                    "textHtml": "قم بتبسيط عمليات نشر التطبيقات وإدارتها، مما يقلل من التعقيدات ويمكّن فريق العمل من التركيز على الابتكار والنمو.",
+                                    "style": {
+                                        "xl": {
+                                            "paddingTop": "19px",
+                                            "paddingBottom": "30px",
+                                            "backgroundColor": "rgb(237, 242, 254)",
+                                            "borderRadius": "5px",
+                                            "paddingLeft": "24px",
+                                            "paddingRight": "24px"
+                                        }
+                                    },
+                                    "parts": {
+                                        "wrap": {
+                                            "xl": {
+                                                "textAlign": "left"
+                                            }
+                                        },
+                                        "heading": {
+                                            "xl": {
+                                                "fontSize": "18px",
+                                                "fontWeight": "700",
+                                                "lineHeight": "22.5px",
+                                                "color": "rgb(51, 51, 51)",
+                                                "textAlign": "left"
+                                            }
+                                        },
+                                        "subHeading": {
+                                            "xl": {
+                                                "fontSize": "15px",
+                                                "fontWeight": "500",
+                                                "lineHeight": "21.3px",
+                                                "color": "rgb(78, 132, 250)",
+                                                "textAlign": "left",
+                                                "marginBottom": "7px"
+                                            }
+                                        },
+                                        "text": {
+                                            "xl": {
+                                                "fontSize": "15px",
+                                                "fontWeight": "400",
+                                                "lineHeight": "26.1px",
+                                                "color": "rgb(105, 105, 105)",
+                                                "textAlign": "left",
+                                                "marginTop": "10px"
+                                            }
+                                        },
+                                        "content": {
+                                            "xl": {
+                                                "fontSize": "15px",
+                                                "fontWeight": "400",
+                                                "lineHeight": "26.1px",
+                                                "color": "rgb(105, 105, 105)",
+                                                "textAlign": "left"
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "kind": "box",
+                                    "variant": "icon-05",
+                                    "heading": "معالجة الأحداث في الوقت الحقيقي",
+                                    "subHeading": "03",
+                                    "textHtml": "احصل على معلومات يمكن استخدامها لتنفيذ الأحداث في الوقت الحقيقي، مما يسمح باتخاذ قرارات مستنيرة وبسرعة للحصول على ميزة تنافسية في الأسواق الديناميكية.",
+                                    "style": {
+                                        "xl": {
+                                            "paddingTop": "19px",
+                                            "paddingBottom": "30px",
+                                            "backgroundColor": "rgb(240, 245, 244)",
+                                            "borderRadius": "5px",
+                                            "paddingLeft": "24px",
+                                            "paddingRight": "24px"
+                                        }
+                                    },
+                                    "parts": {
+                                        "wrap": {
+                                            "xl": {
+                                                "textAlign": "left"
+                                            }
+                                        },
+                                        "heading": {
+                                            "xl": {
+                                                "fontSize": "18px",
+                                                "fontWeight": "700",
+                                                "lineHeight": "22.5px",
+                                                "color": "rgb(51, 51, 51)",
+                                                "textAlign": "left"
+                                            }
+                                        },
+                                        "subHeading": {
+                                            "xl": {
+                                                "fontSize": "15px",
+                                                "fontWeight": "500",
+                                                "lineHeight": "21.3px",
+                                                "color": "rgb(114, 164, 153)",
+                                                "textAlign": "left",
+                                                "marginBottom": "7px"
+                                            }
+                                        },
+                                        "text": {
+                                            "xl": {
+                                                "fontSize": "15px",
+                                                "fontWeight": "400",
+                                                "lineHeight": "26.1px",
+                                                "color": "rgb(105, 105, 105)",
+                                                "textAlign": "left",
+                                                "marginTop": "10px"
+                                            }
+                                        },
+                                        "content": {
+                                            "xl": {
+                                                "fontSize": "15px",
+                                                "fontWeight": "400",
+                                                "lineHeight": "26.1px",
+                                                "color": "rgb(105, 105, 105)",
+                                                "textAlign": "left"
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "kind": "box",
+                                    "variant": "icon-05",
+                                    "heading": "تطوير التطبيقات القابلة للتأقلم",
+                                    "subHeading": "04",
+                                    "textHtml": "قم بتسليم التطبيقات بسرعة أكبر مع بيئة تطوير متأقلمة، لضمان التكامل السلس مع خدمات السحابة وللتكيف مع احتياجات العمل المتغيرة.",
+                                    "style": {
+                                        "xl": {
+                                            "paddingTop": "19px",
+                                            "paddingBottom": "30px",
+                                            "backgroundColor": "rgb(255, 245, 246)",
+                                            "borderRadius": "5px",
+                                            "paddingLeft": "24px",
+                                            "paddingRight": "24px"
+                                        }
+                                    },
+                                    "parts": {
+                                        "wrap": {
+                                            "xl": {
+                                                "textAlign": "left"
+                                            }
+                                        },
+                                        "heading": {
+                                            "xl": {
+                                                "fontSize": "18px",
+                                                "fontWeight": "700",
+                                                "lineHeight": "22.5px",
+                                                "color": "rgb(51, 51, 51)",
+                                                "textAlign": "left"
+                                            }
+                                        },
+                                        "subHeading": {
+                                            "xl": {
+                                                "fontSize": "15px",
+                                                "fontWeight": "500",
+                                                "lineHeight": "21.3px",
+                                                "color": "rgb(231, 68, 91)",
+                                                "textAlign": "left",
+                                                "marginBottom": "7px"
+                                            }
+                                        },
+                                        "text": {
+                                            "xl": {
+                                                "fontSize": "15px",
+                                                "fontWeight": "400",
+                                                "lineHeight": "26.1px",
+                                                "color": "rgb(105, 105, 105)",
+                                                "textAlign": "left",
+                                                "marginTop": "10px"
+                                            }
+                                        },
+                                        "content": {
+                                            "xl": {
+                                                "fontSize": "15px",
+                                                "fontWeight": "400",
+                                                "lineHeight": "26.1px",
+                                                "color": "rgb(105, 105, 105)",
+                                                "textAlign": "left"
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "kind": "box",
+                                    "variant": "icon-05",
+                                    "heading": "أمان واستقرار قويان",
+                                    "subHeading": "05",
+                                    "textHtml": "حافظ على سلامة البيانات الحرجة واضمن استقرار البنية التحتية من خلال تعديلات دقيقة ومراقبة مستمرة.",
+                                    "style": {
+                                        "xl": {
+                                            "paddingTop": "19px",
+                                            "paddingBottom": "30px",
+                                            "backgroundColor": "rgb(252, 247, 238)",
+                                            "borderRadius": "5px",
+                                            "paddingLeft": "24px",
+                                            "paddingRight": "24px"
+                                        }
+                                    },
+                                    "parts": {
+                                        "wrap": {
+                                            "xl": {
+                                                "textAlign": "left"
+                                            }
+                                        },
+                                        "heading": {
+                                            "xl": {
+                                                "fontSize": "18px",
+                                                "fontWeight": "700",
+                                                "lineHeight": "22.5px",
+                                                "color": "rgb(51, 51, 51)",
+                                                "textAlign": "left"
+                                            }
+                                        },
+                                        "subHeading": {
+                                            "xl": {
+                                                "fontSize": "15px",
+                                                "fontWeight": "500",
+                                                "lineHeight": "21.3px",
+                                                "color": "rgb(229, 179, 93)",
+                                                "textAlign": "left",
+                                                "marginBottom": "7px"
+                                            }
+                                        },
+                                        "text": {
+                                            "xl": {
+                                                "fontSize": "15px",
+                                                "fontWeight": "400",
+                                                "lineHeight": "26.1px",
+                                                "color": "rgb(105, 105, 105)",
+                                                "textAlign": "left",
+                                                "marginTop": "10px"
+                                            }
+                                        },
+                                        "content": {
+                                            "xl": {
+                                                "fontSize": "15px",
+                                                "fontWeight": "400",
+                                                "lineHeight": "26.1px",
+                                                "color": "rgb(105, 105, 105)",
+                                                "textAlign": "left"
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "kind": "box",
+                                    "variant": "icon-05",
+                                    "heading": "تحسين التكلفة",
+                                    "subHeading": "06",
+                                    "textHtml": "قم باستفادة من استخدام الموارد وتقليل تكاليف البنية التحتية من خلال اتباع نهج فعال لنشر التطبيقات وإدارتها.",
+                                    "style": {
+                                        "xl": {
+                                            "paddingTop": "19px",
+                                            "paddingBottom": "30px",
+                                            "backgroundColor": "rgb(244, 238, 252)",
+                                            "borderRadius": "5px",
+                                            "paddingLeft": "24px",
+                                            "paddingRight": "24px"
+                                        }
+                                    },
+                                    "parts": {
+                                        "wrap": {
+                                            "xl": {
+                                                "textAlign": "left"
+                                            }
+                                        },
+                                        "heading": {
+                                            "xl": {
+                                                "fontSize": "18px",
+                                                "fontWeight": "700",
+                                                "lineHeight": "22.5px",
+                                                "color": "rgb(51, 51, 51)",
+                                                "textAlign": "left"
+                                            }
+                                        },
+                                        "subHeading": {
+                                            "xl": {
+                                                "fontSize": "15px",
+                                                "fontWeight": "500",
+                                                "lineHeight": "21.3px",
+                                                "color": "rgb(130, 36, 227)",
+                                                "textAlign": "left",
+                                                "marginBottom": "7px"
+                                            }
+                                        },
+                                        "text": {
+                                            "xl": {
+                                                "fontSize": "15px",
+                                                "fontWeight": "400",
+                                                "lineHeight": "26.1px",
+                                                "color": "rgb(105, 105, 105)",
+                                                "textAlign": "left",
+                                                "marginTop": "10px"
+                                            }
+                                        },
+                                        "content": {
+                                            "xl": {
+                                                "fontSize": "15px",
+                                                "fontWeight": "400",
+                                                "lineHeight": "26.1px",
+                                                "color": "rgb(105, 105, 105)",
+                                                "textAlign": "left"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "kind": "row",
+            "id": "tm-row-6af317afcff43",
+            "fullWidth": true,
+            "stretchContent": false,
+            "style": {
+                "xl": {
+                    "paddingBottom": "50px"
+                }
+            },
+            "separators": [],
+            "columns": [
+                {
+                    "kind": "column",
+                    "width": {
+                        "md": 12
+                    },
+                    "style": {
+                        "xl": {
+                            "paddingLeft": "15px",
+                            "paddingRight": "15px"
+                        },
+                        "xs": {
+                            "paddingLeft": "initial",
+                            "paddingRight": "initial"
+                        }
+                    },
+                    "children": [
+                        {
+                            "kind": "spacer",
+                            "height": {
+                                "xl": {
+                                    "height": "50px"
+                                }
+                            }
+                        },
+                        {
+                            "kind": "row",
+                            "id": "tm-row-inner-6af317afd0c88",
+                            "fullWidth": false,
+                            "stretchContent": false,
+                            "style": {
+                                "xl": {}
+                            },
+                            "separators": [],
+                            "align": "middle",
+                            "columns": [
+                                {
+                                    "kind": "column",
+                                    "width": {
+                                        "md": 6
+                                    },
+                                    "style": {
+                                        "xl": {
+                                            "paddingLeft": "15px",
+                                            "paddingRight": "15px"
+                                        },
+                                        "xs": {
+                                            "paddingLeft": "initial",
+                                            "paddingRight": "initial"
+                                        }
+                                    },
+                                    "children": [
+                                        {
+                                            "kind": "heading",
+                                            "tag": "h4",
+                                            "text": "لماذا",
+                                            "style": {
+                                                "xl": {
+                                                    "fontSize": "40px",
+                                                    "fontWeight": "400",
+                                                    "lineHeight": "56px",
+                                                    "color": "rgb(51, 51, 51)",
+                                                    "textAlign": "center",
+                                                    "maxWidth": "570px",
+                                                    "display": "inline-block"
+                                                },
+                                                "md": {
+                                                    "fontSize": "28px",
+                                                    "lineHeight": "39.2px"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "kind": "spacer",
+                                            "height": {
+                                                "xl": {
+                                                    "height": "32px"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "kind": "image",
+                                            "image": {
+                                                "src": "/assets/uploads/2023/07/databubanalytics_logo_2.png",
+                                                "alt": "databubanalytics_logo_2",
+                                                "width": 746,
+                                                "height": 136
+                                            },
+                                            "style": {
+                                                "xl": {
+                                                    "textAlign": "right"
+                                                }
+                                            },
+                                            "imageStyle": {
+                                                "xl": {
+                                                    "width": "570px",
+                                                    "maxWidth": "100%"
+                                                },
+                                                "md": {
+                                                    "width": "330px"
+                                                },
+                                                "xs": {
+                                                    "width": "360px"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "kind": "spacer",
+                                            "height": {
+                                                "xl": {
+                                                    "height": "32px"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "kind": "column",
+                                    "width": {
+                                        "md": 6
+                                    },
+                                    "style": {
+                                        "xl": {
+                                            "paddingLeft": "15px",
+                                            "paddingRight": "15px"
+                                        },
+                                        "xs": {
+                                            "paddingLeft": "initial",
+                                            "paddingRight": "initial"
+                                        }
+                                    },
+                                    "children": [
+                                        {
+                                            "kind": "heading",
+                                            "tag": "h4",
+                                            "text": "شركاءك الموثوق بهم لتحليل البيانات والبنية التحتية والأمان",
+                                            "style": {
+                                                "xl": {
+                                                    "fontSize": "20px",
+                                                    "fontWeight": "600",
+                                                    "lineHeight": "28px",
+                                                    "color": "rgb(51, 51, 51)",
+                                                    "textAlign": "left",
+                                                    "maxWidth": "100%",
+                                                    "paddingLeft": "34px"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "kind": "spacer",
+                                            "height": {
+                                                "xl": {
+                                                    "height": "32px"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "kind": "list",
+                                            "variant": "check",
+                                            "items": [
+                                                {
+                                                    "title": "يمتلك فريقنا المتمرس معرفة وخبرة واسعة في حلول البنية التحتية للحاويات، بما في ذلك تقنيات الحاويات وتنظيم الحاويات والنهج السحابية"
+                                                },
+                                                {
+                                                    "title": "سجلنا حافل بالنجاحات، فقد قدمنا حلول البنية التحتية للحاويات للعديد من العملاء في قطاعات مختلفة، حيث نفهم التحديات الفريدة لكل شركة ونقدم حلولاً مصممة خصيصًا لها."
+                                                },
+                                                {
+                                                    "title": "من خلال الاطلاع على أحدث الاتجاهات والتقنيات، نقدم حلول البنية التحتية للحاويات تتحدى المستقبل، مما يساعد على التكامل السلس للابتكارات الناشئة وتسهيل النمو المستدام لعملائنا."
+                                                },
+                                                {
+                                                    "title": "تشمل خبرتنا تنفيذ تدابير أمان قوية، مما يضمن حماية البيانات والامتثال للتشريعات في جميع بيئات الحاويات."
+                                                },
+                                                {
+                                                    "title": "يقوم فريق الدعم المخصص لدينا بالمتابعة والمراقبة على مدار الساعة، لحل المشكلات في الوقت المناسب، وبشكل استباقي لضمان سلاسة العمليات."
+                                                }
+                                            ],
+                                            "style": {
+                                                "xl": {
+                                                    "textAlign": "left"
+                                                }
+                                            },
+                                            "columns": {
+                                                "xl": {
+                                                    "gridTemplateColumns": "1",
+                                                    "columnGap": "30px",
+                                                    "rowGap": "12px"
+                                                }
+                                            },
+                                            "parts": {
+                                                "item": {
+                                                    "xl": {
+                                                        "fontSize": "15px",
+                                                        "fontWeight": "400",
+                                                        "lineHeight": "26.1px",
+                                                        "color": "rgb(105, 105, 105)",
+                                                        "textAlign": "left",
+                                                        "paddingLeft": "32px"
+                                                    }
+                                                },
+                                                "marker": {
+                                                    "xl": {
+                                                        "fontSize": "15px",
+                                                        "fontWeight": "400",
+                                                        "lineHeight": "26.1px",
+                                                        "color": "rgb(42, 146, 67)",
+                                                        "textAlign": "left"
+                                                    }
+                                                },
+                                                "title": {
+                                                    "xl": {
+                                                        "fontSize": "16px",
+                                                        "fontWeight": "400",
+                                                        "lineHeight": "27.84px",
+                                                        "color": "rgb(105, 105, 105)",
+                                                        "textAlign": "left"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "kind": "spacer",
+                            "height": {
+                                "xl": {
+                                    "height": "80px"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "kind": "row",
+            "id": "tm-row-6af317afec021",
+            "fullWidth": false,
+            "stretchContent": false,
+            "style": {
+                "xl": {}
+            },
+            "separators": [],
+            "columns": [
+                {
+                    "kind": "column",
+                    "width": {
+                        "md": 12
+                    },
+                    "style": {
+                        "xl": {
+                            "paddingLeft": "15px",
+                            "paddingRight": "15px"
+                        },
+                        "xs": {
+                            "paddingLeft": "initial",
+                            "paddingRight": "initial"
+                        }
+                    },
+                    "children": [
+                        {
+                            "kind": "spacer",
+                            "height": {
+                                "xl": {
+                                    "height": "80px"
+                                }
+                            }
+                        },
+                        {
+                            "kind": "heading",
+                            "tag": "h3",
+                            "text": "الأسئلة المتكررة",
+                            "style": {
+                                "xl": {
+                                    "fontSize": "32px",
+                                    "fontWeight": "400",
+                                    "lineHeight": "45.44px",
+                                    "color": "rgb(51, 51, 51)",
+                                    "textAlign": "left",
+                                    "maxWidth": "100%"
+                                }
+                            }
+                        },
+                        {
+                            "kind": "spacer",
+                            "height": {
+                                "xl": {
+                                    "height": "30px"
+                                }
+                            }
+                        },
+                        {
+                            "kind": "accordion",
+                            "items": [
+                                {
+                                    "title": "ما هي عملية التحويل للحاويات وكيف تعود بالفائدة على بنيتنا التحتية؟",
+                                    "html": "التحويل للحاويات هي تقنية تسمح بتعبئة التطبيقات وتبعياتها معًا في شكل موحد، والمعروفة باسم الحاويات. هذه الحاويات معزولة وخفيفة الوزن وقابلة للنقل، مما يتيح للشركات عملية النشر السلس عبر بيئات مختلفة. تشمل فوائد البنية التحتية للحاويات تحسين استخدام الموارد، وتقليل زمن النشر، وتبسيط الإدارة، وتطبيق مستمر في السلوك عبر بيئات التطوير والاختبار والإنتاج."
+                                },
+                                {
+                                    "title": "كيف تضمن حلول البنية التحتية للحاويات الأمان والعزلة؟",
+                                    "html": "تعتمد حلول البنية التحتية للحاويات التي نوفرها على تدابير أمنية قوية لضمان إمكانية عزل الحاويات وحماية البيانات الحساسة. نحن نطبق المعايير العالمية في نسخ وتشغيل الحاويات ونتبع ضوابط شديدة لمنع الوصول غير المصرح به إلى الحاويات. بالإضافة إلى ذلك، نقوم بتحديث صور الحاويات بانتظام لنضمن أحدث التصحيحات الأمنية، ونراقب الحاويات بحثًا عن أي استثناءات أو اختراقات أمنية محتملة."
+                                },
+                                {
+                                    "title": "هل يمكن دمج حلول البنية التحتية للحاويات مع أنظمتنا وأدواتنا الحالية؟",
+                                    "html": "نعم، تم تصميم حلول البنية التحتية للحاويات التي نوفرها لتكون مرنة ويمكن دمجها بسهولة مع أنظمتك وأدواتك الحالية. سواء كنت تستخدم بنية تحتية في الموقع أو تعتمد على نظام السحابة، يمكنك دمج حلولنا مع مكونات البنية التحتية المختلفة، وأدوات الرصد، وCI/CD، وحلول إدارة الاعدادات."
+                                },
+                                {
+                                    "title": "كيف تتعامل حلول البنية التحتية للحاويات مع التوسع والتوفر؟",
+                                    "html": "تقوم حلول البنية التحتية للحاويات التي نوفرها باستغلال منصات تنظيم الحاويات مثل Kubernetes لتوفير التوسع والتوفر. تدير منصة Kubernetes أعباء العمل المعزولة ديناميكيًا، وتقوم بتكييف تلقائي لها بناءً على حاجة الموارد. كما تضمن التوفر العالي من خلال توزيع الحاويات عبر عدة عقد، مع ضمان الوصول إلى التطبيقات حتى في حالة فشل بعض العقد."
+                                },
+                                {
+                                    "title": "ما مستوى الدعم والصيانة الذي نقدمه لحلول البنية التحتية للحاويات؟",
+                                    "html": "نحن نقدم خدمات دعم وصيانة شاملة لحلول البنية التحتية للحاويات التي نوفرها. لدينا فريق من الخبراء لمساعدتك في حالة وجود أي مشاكل تقنية أو تحديثات أو تحسينات. نقدم فحوصات صحية منتظمة، وضبط أداء، ورصد الأنشطة لضمان عمل بنيتك التحتية للحاويات. بالإضافة إلى ذلك، نقوم بتحديث حلولنا بأحدث تقنيات الحاويات وأفضل الممارسات الأمنية لضمان بقاء بيئتك آمنة وفعالة."
+                                }
+                            ],
+                            "style": {
+                                "xl": {}
+                            },
+                            "parts": {
+                                "section": {
+                                    "xl": {
+                                        "fontSize": "16px",
+                                        "fontWeight": "400",
+                                        "lineHeight": "27.84px",
+                                        "color": "rgb(105, 105, 105)",
+                                        "backgroundColor": "rgb(255, 255, 255)"
+                                    }
+                                },
+                                "title": {
+                                    "xl": {
+                                        "fontSize": "18px",
+                                        "fontWeight": "500",
+                                        "lineHeight": "22.14px",
+                                        "color": "rgb(255, 255, 255)",
+                                        "paddingTop": "18px",
+                                        "paddingBottom": "18px",
+                                        "backgroundColor": "rgb(0, 68, 147)",
+                                        "borderBottom": "1px solid rgba(0, 0, 0, 0)",
+                                        "paddingLeft": "30px",
+                                        "paddingRight": "30px"
+                                    }
+                                },
+                                "content": {
+                                    "xl": {
+                                        "fontSize": "16px",
+                                        "fontWeight": "400",
+                                        "lineHeight": "27.84px",
+                                        "color": "rgb(105, 105, 105)",
+                                        "paddingTop": "23px",
+                                        "paddingBottom": "29px",
+                                        "paddingLeft": "30px",
+                                        "paddingRight": "30px"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "kind": "spacer",
+                            "height": {
+                                "xl": {
+                                    "height": "100px"
+                                },
+                                "md": {
+                                    "height": "50px"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

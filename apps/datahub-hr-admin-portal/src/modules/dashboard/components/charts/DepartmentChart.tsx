@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { departmentOption } from '@/modules/dashboard/charts/options';
-import { useChartContext } from '@/modules/dashboard/hooks/useChartContext';
+import { useChartContext } from '@/modules/shared/charts/useChartContext';
 import { useDepartmentHeadcount } from '@/modules/dashboard/hooks/useDashboard';
-import { ChartCard } from './ChartCard';
-import { EChart } from './EChart';
+import { ChartCard } from '@/modules/shared/charts/ChartCard';
+import { EChart } from '@/modules/shared/charts/EChart';
 
 /** Employees per department (horizontal bars, largest first). Organisation scope only. */
 export function DepartmentChart() {

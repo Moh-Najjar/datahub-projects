@@ -5,11 +5,9 @@ employee/manager frontend; both will consume the same future HR backend).
 
 - **Original product.** Comparable in scope to established HR suites, but never copy another vendor's code, branding,
   logos, text or exact screen designs.
-- **Status: Phase 4 — HR dashboard.** Foundation (theme, EN/AR + RTL, routing, TanStack Query, mock API toolkit),
-  the signed-in shell, demo sign-in for every role, permission guards, profile page, and the role-based HR dashboard
-  (KPIs with trends, four Apache ECharts charts, pending actions, recent activity). HR modules come in approved
-  phases (5 organization → employees → attendance → leave; payroll/recruitment/performance later).
-  **Never create a module, folder or screen ahead of its phase.**
+- **Status: Phase 5 — Organization, Employee, Attendance, Leave, Recruitment and Performance Management done** on top
+  of the foundation, shell, demo sign-in, permission guards, profile page and role-based HR dashboard (Phases 2–4).
+  Next, only after approval: payroll / documents / reports.
 - **No backend yet.** All data comes from the in-browser **mock API** with **fictional** data.
 
 ## Commands (from the monorepo root)
@@ -31,7 +29,8 @@ React **19.3.0** (pinned for the whole monorepo by Expo SDK 58) · TypeScript 6 
 React Router 7 · TanStack Query 5 · i18next + react-i18next · Emotion + `stylis-plugin-rtl` (`stylis` stays 4.2.x) ·
 self-hosted Inter + IBM Plex Sans Arabic (`@fontsource`) · React Hook Form + Zod · `@mui/icons-material` · Vitest.
 Charts: **Apache ECharts** (`echarts` + `echarts-for-react`) — do not add `@mui/x-charts` or other chart libraries.
-Planned per phase: MUI X Data Grid / Date Pickers + dayjs (5) — MIT editions only.
+Lists use MUI `Table` + `TablePagination` (server-side paging/sorting); add MUI X (MIT editions only) only when a
+module genuinely needs it (e.g. Date Pickers for attendance/leave).
 `react-hook-form`/`@hookform/resolvers` are shared with the website: install them at the versions already in the
 lockfile so the website's resolved versions never change.
 
@@ -43,17 +42,32 @@ src/
 ├── core/                  application infrastructure — never imports modules (except the router)
 │   ├── api/               API contracts (ListParams, Paginated, ApiError), queryClient, mock/ toolkit
 │   ├── config/            permissions.ts — roles, permissions, role → permission matrix
-│   ├── context/           authContext.ts (Session types, useAuth), AuthProvider.tsx (session state)
+│   ├── context/           authContext.ts (Session types, useAuth), AuthProvider.tsx (session state),
+│   │                      breadcrumbContext.ts + BreadcrumbProvider (pages add crumbs after their nav item)
 │   ├── guards/            RequireAuth / RedirectIfAuthenticated, RequirePermission (UI only)
 │   ├── routes/            index.tsx = the router; navigation.ts = nav map (sidebar, breadcrumbs, guards)
 │   └── theme/             tokens.ts (design tokens, light + dark), theme.ts, emotionCache.ts (RTL), AppThemeProvider
 ├── i18n/                  i18next setup, languages, format (Latin digits), locales/<lang>/<namespace>.json
 ├── modules/               all product functionality, one folder per module
-│   ├── shared/            reusable UI: LanguageSwitcher, ThemeModeSwitcher, DemoModeNotice, BrandMark, PageHeader
+│   ├── shared/            reusable UI: LanguageSwitcher, ThemeModeSwitcher, DemoModeNotice, BrandMark, PageHeader,
+│   │                      list/form/page blocks (DataTable, ListToolbar, FormDialog, Panel…), charts/ (ECharts), hooks/, utils/
 │   ├── layout/            AppLayout, Sidebar, TopBar, AppBreadcrumbs, UserMenu
 │   ├── auth/              LoginPage, ProfilePage, api/authApi (mock), mock/demoAccounts, hooks, schemas, components
 │   ├── dashboard/         DashboardPage, access.ts (widget → permissions), api/, hooks/, mock/, types/, utils/,
 │   │                      charts/ (ECharts setup + pure option builders), components/ (+ components/charts/)
+│   ├── attendance/        AttendancePage (/attendance/*), paths.ts, api/, hooks/, mock/, schemas/, types/, utils/,
+│   │                      charts/ (option builders), components/ (records/, shifts/, history/, reports/, common/)
+│   ├── leave/             LeavePage (/leave/*), paths.ts, index.ts (profile tab), api/, hooks/, mock/ (leaveStore = data,
+│   │                      leaveMock = rules), schemas/, types/, utils/ (rules, format), charts/, components/
+│   ├── recruitment/       RecruitmentPage (/recruitment/*), paths.ts, api/, hooks/, mock/, schemas/, types/, utils/
+│   │                      (pipeline rules), charts/, components/ (requisitions/, candidates/, pipeline/, interviews/, offers/)
+│   ├── performance/       PerformancePage (/performance/*), paths.ts, index.ts (profile tab), api/, hooks/, mock/, schemas/,
+│   │                      types/, utils/, charts/, components/ (cycles/, goals/, reviews/, competencies/, development/)
+│   ├── employees/         EmployeesPage (/employees/*), paths.ts, api/, hooks/, mock/, schemas/, types/, utils/,
+│   │                      components/ (EmployeeDirectory, EmployeeProfile + profile/, form/)
+│   ├── organization/      OrganizationPage (/organization/* tabs), paths.ts, api/, hooks/, mock/, schemas/, types/,
+│   │                      utils/ (hierarchy, countries, serverErrors), components/ (common/, departments/, positions/,
+│   │                      locations/, hierarchy/, OverviewSection)
 │   └── errors/            NotFoundPage, AccessDeniedPage, RouteError
 └── test/                  setup.ts, matchMedia.ts (jsdom stand-in), renderApp.tsx (routes + providers, sign in as a role)
 ```
@@ -107,11 +121,13 @@ preference, not part of the URL.
 
 - `/login` (public; signed-in users are redirected) → signed-in shell (`RequireAuth` + `AppLayout`): `/` redirects to
   the role's landing page (first available nav item: dashboard, or profile for Employee), `/dashboard`, `/profile`,
+  `/organization/*` (sub-routes inside the module: `departments[/:id]`, `positions`, `locations[/:id]`, `hierarchy`),
   and a 404 inside the shell.
 - **`core/routes/navigation.ts` is the single map** of pages: path, icon, required permissions (`anyOf`) and
   `available`. The sidebar shows the items the role may see; planned areas are listed disabled ("Soon") so roles see
   their future scope — never link them before the module exists. Breadcrumbs read `handle.navKey` set by `navRoute()`.
-- **Adding a page:** set its nav item `available: true`, add `navRoute('<key>', LazyPage)` in the router (it wraps the
+- **Adding a page:** set its nav item `available: true`, add `navRoute('<key>', LazyPage)` (`{ nested: true }` when the
+  page owns sub-routes with `<Routes>`) in the router (it wraps the
   page in `RequirePermission`, falling back to the access-denied page), add its `nav.items.<key>` label (EN + AR).
 
 ## Authentication and roles (Phase 3 — MOCK)
@@ -168,19 +184,231 @@ preference, not part of the URL.
 - **Roles:** `access.ts` maps widgets, activity types and pending actions to EXISTING permissions; hooks get
   `enabled: false` for widgets the role cannot see (nothing is fetched). Scope: organisation for HR/payroll/recruitment
   roles, own department for Department Managers; Employees have no dashboard. The backend must enforce the same.
-- **Charts (Apache ECharts):** `charts/echarts.ts` registers only Line/Bar/Pie + Grid/Tooltip/Legend + the SVG
-  renderer. `charts/options.ts` holds pure option builders (data + `ChartContext` {mode, direction, language} → option)
-  using `chartColors` from `core/theme/tokens.ts` (light + dark, ≥ 3:1 contrast). `components/charts/EChart.tsx` renders
-  with `autoResize` (ResizeObserver) and `notMerge`; `ChartCard` provides loading / error + retry / empty states.
+- **Charts (Apache ECharts):** the chart infrastructure is shared (`modules/shared/charts/`: `echarts.ts` registers only
+  Line/Bar/Pie + Grid/Tooltip/Legend + the SVG renderer; `base.ts` theme/RTL helpers; `EChart`, `ChartCard`,
+  `useChartContext`, `CHART_HEIGHT`). `dashboard/charts/options.ts` holds the dashboard's pure option builders (data +
+  `ChartContext` {mode, direction, language} → option) using `chartColors` (light + dark, ≥ 3:1 contrast). `EChart`
+  renders with `autoResize` (ResizeObserver) and `notMerge`; `ChartCard` provides loading / error + retry / empty states.
   Import the React wrapper from `echarts-for-react/esm/core` — the CommonJS `lib/core` breaks in the production bundle.
 - **Charts and RTL:** ECharts never mirrors itself. The chart surface is always `dir="ltr"` (inherited RTL misplaces SVG
   text); builders mirror explicitly — category axes `inverse`, value axes on the right, legends right-aligned and
   reversed, legend text with the name last, tooltips `direction: rtl`. Numbers via `formatNumber` (Latin digits).
-- **Bundle:** ECharts stays inside the lazy `DashboardPage` chunk (~211 kB gzip) — never make it a manual chunk (the
-  bundler then pulls shared helpers into it and every page preloads it). `chunkSizeWarningLimit` is 650 kB for this.
+- **Bundle:** ECharts is a lazy chunk shared by the dashboard and attendance pages (~200 kB gzip, never preloaded by
+  `index.html`) — never make it a manual chunk (the bundler then pulls shared helpers into it and every page preloads
+  it). `chunkSizeWarningLimit` is 650 kB for this.
 - **Tests:** `src/test/echartsStub.ts` replaces `echarts-for-react` in jsdom and records each chart's props (data,
   colours, RTL, resize). `charts/options.test.ts` renders every option with the REAL engine (ECharts SSR → SVG).
   Always also check charts in a real browser (EN/AR, light/dark): stubs cannot catch rendering or bundling bugs.
+
+## Organization Management (`modules/organization`, Phase 5)
+
+- **Data flow:** sections → `hooks/useOrganization.ts` (queries: summary, departments list/detail/hierarchy, positions,
+  locations, manager options; mutations: create / update / status for each entity) → `api/organizationApi.ts` (the 15
+  suggested functions + `getOrganizationSummary`, `getDepartmentHierarchy`, `getManagerOptions`) →
+  `mock/organizationMock.ts` (in-memory stores, fictional data in `mock/seed.ts`). Keys `['organization', <resource>, …]`;
+  a department change invalidates departments + positions (they show department names) + summary; positions and
+  locations invalidate their own resource + summary.
+- **Business rules live in the (mock) backend** and return `VALIDATION` with `fieldErrors`: unique codes per entity
+  (case-insensitive, stored upper-case), no circular parents (`self` / `circular`, `utils/hierarchy.ts`), only active
+  departments as new parents / position departments, no deactivating a department with active subdepartments, no
+  activating under an inactive parent. Forms show them on the field (`utils/serverErrors.ts`); field format rules are
+  the shared Zod schemas (`schemas/organizationSchemas.ts`), which the mock also applies to payloads.
+- **Permissions (existing matrix, no new permission):** `organization:read` opens the module (System/HR Admin, HR
+  Manager, Recruiter); `organization:write` shows create/edit/status/manager actions (System/HR Admin, HR Manager).
+  Department Manager, Payroll Officer and Employee get access denied. The backend must enforce both.
+- **Employee-backed:** department managers are employee ids; department employee counts are the active employees
+  assigned to the unit (computed from employee records); `getManagerOptions` returns active employees (server-side
+  search). The eight top-level departments reuse the dashboard's ids/names and the generated employees match its
+  headcounts (Engineering 58 active + 4 inactive…); the dashboard's own mock is separate, so edits don't change it.
+- **Public API (`index.ts`):** query keys, `useDepartmentOptions`, `usePositions`, `useLocations`,
+  `useDepartmentHierarchy`, `countryName`/`LOCATION_COUNTRIES`, `orgPaths`, types — used by Employee Management.
+- **UI:** generic list/form blocks live in `modules/shared` (see below); `components/common/ManagerField` is the
+  department-manager picker. Deactivation is confirmed.
+- **Tests:** `api/organizationApi.test.ts` (lists, rules), `utils/hierarchy.test.ts`, `schemas/*.test.ts`,
+  `hooks/useOrganization.test.tsx` (keys, caching, invalidation), `organization.test.tsx` (roles, lists, forms,
+  status, hierarchy, states, Arabic, dark).
+
+## Employee Management (`modules/employees`, Phase 5)
+
+- **Routes** (inside `EmployeesPage`, `/employees/*`): directory (index), `new`, `:employeeId` (profile; tab in the URL,
+  `?tab=documents`), `:employeeId/edit`. Breadcrumbs: Home › Employees › name › Edit (`useBreadcrumbs`).
+- **Data flow:** components → `hooks/useEmployees.ts` (`useEmployees`, `useEmployee`, `useEmployeeDocuments`,
+  `useEmploymentHistory`, `useManagerOptions`; mutations create / update / status / add document) →
+  `api/employeesApi.ts` (`getEmployees`, `getEmployeeById`, `createEmployee`, `updateEmployee`, `updateEmployeeStatus`,
+  `getEmployeeDocuments`, `addEmployeeDocument`, `getEmployeeEmploymentHistory`, `getManagerOptions`) →
+  `mock/employeesMock.ts` (fictional, deterministic seed in `mock/seed.ts`: 248 people, `.test` e-mails, "000" phones).
+  Keys `['employees', resource, scope, …]`; every employee write invalidates `employees` **and** `organization`
+  (counts, manager names/options).
+- **Organization integration:** department / position / location options come from the Organization API via
+  `@/modules/organization` (`hooks/useAssignmentOptions.ts`) — never duplicated. New assignments only to ACTIVE
+  records (saved values stay selectable); positions are those of the selected department; changing the department
+  clears position and manager. The mock (like the backend) re-checks: exists, active, position ∈ department.
+- **Rules (backend, `VALIDATION` + `fieldErrors`):** unique employee number and work e-mail (case-insensitive);
+  manager must be active, not the employee, not someone reporting to them, and in the employee's department or a
+  parent department; no deactivating a department manager or someone with active direct reports; no activating with
+  an inactive assignment. Form-level rules (formats, dates: age ≥ 16 at hire, contract start ≥ hire, end after start
+  and required for contract/temporary/intern, probation within a year) are the shared Zod schema
+  (`schemas/employeeSchemas.ts`), applied by the mock too. Department/position/manager/status changes are added to
+  the employment history automatically.
+- **Permissions / scope (existing matrix):** `employees:read` → whole organization (System/HR Admin, HR Manager,
+  Payroll Officer — read-only); `employees:read:team` → Department Manager, own team only (departments they manage +
+  subdepartments; the mock maps demo accounts to employees and returns `FORBIDDEN` outside the team);
+  `employees:write` → create/edit/status; `documents:read`/`documents:write` → Documents tab / simulated upload;
+  `employees:read:personal` (System Admin, HR Admin, HR Manager only) → personal details, see below.
+  Recruiter and Employee have no access. `useEmployeeAccess` derives the scope from the session; the real backend
+  must derive it from the token, never from the request.
+- **Personal information (`employees:read:personal`):** date of birth, gender, nationality, marital status, personal
+  e-mail, phones, address (incl. city/country) and emergency contact form the profile's `personal` block, which the
+  API returns as `null` without the permission (enforced in the mock from the viewer's role — the real backend must
+  decide from the token). Identity/medical documents (`SENSITIVE_DOCUMENT_TYPES`) are likewise not returned. The UI
+  shows a "restricted" notice and no Emergency tab; employment and organization data stay visible. Payroll Officers
+  and Department Managers keep their read access (organization / own team) without personal details. Editing needs
+  the personal block (`employeeToInput` throws without it); every role with `employees:write` holds the permission.
+- **Documents:** metadata only; the "upload" reads the file's name and size in the browser and stores nothing —
+  labelled as simulated in the UI. Statuses: valid / expiring soon (30 days) / expired / pending review.
+- **Tests:** `mock/employeesBackend.test.ts` (seed consistency with Organization, directory, scoping, rules, status,
+  documents, history, manager options), `schemas/employeeSchemas.test.ts`, `hooks/useEmployees.test.tsx` (scoped
+  keys, cross-module invalidation), `employees.test.tsx` (roles, directory, create/edit, status, profile, documents,
+  history, states, Arabic, dark).
+
+## Attendance Management (`modules/attendance`, Phase 5)
+
+- **Routes** (inside `AttendancePage`, `/attendance/*`): overview (index), `records`, `records/:recordId`, `shifts`,
+  `shifts/:shiftId`, `history`, `history/:employeeId?month=YYYY-MM`, `reports`. Own-only roles see "My attendance"
+  (their history; the API resolves `employeeId = 'me'` from the signed-in account) and are redirected from the rest.
+- **Data flow:** components → `hooks/useAttendance.ts` (keys `['attendance', resource, scope, …]`; every write
+  invalidates `['attendance']`) → `api/attendanceApi.ts` (summary, records, record, history, create/update record,
+  checkIn/checkOut, shifts CRUD + status + members + assign, reports, CSV export) → `mock/attendanceMock.ts`.
+- **One dataset:** records are generated for the EXISTING employees (Employee Management ids, via `employeeRecords`)
+  from a deterministic hash of employee id + date over the current month and the three before (`WINDOW_MONTHS`), only
+  for days the employee was employed (deactivated employees keep their earlier records) and their shift works. The
+  overview, records, history, reports and CSV all read the same records. Each record keeps a SNAPSHOT of the employee's
+  department/position and of the shift on that day; shift assignments have an effective date.
+- **Status rules** (`utils/time.ts`, pure, tested): computed from the shift window, punches and "now" — `scheduled`
+  ("Not started") until the shift ends without a check-in (never "absent" just because a check-in is missing),
+  `absent` after it, `late` after start + grace (late minutes count from the start), `half-day` under half the
+  scheduled working time, `incomplete` when the check-out is still missing 4 h after the shift end, `on-leave`.
+  Overnight shifts end the next day. Worked time deducts the break.
+- **Simulated operations:** check-in/out are labelled simulated; the backend refuses a second check-in/out, a check-out
+  before the check-in, future times and times far from the shift; manual records only for days without one.
+- **Permissions (existing matrix):** `attendance:read` → organization; `attendance:read:team` → Department Manager's
+  departments (+ subdepartments; records by their snapshot department); `attendance:read:own` (every role's
+  self-service) → own records only; `attendance:write` → records, punches, shifts, assignments. The mock enforces all
+  of it from the scope's role (`FORBIDDEN`). Gaps reported, not implemented: Payroll Officer has no organization-wide
+  attendance read; no permission lets employees check themselves in.
+- **CSV export:** `exportAttendanceReport` returns the whole filtered report (scope applied) in the UI language, with a
+  BOM and spreadsheet-formula neutralisation (`csvCell`); the page downloads it as a Blob. No extra dependency.
+- **Tests:** `utils/time.test.ts`, `mock/attendanceBackend.test.ts` (fixed clock: consistency, determinism, history,
+  punches, shifts, reports/CSV, every role), `attendance.test.tsx` (UI on a fixed clock: overview/charts, records,
+  punches, shifts, history, reports export, roles, states, Arabic, dark). Use `vi.useFakeTimers({ toFake: ['Date'] })`
+  for "now".
+
+## Leave Management (`modules/leave`, Phase 5)
+
+- **Routes** (inside `LeavePage`, `/leave/*`): overview (index), `requests`, `requests/:requestId`, `approvals`
+  ("Awaiting me"), `my`, `balances`, `balances/:employeeId?year=`, `calendar`, `reports`, `types`, `types/:typeId`.
+  Own-only roles get "My leave" at the index (balances + own requests; the API resolves `employeeId = 'me'`) and are
+  redirected from the rest.
+- **Data flow:** components → `hooks/useLeave.ts` (keys `['leave', resource, scope, …]`; request writes invalidate
+  `['leave']` AND `['attendance']`, type writes only `['leave']`) → `api/leaveApi.ts` (the 19 requested functions +
+  `getLeaveQuote`) → `mock/leaveMock.ts` (rules) → `mock/leaveStore.ts` (data). Every rule is enforced in the mock
+  (`VALIDATION` + fieldErrors, `CONFLICT` for state changes, `FORBIDDEN` outside scope); `request.can` tells the UI which
+  actions to offer.
+- **Rules:** days = working days of the employee's shift schedule (Attendance) minus public holidays when the type excludes
+  them; one calendar year per request; no overlap with pending/approved leave; no days already worked (check-in);
+  inactive employees / inactive or ineligible types refused; document and balance checked on submission. Balance:
+  **remaining = allocated − used − pending** (pending reserves, approval uses, rejection/cancellation releases, cancelling
+  approved leave restores). Allocation per type (base, seniority bonus, first-year pro-rating) — configurable EXAMPLES,
+  not an official policy. Balance history = ledger of each request (sum = remaining, tested).
+- **Approval:** `leave:approve` (organization) or `leave:approve:team` (the manager's departments); never one's own
+  request; only pending ones (no double decision, rejected/cancelled can't be approved); rejection needs a reason.
+  Employees cancel drafts/pending and approved leave before it starts; approvers cancel any approved leave.
+- **Attendance integration (one source of truth):** Attendance never stores leave. `toRecord` looks up
+  `leaveData.approvedOn(employee, date)` on every read (`onLeave` + `leaveRequestId`), generation skips punches on approved
+  leave days, check-ins on leave days are refused, and the record's manual "on leave" flag is gone. Cancelling approved
+  leave makes the days working days again (past ones without a check-in → absent). "On leave today" is the same figure in
+  both overviews (tested). Layering avoids an import cycle: `leaveMock → attendanceMock → leaveStore` (lint-enforced:
+  `leaveStore` may import only the attendance *seed*).
+- **Permissions (existing matrix):** `leave:read` (System/HR Admin, HR Manager) organization; `leave:read:team`
+  (Department Manager) team + own; `leave:read:own` everyone; `leave:request` own requests only;
+  `leave:manage-policies` (System/HR Admin) leave types. Reasons and documents are returned only to the requester and to whoever may decide the request; drafts only
+  to their owner; gender-restricted types appear in other people's balances only when used. Gaps (reported, not
+  implemented): no `leave:request` on behalf of others; Payroll Officer has no organization-wide leave read.
+- **UI:** request form (RHF + Zod) with a live balance summary from the API; calendar built from MUI (month grid, agenda
+  list on phones, no new dependency); Employee Profile "Leave" tab (lazy-loaded `EmployeeLeaveTab` from `@/modules/leave`).
+  Leave never imports Employees or Attendance (links via the navigation map) — module graph: employees → leave → organization.
+- **Tests:** `utils/rules.test.ts`, `mock/leaveBackend.test.ts` (seed, every rule, scope, balances, workflow, attendance
+  integration, calendar, reports/CSV), `charts/options.test.ts` (real ECharts SSR), `hooks/useLeave.test.tsx`,
+  `leave.test.tsx`.
+
+## Recruitment Management (`modules/recruitment`, Phase 5)
+
+- **Routes** (`/recruitment/*`): overview, `requisitions[/:id]`, `candidates[/:id]` (tabs profile / timeline / interviews /
+  offers), `candidates/:id/convert` (lazy), `pipeline` (board or `?view=list`, `?requisition=`), `interviews[/:id]`,
+  `offers[/:id]`.
+- **Data flow:** components → `hooks/useRecruitment.ts` (keys `['recruitment', resource, scope, …]`; every write
+  invalidates `['recruitment']`; conversion also `employeeKeys.all` + `organizationKeys.all`) → `api/recruitmentApi.ts` →
+  `mock/recruitmentMock.ts` (one in-memory dataset generated relative to today; departments / positions / locations are
+  Organization ids, people are Employee ids — no copied data).
+- **Workflows (enforced in the mock):** requisition statuses draft → pending approval → open ⇄ on hold → closed (reopen) /
+  cancelled; candidate pipeline `utils/pipeline.ts` (valid transitions only, every change in the history; **hired only
+  through an accepted offer**; hired/rejected final, explicit reopen of rejected); one active application per e-mail;
+  interviews: future times, no double booking of interviewers/candidate, cancel with reason, feedback once per assigned
+  interviewer after the interview (1–5 + recommendation); offers: draft → sent (simulated) → accepted / rejected /
+  withdrawn, expired automatically, salary within the requisition range, one active offer per candidate, accepting
+  closes a filled requisition. Nothing is e-mailed, published or sent — labelled as simulated.
+- **Candidate → employee:** `candidates/:id/convert` renders Employee Management's own `EmployeeForm` (exported from
+  `@/modules/employees` with an `external` create flow), pre-filled from the candidate + accepted offer; the mock calls the
+  employees mock's `createEmployee` (same validation and employee-number rules), links `candidate.employeeId` and records
+  the history. Refused twice (`CONFLICT`); needs `recruitment:write` + `employees:write` (not the Recruiter).
+- **Permissions:** `recruitment:read`/`write` (HR roles, Recruiter); `recruitment:read:team` (Department Manager, approved
+  addition): requisitions of their departments / where they are the hiring manager, read-only, no salaries or offers,
+  may submit their own interview feedback. Private feedback: writers see all, a team interviewer only their own.
+- **Tests:** `mock/recruitmentBackend.test.ts`, `charts/options.test.ts`, `hooks/useRecruitment.test.tsx`,
+  `recruitment.test.tsx`.
+
+## Performance Management (`modules/performance`, Phase 5)
+
+- **Routes** (`/performance/*`): overview, `my`, `reviews[/:id]`, `goals`, `cycles[/:id]`, `development[/:id]`,
+  `competencies`. Own-only roles get "My performance" at the index and are redirected from the rest.
+- **Data flow:** components → `hooks/usePerformance.ts` (keys `['performance', resource, scope, …]`; every write
+  invalidates `['performance']`) → `api/performanceApi.ts` → `mock/performanceMock.ts` (cycles, reviews, goals, plans,
+  competencies, templates and the rating scale in one dataset; participants are existing employees).
+- **Rules (mock):** cycle dates in order, no overlapping review periods; draft → active (creates every participant's
+  review) → in progress / completed (automatic) → closed (final, history kept); goals 0–100 %, "completed" = 100 %,
+  final statuses locked, history recorded, goals in a cycle join that cycle's review; self-assessment only by the
+  employee, final once submitted unless HR reopens it; manager review by `performance:write` or `performance:review:team`
+  (team), never one's own, after the self-assessment or its deadline; ratings must be on the configured scale (values
+  1–5 fixed, labels configurable — examples, not policy); templates used by an open cycle are locked; plans complete only
+  when every activity is done. Drafts of the other party are never shown (manager sees submitted self-assessments only;
+  the employee sees the manager review once submitted).
+- **Permissions (approved additions):** `performance:read:own` (every role), `performance:read:team` +
+  `performance:review:team` (Department Manager), `performance:manage-config` (HR Admin; System Admin has all). HR Manager
+  keeps organization-wide `performance:read`/`write` without configuration.
+- **Employee Profile:** lazy "Performance" tab (`EmployeePerformanceTab` from `@/modules/performance`) for organization /
+  team readers.
+- **Tests:** `mock/performanceBackend.test.ts`, `charts/options.test.ts`, `hooks/usePerformance.test.tsx`,
+  `performance.test.tsx`.
+
+## Shared building blocks (`modules/shared`)
+
+- Lists: `DataTable` (server-side sort/pagination, loading / error + retry / empty, `hideBelow` per column),
+  `ListToolbar` + `FilterSelect`, `RowActions`, `StatusChip`; `hooks/useListState` (1-based params, 300 ms search
+  debounce). Forms: `FormDialog` (optional `secondaryAction`, `maxWidth`), `SelectField` (RHF-bound select),
+  `ConfirmDialog`, `formFields` (`textFieldProps`, `arabicInput`/`latinInput`), `utils/download` (CSV via Blob),
+  `utils/serverErrors` (`applyServerErrors`). Pages: `Panel`, `DetailList`, `QueryBoundary`, `Feedback` +
+  `hooks/useFeedback`, `hooks/useStatusFlow` (confirmed deactivation). Texts come from `common` (`list.*`, `status.*`).
+- Modules translate their own field/server reasons (`utils/serverErrors.ts` per module) and wrap `useStatusFlow` with
+  their wording.
+- **Gotcha:** in MUI `sx` a number ≤ 1 is a fraction (`width: 1` = 100%) — use `'1px'` for visually-hidden styles.
+
+## Simulated backend across modules
+
+Organization, Employees, Attendance, Leave, Recruitment and Performance mocks are ONE simulated backend: their `mock/`
+folders may import each other's `mock/` files (organization ⇄ employees; attendance → employees + organization + leave
+`leaveStore` only; leave → attendance + employees + organization; recruitment → employees + organization; performance →
+employees + organization) and nothing else of the other module — lint overrides allow exactly that. Never import
+another module's mock from UI, hooks or API code. `test/setup.ts` resets every mock after each test.
 
 ## Security (even with mock data)
 

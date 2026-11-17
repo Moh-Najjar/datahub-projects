@@ -90,12 +90,176 @@
       }
     },
     {
+      "files": ["src/modules/organization/**"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": [
+          { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The Admin Portal is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+          { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*", "**/datahub-website", "**/datahub-website/**", "datahub-website", "datahub-website/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+          { "group": ["@/modules/*/**", "!@/modules/organization/**", "!@/modules/shared/**"], "message": "Use another module only through its index.ts: import from '@/modules/<name>'." },
+          { "group": ["@/core/routes", "@/core/routes/index"], "message": "Only App.tsx imports the router." }
+        ] }]
+      }
+    },
+    {
+      "files": ["src/modules/employees/**"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": [
+          { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The Admin Portal is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+          { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*", "**/datahub-website", "**/datahub-website/**", "datahub-website", "datahub-website/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+          { "group": ["@/modules/*/**", "!@/modules/employees/**", "!@/modules/shared/**"], "message": "Use another module only through its index.ts: import from '@/modules/<name>'." },
+          { "group": ["@/core/routes", "@/core/routes/index"], "message": "Only App.tsx imports the router." }
+        ] }]
+      }
+    },
+    {
+      "files": ["src/modules/attendance/**"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": [
+          { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The Admin Portal is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+          { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*", "**/datahub-website", "**/datahub-website/**", "datahub-website", "datahub-website/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+          { "group": ["@/modules/*/**", "!@/modules/attendance/**", "!@/modules/shared/**"], "message": "Use another module only through its index.ts: import from '@/modules/<name>'." },
+          { "group": ["@/core/routes", "@/core/routes/index"], "message": "Only App.tsx imports the router." }
+        ] }]
+      }
+    },
+    {
       "files": ["src/modules/layout/**"],
       "rules": {
         "no-restricted-imports": ["error", { "patterns": [
           { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The Admin Portal is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
           { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*", "**/datahub-website", "**/datahub-website/**", "datahub-website", "datahub-website/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
           { "group": ["@/modules/*/**", "!@/modules/layout/**", "!@/modules/shared/**"], "message": "Use another module only through its index.ts: import from '@/modules/<name>'." },
+          { "group": ["@/core/routes", "@/core/routes/index"], "message": "Only App.tsx imports the router." }
+        ] }]
+      }
+    },
+    {
+      // Simulated backend: organization and employees mocks form ONE backend (department managers are employees,
+      // counts come from employee records), so their mock/ folders may read each other's mock/ files — nothing else.
+      "files": ["src/modules/employees/mock/**"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": [
+          { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The Admin Portal is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+          { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*", "**/datahub-website", "**/datahub-website/**", "datahub-website", "datahub-website/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+          { "group": ["@/modules/*/**", "!@/modules/employees/**", "!@/modules/organization/mock/**", "!@/modules/shared/**"], "message": "A module's mock may use only its own module and the organization mock (same simulated backend)." },
+          { "group": ["@/core/routes", "@/core/routes/index"], "message": "Only App.tsx imports the router." }
+        ] }]
+      }
+    },
+    {
+      // Simulated backend: organization and employees mocks form ONE backend (department managers are employees,
+      // counts come from employee records), so their mock/ folders may read each other's mock/ files — nothing else.
+      "files": ["src/modules/organization/mock/**"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": [
+          { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The Admin Portal is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+          { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*", "**/datahub-website", "**/datahub-website/**", "datahub-website", "datahub-website/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+          { "group": ["@/modules/*/**", "!@/modules/organization/**", "!@/modules/employees/mock/**", "!@/modules/shared/**"], "message": "A module's mock may use only its own module and the employees mock (same simulated backend)." },
+          { "group": ["@/core/routes", "@/core/routes/index"], "message": "Only App.tsx imports the router." }
+        ] }]
+      }
+    },
+    {
+      // Simulated backend: attendance records reference employees and departments; "On leave" comes from the leave DATA layer.
+      "files": ["src/modules/attendance/mock/**"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": [
+          { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The Admin Portal is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+          { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*", "**/datahub-website", "**/datahub-website/**", "datahub-website", "datahub-website/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+          { "group": ["@/modules/*/**", "!@/modules/attendance/**", "!@/modules/employees/mock/**", "!@/modules/organization/mock/**", "!@/modules/leave/mock/leaveStore", "!@/modules/shared/**"], "message": "The attendance mock may use only its own module, the employees/organization mocks and the leave data layer (leaveStore) — same simulated backend." },
+          { "group": ["@/core/routes", "@/core/routes/index"], "message": "Only App.tsx imports the router." }
+        ] }]
+      }
+    },
+    {
+      "files": ["src/modules/leave/**"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": [
+          { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The Admin Portal is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+          { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*", "**/datahub-website", "**/datahub-website/**", "datahub-website", "datahub-website/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+          { "group": ["@/modules/*/**","!@/modules/leave/**","!@/modules/shared/**"], "message": "Use another module only through its index.ts: import from '@/modules/<name>'." },
+          { "group": ["@/core/routes", "@/core/routes/index"], "message": "Only App.tsx imports the router." }
+        ] }]
+      }
+    },
+    {
+      // Simulated backend: leave rules read the employees, organization and attendance (working days, check-ins) mocks.
+      "files": ["src/modules/leave/mock/**"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": [
+          { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The Admin Portal is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+          { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*", "**/datahub-website", "**/datahub-website/**", "datahub-website", "datahub-website/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+          { "group": ["@/modules/*/**","!@/modules/leave/**","!@/modules/attendance/mock/**","!@/modules/employees/mock/**","!@/modules/organization/mock/**","!@/modules/shared/**"], "message": "The leave mock may use only its own module and the attendance/employees/organization mocks (same simulated backend)." },
+          { "group": ["@/core/routes", "@/core/routes/index"], "message": "Only App.tsx imports the router." }
+        ] }]
+      }
+    },
+    {
+      // The leave DATA layer is read by the attendance mock, so it must never import the attendance mock (only its pure seed): no import cycle.
+      "files": ["src/modules/leave/mock/leaveStore.ts","src/modules/leave/mock/seed.ts"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": [
+          { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The Admin Portal is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+          { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*", "**/datahub-website", "**/datahub-website/**", "datahub-website", "datahub-website/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+          { "group": ["@/modules/*/**","!@/modules/leave/**","!@/modules/attendance/mock/seed","!@/modules/employees/mock/**","!@/modules/organization/mock/**","!@/modules/shared/**"], "message": "leaveStore is read by the attendance mock: it may use only the attendance seed, never attendanceMock (import cycle)." },
+          { "group": ["@/core/routes", "@/core/routes/index"], "message": "Only App.tsx imports the router." }
+        ] }]
+      }
+    },
+    {
+      // Integration tests of the simulated backend also call the attendance API to check both modules agree.
+      "files": ["src/modules/leave/mock/*.test.ts"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": [
+          { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The Admin Portal is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+          { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*", "**/datahub-website", "**/datahub-website/**", "datahub-website", "datahub-website/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+          { "group": ["@/modules/*/**","!@/modules/leave/**","!@/modules/attendance/mock/**","!@/modules/attendance/api/**","!@/modules/attendance/types/**","!@/modules/employees/mock/**","!@/modules/organization/mock/**","!@/modules/shared/**"], "message": "Leave backend tests may use the attendance API/mocks and the employees/organization mocks only." },
+          { "group": ["@/core/routes", "@/core/routes/index"], "message": "Only App.tsx imports the router." }
+        ] }]
+      }
+    },
+    {
+      "files": ["src/modules/recruitment/**"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": [
+          { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The Admin Portal is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+          { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*", "**/datahub-website", "**/datahub-website/**", "datahub-website", "datahub-website/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+          { "group": ["@/modules/*/**","!@/modules/recruitment/**","!@/modules/shared/**"], "message": "Use another module only through its index.ts: import from '@/modules/<name>'." },
+          { "group": ["@/core/routes", "@/core/routes/index"], "message": "Only App.tsx imports the router." }
+        ] }]
+      }
+    },
+    {
+      // Simulated backend: requisitions use organization ids; people are employees; conversion creates the employee through the employees mock.
+      "files": ["src/modules/recruitment/mock/**"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": [
+          { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The Admin Portal is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+          { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*", "**/datahub-website", "**/datahub-website/**", "datahub-website", "datahub-website/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+          { "group": ["@/modules/*/**","!@/modules/recruitment/**","!@/modules/employees/mock/**","!@/modules/organization/mock/**","!@/modules/shared/**"], "message": "The recruitment mock may use only its own module and the employees/organization mocks (same simulated backend)." },
+          { "group": ["@/core/routes", "@/core/routes/index"], "message": "Only App.tsx imports the router." }
+        ] }]
+      }
+    },
+    {
+      "files": ["src/modules/performance/**"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": [
+          { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The Admin Portal is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+          { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*", "**/datahub-website", "**/datahub-website/**", "datahub-website", "datahub-website/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+          { "group": ["@/modules/*/**","!@/modules/performance/**","!@/modules/shared/**"], "message": "Use another module only through its index.ts: import from '@/modules/<name>'." },
+          { "group": ["@/core/routes", "@/core/routes/index"], "message": "Only App.tsx imports the router." }
+        ] }]
+      }
+    },
+    {
+      // Simulated backend: participants, goal owners and plans reference employees; departments come from the organization mock.
+      "files": ["src/modules/performance/mock/**"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": [
+          { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The Admin Portal is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+          { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*", "**/datahub-website", "**/datahub-website/**", "datahub-website", "datahub-website/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+          { "group": ["@/modules/*/**","!@/modules/performance/**","!@/modules/employees/mock/**","!@/modules/organization/mock/**","!@/modules/shared/**"], "message": "The performance mock may use only its own module and the employees/organization mocks (same simulated backend)." },
           { "group": ["@/core/routes", "@/core/routes/index"], "message": "Only App.tsx imports the router." }
         ] }]
       }

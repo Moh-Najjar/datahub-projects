@@ -44,7 +44,8 @@ describe('permission guards', () => {
 
   it('renders the page when the role has the permission', async () => {
     renderApp('/dashboard', { as: 'department-manager' });
-    expect(await screen.findByRole('heading', { level: 1, name: /Dana Yousef/ })).toBeTruthy();
+    // First render lazy-loads the dashboard and ECharts (slower while all test files run in parallel).
+    expect(await screen.findByRole('heading', { level: 1, name: /Dana Yousef/ }, { timeout: 5000 })).toBeTruthy();
   });
 
   it('shows the not-found page for unknown URLs inside the shell', async () => {

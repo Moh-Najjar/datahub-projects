@@ -61,22 +61,22 @@ export const NAV_GROUPS: readonly NavGroup[] = [
   {
     key: 'people',
     items: [
-      { key: 'employees', path: '/employees', icon: PeopleAltOutlined, anyOf: ['employees:read', 'employees:read:team'], available: false },
-      { key: 'organization', path: '/organization', icon: AccountTreeOutlined, anyOf: ['organization:read'], available: false },
+      { key: 'employees', path: '/employees', icon: PeopleAltOutlined, anyOf: ['employees:read', 'employees:read:team'], available: true },
+      { key: 'organization', path: '/organization', icon: AccountTreeOutlined, anyOf: ['organization:read'], available: true },
     ],
   },
   {
     key: 'time',
     items: [
-      { key: 'attendance', path: '/attendance', icon: AccessTimeOutlined, anyOf: ['attendance:read', 'attendance:read:team', 'attendance:read:own'], available: false },
-      { key: 'leave', path: '/leave', icon: EventAvailableOutlined, anyOf: ['leave:read', 'leave:read:team', 'leave:read:own'], available: false },
+      { key: 'attendance', path: '/attendance', icon: AccessTimeOutlined, anyOf: ['attendance:read', 'attendance:read:team', 'attendance:read:own'], available: true },
+      { key: 'leave', path: '/leave', icon: EventAvailableOutlined, anyOf: ['leave:read', 'leave:read:team', 'leave:read:own'], available: true },
     ],
   },
   {
     key: 'talent',
     items: [
-      { key: 'recruitment', path: '/recruitment', icon: WorkOutlineOutlined, anyOf: ['recruitment:read'], available: false },
-      { key: 'performance', path: '/performance', icon: TrendingUpOutlined, anyOf: ['performance:read'], available: false },
+      { key: 'recruitment', path: '/recruitment', icon: WorkOutlineOutlined, anyOf: ['recruitment:read', 'recruitment:read:team'], available: true },
+      { key: 'performance', path: '/performance', icon: TrendingUpOutlined, anyOf: ['performance:read', 'performance:read:team', 'performance:read:own'], available: true },
     ],
   },
   {

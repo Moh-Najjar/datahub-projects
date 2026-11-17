@@ -21,8 +21,8 @@ export default defineConfig({
   },
   build: {
     target: 'es2022',
-    // The lazy dashboard chunk includes the modular Apache ECharts core (~620 kB min / ~211 kB gzip) and loads
-    // only with the dashboard. The limit sits just above it so any NEW oversized chunk still warns.
+    // The modular Apache ECharts core (~590 kB min / ~200 kB gzip) is a lazy chunk shared by the dashboard and
+    // attendance pages (never preloaded by index.html). The limit sits just above it so any NEW oversized chunk warns.
     chunkSizeWarningLimit: 650,
     rollupOptions: {
       output: {
@@ -44,5 +44,11 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/matchMedia.ts', './src/test/setup.ts'],
     css: false,
+    // jsdom renders of whole pages (lazy chunks, ECharts) can exceed 5 s while every file runs in parallel.
+    // Individual waits keep their own short timeouts, so real failures still surface quickly.
+    testTimeout: 15_000,
+    // 39 files of whole-page jsdom renders: one worker per core starves the cold lazy-page loads on a busy machine
+    // (first test of a file timing out). Half the cores keeps the suite fast and stable.
+    maxWorkers: '50%',
   },
 });

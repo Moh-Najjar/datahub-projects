@@ -133,7 +133,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
       <Box component="nav" aria-label="Mobile" sx={{ flex: 1, overflowY: 'auto', px: '30px', pt: '20px', pb: '30px' }}>
         <List disablePadding>
           {items.map((item, index) => {
-            const hasChildren = item.kind !== 'link';
+            const hasChildren = item.kind === 'dropdown' || item.kind === 'mega';
             const isOpen = expanded === index;
             const href = item.kind === 'mega' ? undefined : item.href;
             const toggle = () => setExpanded(isOpen ? null : index);

@@ -10,7 +10,36 @@
     "backHome": "Back to home",
     "reload": "Reload the page",
     "retry": "Try again",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "cancel": "Cancel",
+    "saving": "Saving…"
+  },
+  "pagination": {
+    "first": "Go to first page",
+    "last": "Go to last page",
+    "next": "Go to next page",
+    "previous": "Go to previous page"
+  },
+  "list": {
+    "search": "Search",
+    "allStatuses": "All statuses",
+    "clearFilters": "Clear filters",
+    "rowsPerPage": "Rows per page",
+    "displayedRows": "{{from}}–{{to}} of {{value}}",
+    "actionsFor": "Actions for {{name}}",
+    "actions": "Actions",
+    "empty": "Nothing has been added yet.",
+    "noResults": "No results match your search or filters.",
+    "loadError": "This list could not be loaded.",
+    "none": "—"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "charts": {
+    "error": "This chart could not be loaded.",
+    "empty": "No data to display yet."
   },
   "shell": {
     "openNavigation": "Open navigation",
@@ -71,6 +100,7 @@
     "profile_view": "View own profile",
     "employees_read": "View all employees",
     "employees_read_team": "View own team's employees",
+    "employees_read_personal": "View employees' personal information",
     "employees_write": "Create and edit employees",
     "organization_read": "View organization structure",
     "organization_write": "Manage organization structure",
@@ -88,8 +118,13 @@
     "payroll_read": "View payroll",
     "payroll_write": "Manage payroll",
     "recruitment_read": "View recruitment",
+    "recruitment_read_team": "View own team's recruitment",
     "recruitment_write": "Manage recruitment",
     "performance_read": "View performance",
+    "performance_read_team": "View own team's performance",
+    "performance_read_own": "View own performance",
+    "performance_review_team": "Review own team's performance",
+    "performance_manage-config": "Configure performance reviews",
     "performance_write": "Manage performance",
     "documents_read": "View documents",
     "documents_write": "Manage documents",
