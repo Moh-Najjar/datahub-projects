@@ -117,6 +117,8 @@
     "leave_manage-policies": "إدارة أنواع الإجازات وسياساتها",
     "payroll_read": "عرض الرواتب",
     "payroll_write": "إدارة الرواتب",
+    "payroll_read_own": "عرض قسائم راتبه",
+    "payroll_approve": "اعتماد الرواتب",
     "recruitment_read": "عرض التوظيف",
     "recruitment_read_team": "عرض توظيف فريقه",
     "recruitment_write": "إدارة التوظيف",

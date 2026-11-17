@@ -117,6 +117,8 @@
     "leave_manage-policies": "Manage leave types and policies",
     "payroll_read": "View payroll",
     "payroll_write": "Manage payroll",
+    "payroll_read_own": "View own payslips",
+    "payroll_approve": "Approve payroll",
     "recruitment_read": "View recruitment",
     "recruitment_read_team": "View own team's recruitment",
     "recruitment_write": "Manage recruitment",

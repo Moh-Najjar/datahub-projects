@@ -11,15 +11,15 @@ describe('role-based navigation', () => {
   });
 
   it('Employee sees only self-service items', () => {
-    expect(visibleKeys('employee')).toEqual(['profile', 'attendance', 'leave', 'performance']);
+    expect(visibleKeys('employee')).toEqual(['profile', 'attendance', 'leave', 'performance', 'payroll']);
   });
 
   it('Department Manager sees team areas but not organisation-wide admin areas', () => {
-    expect(visibleKeys('department-manager')).toEqual(['dashboard', 'profile', 'employees', 'attendance', 'leave', 'recruitment', 'performance']);
+    expect(visibleKeys('department-manager')).toEqual(['dashboard', 'profile', 'employees', 'attendance', 'leave', 'recruitment', 'performance', 'payroll']);
   });
 
   it('Recruiter sees recruitment and organization (positions)', () => {
-    expect(visibleKeys('recruiter')).toEqual(['dashboard', 'profile', 'organization', 'attendance', 'leave', 'recruitment', 'performance']);
+    expect(visibleKeys('recruiter')).toEqual(['dashboard', 'profile', 'organization', 'attendance', 'leave', 'recruitment', 'performance', 'payroll']);
   });
 
   it('Payroll Officer sees payroll and employees', () => {
@@ -37,10 +37,10 @@ describe('role-based navigation', () => {
     expect(landingPath(canAnyFor('employee'))).toBe('/profile');
   });
 
-  it('only built pages are available (Organization, Employees, Attendance, Leave, Recruitment and Performance since Phase 5); planned areas are marked unavailable', () => {
-    expect(NAV_ITEMS.filter((i) => i.available).map((i) => i.key)).toEqual(['dashboard', 'profile', 'employees', 'organization', 'attendance', 'leave', 'recruitment', 'performance']);
+  it('only built pages are available (Organization, Employees, Attendance, Leave, Recruitment, Performance and Payroll since Phase 5); planned areas are marked unavailable', () => {
+    expect(NAV_ITEMS.filter((i) => i.available).map((i) => i.key)).toEqual(['dashboard', 'profile', 'employees', 'organization', 'attendance', 'leave', 'recruitment', 'performance', 'payroll']);
     expect(NAV_ITEMS.filter((i) => !i.available).map((i) => i.key)).toEqual(
-      expect.arrayContaining(['payroll', 'documents', 'reports', 'settings', 'users']),
+      expect.arrayContaining(['documents', 'reports', 'settings', 'users']),
     );
   });
 });

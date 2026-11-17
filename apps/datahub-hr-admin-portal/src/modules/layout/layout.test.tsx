@@ -21,16 +21,17 @@ describe('role-based navigation (sidebar)', () => {
     renderApp('/profile', { as: 'employee' });
     const nav = await navigation();
     expect(nav.queryByRole('link', { name: 'Dashboard' })).toBeNull();
-    expect(nav.queryByText('Payroll')).toBeNull();
+    // Own payslips only (My payroll): every staff member has payroll:read:own.
+    expect(nav.getByRole('link', { name: 'Payroll' })).toBeTruthy();
     expect(nav.queryByText('Settings')).toBeNull();
     expect(nav.getByRole('link', { name: 'My profile' })).toBeTruthy();
   });
 
-  it('Recruiter: recruitment visible, payroll and employees hidden', async () => {
+  it('Recruiter: recruitment visible, employees hidden; payroll only as own payslips', async () => {
     renderApp('/dashboard', { as: 'recruiter' });
     const nav = await navigation();
     expect(nav.getByText('Recruitment')).toBeTruthy();
-    expect(nav.queryByText('Payroll')).toBeNull();
+    expect(nav.getByRole('link', { name: 'Payroll' })).toBeTruthy();
     expect(nav.queryByText('Employees')).toBeNull();
   });
 });

@@ -5,9 +5,9 @@ employee/manager frontend; both will consume the same future HR backend).
 
 - **Original product.** Comparable in scope to established HR suites, but never copy another vendor's code, branding,
   logos, text or exact screen designs.
-- **Status: Phase 5 — Organization, Employee, Attendance, Leave, Recruitment and Performance Management done** on top
+- **Status: Phase 5 — Organization, Employee, Attendance, Leave, Recruitment, Performance and Payroll Management done** on top
   of the foundation, shell, demo sign-in, permission guards, profile page and role-based HR dashboard (Phases 2–4).
-  Next, only after approval: payroll / documents / reports.
+  Next, only after approval: documents / reports.
 - **No backend yet.** All data comes from the in-browser **mock API** with **fictional** data.
 
 ## Commands (from the monorepo root)
@@ -390,6 +390,35 @@ preference, not part of the URL.
 - **Tests:** `mock/performanceBackend.test.ts`, `charts/options.test.ts`, `hooks/usePerformance.test.tsx`,
   `performance.test.tsx`.
 
+## Payroll Management (`modules/payroll`, Phase 5)
+
+- **Routes** (`/payroll/*`): overview, `runs[/:id[/employees/:employeeId]]`, `compensation[/:employeeId]`, `structures`,
+  `allowances`, `deductions` (+ calculation policy), `payslips[/:id]`, `reports`, `my`. Roles without `payroll:read` get
+  "My payroll" at the index; only `payslips/:id` stays reachable (the API returns NOT_FOUND for others' payslips).
+- **Data flow:** components → `hooks/usePayroll.ts` (keys `['payroll', resource, scope, …]`; every write invalidates
+  `['payroll']`) → `api/payrollApi.ts` → `mock/payrollMock.ts`. Salaries live ONLY in payroll (never in employee
+  listings); employees/organization are read through their mocks, attendance through `attendanceFacts` and approved
+  leave through `leaveFacts` (read-only backend accessors added to those mocks).
+- **Money (`utils/money.ts`):** integers in minor units (JOD 3 decimals, USD/SAR/AED 2), basis points for percentages,
+  exact `divRound` half-up; one rounding per line, totals = sums of rounded lines; forms parse decimal text (never
+  floats); display formats the decimal string. No currency mixing (summary and reports use JOD, the demo currency).
+- **Engine (`utils/engine.ts`, pure, tested):** basic prorated per compensation segment by calendar days; recurring
+  items in full while in force, one-time in their period; overtime always 0 (no attendance field — reported gap);
+  unpaid leave = APPROVED unpaid leave days (each once) × basic ÷ divisor (policy, default 30); absence only when an
+  absence deduction type is active; lateness never; statutory types illustrative and inactive by default; caps per
+  period; negative net = error. Each line stores a snapshot of its inputs; validation warns if inputs changed.
+- **Rules (mock):** compensation records immutable (ends derived from the next record), no back-dating before the
+  latest record or into approved/paid periods; one active type per system deduction cause; runs = one calendar month,
+  no overlapping non-cancelled runs over the same employees; draft → calculated → validated → pending approval →
+  approved → paid (simulated) — rejected runs recalculated or edited (→ draft) and resubmitted; paid/approved final;
+  creators never approve/reject their own run; payslips only from approved/paid runs; every transition in history.
+- **Permissions (approved additions):** `payroll:read:own` (every role), `payroll:approve` (HR Admin; System Admin
+  has all). Payroll Officer processes (`payroll:write`) but never approves; HR Manager reads only.
+- **Payslip PDF:** `PayslipDocument` (inline-styled, bilingual) is shown on screen and rendered to static markup
+  (`react-dom/server`, lazy chunk — excluded from the `react` manual chunk) into a hidden frame → browser print
+  ("Save as PDF"). No PDF library.
+- **Tests:** `utils/engine.test.ts`, `mock/payrollBackend.test.ts`, `charts/options.test.ts`, `payroll.test.tsx`.
+
 ## Shared building blocks (`modules/shared`)
 
 - Lists: `DataTable` (server-side sort/pagination, loading / error + retry / empty, `hideBelow` per column),
@@ -404,10 +433,10 @@ preference, not part of the URL.
 
 ## Simulated backend across modules
 
-Organization, Employees, Attendance, Leave, Recruitment and Performance mocks are ONE simulated backend: their `mock/`
+Organization, Employees, Attendance, Leave, Recruitment, Performance and Payroll mocks are ONE simulated backend: their `mock/`
 folders may import each other's `mock/` files (organization ⇄ employees; attendance → employees + organization + leave
 `leaveStore` only; leave → attendance + employees + organization; recruitment → employees + organization; performance →
-employees + organization) and nothing else of the other module — lint overrides allow exactly that. Never import
+employees + organization; payroll → employees + organization + attendance + leave mocks) and nothing else of the other module — lint overrides allow exactly that. Never import
 another module's mock from UI, hooks or API code. `test/setup.ts` resets every mock after each test.
 
 ## Security (even with mock data)

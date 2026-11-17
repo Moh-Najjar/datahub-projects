@@ -28,6 +28,8 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
+            // React DOM's static-markup renderer is used only to print payslips: keep it in its own lazy chunk.
+            if (/[\\/]react-dom[\\/](server|cjs[\\/]react-dom-server)/.test(id)) return undefined;
             if (/[\\/](react|react-dom|react-router|react-router-dom|scheduler)[\\/]/.test(id)) return 'react';
             if (/[\\/](@mui|@emotion|stylis|stylis-plugin-rtl)[\\/]/.test(id)) return 'mui';
             if (/[\\/](i18next|react-i18next)[\\/]/.test(id)) return 'i18n';

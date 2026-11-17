@@ -793,3 +793,71 @@ export const attendanceSchedule = {
     return Boolean(records.get(recordId(date, employeeId))?.checkIn);
   },
 };
+
+/* Used by the payroll mock (same simulated backend; payroll → attendance, never the other way) ------------- */
+
+export interface AttendancePeriodFacts {
+  /** First and last day attendance data exists for inside the period (`null` when none: before the data window). */
+  dataFrom: string | null;
+  dataTo: string | null;
+  /** Working days of the employee's shift schedule in the period (whole period, including future days). */
+  scheduledDays: number;
+  /** Status counts of the records that exist (only days up to today, inside the data window). */
+  present: number;
+  late: number;
+  absent: number;
+  halfDay: number;
+  incomplete: number;
+  onLeave: number;
+  /** Days marked absent (no check-in, no approved leave). */
+  absentDates: string[];
+  lateMinutes: number;
+  workedMinutes: number;
+  /** Scheduled working time (shift minus break) of the days with a complete record. */
+  scheduledMinutes: number;
+  /** Worked time beyond the scheduled time on complete days — for REFERENCE only (no overtime policy exists). */
+  minutesBeyondShift: number;
+}
+
+export const attendanceFacts = {
+  /** Attendance facts for one employee and period, computed with the same rules as the attendance screens. */
+  forPeriod(employeeId: string, from: string, to: string): AttendancePeriodFacts {
+    const nowMs = now();
+    let scheduledDays = 0;
+    for (let d = from; d <= to; d = addDays(d, 1)) if (attendanceSchedule.isWorkingDay(employeeId, d)) scheduledDays++;
+    const facts: AttendancePeriodFacts = { dataFrom: null, dataTo: null, scheduledDays, present: 0, late: 0, absent: 0, halfDay: 0, incomplete: 0, onLeave: 0, absentDates: [], lateMinutes: 0, workedMinutes: 0, scheduledMinutes: 0, minutesBeyondShift: 0 };
+    // Days of the period inside the data window (start of the window … today).
+    const today = todayIso(nowMs);
+    if (!windowStart) windowStart = computeWindowStart(today);
+    const dates: string[] = [];
+    for (let d = from < windowStart ? windowStart : from; d <= to && d <= today; d = addDays(d, 1)) dates.push(d);
+    if (dates.length === 0) return facts;
+    facts.dataFrom = dates[0]!;
+    facts.dataTo = dates.at(-1)!;
+    // Generate only days not yet considered for everyone (payroll asks once per employee).
+    const everyone = employeeRecords.all().length;
+    const pending = dates.filter((d) => (considered.get(d)?.size ?? 0) < everyone);
+    if (pending.length) materialize(pending);
+    for (const date of dates) {
+      const row = records.get(recordId(date, employeeId));
+      if (!row) continue;
+      const r = toRecord(row, nowMs);
+      if (r.status === 'present') facts.present++;
+      else if (r.status === 'late') facts.late++;
+      else if (r.status === 'absent') {
+        facts.absent++;
+        facts.absentDates.push(date);
+      } else if (r.status === 'half-day') facts.halfDay++;
+      else if (r.status === 'incomplete') facts.incomplete++;
+      else if (r.status === 'on-leave') facts.onLeave++;
+      facts.lateMinutes += r.lateMinutes;
+      if (r.workedMinutes !== null) {
+        const scheduled = (toMs(r.scheduledEnd) - toMs(r.scheduledStart)) / 60_000 - r.shift.breakMinutes;
+        facts.workedMinutes += r.workedMinutes;
+        facts.scheduledMinutes += scheduled;
+        facts.minutesBeyondShift += Math.max(0, r.workedMinutes - scheduled);
+      }
+    }
+    return facts;
+  },
+};

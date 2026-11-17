@@ -787,3 +787,47 @@ export function exportReport(filters: LeaveReportFilters, language: 'en' | 'ar',
   const content = '﻿' + [header, ...lines].map((line) => line.map(csvCell).join(',')).join('\r\n') + '\r\n';
   return { fileName: `leave-${filters.type}-${filters.from}_${filters.to}.csv`, content, rows: lines.length };
 }
+
+/* Used by the payroll mock (same simulated backend; payroll → leave, never the other way) ------------------- */
+
+export interface ApprovedLeaveInPeriod {
+  requestId: string;
+  number: string;
+  leaveType: { id: string; code: string; name: Localized<string>; paid: boolean };
+  startDate: string;
+  endDate: string;
+  /** The request's counted leave days (employee's working days, minus excluded holidays) that fall inside the period. */
+  dates: string[];
+}
+
+/** Approved requests per employee, rebuilt when the request list changes (new array or new row). */
+let approvedCache: { rows: readonly LeaveRow[]; length: number; byEmployee: Map<string, LeaveRow[]> } | null = null;
+function approvedByEmployee(): Map<string, LeaveRow[]> {
+  const rows = leaveData.rows();
+  if (approvedCache?.rows === rows && approvedCache.length === rows.length) return approvedCache.byEmployee;
+  const byEmployee = new Map<string, LeaveRow[]>();
+  for (const r of rows) if (r.status === 'approved') byEmployee.set(r.employeeId, [...(byEmployee.get(r.employeeId) ?? []), r]);
+  approvedCache = { rows, length: rows.length, byEmployee };
+  return byEmployee;
+}
+
+export const leaveFacts = {
+  /**
+   * APPROVED leave of the employee overlapping [from, to]: pending, rejected, cancelled and draft requests never
+   * count. Days are counted exactly as Leave Management counts them for the request.
+   */
+  approvedInPeriod(employeeId: string, from: string, to: string): ApprovedLeaveInPeriod[] {
+    const e = employeeRecords.get(employeeId);
+    if (!e) return [];
+    const result: ApprovedLeaveInPeriod[] = [];
+    for (const r of approvedByEmployee().get(employeeId) ?? []) {
+      if (r.startDate > to || r.endDate < from) continue;
+      const type = typeById(r.leaveTypeId);
+      if (!type) continue;
+      const dates = count(e, type, r.startDate, r.endDate).countedDates.filter((d) => d >= from && d <= to);
+      if (dates.length === 0) continue;
+      result.push({ requestId: r.id, number: r.number, leaveType: { id: type.id, code: type.code, name: type.name, paid: type.paid }, startDate: r.startDate, endDate: r.endDate, dates });
+    }
+    return result.sort((a, b) => a.startDate.localeCompare(b.startDate));
+  },
+};

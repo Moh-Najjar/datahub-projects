@@ -7,6 +7,7 @@ import { resetAttendanceMock } from '@/modules/attendance/mock/attendanceMock';
 import { resetEmployeesMock } from '@/modules/employees/mock/employeesMock';
 import { resetLeaveStore } from '@/modules/leave/mock/leaveStore';
 import { resetOrganizationMock } from '@/modules/organization/mock/organizationMock';
+import { resetPayrollMock } from '@/modules/payroll/mock/payrollMock';
 import { resetPerformanceMock } from '@/modules/performance/mock/performanceMock';
 import { resetRecruitmentMock } from '@/modules/recruitment/mock/recruitmentMock';
 import { recordedCharts } from './echartsStub';
@@ -37,6 +38,7 @@ afterEach(async () => {
   resetLeaveStore();
   resetRecruitmentMock();
   resetPerformanceMock();
+  resetPayrollMock();
   localStorage.clear();
   sessionStorage.clear();
   document.documentElement.removeAttribute('data-color-scheme');

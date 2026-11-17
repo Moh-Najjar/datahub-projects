@@ -22,6 +22,7 @@ function FooterMain() {
   const ui = useLocalized(UI);
   const offices = useLocalized(OFFICES);
   const columns = useLocalized(FOOTER_COLUMNS);
+  const year = new Date().getFullYear();
 
   return (
     <Box sx={{ position: 'relative', overflow: 'hidden', bgcolor: 'brand.footer' }}>
@@ -85,7 +86,7 @@ function FooterMain() {
           <Box sx={{ display: 'inline-block' }}>
             <Logo variant="white" />
           </Box>
-          <Typography sx={{ mt: '22px', mb: '26px', color: 'text.secondary' }}>{ui.footer.copyright}</Typography>
+          <Typography sx={{ mt: '22px', mb: '26px', color: 'text.secondary' }}>{`© ${year} ${ui.footer.copyright}`}</Typography>
         </Box>
       </Box>
     </Box>

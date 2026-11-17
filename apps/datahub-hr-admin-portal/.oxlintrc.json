@@ -263,6 +263,29 @@
           { "group": ["@/core/routes", "@/core/routes/index"], "message": "Only App.tsx imports the router." }
         ] }]
       }
+    },
+    {
+      "files": ["src/modules/payroll/**"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": [
+          { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The Admin Portal is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+          { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*", "**/datahub-website", "**/datahub-website/**", "datahub-website", "datahub-website/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+          { "group": ["@/modules/*/**","!@/modules/payroll/**","!@/modules/shared/**"], "message": "Use another module only through its index.ts: import from '@/modules/<name>'." },
+          { "group": ["@/core/routes", "@/core/routes/index"], "message": "Only App.tsx imports the router." }
+        ] }]
+      }
+    },
+    {
+      // Simulated backend: compensation and lines reference employees; attendance facts and approved leave are read through those mocks.
+      "files": ["src/modules/payroll/mock/**"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": [
+          { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The Admin Portal is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+          { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*", "**/datahub-website", "**/datahub-website/**", "datahub-website", "datahub-website/*"], "message": "Apps must not import each other. Share types through @datahub/shared-types." },
+          { "group": ["@/modules/*/**","!@/modules/payroll/**","!@/modules/employees/mock/**","!@/modules/organization/mock/**","!@/modules/attendance/mock/**","!@/modules/leave/mock/**","!@/modules/shared/**"], "message": "The payroll mock may use only its own module and the employees, organization, attendance and leave mocks (same simulated backend)." },
+          { "group": ["@/core/routes", "@/core/routes/index"], "message": "Only App.tsx imports the router." }
+        ] }]
+      }
     }
   ]
 }

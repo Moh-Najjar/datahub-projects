@@ -81,7 +81,7 @@ export const NAV_GROUPS: readonly NavGroup[] = [
   },
   {
     key: 'finance',
-    items: [{ key: 'payroll', path: '/payroll', icon: PaymentsOutlined, anyOf: ['payroll:read'], available: false }],
+    items: [{ key: 'payroll', path: '/payroll', icon: PaymentsOutlined, anyOf: ['payroll:read', 'payroll:read:own'], available: true }],
   },
   {
     key: 'administration',

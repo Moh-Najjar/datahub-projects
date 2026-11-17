@@ -30,7 +30,7 @@ describe('role/permission matrix (Phase 1)', () => {
   it('Department Manager: team scope only', () => {
     const p = grants('department-manager');
     for (const x of ['employees:read:team', 'attendance:read:team', 'leave:read:team', 'leave:approve:team', 'recruitment:read:team', 'performance:read:team', 'performance:review:team'] as const) expect(p.has(x), x).toBe(true);
-    for (const x of ['employees:read', 'attendance:read', 'leave:read', 'leave:approve', 'employees:write', 'payroll:read', 'recruitment:read', 'recruitment:write', 'performance:read', 'performance:write', 'performance:manage-config'] as const) expect(p.has(x), x).toBe(false);
+    for (const x of ['employees:read', 'attendance:read', 'leave:read', 'leave:approve', 'employees:write', 'payroll:read', 'payroll:write', 'payroll:approve', 'recruitment:read', 'recruitment:write', 'performance:read', 'performance:write', 'performance:manage-config'] as const) expect(p.has(x), x).toBe(false);
   });
 
   it("employees' personal information: only System Administrator, HR Administrator and HR Manager", () => {
@@ -49,7 +49,7 @@ describe('role/permission matrix (Phase 1)', () => {
   });
 
   it('Employee: self-service only (no dashboard, no other people)', () => {
-    expect(grants('employee')).toEqual(new Set(['profile:view', 'attendance:read:own', 'leave:read:own', 'leave:request', 'performance:read:own']));
+    expect(grants('employee')).toEqual(new Set(['profile:view', 'attendance:read:own', 'leave:read:own', 'leave:request', 'performance:read:own', 'payroll:read:own']));
   });
 
   it('Recruiter: recruitment read/write and positions read; no employee records', () => {
@@ -66,6 +66,15 @@ describe('role/permission matrix (Phase 1)', () => {
     expect(p.has('employees:read')).toBe(true);
     expect(p.has('employees:write')).toBe(false);
     expect(p.has('leave:approve')).toBe(false);
+    // Processing and approval are separated: the Payroll Officer prepares runs, the HR Administrator approves them.
+    expect(p.has('payroll:approve')).toBe(false);
+  });
+
+  it('payroll approval: System Administrator and HR Administrator only; own payslips for every role', () => {
+    expect(ROLES.filter((role) => hasPermission(role, 'payroll:approve'))).toEqual(['system-admin', 'hr-admin']);
+    expect(ROLES.filter((role) => hasPermission(role, 'payroll:read'))).toEqual(['system-admin', 'hr-admin', 'hr-manager', 'payroll-officer']);
+    expect(ROLES.filter((role) => hasPermission(role, 'payroll:write'))).toEqual(['system-admin', 'hr-admin', 'payroll-officer']);
+    for (const role of ROLES) expect(hasPermission(role, 'payroll:read:own'), role).toBe(true);
   });
 
   it('every role can view its own profile and request leave; only valid permissions are granted', () => {
