@@ -24,8 +24,20 @@ export function AppBreadcrumbs() {
   return (
     <Breadcrumbs
       aria-label={t('shell.breadcrumb')}
-      separator={<NavigateNextOutlined fontSize="small" sx={{ transform: (theme) => (theme.direction === 'rtl' ? 'scaleX(-1)' : undefined) }} />}
-      sx={{ mb: 2 }}
+      separator={<NavigateNextOutlined sx={{ fontSize: 16, transform: (theme) => (theme.direction === 'rtl' ? 'scaleX(-1)' : undefined) }} />}
+      sx={{
+        minWidth: 0,
+        '& .MuiBreadcrumbs-ol': { flexWrap: 'nowrap' },
+        '& .MuiBreadcrumbs-li': { minWidth: 0 },
+        '& .MuiTypography-root, & .MuiLink-root': {
+          display: 'block',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+          maxWidth: { sm: 160, md: 280, lg: 420 },
+          fontSize: 13,
+        },
+      }}
     >
       <Link component={RouterLink} to={landingPath(canAny)} underline="hover" color="text.secondary">
         {t('shell.home')}
@@ -35,7 +47,7 @@ export function AppBreadcrumbs() {
           {t(`nav.items.${current.navKey}`)}
         </Link>
       ) : (
-        <Typography color="text.primary" aria-current="page">
+        <Typography color="text.primary" aria-current="page" sx={{ fontWeight: 600 }}>
           {t(`nav.items.${current.navKey}`)}
         </Typography>
       )}
@@ -45,7 +57,7 @@ export function AppBreadcrumbs() {
             {crumb.label}
           </Link>
         ) : (
-          <Typography key={crumb.label} color="text.primary" aria-current={i === trail.length - 1 ? 'page' : undefined}>
+          <Typography key={crumb.label} color="text.primary" aria-current={i === trail.length - 1 ? 'page' : undefined} sx={{ fontWeight: 600 }}>
             {crumb.label}
           </Typography>
         ),

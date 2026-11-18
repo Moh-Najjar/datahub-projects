@@ -34,10 +34,10 @@ export default function DashboardPage() {
       <KpiCards scope={scope} />
 
       {charts.length > 0 && (
-        <Box sx={{ display: 'grid', gap: 2, mb: 3, gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 440px), 1fr))' }}>{charts}</Box>
+        <Box sx={{ display: 'grid', gap: 2, mb: 3, alignItems: 'stretch', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 420px), 1fr))' }}>{charts}</Box>
       )}
 
-      <Box sx={{ display: 'grid', gap: 2, mb: 2, gridTemplateColumns: { xs: '1fr', lg: 'minmax(0, 2fr) minmax(0, 3fr)' }, alignItems: 'start' }}>
+      <Box sx={{ display: 'grid', gap: 2, mb: 2.5, gridTemplateColumns: { xs: '1fr', lg: 'minmax(280px, 2fr) minmax(0, 3fr)' }, alignItems: 'stretch' }}>
         <PendingActions scope={scope} />
         <RecentActivity scope={scope} />
       </Box>

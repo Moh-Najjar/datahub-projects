@@ -16,6 +16,7 @@ export const ADMIN_TEXT = {
     allStatuses: 'All statuses',
     columns: { cover: 'Cover', title: 'Title', date: 'Publication date', status: 'Status', actions: 'Actions' },
     counts: (total: number, published: number, drafts: number) => `${total} posts · ${published} published · ${drafts} drafts`,
+    metrics: { total: 'All posts', published: 'Published', drafts: 'Drafts' },
     empty: 'No posts yet. Create the first one.',
     noMatches: 'No posts match your search or filter.',
     loadError: 'The posts could not be loaded.',

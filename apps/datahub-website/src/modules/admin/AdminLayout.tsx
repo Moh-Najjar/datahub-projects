@@ -1,6 +1,7 @@
-import { Suspense } from 'react';
+import { Suspense, useMemo, type ReactNode } from 'react';
 import Alert from '@mui/material/Alert';
 import AppBar from '@mui/material/AppBar';
+import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
@@ -8,37 +9,64 @@ import Typography from '@mui/material/Typography';
 import AppsOutlinedIcon from '@mui/icons-material/AppsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined';
+import { ThemeProvider, useTheme } from '@mui/material/styles';
 import { Link as RouterLink, Navigate, Outlet, ScrollRestoration, useLocation } from 'react-router-dom';
 import { AppThemeProvider } from '@/core/theme/AppThemeProvider';
 import { ADMIN_ROUTES, ROUTES, WORKSPACE_ROUTES } from '@/core/routes/paths';
 import { UI } from '@/i18n';
 import { LocaleProvider } from '@/i18n/LocaleProvider';
+import { createAdminTheme } from '@/modules/admin/adminTheme';
 import { ADMIN_TEXT } from '@/modules/admin/data/adminText';
 import { canOpen, useWorkspaceSession, type WorkspaceLocationState, type WorkspaceSession } from '@/modules/portals';
 import { PageLoading } from './components/PageLoading';
 
 const T = ADMIN_TEXT;
 
+/** Up to two initials from a display name. */
+function accountInitials(name: string): string {
+  const parts = name.split(' ').filter((part) => part.length > 0);
+  const first = parts[0]?.charAt(0) ?? '';
+  const second = parts.length > 1 ? (parts[1]?.charAt(0) ?? '') : '';
+  return `${first}${second}`.toUpperCase();
+}
+
+/** Applies the admin surface on top of the public site theme, without changing that theme. */
+function AdminTheme({ children }: { children: ReactNode }) {
+  const theme = useTheme();
+  const adminTheme = useMemo(() => createAdminTheme(theme), [theme]);
+  return <ThemeProvider theme={adminTheme}>{children}</ThemeProvider>;
+}
+
 function AdminBar({ session }: { session: WorkspaceSession }) {
+  const name = session.name.en;
+  const role = UI.en.workspace.roles[session.role];
   return (
-    <AppBar position="sticky" color="inherit" elevation={0} sx={{ borderBottom: '1px solid #ededed', bgcolor: 'common.white' }}>
-      <Toolbar sx={{ gap: { xs: 1, sm: 2 }, minHeight: { xs: 60 }, px: { xs: '15px', md: '30px' } }}>
-        <Box component={RouterLink} to={ADMIN_ROUTES.blogs} sx={{ display: 'flex', alignItems: 'center', gap: '12px', mr: 'auto', minWidth: 0 }} aria-label={T.nav.blogs}>
-          <Box component="img" src="/assets/logos/datahub-logo.png" srcSet="/assets/logos/datahub-logo.png 1x, /assets/logos/datahub-logo@2x.png 2x" alt="Datahub Analytics" width={250} height={46} sx={{ width: { xs: 130, sm: 160 }, height: 'auto' }} />
-          <Typography component="span" sx={{ display: { xs: 'none', sm: 'inline' }, px: '8px', py: '2px', borderRadius: '4px', bgcolor: 'brand.heading', color: 'common.white', fontSize: 12, fontWeight: 500, letterSpacing: '1px', textTransform: 'uppercase' }}>
+    <AppBar position="sticky" color="inherit" elevation={0} sx={{ borderBottom: '1px solid', borderColor: 'divider', bgcolor: 'background.paper' }}>
+      <Toolbar sx={{ gap: { xs: 1, sm: 1.5 }, minHeight: 64, px: { xs: '16px', md: '28px' } }}>
+        <Box component={RouterLink} to={ADMIN_ROUTES.blogs} sx={{ display: 'flex', alignItems: 'center', gap: '12px', mr: 'auto', minWidth: 0, color: 'text.primary' }} aria-label={T.nav.blogs}>
+          <Box component="img" src="/assets/logos/datahub-logo.png" srcSet="/assets/logos/datahub-logo.png 1x, /assets/logos/datahub-logo@2x.png 2x" alt="Datahub Analytics" width={250} height={46} sx={{ width: { xs: 120, sm: 148 }, height: 'auto' }} />
+          <Typography component="span" sx={{ display: { xs: 'none', sm: 'inline' }, px: '8px', py: '3px', borderRadius: '6px', bgcolor: 'primary.main', color: 'primary.contrastText', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
             {T.areaName}
           </Typography>
         </Box>
-        <Button component={RouterLink} to={WORKSPACE_ROUTES.root} color="inherit" startIcon={<AppsOutlinedIcon />} sx={{ display: { xs: 'none', md: 'inline-flex' }, height: 40, px: 2 }}>
+        <Button component={RouterLink} to={WORKSPACE_ROUTES.root} color="inherit" startIcon={<AppsOutlinedIcon />} sx={{ display: { xs: 'none', md: 'inline-flex' }, height: 36, px: 1.5, color: 'text.primary' }}>
           {T.nav.workspace}
         </Button>
-        <Button component="a" href={ROUTES.blog} target="_blank" rel="noopener" color="inherit" startIcon={<OpenInNewOutlinedIcon />} sx={{ display: { xs: 'none', md: 'inline-flex' }, height: 40, px: 2 }}>
+        <Button component="a" href={ROUTES.blog} target="_blank" rel="noopener" color="inherit" startIcon={<OpenInNewOutlinedIcon />} sx={{ display: { xs: 'none', md: 'inline-flex' }, height: 36, px: 1.5, color: 'text.primary' }}>
           {T.nav.viewSite}
         </Button>
-        <Typography variant="body2" color="text.secondary" sx={{ display: { xs: 'none', lg: 'block' } }}>
-          {T.nav.signedInAs(session.name.en, UI.en.workspace.roles[session.role])}
-        </Typography>
-        <Button component={RouterLink} to={WORKSPACE_ROUTES.logout} variant="outlined" startIcon={<LogoutOutlinedIcon />} sx={{ height: 40, px: 2 }}>
+        <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'center', gap: '10px', minWidth: 0, pl: 1, borderLeft: '1px solid', borderColor: 'divider' }}>
+          <Avatar sx={{ width: 32, height: 32, fontSize: 12, fontWeight: 700, bgcolor: 'primary.main' }}>{accountInitials(name)}</Avatar>
+          <Box sx={{ minWidth: 0 }}>
+            <Typography variant="body2" sx={{ fontWeight: 600, color: 'text.primary', lineHeight: 1.3 }}>
+              {name}
+            </Typography>
+            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', lineHeight: 1.3 }}>
+              {role}
+            </Typography>
+          </Box>
+        </Box>
+        <Button component={RouterLink} to={WORKSPACE_ROUTES.logout} variant="outlined" startIcon={<LogoutOutlinedIcon />} sx={{ height: 36, px: 1.5 }}>
           {T.nav.signOut}
         </Button>
       </Toolbar>
@@ -64,8 +92,8 @@ export default function AdminLayout() {
     content = (
       <>
         <AdminBar session={session} />
-        <Box component="main" sx={{ maxWidth: 1240, mx: 'auto', px: { xs: '15px', md: '30px' }, py: { xs: '24px', md: '40px' } }}>
-          <Alert severity="info" variant="outlined" sx={{ mb: 3, bgcolor: 'common.white' }}>
+        <Box component="main" sx={{ maxWidth: 1280, mx: 'auto', px: { xs: '16px', md: '28px' }, py: { xs: '20px', md: '28px' } }}>
+          <Alert severity="info" variant="outlined" sx={{ mb: '20px', bgcolor: 'background.paper', borderRadius: '10px' }}>
             {T.prototypeNotice}
           </Alert>
           <Suspense fallback={<PageLoading />}>
@@ -79,11 +107,13 @@ export default function AdminLayout() {
   return (
     <LocaleProvider locale="en">
       <AppThemeProvider>
-        <meta name="robots" content="noindex, nofollow" />
-        <ScrollRestoration />
-        <Box sx={{ minHeight: '100vh', bgcolor: '#f7f8fa' }}>
-          <Suspense fallback={<PageLoading />}>{content}</Suspense>
-        </Box>
+        <AdminTheme>
+          <meta name="robots" content="noindex, nofollow" />
+          <ScrollRestoration />
+          <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', color: 'text.primary' }}>
+            <Suspense fallback={<PageLoading />}>{content}</Suspense>
+          </Box>
+        </AdminTheme>
       </AppThemeProvider>
     </LocaleProvider>
   );

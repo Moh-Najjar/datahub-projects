@@ -49,11 +49,11 @@ export default function AdminBlogEditorPage() {
   return (
     <>
       <title>{ADMIN_TEXT.pageTitle(heading)}</title>
-      <Button component={RouterLink} to={ADMIN_ROUTES.blogs} startIcon={<ArrowBackIcon />} sx={{ height: 36, px: 1, mb: 2 }}>
+      <Button component={RouterLink} to={ADMIN_ROUTES.blogs} startIcon={<ArrowBackIcon />} sx={{ height: 36, px: 1, mb: '12px', color: 'text.secondary' }}>
         {E.back}
       </Button>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 2, mb: 3 }}>
-        <Typography variant="h1" sx={{ fontSize: { xs: 26, md: 32 } }}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '12px', mb: '20px' }}>
+        <Typography variant="h1" sx={{ fontSize: { xs: 26, md: 30 }, fontWeight: 700, letterSpacing: '-0.02em', color: 'text.primary' }}>
           {heading}
         </Typography>
         {post && <StatusChip status={post.status} />}

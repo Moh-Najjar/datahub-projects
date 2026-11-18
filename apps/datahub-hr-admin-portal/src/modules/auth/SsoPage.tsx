@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
+import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
@@ -48,11 +49,11 @@ export default function SsoPage() {
   if (exchange.isError) return <Navigate to="/login" replace state={{ handoffFailed: true } satisfies HandoffFailedState} />;
 
   return (
-    <Box component="main" role="status" sx={{ minHeight: '100vh', display: 'grid', placeItems: 'center', bgcolor: 'background.default' }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <CircularProgress size={24} />
+    <Box component="main" role="status" sx={{ minHeight: '100vh', display: 'grid', placeItems: 'center', bgcolor: 'background.default', px: 2 }}>
+      <Paper variant="outlined" sx={{ px: { xs: 3, sm: 4 }, py: 3, display: 'flex', alignItems: 'center', gap: 2 }}>
+        <CircularProgress size={22} />
         <Typography>{t('sso.signingIn')}</Typography>
-      </Box>
+      </Paper>
     </Box>
   );
 }

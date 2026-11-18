@@ -51,11 +51,11 @@ export function PendingActions({ scope }: { scope: DashboardScope }) {
   const items = query.data?.items.filter((item) => visibleTypes.includes(item.type) && item.count > 0) ?? [];
 
   return (
-    <Paper variant="outlined" component="section" aria-labelledby="pending-title" sx={{ p: 2.5, minWidth: 0 }}>
+    <Paper variant="outlined" component="section" aria-labelledby="pending-title" sx={{ p: { xs: 2, sm: 2.5 }, minWidth: 0, height: '100%' }}>
       <Typography id="pending-title" variant="h6" component="h2">
         {t('pending.title')}
       </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+      <Typography variant="body2" color="text.secondary" sx={{ mt: 0.25, mb: 1.5, pb: 1.5, borderBottom: 1, borderColor: 'divider' }}>
         {t('pending.subtitle')}
       </Typography>
       {query.isPending && (
@@ -89,7 +89,7 @@ export function PendingActions({ scope }: { scope: DashboardScope }) {
                   <Icon fontSize="small" />
                 </ListItemIcon>
                 <ListItemText primary={t(`pending.items.${meta.key}.label`)} secondary={t(`pending.items.${meta.key}.hint`)} />
-                <Chip label={formatNumber(item.count, language)} color="primary" variant="outlined" size="small" sx={{ fontWeight: 700, ms: 1 }} />
+                <Chip label={formatNumber(item.count, language)} color="primary" size="small" sx={{ fontWeight: 700, minWidth: 32, ms: 1 }} />
               </ListItem>
             );
           })}

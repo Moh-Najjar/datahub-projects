@@ -34,8 +34,8 @@ const SERVICE_REASONS: Record<string, string> = {
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <Paper component="section" variant="outlined" aria-label={title} sx={{ p: { xs: 2, md: 3 }, borderRadius: '8px', display: 'grid', gap: '20px', alignContent: 'start' }}>
-      <Typography component="h2" sx={{ fontSize: 18, fontWeight: 500, color: 'brand.heading' }}>
+    <Paper component="section" variant="outlined" aria-label={title} sx={{ p: { xs: '16px', md: '20px' }, display: 'grid', gap: '16px', alignContent: 'start' }}>
+      <Typography component="h2" sx={{ fontSize: 16, fontWeight: 700, color: 'text.primary', pb: '12px', borderBottom: '1px solid', borderColor: 'divider' }}>
         {title}
       </Typography>
       {children}

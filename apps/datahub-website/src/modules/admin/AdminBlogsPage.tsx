@@ -18,6 +18,7 @@ import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import AddIcon from '@mui/icons-material/Add';
+import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ImageNotSupportedOutlinedIcon from '@mui/icons-material/ImageNotSupportedOutlined';
@@ -100,21 +101,40 @@ export default function AdminBlogsPage() {
   return (
     <>
       <title>{ADMIN_TEXT.pageTitle(T.title)}</title>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: 2, mb: 3 }}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: '16px', mb: '20px' }}>
         <Box>
-          <Typography variant="h1" sx={{ fontSize: { xs: 26, md: 32 } }}>
+          <Typography variant="h1" sx={{ fontSize: { xs: 26, md: 30 }, fontWeight: 700, letterSpacing: '-0.02em', color: 'text.primary' }}>
             {T.title}
           </Typography>
-          <Typography color="text.secondary" sx={{ mt: '4px' }}>
+          <Typography color="text.secondary" sx={{ mt: '4px', maxWidth: 640 }}>
             {T.subtitle}
           </Typography>
         </Box>
-        <Button component={RouterLink} to={ADMIN_ROUTES.newBlog} variant="contained" startIcon={<AddIcon />} sx={{ height: 44, px: 2.5, fontWeight: 500 }}>
+        <Button component={RouterLink} to={ADMIN_ROUTES.newBlog} variant="contained" startIcon={<AddIcon />} sx={{ height: 40, px: 2 }}>
           {T.newPost}
         </Button>
       </Box>
 
-      <Paper variant="outlined" sx={{ borderRadius: '8px', overflow: 'hidden' }}>
+      {!isLoading && !error && (
+        <Box component="ul" aria-label={T.counts(posts.length, published, posts.length - published)} sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, minmax(0, 1fr))' }, gap: '12px', mb: '16px', p: 0, m: 0, listStyle: 'none' }}>
+          {(
+            [
+              [T.metrics.total, posts.length],
+              [T.metrics.published, published],
+              [T.metrics.drafts, posts.length - published],
+            ] as const
+          ).map(([label, value]) => (
+            <Paper key={label} component="li" variant="outlined" sx={{ px: '16px', py: '14px' }}>
+              <Typography variant="body2" color="text.secondary">
+                {label}
+              </Typography>
+              <Typography sx={{ mt: '2px', fontSize: 26, fontWeight: 700, lineHeight: 1.2, color: 'text.primary' }}>{value}</Typography>
+            </Paper>
+          ))}
+        </Box>
+      )}
+
+      <Paper variant="outlined" sx={{ overflow: 'hidden' }}>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, alignItems: 'center', p: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
           <TextField
             type="search"
@@ -157,15 +177,16 @@ export default function AdminBlogsPage() {
             {T.loadError}
           </Alert>
         ) : filtered.length === 0 ? (
-          <Typography color="text.secondary" sx={{ p: 5, textAlign: 'center' }}>
-            {posts.length === 0 ? T.empty : T.noMatches}
-          </Typography>
+          <Box sx={{ display: 'grid', justifyItems: 'center', gap: '8px', px: '24px', py: '48px', textAlign: 'center' }}>
+            <ArticleOutlinedIcon sx={{ fontSize: 32, color: 'text.secondary' }} />
+            <Typography color="text.secondary">{posts.length === 0 ? T.empty : T.noMatches}</Typography>
+          </Box>
         ) : (
           <>
             <TableContainer>
               <Table aria-label={T.title} sx={{ minWidth: 720 }}>
                 <TableHead>
-                  <TableRow sx={{ '& th': { fontWeight: 500, color: 'brand.heading', whiteSpace: 'nowrap' } }}>
+                  <TableRow sx={{ '& th': { whiteSpace: 'nowrap' } }}>
                     <TableCell sx={{ width: 104 }}>{T.columns.cover}</TableCell>
                     <TableCell>{T.columns.title}</TableCell>
                     <TableCell sx={{ width: 170 }}>{T.columns.date}</TableCell>
@@ -183,15 +204,15 @@ export default function AdminBlogsPage() {
                       <TableRow key={item.id} hover>
                         <TableCell>
                           {p.image ? (
-                            <Box component="img" src={p.image.card} alt="" loading="lazy" width={80} height={45} sx={{ width: 80, height: 45, objectFit: 'cover', borderRadius: '4px', bgcolor: '#eee' }} />
+                            <Box component="img" src={p.image.card} alt="" loading="lazy" width={80} height={45} sx={{ width: 80, height: 45, objectFit: 'cover', borderRadius: '6px', bgcolor: 'background.default' }} />
                           ) : (
-                            <Box title={T.noCover} sx={{ width: 80, height: 45, display: 'grid', placeItems: 'center', borderRadius: '4px', bgcolor: '#f0f2f5', color: 'text.secondary' }}>
+                            <Box title={T.noCover} sx={{ width: 80, height: 45, display: 'grid', placeItems: 'center', borderRadius: '6px', bgcolor: 'background.default', color: 'text.secondary' }}>
                               <ImageNotSupportedOutlinedIcon fontSize="small" aria-label={T.noCover} />
                             </Box>
                           )}
                         </TableCell>
                         <TableCell sx={{ minWidth: 240 }}>
-                          <Box component={RouterLink} to={ADMIN_ROUTES.editBlog(item.id)} sx={{ color: 'brand.heading', fontWeight: 500, lineHeight: 1.45, display: 'block', '&:hover': { color: 'info.main' } }}>
+                          <Box component={RouterLink} to={ADMIN_ROUTES.editBlog(item.id)} sx={{ color: 'text.primary', fontWeight: 600, lineHeight: 1.45, display: 'block', '&:hover': { color: 'primary.main' } }}>
                             {p.title}
                           </Box>
                           <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'monospace', fontSize: 12, wordBreak: 'break-all' }}>

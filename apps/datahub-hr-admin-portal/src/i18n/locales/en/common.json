@@ -51,6 +51,8 @@
     "userMenu": "Account menu for {{name}}",
     "comingSoon": "Soon",
     "comingSoonHint": "Planned for a later release",
+    "collapseNavigation": "Collapse navigation",
+    "expandNavigation": "Expand navigation",
     "loading": "Loading…"
   },
   "theme": {

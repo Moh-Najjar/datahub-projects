@@ -42,11 +42,11 @@ export function ChartCard({ id, title, subtitle, query, isEmpty, children }: { i
   else body = children;
 
   return (
-    <Paper variant="outlined" component="section" aria-labelledby={`${id}-title`} sx={{ p: 2.5, minWidth: 0 }}>
+    <Paper variant="outlined" component="section" aria-labelledby={`${id}-title`} sx={{ p: { xs: 2, sm: 2.5 }, minWidth: 0, height: '100%' }}>
       <Typography id={`${id}-title`} variant="h6" component="h2">
         {title}
       </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+      <Typography variant="body2" color="text.secondary" sx={{ mt: 0.25, mb: 2, pb: 1.5, borderBottom: 1, borderColor: 'divider' }}>
         {subtitle}
       </Typography>
       {body}

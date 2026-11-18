@@ -55,7 +55,7 @@ export function FormDialog({ open, title, onClose, onSubmit, submitLabel, pendin
           {children}
         </Stack>
       </DialogContent>
-      <DialogActions sx={{ px: 3, py: 2 }}>
+      <DialogActions>
         <Button onClick={onClose} disabled={pending}>
           {t('actions.cancel')}
         </Button>

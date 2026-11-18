@@ -1,9 +1,7 @@
 import type { ReactNode } from 'react';
-import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import { useTranslation } from 'react-i18next';
-import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { ModuleTabs } from '@/modules/shared/ModuleTabs';
 import { PageHeader } from '@/modules/shared/PageHeader';
 import { useDocumentsAccess } from '@/modules/documents/hooks/useDocumentsAccess';
 import { documentPaths } from '@/modules/documents/paths';
@@ -48,14 +46,11 @@ export default function DocumentsPage() {
     <>
       <PageHeader title={beyondOwn ? t('title') : t('tabs.my')} subtitle={beyondOwn ? t('subtitle') : t('ownSubtitle')} />
       {beyondOwn && (
-        <Box component="nav" aria-label={t('tabs.label')} sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
-          {/* No scroll arrows: MUI's automatic detection misfires in RTL; the tabs still scroll by swipe/keyboard. */}
-          <Tabs value={visible.some((x) => x.key === tab) ? tab : false} variant="scrollable" scrollButtons={false}>
-            {visible.map((item) => (
-              <Tab key={item.key} value={item.key} label={t(`tabs.${item.key}`)} component={Link} to={item.to} aria-current={item.key === tab ? 'page' : undefined} />
-            ))}
-          </Tabs>
-        </Box>
+        <ModuleTabs
+          label={t('tabs.label')}
+          value={visible.some((item) => item.key === tab) ? tab : false}
+          tabs={visible.map((item) => ({ key: item.key, to: item.to, label: t(`tabs.${item.key}`) }))}
+        />
       )}
       <Routes>
         <Route index element={beyondOwn ? <OverviewSection /> : <MyDocuments />} />

@@ -109,7 +109,8 @@ function ProfileView({ employee: e }: { employee: Employee }) {
 
   return (
     <>
-      <Paper variant="outlined" sx={{ p: { xs: 2, sm: 3 }, display: 'flex', flexWrap: 'wrap', gap: 2.5, alignItems: 'center' }}>
+      <Paper variant="outlined" sx={{ overflow: 'hidden' }}>
+        <Box sx={{ p: { xs: 2, sm: 3 }, display: 'flex', flexWrap: 'wrap', gap: 2.5, alignItems: 'center' }}>
         <EmployeeAvatar id={e.id} name={e.name} size={72} />
         <Box sx={{ flex: '1 1 260px', minWidth: 0 }}>
           <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 1.25 }}>
@@ -151,17 +152,22 @@ function ProfileView({ employee: e }: { employee: Employee }) {
             )}
           </Box>
         )}
-      </Paper>
-
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs aria-label={t('profile.tabsLabel')} value={tab} variant="scrollable" scrollButtons={false} onChange={(_, value: TabKey) => setParams(value === 'personal' ? {} : { tab: value }, { replace: true })}>
+        </Box>
+        <Tabs
+          aria-label={t('profile.tabsLabel')}
+          value={tab}
+          variant="scrollable"
+          scrollButtons={false}
+          onChange={(_, value: TabKey) => setParams(value === 'personal' ? {} : { tab: value }, { replace: true })}
+          sx={{ px: { xs: 1, sm: 2 }, borderTop: 1, borderColor: 'divider' }}
+        >
           {tabs.map((key) => (
             <Tab key={key} value={key} label={t(`profile.tabs.${key}`)} id={`employee-tab-${key}`} aria-controls="employee-tabpanel" />
           ))}
         </Tabs>
-      </Box>
+      </Paper>
 
-      <Box role="tabpanel" id="employee-tabpanel" aria-labelledby={`employee-tab-${tab}`}>
+      <Box role="tabpanel" id="employee-tabpanel" aria-labelledby={`employee-tab-${tab}`} sx={{ pt: 2.5 }}>
         {tab === 'personal' && <PersonalSection employee={e} />}
         {tab === 'contact' && <ContactSection employee={e} />}
         {tab === 'employment' && <EmploymentSection employee={e} />}

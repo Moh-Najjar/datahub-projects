@@ -6,11 +6,11 @@ import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
 import { BreadcrumbProvider } from '@/core/context/BreadcrumbProvider';
-import { AppBreadcrumbs } from './AppBreadcrumbs';
+import { layout } from '@/core/theme/tokens';
 import { Sidebar } from './Sidebar';
 import { TopBar } from './TopBar';
 
-/** Signed-in shell: sidebar + top bar + breadcrumbs around the current page. */
+/** Signed-in shell: sidebar + top bar around the current page. Breadcrumbs live in the top bar. */
 export function AppLayout() {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -24,15 +24,25 @@ export function AppLayout() {
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
       <Sidebar permanent={isDesktop} open={mobileOpen} onClose={() => setOpenedOn(null)} />
       <Box sx={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
-        <TopBar onOpenNavigation={isDesktop ? undefined : () => setOpenedOn(pathname)} />
-        <Box component="main" sx={{ flex: 1, p: { xs: 2, md: 4 }, maxWidth: 1440, width: '100%', mx: 'auto' }}>
-          <BreadcrumbProvider>
-            <AppBreadcrumbs />
+        {/* The provider wraps the bar and the page so detail screens can append crumbs. */}
+        <BreadcrumbProvider>
+          <TopBar onOpenNavigation={isDesktop ? undefined : () => setOpenedOn(pathname)} />
+          <Box
+            component="main"
+            sx={{
+              flex: 1,
+              width: '100%',
+              maxWidth: layout.contentMax,
+              mx: 'auto',
+              px: { xs: 2, sm: 2.5, lg: 3.5 },
+              py: { xs: 2, md: 3 },
+            }}
+          >
             <Suspense fallback={<LinearProgress aria-label={t('shell.loading')} />}>
               <Outlet />
             </Suspense>
-          </BreadcrumbProvider>
-        </Box>
+          </Box>
+        </BreadcrumbProvider>
       </Box>
     </Box>
   );

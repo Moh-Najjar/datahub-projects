@@ -9,7 +9,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import type { SvgIconComponent } from '@mui/icons-material';
 import EventOutlined from '@mui/icons-material/EventOutlined';
-import FiberNewOutlined from '@mui/icons-material/FiberNewOutlined';
+import PersonAddAltOutlined from '@mui/icons-material/PersonAddAltOutlined';
 import HowToRegOutlined from '@mui/icons-material/HowToRegOutlined';
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import LocalOfferOutlined from '@mui/icons-material/LocalOfferOutlined';
@@ -37,7 +37,7 @@ type KpiKey = 'openPositions' | 'totalCandidates' | 'newCandidates' | 'inIntervi
 const KPIS: ReadonlyArray<{ key: KpiKey; icon: SvgIconComponent; color: 'primary' | 'success' | 'error' | 'warning' | 'info' | 'secondary' }> = [
   { key: 'openPositions', icon: WorkOutlineOutlined, color: 'primary' },
   { key: 'totalCandidates', icon: PeopleAltOutlined, color: 'secondary' },
-  { key: 'newCandidates', icon: FiberNewOutlined, color: 'info' },
+  { key: 'newCandidates', icon: PersonAddAltOutlined, color: 'info' },
   { key: 'inInterview', icon: EventOutlined, color: 'primary' },
   { key: 'pendingOffers', icon: LocalOfferOutlined, color: 'warning' },
   { key: 'hired', icon: HowToRegOutlined, color: 'success' },

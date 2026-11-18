@@ -1,10 +1,8 @@
 import Alert from '@mui/material/Alert';
-import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
-import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { ModuleTabs } from '@/modules/shared/ModuleTabs';
 import { PageHeader } from '@/modules/shared/PageHeader';
 import { useOrganizationAccess } from '@/modules/organization/hooks/useOrganizationAccess';
 import { orgPaths } from '@/modules/organization/paths';
@@ -59,14 +57,7 @@ export default function OrganizationPage() {
           {t('readOnlyNote')}
         </Alert>
       )}
-      <Box component="nav" aria-label={t('tabs.label')} sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
-        {/* No scroll arrows: MUI's automatic detection misfires in RTL; the tabs still scroll by swipe/keyboard. */}
-        <Tabs value={tab} variant="scrollable" scrollButtons={false}>
-          {TABS.map((item) => (
-            <Tab key={item.key} value={item.key} label={t(`tabs.${item.key}`)} component={Link} to={item.to} aria-current={item.key === tab ? 'page' : undefined} />
-          ))}
-        </Tabs>
-      </Box>
+      <ModuleTabs label={t('tabs.label')} value={tab} tabs={TABS.map((item) => ({ key: item.key, to: item.to, label: t(`tabs.${item.key}`) }))} />
       <Routes>
         <Route index element={<OverviewSection />} />
         <Route path="departments" element={<DepartmentsSection />} />

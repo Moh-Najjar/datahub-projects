@@ -12,17 +12,21 @@ export default function AccessDeniedPage() {
   const { t } = useTranslation();
   const { canAny } = useAuth();
   return (
-    <Box role="alert" sx={{ py: { xs: 6, md: 10 }, textAlign: 'center' }}>
-      <LockOutlined color="disabled" sx={{ fontSize: 48, mb: 2 }} />
-      <Typography variant="h2" component="h1" sx={{ mb: 1 }}>
-        {t('errors.accessDeniedTitle')}
-      </Typography>
-      <Typography color="text.secondary" sx={{ mb: 3, maxWidth: 480, mx: 'auto' }}>
-        {t('errors.accessDeniedText')}
-      </Typography>
-      <Button variant="contained" component={Link} to={landingPath(canAny)}>
-        {t('actions.backHome')}
-      </Button>
+    <Box sx={{ minHeight: { xs: 320, md: 420 }, display: 'grid', placeItems: 'center' }}>
+      <Box role="alert" component="section" sx={{ width: '100%', maxWidth: 480, px: { xs: 2.5, sm: 4 }, py: { xs: 4, sm: 5 }, textAlign: 'center', border: 1, borderColor: 'divider', borderRadius: 1, bgcolor: 'background.paper' }}>
+        <Box aria-hidden="true" sx={{ width: 48, height: 48, mx: 'auto', mb: 2, display: 'grid', placeItems: 'center', borderRadius: '50%', bgcolor: 'action.hover', color: 'text.secondary' }}>
+          <LockOutlined />
+        </Box>
+        <Typography variant="h3" component="h1" sx={{ mb: 1 }}>
+          {t('errors.accessDeniedTitle')}
+        </Typography>
+        <Typography color="text.secondary" sx={{ mb: 3 }}>
+          {t('errors.accessDeniedText')}
+        </Typography>
+        <Button variant="contained" component={Link} to={landingPath(canAny)}>
+          {t('actions.backHome')}
+        </Button>
+      </Box>
     </Box>
   );
 }

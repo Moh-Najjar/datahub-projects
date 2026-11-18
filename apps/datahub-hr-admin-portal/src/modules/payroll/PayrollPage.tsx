@@ -1,10 +1,8 @@
 import type { ReactNode } from 'react';
 import Alert from '@mui/material/Alert';
-import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import { useTranslation } from 'react-i18next';
-import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { ModuleTabs } from '@/modules/shared/ModuleTabs';
 import { PageHeader } from '@/modules/shared/PageHeader';
 import { usePayrollAccess } from '@/modules/payroll/hooks/usePayrollAccess';
 import { payrollPaths } from '@/modules/payroll/paths';
@@ -58,14 +56,7 @@ export default function PayrollPage() {
         {t('demoNotice')}
       </Alert>
       {canReadOrganization && (
-        <Box component="nav" aria-label={t('tabs.label')} sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
-          {/* No scroll arrows: MUI's automatic detection misfires in RTL; the tabs still scroll by swipe/keyboard. */}
-          <Tabs value={tab} variant="scrollable" scrollButtons={false}>
-            {tabs.map((item) => (
-              <Tab key={item.key} value={item.key} label={t(`tabs.${item.key}`)} component={Link} to={item.to} aria-current={item.key === tab ? 'page' : undefined} />
-            ))}
-          </Tabs>
-        </Box>
+        <ModuleTabs label={t('tabs.label')} value={tab} tabs={tabs.map((item) => ({ key: item.key, to: item.to, label: t(`tabs.${item.key}`) }))} />
       )}
       <Routes>
         <Route index element={canReadOrganization ? <OverviewSection /> : <MyPayroll />} />

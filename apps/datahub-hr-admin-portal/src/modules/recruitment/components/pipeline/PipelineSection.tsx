@@ -92,7 +92,7 @@ export function PipelineSection() {
               const list = byStage.get(stage) ?? [];
               const count = requisitionId ? list.length : (summary.data?.byStage[stage] ?? list.length);
               return (
-                <Paper key={stage} role="listitem" variant="outlined" aria-label={`${t(`stages.${stage}`)}: ${count}`} sx={{ flex: '0 0 240px', p: 1.25, bgcolor: 'action.hover', scrollSnapAlign: 'start', minHeight: 160 }} data-column={stage}>
+                <Paper key={stage} role="listitem" variant="outlined" aria-label={`${t(`stages.${stage}`)}: ${count}`} sx={{ flex: '0 0 260px', p: 1.5, bgcolor: 'background.default', scrollSnapAlign: 'start', minHeight: 180 }} data-column={stage}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
                     <Typography variant="subtitle2" component="h3">
                       {t(`stages.${stage}`)}
@@ -125,7 +125,7 @@ function CandidateCard({ candidate: c, now, showRequisition, onMove }: { candida
   const days = Math.max(0, Math.floor((now - toMs(c.appliedAt)) / 86_400_000));
   const name = personName(c.name, language);
   return (
-    <Paper component="li" variant="outlined" sx={{ p: 1.25 }} data-candidate={c.id}>
+    <Paper component="li" variant="outlined" sx={{ p: 1.5, bgcolor: 'background.paper' }} data-candidate={c.id}>
       <Link component={RouterLink} to={recruitmentPaths.candidate(c.id)} sx={{ fontWeight: 500, display: 'block' }}>
         {name}
       </Link>

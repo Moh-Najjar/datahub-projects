@@ -51,6 +51,8 @@
     "userMenu": "قائمة حساب {{name}}",
     "comingSoon": "قريباً",
     "comingSoonHint": "مخطط له في إصدار لاحق",
+    "collapseNavigation": "طي قائمة التنقل",
+    "expandNavigation": "توسيع قائمة التنقل",
     "loading": "جارٍ التحميل…"
   },
   "theme": {

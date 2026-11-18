@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import LinearProgress from '@mui/material/LinearProgress';
 import Skeleton from '@mui/material/Skeleton';
+import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -13,6 +14,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Typography from '@mui/material/Typography';
+import InboxOutlined from '@mui/icons-material/InboxOutlined';
 import { useTranslation } from 'react-i18next';
 import type { Paginated, SortDirection } from '@/core/api/types';
 import { formatNumber } from '@/i18n/format';
@@ -74,26 +76,27 @@ export function DataTable<T, TSort extends string>({ label, columns, getRowId, q
   }
 
   return (
-    <Box sx={{ position: 'relative' }}>
+    <Paper variant="outlined" sx={{ position: 'relative', overflow: 'hidden' }}>
       {/* Refetching (paging, sorting, after a change): keep the rows, show progress. */}
       {query.isFetching && data && <LinearProgress aria-hidden sx={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 1, height: 2 }} />}
       {/* Positioned, so visually-hidden header text stays inside the horizontal scroll area. */}
       <TableContainer sx={{ position: 'relative' }}>
         {/* Tighter cell padding on phones so the essential columns fit without scrolling. */}
-        <Table size="small" aria-label={label} aria-busy={query.isFetching || undefined} sx={{ '& .MuiTableCell-root': { px: { xs: 1, sm: 2 } } }}>
+        <Table aria-label={label} aria-busy={query.isFetching || undefined} sx={{ '& .MuiTableCell-root': { px: { xs: 1.25, sm: 2 } } }}>
           <TableHead>
             <TableRow>
               {columns.map((column) => {
-                const active = column.sortField !== undefined && sort.sortBy === column.sortField;
+                const sortField = column.sortField;
+                const active = sortField !== undefined && sort.sortBy === sortField;
                 return (
                   <TableCell
                     key={column.id}
                     align={column.align}
                     sortDirection={active ? sort.sortDirection : false}
-                    sx={{ whiteSpace: 'nowrap', fontWeight: 600, ...hide(column) }}
+                    sx={{ whiteSpace: 'nowrap', ...hide(column) }}
                   >
-                    {column.sortField ? (
-                      <TableSortLabel active={active} direction={active ? sort.sortDirection : 'asc'} onClick={() => sort.toggleSort(column.sortField!)}>
+                    {sortField ? (
+                      <TableSortLabel active={active} direction={active ? sort.sortDirection : 'asc'} onClick={() => sort.toggleSort(sortField)}>
                         {column.label}
                       </TableSortLabel>
                     ) : (
@@ -132,10 +135,11 @@ export function DataTable<T, TSort extends string>({ label, columns, getRowId, q
             ))}
             {data && data.items.length === 0 && (
               <TableRow>
-                <TableCell colSpan={columns.length}>
-                  <Typography color="text.secondary" sx={{ py: 4, textAlign: 'center' }}>
-                    {filtered ? t('list.noResults') : t('list.empty')}
-                  </Typography>
+                <TableCell colSpan={columns.length} sx={{ borderBottom: 0 }}>
+                  <Box sx={{ py: 6, textAlign: 'center' }}>
+                    <InboxOutlined aria-hidden="true" sx={{ fontSize: 32, color: 'text.disabled', mb: 1 }} />
+                    <Typography color="text.secondary">{filtered ? t('list.noResults') : t('list.empty')}</Typography>
+                  </Box>
                 </TableCell>
               </TableRow>
             )}
@@ -156,6 +160,6 @@ export function DataTable<T, TSort extends string>({ label, columns, getRowId, q
           getItemAriaLabel={(type) => t(`pagination.${type}`)}
         />
       )}
-    </Box>
+    </Paper>
   );
 }

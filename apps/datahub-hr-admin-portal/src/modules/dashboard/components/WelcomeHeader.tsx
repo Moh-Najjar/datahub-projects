@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/core/context/authContext';
@@ -12,6 +13,7 @@ const greetingKey = (hour: number) => (hour < 12 ? 'greeting.morning' : hour < 1
 /** Greeting for the signed-in user, today's date and what the dashboard covers. The page's only h1. */
 export function WelcomeHeader({ scope, date }: { scope: DashboardScope; date?: Date }) {
   const { t } = useTranslation('dashboard');
+  const { t: tc } = useTranslation();
   // Taken once when the page opens (render stays pure); `date` lets tests fix the time of day.
   const [now] = useState(() => date ?? new Date());
   const { language } = useLanguage();
@@ -19,16 +21,19 @@ export function WelcomeHeader({ scope, date }: { scope: DashboardScope; date?: D
   if (!user) return null;
 
   return (
-    <Box component="header" sx={{ mb: 3 }}>
-      <Typography variant="body2" color="text.secondary" component="p">
-        {formatDate(now, language, { dateStyle: 'full' })}
-      </Typography>
-      <Typography variant="h2" component="h1" sx={{ mt: 0.5 }}>
-        {t(greetingKey(now.getHours()), { name: user.name[language] })}
-      </Typography>
-      <Typography color="text.secondary" sx={{ mt: 0.5 }}>
-        {scope === 'team' && user.department ? t('description.team', { department: user.department[language] }) : t('description.organization')}
-      </Typography>
+    <Box component="header" sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: 2, mb: 3 }}>
+      <Box sx={{ minWidth: 0 }}>
+        <Typography variant="body2" color="text.secondary" component="p">
+          {formatDate(now, language, { dateStyle: 'full' })}
+        </Typography>
+        <Typography variant="h3" component="h1" sx={{ mt: 0.5 }}>
+          {t(greetingKey(now.getHours()), { name: user.name[language] })}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75, maxWidth: 640 }}>
+          {scope === 'team' && user.department ? t('description.team', { department: user.department[language] }) : t('description.organization')}
+        </Typography>
+      </Box>
+      <Chip label={tc(`roles.${user.role}`)} variant="outlined" sx={{ fontWeight: 600 }} />
     </Box>
   );
 }

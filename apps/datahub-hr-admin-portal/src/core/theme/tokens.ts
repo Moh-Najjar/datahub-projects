@@ -17,19 +17,19 @@ export const brand = {
   greenLight: '#e7f4ea',
 } as const;
 
-/** Slate neutrals: 50 = app background … 900 = primary text. */
+/** Cool slate neutrals: 50 = app canvas … 900 = primary text. */
 export const neutral = {
   0: '#ffffff',
-  50: '#f6f8fb',
-  100: '#eef1f6',
-  200: '#dde3ec',
-  300: '#c4ccd8',
-  400: '#98a3b3',
-  500: '#6b7789',
-  600: '#4f5a6b',
-  700: '#3a4455',
-  800: '#252d3a',
-  900: '#151b26',
+  50: '#f4f6f9',
+  100: '#e8edf3',
+  200: '#d5dde8',
+  300: '#c0c9d6',
+  400: '#8e9aab',
+  500: '#667386',
+  600: '#4d596b',
+  700: '#384454',
+  800: '#232b38',
+  900: '#141b26',
 } as const;
 
 /** Status colours (form errors, approvals, alerts). Each passes WCAG AA (≥ 4.5:1) as text on white. */
@@ -126,19 +126,35 @@ export const chartColors = {
 /** Base spacing unit (px): `theme.spacing(2)` = 16px. */
 export const spacingUnit = 8;
 
+/** Modest radii: controls stay crisp; dialogs are only slightly softer. */
 export const radius = {
   sm: 6,
-  md: 10,
-  lg: 14,
+  md: 8,
+  lg: 12,
 } as const;
 
 export const shadows = {
-  /** Resting surfaces (cards, panels). */
-  sm: '0 1px 2px rgba(21, 27, 38, 0.06), 0 1px 3px rgba(21, 27, 38, 0.08)',
-  /** Raised surfaces (menus, popovers). */
-  md: '0 4px 12px rgba(21, 27, 38, 0.10)',
-  /** Overlays (dialogs, drawers). */
-  lg: '0 12px 32px rgba(21, 27, 38, 0.16)',
+  /** Resting cards. A hairline border does most of the work; the shadow only separates the surface. */
+  sm: '0 1px 2px rgba(20, 27, 38, 0.04), 0 1px 1px rgba(20, 27, 38, 0.03)',
+  /** Menus and popovers. */
+  md: '0 8px 24px rgba(20, 27, 38, 0.10)',
+  /** Dialogs and drawers. */
+  lg: '0 18px 48px rgba(20, 27, 38, 0.16)',
+} as const;
+
+/** Shell dimensions in pixels. Content stays readable on wide monitors without stretching edge to edge. */
+export const layout = {
+  sidebar: 272,
+  sidebarCollapsed: 76,
+  header: 64,
+  contentMax: 1440,
+} as const;
+
+/** Interactive control heights (px). Touch targets stay at least 32px; primary actions are 40px. */
+export const control = {
+  sm: 32,
+  md: 36,
+  lg: 40,
 } as const;
 
 /** Breakpoints (px): phone < 600 ≤ tablet < 900 ≤ laptop < 1200 ≤ desktop < 1536 ≤ wide. */

@@ -72,7 +72,7 @@ function Trend({ kpi, def }: { kpi: Kpi; def: KpiDefinition }) {
   const Icon = change.direction === 'up' ? ArrowUpwardRounded : change.direction === 'down' ? ArrowDownwardRounded : RemoveRounded;
 
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, flexWrap: 'wrap' }}>
+    <Box component="span" sx={{ display: 'flex', alignItems: 'center', gap: 0.5, flexWrap: 'wrap', mt: 'auto' }}>
       <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.25, color, fontWeight: 600, fontSize: 13 }}>
         <Icon sx={{ fontSize: 16 }} aria-label={t(`trend.${change.direction}`)} />
         {/* Pure numbers stay LTR (sign before digits); the rate text includes a translated unit, so it keeps the page direction. */}
@@ -89,13 +89,13 @@ function KpiCard({ def, kpi, value }: { def: KpiDefinition; kpi: Kpi; value: Rea
   const { t } = useTranslation('dashboard');
   const Icon = def.icon;
   return (
-    <Paper variant="outlined" component="li" sx={{ p: 2.25, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 1 }}>
+    <Paper variant="outlined" component="li" sx={{ p: 2.25, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 1.25, minHeight: 148 }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
         <Box
           aria-hidden="true"
           sx={(theme) => ({
-            width: 36,
-            height: 36,
+            width: 40,
+            height: 40,
             flexShrink: 0,
             borderRadius: 1,
             display: 'grid',
@@ -115,7 +115,7 @@ function KpiCard({ def, kpi, value }: { def: KpiDefinition; kpi: Kpi; value: Rea
           </IconButton>
         </Tooltip>
       </Box>
-      <Typography variant="h2" component="p" sx={{ fontWeight: 700 }} data-kpi={def.key}>
+      <Typography variant="h3" component="p" sx={{ fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.15 }} data-kpi={def.key}>
         {value}
       </Typography>
       <Trend kpi={kpi} def={def} />
@@ -133,7 +133,7 @@ export function KpiCards({ scope }: { scope: DashboardScope }) {
   const query = useDashboardSummary(scope, candidates.length > 0);
   if (candidates.length === 0) return null;
 
-  const grid = { m: 0, p: 0, display: 'grid', gap: 2, gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 210px), 1fr))' };
+  const grid = { m: 0, p: 0, display: 'grid', gap: 2, alignItems: 'stretch', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 230px), 1fr))' };
 
   return (
     <Box component="section" aria-labelledby="kpis-title" sx={{ mb: 3 }}>

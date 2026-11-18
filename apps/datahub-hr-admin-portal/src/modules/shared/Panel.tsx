@@ -14,7 +14,7 @@ export function Panel({ title, subtitle, actions, children }: { title: ReactNode
   const id = useId();
   return (
     <Paper variant="outlined" component="section" aria-labelledby={id} sx={{ p: { xs: 2, sm: 2.5 }, minWidth: 0 }}>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start', justifyContent: 'space-between', gap: 1, mb: 2 }}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start', justifyContent: 'space-between', gap: 1, mb: 2, pb: 1.5, borderBottom: 1, borderColor: 'divider' }}>
         <div>
           <Typography id={id} variant="h6" component="h2">
             {title}

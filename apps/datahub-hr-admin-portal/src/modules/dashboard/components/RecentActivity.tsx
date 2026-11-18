@@ -49,8 +49,8 @@ export function RecentActivity({ scope }: { scope: DashboardScope }) {
   const items = query.data?.items.filter((item) => visibleTypes.includes(item.type)) ?? [];
 
   return (
-    <Paper variant="outlined" component="section" aria-labelledby="activity-title" sx={{ p: 2.5, minWidth: 0 }}>
-      <Typography id="activity-title" variant="h6" component="h2" sx={{ mb: 1 }}>
+    <Paper variant="outlined" component="section" aria-labelledby="activity-title" sx={{ p: { xs: 2, sm: 2.5 }, minWidth: 0, height: '100%' }}>
+      <Typography id="activity-title" variant="h6" component="h2" sx={{ mb: 1.5, pb: 1.5, borderBottom: 1, borderColor: 'divider' }}>
         {t('activity.title')}
       </Typography>
       {query.isPending && (

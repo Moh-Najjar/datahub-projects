@@ -42,12 +42,16 @@ export function base(ctx: ChartContext): EChartsOption {
 /** Tooltip look shared by every chart, with RTL text in Arabic. */
 export function tooltip(ctx: ChartContext, extra: TooltipComponentOption): TooltipComponentOption {
   const c = palette(ctx);
+  const { extraCssText, ...rest } = extra;
+  const directionCss = `direction: ${ctx.direction}; text-align: ${isRtl(ctx) ? 'right' : 'left'}; border-radius: 8px; box-shadow: 0 8px 24px rgba(20, 27, 38, 0.12);`;
   return {
     backgroundColor: c.tooltipBackground,
     borderColor: c.tooltipBorder,
-    textStyle: { color: c.text, fontFamily: isRtl(ctx) ? fontFamily.arabic : fontFamily.latin },
-    extraCssText: `direction: ${ctx.direction}; text-align: ${isRtl(ctx) ? 'right' : 'left'}; box-shadow: none;`,
-    ...extra,
+    borderWidth: 1,
+    padding: [8, 12],
+    textStyle: { color: c.text, fontSize: 12, fontFamily: isRtl(ctx) ? fontFamily.arabic : fontFamily.latin },
+    ...rest,
+    extraCssText: extraCssText ? `${directionCss} ${extraCssText}` : directionCss,
   };
 }
 
@@ -59,7 +63,8 @@ export function legend(ctx: ChartContext, position: 'top' | 'bottom'): LegendCom
     icon: 'roundRect',
     itemWidth: 12,
     itemHeight: 8,
-    textStyle: { color: palette(ctx).mutedText },
+    itemGap: 16,
+    textStyle: { color: palette(ctx).mutedText, fontSize: 12, fontFamily: isRtl(ctx) ? fontFamily.arabic : fontFamily.latin },
   };
 }
 

@@ -35,7 +35,7 @@ export function ConfirmDialog({ open, title, text, confirmLabel, pending, error,
           </Alert>
         )}
       </DialogContent>
-      <DialogActions sx={{ px: 3, pb: 2 }}>
+      <DialogActions>
         <Button onClick={onClose} disabled={pending}>
           {t('actions.cancel')}
         </Button>

@@ -119,13 +119,13 @@ export function CoverField({ value, onChange, altError }: CoverFieldProps) {
     <Box sx={{ display: 'grid', gap: '12px' }}>
       {value ? (
         <Box>
-          <Box component="img" src={value.src} alt={value.alt} sx={{ display: 'block', width: '100%', aspectRatio: '370 / 230', objectFit: 'cover', borderRadius: '5px', bgcolor: '#eee' }} />
+          <Box component="img" src={value.src} alt={value.alt} sx={{ display: 'block', width: '100%', aspectRatio: '370 / 230', objectFit: 'cover', borderRadius: '8px', bgcolor: 'background.default' }} />
           <Typography variant="caption" color="text.secondary">
             {C.preview}
           </Typography>
         </Box>
       ) : (
-        <Box sx={{ display: 'grid', placeItems: 'center', aspectRatio: '370 / 230', borderRadius: '5px', border: '1px dashed', borderColor: 'divider', bgcolor: '#fafbfc', p: 2, textAlign: 'center' }}>
+        <Box sx={{ display: 'grid', placeItems: 'center', aspectRatio: '370 / 230', borderRadius: '8px', border: '1px dashed', borderColor: 'divider', bgcolor: 'background.default', p: 2, textAlign: 'center' }}>
           <Typography variant="body2" color="text.secondary">
             {busy ? C.processing : C.none}
           </Typography>
