@@ -2,7 +2,7 @@ import { keepPreviousData, useMutation, useQuery, useQueryClient, type QueryClie
 import type { ListParams } from '@/core/api/types';
 import { organizationKeys } from '@/modules/organization';
 import { employeesApi } from '@/modules/employees/api/employeesApi';
-import type { DocumentInput, EmployeeFilters, EmployeeInput, EmployeeScope, EmploymentStatus, ManagerOptionsQuery } from '@/modules/employees/types/employee';
+import type { EmployeeFilters, EmployeeInput, EmployeeScope, EmploymentStatus, ManagerOptionsQuery } from '@/modules/employees/types/employee';
 import { useEmployeeAccess } from './useEmployeeAccess';
 
 /**
@@ -15,7 +15,6 @@ export const employeeKeys = {
   list: (scope: EmployeeScope, params: ListParams<EmployeeFilters>) => [...employeeKeys.lists(), scope, params] as const,
   details: () => [...employeeKeys.all, 'detail'] as const,
   detail: (scope: EmployeeScope, id: string) => [...employeeKeys.details(), scope, id] as const,
-  documents: (scope: EmployeeScope, id: string) => [...employeeKeys.all, 'documents', scope, id] as const,
   history: (scope: EmployeeScope, id: string) => [...employeeKeys.all, 'history', scope, id] as const,
   managerOptions: (query: ManagerOptionsQuery) => [...employeeKeys.all, 'manager-options', query] as const,
 };
@@ -30,12 +29,6 @@ export function useEmployees(params: ListParams<EmployeeFilters>) {
 export function useEmployee(id: string) {
   const { scope } = useEmployeeAccess();
   return useQuery({ queryKey: employeeKeys.detail(scope, id), queryFn: ({ signal }) => employeesApi.getEmployeeById(id, scope, signal) });
-}
-
-/** Documents are fetched only for roles with `documents:read`. */
-export function useEmployeeDocuments(id: string, enabled: boolean) {
-  const { scope } = useEmployeeAccess();
-  return useQuery({ queryKey: employeeKeys.documents(scope, id), queryFn: ({ signal }) => employeesApi.getEmployeeDocuments(id, scope, signal), enabled });
 }
 
 export function useEmploymentHistory(id: string) {
@@ -78,11 +71,3 @@ export function useUpdateEmployeeStatus() {
   });
 }
 
-export function useAddEmployeeDocument(employeeId: string) {
-  const client = useQueryClient();
-  const { scope } = useEmployeeAccess();
-  return useMutation({
-    mutationFn: (input: DocumentInput) => employeesApi.addEmployeeDocument(employeeId, input, scope),
-    onSuccess: () => client.invalidateQueries({ queryKey: [...employeeKeys.all, 'documents'] }),
-  });
-}

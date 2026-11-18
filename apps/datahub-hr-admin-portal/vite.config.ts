@@ -13,8 +13,9 @@ export default defineConfig({
     dedupe: ['react', 'react-dom'],
   },
   server: {
-    // The website uses 5173.
-    port: 5174,
+    // The website uses 3000.
+    port: 3001,
+    strictPort: true,
   },
   preview: {
     port: 4174,

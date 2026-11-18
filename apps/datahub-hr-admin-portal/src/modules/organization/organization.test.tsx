@@ -73,13 +73,14 @@ describe('access by role (existing permission matrix)', () => {
   it('unfinished modules stay disabled "Soon" items', async () => {
     await open('/organization');
     const nav = within(screen.getByRole('navigation', { name: 'Main navigation' }));
-    for (const name of ['Documents', 'Reports']) {
+    for (const name of ['Reports']) {
       expect(nav.getByText(name).closest('[aria-disabled="true"]'), name).not.toBeNull();
     }
     expect(nav.getByRole('link', { name: 'Employees' })).toBeTruthy();
     expect(nav.getByRole('link', { name: 'Attendance' })).toBeTruthy();
     expect(nav.getByRole('link', { name: 'Leave' })).toBeTruthy();
     expect(nav.getByRole('link', { name: 'Payroll' })).toBeTruthy();
+    expect(nav.getByRole('link', { name: 'Documents' })).toBeTruthy();
   });
 });
 

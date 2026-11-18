@@ -69,6 +69,54 @@ export interface UiStrings {
     loading: string;
     error: string;
   };
+  /**
+   * DataHub Workspace (central staff sign-in + application launcher; DataHub's own copy). `{name}`-style placeholders
+   * are filled with `fill()` from `@/i18n`.
+   */
+  workspace: {
+    name: string;
+    pageTitle: string;
+    switchLanguage: string;
+    login: {
+      title: string;
+      subtitle: string;
+      prototype: string;
+      username: string;
+      password: string;
+      showPassword: string;
+      hidePassword: string;
+      submit: string;
+      submitting: string;
+      usernameRequired: string;
+      passwordRequired: string;
+      invalid: string;
+      generic: string;
+      signInRequired: string;
+      signedOut: string;
+      demoTitle: string;
+      demoHint: string;
+      backToSite: string;
+    };
+    home: {
+      title: string;
+      subtitle: string;
+      open: string;
+      empty: string;
+      accessDenied: string;
+      sessionNote: string;
+    };
+    header: {
+      signOut: string;
+      viewSite: string;
+    };
+    apps: Record<'hr-admin' | 'blogs-admin', { name: string; description: string }>;
+    roles: Record<'system-admin' | 'hr-admin' | 'hr-manager' | 'department-manager' | 'employee' | 'recruiter' | 'payroll-officer' | 'blogs-admin', string>;
+  };
+}
+
+/** Fills `{key}` placeholders: `fill('Hello {name}', { name: 'Sam' })`. */
+export function fill(template: string, values: Record<string, string>): string {
+  return template.replace(/\{(\w+)\}/g, (match, key: string) => values[key] ?? match);
 }
 
 /** Interface strings per locale. The values live in `locales/en.json` and `locales/ar.json`. */

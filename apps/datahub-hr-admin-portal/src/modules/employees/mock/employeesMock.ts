@@ -4,11 +4,9 @@ import { createMockStore } from '@/core/api/mock/store';
 import { ApiError, type ListParams, type Paginated } from '@/core/api/types';
 import { hasPermission } from '@/core/config/permissions';
 import { orgTables } from '@/modules/organization/mock/organizationMock';
-import { validateDocumentInput, validateEmployeeInput, type FieldErrors } from '@/modules/employees/schemas/employeeSchemas';
+import { validateEmployeeInput, type FieldErrors } from '@/modules/employees/schemas/employeeSchemas';
 import type {
-  DocumentInput,
   Employee,
-  EmployeeDocument,
   EmployeeFilters,
   EmployeeInput,
   EmployeeOption,
@@ -21,8 +19,7 @@ import type {
   NamedRef,
   PersonalDetails,
 } from '@/modules/employees/types/employee';
-import { SENSITIVE_DOCUMENT_TYPES } from '@/modules/employees/types/employee';
-import { ACCOUNT_EMPLOYEE, DOCUMENT_SEED, EMPLOYEE_SEED, HISTORY_SEED, type DocumentRow, type EmployeeRow, type HistoryRow } from './seed';
+import { ACCOUNT_EMPLOYEE, EMPLOYEE_SEED, HISTORY_SEED, type EmployeeRow, type HistoryRow } from './seed';
 
 /*
  * SIMULATED employees backend: in-memory tables (reset on reload) plus the rules the real backend must enforce —
@@ -37,13 +34,11 @@ import { ACCOUNT_EMPLOYEE, DOCUMENT_SEED, EMPLOYEE_SEED, HISTORY_SEED, type Docu
  */
 
 const employees = createMockStore<EmployeeRow>(EMPLOYEE_SEED, 'emp');
-const documents = createMockStore<DocumentRow>(DOCUMENT_SEED, 'doc');
 const history = createMockStore<HistoryRow>(HISTORY_SEED, 'hist');
 
 /** Restore the seed data (tests). */
 export function resetEmployeesMock(): void {
   employees.reset();
-  documents.reset();
   history.reset();
 }
 
@@ -311,40 +306,7 @@ export function updateEmployeeStatus(id: string, status: EmploymentStatus, scope
   return toEmployee(employees.update(id, { status }), scope);
 }
 
-/* Documents and history ------------------------------------------------------------------------------- */
-
-const EXPIRING_DAYS = 30;
-
-function toDocument(row: DocumentRow): EmployeeDocument {
-  const { pendingReview, ...rest } = row;
-  let status: EmployeeDocument['status'] = 'valid';
-  if (pendingReview) status = 'pending-review';
-  else if (row.expiryDate && row.expiryDate < today()) status = 'expired';
-  else if (row.expiryDate && Date.parse(row.expiryDate) - Date.parse(today()) <= EXPIRING_DAYS * 86_400_000) status = 'expiring-soon';
-  return { ...rest, status };
-}
-
-export function employeeDocuments(id: string, scope: EmployeeScope): EmployeeDocument[] {
-  getVisible(id, scope);
-  const personal = canReadPersonal(scope);
-  return documents
-    .all()
-    // Identity and medical documents are personal data: not returned without employees:read:personal.
-    .filter((d) => d.employeeId === id && (personal || !SENSITIVE_DOCUMENT_TYPES.includes(d.type)))
-    .map(toDocument)
-    .sort((a, b) => b.uploadedAt.localeCompare(a.uploadedAt));
-}
-
-/** SIMULATED upload: only the metadata is kept (in memory); the file content is never read or stored. */
-export function addEmployeeDocument(id: string, input: DocumentInput, scope: EmployeeScope): EmployeeDocument {
-  getVisible(id, scope);
-  if (SENSITIVE_DOCUMENT_TYPES.includes(input.type) && !canReadPersonal(scope)) throw new ApiError('FORBIDDEN', 'Personal documents require employees:read:personal');
-  const errors = validateDocumentInput(input);
-  if (errors) invalid(errors);
-  return toDocument(
-    documents.create({ employeeId: id, name: input.name.trim(), type: input.type, fileName: input.fileName, sizeBytes: input.sizeBytes, uploadedAt: new Date().toISOString(), expiryDate: input.expiryDate || null, pendingReview: true }),
-  );
-}
+/* History (documents live in Documents Management) ------------------------------------------------- */
 
 export function employmentHistory(id: string, scope: EmployeeScope): EmploymentHistoryEntry[] {
   getVisible(id, scope);

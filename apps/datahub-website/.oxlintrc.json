@@ -134,6 +134,17 @@
       }
     },
     {
+      "files": ["src/modules/portals/**"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": [
+          { "group": ["react-native", "react-native/*", "react-native-*", "expo", "expo/*", "expo-*", "@expo/*"], "message": "The website is a React DOM app: React Native/Expo belong to apps/datahub-hr." },
+          { "group": ["**/datahub-hr", "**/datahub-hr/**", "datahub-hr", "datahub-hr/*", "**/datahub-hr-admin-portal", "**/datahub-hr-admin-portal/**"], "message": "Apps must not import each other (the Workspace only links to the HR portal). Share types through @datahub/shared-types." },
+          { "group": ["@/modules/*", "@/modules/*/**", "!@/modules/portals/**", "!@/modules/shared/**"], "message": "Portals holds the site's central staff session: it must not import other modules (Blogs Admin imports it)." },
+          { "group": ["@/core/routes", "@/core/routes/index"], "message": "Import route paths from @/core/routes/paths. Only App.tsx imports the router." }
+        ] }]
+      }
+    },
+    {
       "files": ["src/modules/admin/**"],
       "rules": {
         "no-restricted-imports": ["error", { "patterns": [

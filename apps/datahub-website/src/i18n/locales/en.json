@@ -62,5 +62,62 @@
     },
     "loading": "Loading products",
     "error": "The products could not be loaded. Please try again later."
+  },
+  "workspace": {
+    "name": "Portals",
+    "pageTitle": "{page} · Datahub Analytics Portals",
+    "switchLanguage": "العربية",
+    "login": {
+      "title": "Sign in to Portals",
+      "subtitle": "One sign-in for the DataHub applications you use at work.",
+      "prototype": "Prototype — not real authentication. Sign in with one of the demo accounts below; any password is accepted and it is never stored. Company sign-in will replace this page.",
+      "username": "Username",
+      "password": "Password",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "submit": "Sign in",
+      "submitting": "Signing in…",
+      "usernameRequired": "Enter your username.",
+      "passwordRequired": "Enter your password (any password works for the demo accounts).",
+      "invalid": "There is no account with this username. Use one of the demo accounts below.",
+      "generic": "Sign-in failed. Please try again.",
+      "signInRequired": "Sign in to continue.",
+      "signedOut": "You have signed out.",
+      "demoTitle": "Demo accounts",
+      "demoHint": "Fictional users from the HR portal (plus a Blogs Administrator). Select one to fill in the username.",
+      "backToSite": "Back to website"
+    },
+    "home": {
+      "title": "My applications",
+      "subtitle": "Signed in as {role}. Choose an application to open it.",
+      "open": "Open application",
+      "empty": "No applications are available for your role yet.",
+      "accessDenied": "Your role does not have access to {app}.",
+      "sessionNote": "Signing out ends your session in every DataHub application (HR Admin and Blogs Admin), in all tabs."
+    },
+    "header": {
+      "signOut": "Sign out",
+      "viewSite": "Website"
+    },
+    "apps": {
+      "hr-admin": {
+        "name": "HR Admin",
+        "description": "Manage HR operations and administration."
+      },
+      "blogs-admin": {
+        "name": "Blogs Admin",
+        "description": "Manage DataHub website blog posts and content."
+      }
+    },
+    "roles": {
+      "system-admin": "System Administrator",
+      "hr-admin": "HR Administrator",
+      "hr-manager": "HR Manager",
+      "department-manager": "Department Manager",
+      "employee": "Employee",
+      "recruiter": "Recruiter",
+      "payroll-officer": "Payroll Officer",
+      "blogs-admin": "Blogs Administrator"
+    }
   }
 }

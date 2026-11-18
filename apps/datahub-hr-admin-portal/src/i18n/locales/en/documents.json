@@ -1,0 +1,435 @@
+{
+  "title": "Documents",
+  "subtitle": "Employee and candidate documents, verification, expiry and required documents.",
+  "ownSubtitle": "Your documents and your required-document checklist.",
+  "tabs": {
+    "label": "Documents sections",
+    "overview": "Overview",
+    "directory": "Directory",
+    "expiry": "Expiry",
+    "required": "Required documents",
+    "categories": "Categories",
+    "my": "My documents"
+  },
+  "storage": {
+    "notice": "Demo: files are not uploaded or stored. Only the document details and the file names are kept, in this browser tab, until reload. Storing and downloading real files requires the secure backend.",
+    "short": "Demo: file contents are not stored and cannot be downloaded."
+  },
+  "actions": {
+    "upload": "Upload document",
+    "uploadReplacement": "Upload replacement",
+    "replace": "Replace",
+    "view": "View details",
+    "edit": "Edit metadata",
+    "archive": "Archive",
+    "verify": "Verify",
+    "reject": "Reject",
+    "requestReplacement": "Request replacement",
+    "addNote": "Add internal note",
+    "create": "Create",
+    "save": "Save",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "viewAll": "View all",
+    "backToDirectory": "Back to the directory",
+    "backToMy": "Back to my documents"
+  },
+  "fields": {
+    "document": "Document",
+    "reference": "Reference",
+    "name": "Name",
+    "documentNumber": "Document number",
+    "owner": "Owner",
+    "ownerType": "Belongs to",
+    "ownerNumber": "Employee / candidate no.",
+    "employee": "Employee",
+    "candidate": "Candidate",
+    "department": "Department",
+    "category": "Category",
+    "categories": "Categories",
+    "group": "Group",
+    "issueDate": "Issue date",
+    "expiryDate": "Expiry date",
+    "expiry": "Expiry",
+    "daysRemaining": "Days remaining",
+    "issuingAuthority": "Issuing authority",
+    "description": "Description",
+    "confidentiality": "Confidentiality",
+    "defaultConfidentiality": "Default confidentiality",
+    "status": "Status",
+    "uploadedAt": "Uploaded",
+    "uploadedBy": "Uploaded by",
+    "updatedAt": "Last modified",
+    "reviewedBy": "Last review",
+    "source": "Source",
+    "linkedEmployee": "Linked employee",
+    "reason": "Reason",
+    "note": "Note",
+    "code": "Code",
+    "nameEn": "Name (English)",
+    "nameAr": "Name (Arabic)",
+    "appliesTo": "Applies to",
+    "allowedFiles": "Allowed files",
+    "maxFileSize": "Maximum file size (MB)",
+    "employmentTypes": "Employment types",
+    "employmentStatus": "Employment status",
+    "documents": "Documents",
+    "employees": "Employees",
+    "thresholdDays": "Expiry warning (days)"
+  },
+  "filters": {
+    "allCategories": "All categories",
+    "allStatuses": "All statuses",
+    "allExpiry": "Any expiry",
+    "allDepartments": "All departments",
+    "allGroups": "All groups",
+    "uploadedFrom": "Uploaded from",
+    "uploadedTo": "Uploaded to"
+  },
+  "common": {
+    "created": "“{{name}}” was created.",
+    "saved": "“{{name}}” was saved.",
+    "activated": "“{{name}}” was activated.",
+    "deactivated": "“{{name}}” was deactivated."
+  },
+  "status": {
+    "pending-review": "Pending review",
+    "verified": "Verified",
+    "rejected": "Rejected",
+    "expired": "Expired",
+    "archived": "Archived",
+    "superseded": "Superseded"
+  },
+  "expiryStatus": {
+    "valid": "Valid",
+    "expiring-soon": "Expiring soon",
+    "expired": "Expired",
+    "no-expiry": "No expiry date"
+  },
+  "confidentiality": {
+    "standard": "Standard",
+    "confidential": "Confidential",
+    "highly-confidential": "Highly confidential"
+  },
+  "ownerType": {
+    "employee": "Employee",
+    "candidate": "Candidate"
+  },
+  "decision": {
+    "verified": "verified",
+    "rejected": "rejected"
+  },
+  "groups": {
+    "identity": "Employee identity",
+    "employment": "Employment",
+    "education": "Education and professional",
+    "hr": "HR and administration",
+    "leave": "Leave and attendance",
+    "payroll": "Payroll",
+    "recruitment": "Recruitment"
+  },
+  "employmentType": {
+    "full-time": "Full-time",
+    "part-time": "Part-time",
+    "contract": "Contract",
+    "temporary": "Temporary",
+    "intern": "Intern"
+  },
+  "source": {
+    "leave": "Leave request {{reference}}",
+    "recruitment": "Recruitment",
+    "upload": "Uploaded in Documents"
+  },
+  "history": {
+    "uploaded": "Uploaded by {{by}}",
+    "registered": "Registered from a leave request by {{by}}",
+    "edited": "Metadata edited by {{by}}",
+    "verified": "Verified by {{by}}",
+    "rejected": "Rejected by {{by}}",
+    "replacement-requested": "Replacement requested by {{by}}",
+    "replacement-uploaded": "Replacement uploaded by {{by}}",
+    "replaces": "Uploaded by {{by}} as a replacement of",
+    "superseded": "Superseded (replacement verified by {{by}}):",
+    "archived": "Archived by {{by}}",
+    "note": "Internal note by {{by}}",
+    "linked-to-employee": "Linked to the new employee by {{by}} (candidate hired)",
+    "returned-to-review": "Returned to review after changes by {{by}}"
+  },
+  "kpis": {
+    "label": "Document key figures",
+    "total": "Total documents",
+    "totalHint": "Every document you may see, including archived and superseded ones.",
+    "active": "Active documents",
+    "activeHint": "Current documents (not archived or superseded).",
+    "expiringSoon": "Expiring soon",
+    "expiringSoonHint": "Current documents expiring within {{days}} days.",
+    "expired": "Expired",
+    "expiredHint": "Current documents past their expiry date.",
+    "pendingReview": "Pending review",
+    "pendingReviewHint": "Current documents waiting for verification.",
+    "archived": "Archived",
+    "archivedHint": "Archived documents (kept as history)."
+  },
+  "charts": {
+    "documents": "Documents",
+    "expiring": "Expiring",
+    "other": "Other",
+    "category": {
+      "title": "Documents by category",
+      "subtitle": "Current documents, largest categories"
+    },
+    "expiry": {
+      "title": "Document expiry",
+      "subtitle": "Current documents expiring per month, next 12 months"
+    },
+    "status": {
+      "title": "Verification status",
+      "subtitle": "All documents by status"
+    },
+    "department": {
+      "title": "Documents by department",
+      "subtitle": "Current documents per top-level department"
+    }
+  },
+  "overview": {
+    "empty": "There are no documents to show yet.",
+    "expired": "Expired documents requiring attention",
+    "expiredOn": "expired {{date}}",
+    "noneExpired": "No expired documents.",
+    "expiringSoon": "Expiring within {{days}} days",
+    "inDays": "in {{days}} days",
+    "noneExpiring": "Nothing expires soon.",
+    "pendingReview": "Awaiting verification",
+    "nonePending": "Nothing is waiting for verification.",
+    "missing": "Missing mandatory documents ({{number}})",
+    "missingLabel": "Missing mandatory documents",
+    "noneMissing": "No mandatory document is missing.",
+    "today": "expires today"
+  },
+  "directory": {
+    "title": "Documents",
+    "search": "Search by document, number, employee or employee number"
+  },
+  "upload": {
+    "title": "Upload document (simulated)",
+    "replaceTitle": "Upload a replacement for “{{name}}” (simulated)",
+    "simulatedNotice": "Simulated upload: the files are only checked and described (name, size, type). Their content is not sent or stored, and they cannot be downloaded later.",
+    "replaceHint": "The current document is kept and linked. It becomes superseded only when this replacement is verified.",
+    "dropHere": "Drag and drop files here",
+    "chooseFiles": "Choose files",
+    "chooseCategoryFirst": "Choose a category to see the allowed file types and size.",
+    "allowed": "Allowed: {{types}} · up to {{size}} MB each · at most {{max}} files",
+    "categoryRules": "Allowed: {{types}} · up to {{size}} MB",
+    "expiryTracked": "This category tracks expiry.",
+    "selectedFiles": "Selected files",
+    "removeFile": "Remove {{name}}",
+    "progress": "Simulated upload progress of {{name}}",
+    "uploading": "Simulated upload… {{percent}}%",
+    "cancelUpload": "Cancel upload",
+    "done": "“{{name}}” was saved (simulated upload, pending review)."
+  },
+  "details": {
+    "notFound": "This document does not exist or is not available to you.",
+    "document": "Document",
+    "owner": "Owner and record",
+    "files": "Files",
+    "notStored": "not stored (demo)",
+    "notes": "Internal notes",
+    "notesHint": "Visible to HR only — never to the employee.",
+    "noNotes": "No internal notes.",
+    "history": "History",
+    "daysRemaining": "{{days}} days remaining",
+    "daysAgo": "expired {{days}} days ago",
+    "expiredPending": "This document has expired: it cannot be verified. Request or upload a replacement.",
+    "expiredNote": "Expired: this document is not treated as valid, whatever its review decision.",
+    "rejected": "Rejected: {{reason}} A replacement is required.",
+    "replacementRequested": "{{name}} requested a replacement: {{reason}}",
+    "replacedBy": "A replacement was uploaded:",
+    "replaces": "This document replaces",
+    "linkedAfterHire": "Shown on the employee's record since the candidate was hired (same record, not a copy).",
+    "saved": "The document details were saved.",
+    "replacementUploaded": "The replacement was uploaded (simulated) and is pending review."
+  },
+  "edit": {
+    "title": "Edit document details",
+    "reviewHint": "Changing the category, number or dates returns a verified document to review."
+  },
+  "verify": {
+    "title": "Verify “{{name}}”?",
+    "text": "Confirm that the document was checked and is valid. The decision is recorded with your name and the date.",
+    "replacesText": "Verifying this replacement supersedes {{reference}} (kept in the history, never deleted).",
+    "done": "The document was verified."
+  },
+  "reject": {
+    "title": "Reject “{{name}}”",
+    "hint": "Explain why. The reason is recorded and shown to the owner, who must provide a replacement.",
+    "done": "The document was rejected."
+  },
+  "replacement": {
+    "title": "Request a replacement",
+    "hint": "Explain what is needed. No e-mail or notification is sent in the demo.",
+    "done": "A replacement was requested."
+  },
+  "archive": {
+    "title": "Archive “{{name}}”",
+    "hint": "Archived documents are kept as history but no longer count as current. Give a reason.",
+    "done": "The document was archived."
+  },
+  "note": {
+    "title": "Add an internal note",
+    "hint": "Internal notes are visible to HR only, never to the employee.",
+    "done": "The note was added."
+  },
+  "expiry": {
+    "title": "Expiring documents",
+    "window": "Expiry window",
+    "windows": {
+      "7": "7 days",
+      "30": "30 days",
+      "60": "60 days",
+      "90": "90 days",
+      "expired": "Expired"
+    },
+    "hint": "Current documents with an expiry date. “Expiring soon” uses a {{days}}-day warning threshold.",
+    "daysLeft": "{{days}} days left",
+    "daysAgo": "{{days}} days ago",
+    "replaceFor": "Replace {{name}} of {{owner}}",
+    "noReminders": "No e-mails or push notifications are sent in the demo.",
+    "today": "expires today"
+  },
+  "categories": {
+    "title": "Document categories",
+    "hint": "Categories decide allowed files, expiry and number rules, confidentiality and who can see documents.",
+    "readOnly": "Categories are configured by the HR Administrator.",
+    "search": "Search by code or name",
+    "create": "New category",
+    "createTitle": "New document category",
+    "editTitle": "Edit document category",
+    "editHint": "Existing documents keep their details; the new rules apply to uploads and edits.",
+    "codeHint": "Capital letters, digits and hyphens.",
+    "groupHint": "The group also decides access: payroll roles see Payroll, recruiters Recruitment.",
+    "sizeHint": "1 to 25 MB.",
+    "tracksExpiry": "Expiry",
+    "requiresNumber": "Number",
+    "required": "Required",
+    "transferOnHire": "Follows hire",
+    "flagRequired": "Generally mandatory",
+    "flagExpiry": "Track expiry (expiry date required)",
+    "flagNumber": "Document number required and unique",
+    "flagEmployee": "Visible to the employee",
+    "flagManager": "Visible to department managers (standard confidentiality only)",
+    "flagTransfer": "Candidate documents follow the candidate when hired",
+    "deactivateTitle": "Deactivate “{{name}}”?",
+    "deactivateText": "No new documents can use it; existing documents keep it. Categories required by an active rule cannot be deactivated."
+  },
+  "required": {
+    "hint": "Required documents are information only: missing documents never block payroll or change an employee's status.",
+    "rules": "Required-document rules",
+    "rulesHint": "Any one of a rule's categories satisfies it.",
+    "create": "New rule",
+    "createTitle": "New required-document rule",
+    "editTitle": "Edit required-document rule",
+    "or": "or",
+    "allTypes": "All employment types",
+    "anyOf": "Satisfied by any of these categories",
+    "typesHint": "None selected = every employment type.",
+    "departmentHint": "Includes its subdepartments.",
+    "employmentStatus": {
+      "active": "Active employees",
+      "inactive": "Inactive employees",
+      "any": "Active and inactive"
+    },
+    "threshold": "Expiry warning: {{days}} days",
+    "thresholdTitle": "Expiry warning threshold",
+    "thresholdHint": "Documents expiring within this many days are “expiring soon” (1–180, initially 30).",
+    "thresholdSaved": "The expiry warning threshold was saved.",
+    "noBlocking": "No policy is configured to block payroll or change employment status because of missing documents."
+  },
+  "compliance": {
+    "title": "Employee compliance",
+    "subtitle": "Active employees in your scope; select a name to see the checklist.",
+    "subtitleOne": "Missing and expired are different: an expired document exists and must be renewed.",
+    "search": "Search employees",
+    "withStatus": "With an item",
+    "items": "Open items",
+    "completeness": "Completeness",
+    "completenessOf": "Completeness of {{name}}",
+    "checklist": "Required documents",
+    "checklistFor": "Checklist — {{name}}",
+    "noRules": "No required-document rule applies.",
+    "dueBy": "due by {{date}}",
+    "notProvided": "not provided",
+    "status": {
+      "required": "Required",
+      "uploaded": "Uploaded — replacement requested",
+      "pending-verification": "Pending verification",
+      "verified": "Verified",
+      "missing": "Missing",
+      "expired": "Expired"
+    }
+  },
+  "employeeTab": {
+    "documents": "Documents",
+    "subtitle": "From Documents Management — only the documents you may see.",
+    "none": "No documents.",
+    "historical": "Archived and superseded",
+    "payslips": "Payslips (Payroll)",
+    "payslipsHint": "References to the payslips issued by Payroll (opened in Payroll).",
+    "noPayslips": "No payslips issued yet."
+  },
+  "candidateTab": {
+    "title": "Candidate documents",
+    "subtitle": "Visible to recruitment users only. Identity and education documents follow the candidate when hired.",
+    "none": "No documents for this candidate."
+  },
+  "payrollPanel": {
+    "title": "Payroll supporting documents",
+    "subtitle": "Salary-related documents from Documents Management (payroll categories only).",
+    "none": "No payroll documents."
+  },
+  "my": {
+    "documents": "My documents",
+    "subtitle": "Your documents on record.",
+    "none": "You have no documents on record.",
+    "noEmployeeRecord": "No employee record is linked to this account.",
+    "privacy": "You see your own documents only. Internal HR notes and restricted documents are never sent to your browser."
+  },
+  "validation": {
+    "required": "This field is required.",
+    "tooLong": "This is too long.",
+    "invalidDate": "Enter a valid date.",
+    "invalidCode": "Use capital letters, digits and hyphens (up to 24).",
+    "arabicRequired": "Enter the name in Arabic.",
+    "chooseOne": "Choose at least one.",
+    "invalidSize": "Enter a whole number from 1 to 25.",
+    "reasonTooShort": "Write at least 5 characters.",
+    "invalidThreshold": "Enter a whole number from 1 to 180.",
+    "fileRequired": "Add at least one file.",
+    "tooManyFiles": "At most 5 files per document.",
+    "fileType": "This file type is not allowed for the category.",
+    "fileSize": "The file is larger than the category allows.",
+    "emptyFile": "The file is empty.",
+    "expiryRequired": "This category requires an expiry date.",
+    "numberRequired": "This category requires a document number.",
+    "issueInFuture": "The issue date cannot be in the future.",
+    "expiryBeforeIssue": "The expiry date cannot precede the issue date."
+  },
+  "serverErrors": {
+    "stateChanged": "This record changed in the meantime. Reload and try again.",
+    "duplicateNumber": "Another current document of this category has this number.",
+    "duplicateCode": "This code is already used.",
+    "categoryInactive": "This category is inactive.",
+    "notForOwner": "This category does not apply to this owner.",
+    "notEligible": "This category does not apply to the employee's employment type.",
+    "ownerInactive": "The owner is inactive: no new documents.",
+    "notEditable": "Archived and superseded documents cannot be edited.",
+    "alreadyHistorical": "The document is already archived or superseded.",
+    "historicalCannotVerify": "Archived and superseded documents cannot be verified.",
+    "notPending": "Only documents pending review can be verified or rejected.",
+    "expiredCannotVerify": "An expired document cannot be verified.",
+    "cannotRequestReplacement": "A replacement cannot be requested for this document now.",
+    "cannotReplace": "This document cannot be replaced (already replaced or historical).",
+    "categoryRequired": "An active required-document rule uses this category.",
+    "ownerTypeInUse": "Documents of this owner type already use the category."
+  }
+}

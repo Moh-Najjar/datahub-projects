@@ -96,7 +96,23 @@ function RequestView({ request: r }: { request: LeaveRequest }) {
             { label: t('fields.endDate'), value: formatDay(r.endDate, language, { dateStyle: 'full' }) },
             { label: t('fields.days'), value: formatDays(t, r.days, language) },
             { label: t('fields.reason'), value: r.reason === null ? <Typography component="span" color="text.secondary">{t('details.restricted')}</Typography> : r.reason || '—' },
-            { label: t('fields.document'), value: r.document === null ? '—' : <Box component="span" dir="ltr">{t('details.document', { name: r.document.fileName, size: Math.ceil(r.document.sizeBytes / 1024) })}</Box> },
+            {
+              label: t('fields.document'),
+              value:
+                r.document === null ? (
+                  '—'
+                ) : (
+                  <>
+                    <Box component="span" dir="ltr">{t('details.document', { name: r.document.fileName, size: Math.ceil(r.document.sizeBytes / 1024) })}</Box>
+                    {/* The attachment is registered in Documents Management (same file reference, not a copy). */}
+                    {can('documents:read') && (
+                      <Link component={RouterLink} to={externalPaths.documentsFor(r.number)} sx={{ display: 'block' }}>
+                        {t('details.viewInDocuments')}
+                      </Link>
+                    )}
+                  </>
+                ),
+            },
             { label: t('columns.submitted'), value: r.submittedAt ? formatTimestamp(r.submittedAt, language) : '—' },
             { label: t('fields.decidedBy'), value: r.decidedBy ? `${r.decidedBy[language]} · ${formatTimestamp(r.decidedAt!, language)}` : '—' },
           ]}

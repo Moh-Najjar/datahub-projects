@@ -9,7 +9,7 @@ built in the same visual identity. Full plan and decisions: [docs/PLAN.md](docs/
 
 | Command | Purpose |
 | --- | --- |
-| `npm run dev` | Vite dev server (port 5173) |
+| `npm run dev` | Vite dev server (port 3000) |
 | `npm run build` | Type-check (`tsc -b`) + production build |
 | `npm run typecheck` / `npm run lint` | TypeScript (strict) / oxlint |
 | `npm run assets` | Download original public assets listed in `scripts/assets.manifest.ts` into `public/` (idempotent) |
@@ -40,9 +40,9 @@ Run `npm run typecheck && npm run lint && npm run build` before considering any 
   augmentation in `src/core/theme/augmentation.d.ts`. Custom palette lives under `palette.brand.*`; shadows under `theme.customShadows`.
 - Spacing unit is **5px** (`sx={{ p: 6 }}` = 30px). Pixel strings (`'30px'`) are fine when copying measured values.
 - Breakpoints mirror the original grid: `sm 544 · md 768 · lg 992 · xl 1200`. The desktop menu shows from `xl`.
-  With the added Products and HR Portal items, top-level menu items use tighter spacing from 1200px until the
-  menu fits with the original spacing (`ROOMY_FROM` in `Navigation/DesktopNav.styles.ts`: 1540px EN, 1800px AR),
-  and the HR Portal item is an icon (label as tooltip/accessible name) below 1440px. Re-check the fit (EN and AR,
+  With the added Products and Workspace items, top-level menu items use tighter spacing from 1200px until the
+  menu fits with the original spacing (`ROOMY_FROM` in `Navigation/DesktopNav.styles.ts`: 1580px EN, 1800px AR),
+  and the Workspace item is an icon (label as tooltip/accessible name) below 1440px. Re-check the fit (EN and AR,
   1200–1920px) whenever a top-level menu item is added.
 - Button variants: `solid`, `gradient`, `textArrow`, `pill` (use `ButtonLink` for links).
 - Style with the theme, `sx`, or `styled()` next to the component. No CSS Modules, Tailwind or Bootstrap. Avoid inline `style`.
@@ -95,8 +95,11 @@ src/
 │   ├── home/                HomePage.tsx, components/ (sections), data/ (home copy, logos, industry icons)
 │   ├── blog/                BlogPostPage.tsx, ArabicPostRedirect.tsx, components/, api/blogApi.ts (blog service),
 │   │                        data/ (seed, blogStore, cached readers), hooks/, types/, utils/ (sanitizeHtml, articleStyles)
-│   ├── admin/               /admin/ area (blog management prototype): AdminLayout + pages, api/authService.ts,
+│   ├── admin/               /admin/ = Blogs Admin (prototype): AdminLayout (guard = Workspace session) + pages,
 │   │                        components/ (BlogForm, RichTextEditor, CoverField), schemas/, hooks/, data/, utils/
+│   ├── portals/             /workspace/ — central staff sign-in + application launcher (prototype): WorkspaceLayout,
+│   │                        Workspace{Login,Logout,Open}Page, WorkspacePage; api/ (workspaceAuth, hrHandoff, sessionBridge),
+│   │                        data/ (accounts, applications), components/, hooks/
 │   ├── contact/             api/appointment.ts, components/ (AppointmentForm, ConsultationSection), schemas/, data/
 │   ├── page-blocks/         BlockPage.tsx — renders every generated page (about-us, services, solutions, contact,
 │   │                        careers, blog list…) from src/content/pages; components/ + widgets/, types/, utils/
@@ -115,6 +118,7 @@ Images and fonts stay in `public/` (generated content references them by URL). C
 | Find or add a URL | `src/core/routes/paths.ts` (`ROUTES`) + `src/core/config/pages.ts` (locales, SEO title/description) |
 | See how a URL is rendered | `src/core/routes/index.tsx`: `home` → `modules/home/HomePage`, `products` → `modules/products/ProductsPage`, every other route → `modules/page-blocks/BlockPage` (document `src/content/pages/<routeKey>.<locale>.json`), `/<slug>/` → `modules/blog/BlogPostPage` |
 | Manage blog posts | `/admin/` (see "Blog & admin" below); data access only through `modules/blog/api/blogApi.ts` |
+| Change who may open an internal application | `src/modules/portals/data/applications.ts` (see "Portals" below) |
 | Add or change a product | `src/modules/products/data/mockProducts.ts` (until a backend exists) — see "Products" below |
 | Write an API call | `src/modules/<module>/api/` — e.g. `modules/contact/api/appointment.ts` (`submitAppointment`) |
 | Change a translation | `src/i18n/locales/en.json` + `ar.json` (same key in both; add new keys to `UiStrings` in `i18n/index.ts`) |
@@ -175,10 +179,11 @@ Images and fonts stay in `public/` (generated content references them by URL). C
   homepage's `BlogSection` (`useLatestPosts`) read through the service. Card images keep the 370×207 / 370×230 ratio
   for any upload. Drafts and deleted posts are 404s. Article HTML from the editor is sanitized (`utils/sanitizeHtml.ts`).
 - **Slugs** are unique and may not reuse a site URL's first segment (posts live at `/<slug>/`).
-- **Admin** (`/admin/login/`, `/admin/blogs/`, `/admin/blogs/new/`, `/admin/blogs/:id/edit/`, `ADMIN_ROUTES`): English only,
-  own layout (not `SiteLayout`), lazy-loaded, `noindex`. `AdminLayout` guards every page but sign-in. Mock
-  sign-in lives only in `modules/admin/api/authService.ts` (dev credentials, 8-hour session in localStorage) — to be
-  replaced by the backend. Available in development; production builds only with `VITE_ENABLE_ADMIN=true`.
+- **Admin = "Blogs Admin"** (`/admin/blogs/`, `/admin/blogs/new/`, `/admin/blogs/:id/edit/`, `ADMIN_ROUTES`): English
+  only, own layout (not `SiteLayout`), lazy-loaded, `noindex`. **No separate sign-in:** `AdminLayout` uses the central
+  Workspace session (`@/modules/portals`) — signed-out users go to `/workspace/login/` (then back), roles without
+  Blogs Admin access go to `/workspace/` with a notice; `/admin/login/` forwards to the Workspace sign-in; sign-out is
+  `/workspace/logout/`. Available in development; production builds only with `VITE_ENABLE_ADMIN=true`.
 - **Editor:** TipTap (`@tiptap/*`, admin chunk only — excluded from the `react` manual chunk in `vite.config.ts`) with
   headings, lists, quotes, links, images, tables and an HTML source mode; it uses the article page's `articleSx`.
 
@@ -195,13 +200,46 @@ Images and fonts stay in `public/` (generated content references them by URL). C
   described as usable. Page labels (title, intro, status names) are in `i18n/locales/*.json` under `products`.
 - **Not products:** administrative portals (e.g. the DataHub HR Admin Portal) stay out of the catalogue.
 
-## HR Admin Portal link
+## Portals — central staff sign-in (`modules/portals`, PROTOTYPE)
 
-- The header (desktop and mobile) has an **HR Portal / بوابة الموارد البشرية** item (`kind: 'app'` in
-  `core/config/navigation.ts`) that opens `<VITE_HR_ADMIN_PORTAL_URL>/login` in the same tab
-  (`core/config/hrAdminPortal.ts`). Dev default: `http://localhost:5174`. A production build without the variable
-  **hides** the item. See `.env.example`.
-- Navigation only: no SSO, tokens or session data are shared with the portal (that comes with the shared backend).
+One sign-in for DataHub's internal applications: Main website → **Portals** → sign-in (if needed) → dashboard →
+application. **Not real authentication and not production-secure** (the page says so); the backend will provide real
+sign-in and authorization — only the `api/` function bodies change.
+
+- **Header:** **Portals / البوابات** (`kind: 'app'` in `core/config/navigation.ts`, after Contact Us) — replaced
+  the former HR Portal link; icon below 1440px like before. It links to `/workspace/` (`/ar/workspace/` in Arabic).
+- **Routes** (`WORKSPACE_ROUTES`, outside `SiteLayout` and the page catalogue, EN + AR, `noindex`, lazy):
+  `/workspace/` (dashboard; signed-out → sign-in, then back), `/workspace/login/` (the ONLY sign-in page of every
+  application; a "Back to website" button returns to the homepage), `/workspace/logout/` (ends the session, then the sign-in page with a confirmation — every
+  application's Sign out lands here), `/workspace/open/<app>/` (opens an application as the signed-in user; sign-in
+  first when needed; the cards and the HR portal use it). `workspace` is a reserved blog slug.
+- **Session check page** `/workspace-session.html` (second Vite entry, `src/portalsSession.ts` → `api/sessionBridge.ts`,
+  no React): embedded hidden by the HR portal; reports the central session (account email + expiry, or `null`) with
+  `postMessage` to the HR portal origin only — on load, on request and on every change, also from other tabs.
+- **Sign-in** (`api/workspaceAuth.ts`): username + password. The accounts (`data/accounts.ts`) are the **HR portal's
+  demo accounts** (mirrored — keep in sync with `apps/datahub-hr-admin-portal/src/modules/auth/mock/demoAccounts.ts`)
+  plus a **Blogs Administrator** (`blogs.admin@demo.datahub.test`). Any non-empty password is accepted; it is never
+  stored, logged or sent. Session: `localStorage` (`datahub-website.workspace-session`, 8 h, shared by the site's tabs,
+  sign-out in one tab signs out all). The stored role is re-checked against the account list on every read.
+- **Applications and access** (`data/applications.ts`, the one place for the prototype rules): **HR Admin** → every
+  HR portal role; **Blogs Admin** → Blogs Administrator and System Administrator. Cards, the Blogs Admin guard and the HR
+  handoff all use `canOpen` / `applicationsFor`. To add an application: id + roles there, strings under
+  `workspace.apps.<id>` in `i18n/locales/*.json`, and how `components/ApplicationCard.tsx` opens it.
+- **Blogs Admin** (same origin) reads the same session — see "Blog & admin".
+- **HR Admin** (another origin, `VITE_HR_ADMIN_PORTAL_URL`, dev default `http://localhost:3001`; production without
+  it hides the card): `/workspace/open/hr-admin/` sends the browser to `<portal>/sso#token=…` (`api/hrHandoff.ts`).
+  The token — base64url JSON `WorkspaceHandoffPayload` from `@datahub/shared-types`: issuer, account email, ~2-minute
+  expiry; no password or permissions — is created at that moment and travels in the URL **hash** (never sent to
+  servers, never in the query string). The portal has **no sign-in form**: it creates its session for the same demo
+  account, sends signed-out visitors to `/workspace/open/hr-admin/`, and follows the central session through the session
+  check page. The token is **unsigned**: a backend-issued token replaces `createHandoffToken` and the portal's parser.
+- **Sign-out** (Workspace, Blogs Admin or HR Admin) → `/workspace/logout/` → Workspace sign-in. It ends the central
+  session; this site's other tabs follow at once (storage event) and open HR tabs follow through the session check
+  (they end their session and go back through the Workspace). If another account signs in centrally, an open HR tab
+  switches to it. Same-site deployment (e.g. subdomains of one domain) is required for the check: cross-site embeds get
+  partitioned storage — the portal then stops after two ended sessions in 30 s (loop guard) and shows a button.
+- **i18n:** all Workspace text is in `i18n/locales/{en,ar}.json` under `workspace` (`UiStrings`); `fill()` fills `{…}`
+  placeholders. Blogs Admin stays English only.
 
 ## Content pipeline (inner pages)
 
@@ -222,5 +260,5 @@ Images and fonts stay in `public/` (generated content references them by URL). C
 
 ## Visual comparison workflow
 
-`npm run screenshot -- https://datahubanalytics.com/<path> <dir>/orig 1440` and the same for `http://localhost:5173/<path>`,
+`npm run screenshot -- https://datahubanalytics.com/<path> <dir>/orig 1440` and the same for `http://localhost:3000/<path>`,
 then compare chunk by chunk. Check 1920/1440/1280/1024/768/390/375 and both `/` and `/ar/`.

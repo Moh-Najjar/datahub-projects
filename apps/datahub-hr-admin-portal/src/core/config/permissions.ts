@@ -63,7 +63,13 @@ export const PERMISSIONS = [
   /** Review cycles, templates, competencies and the rating scale (performance configuration). */
   'performance:manage-config',
   'documents:read',
+  /** Documents of the departments the user manages: standard confidentiality, manager-visible categories only. */
+  'documents:read:team',
+  /** Own documents of employee-visible categories (never internal HR notes). */
+  'documents:read:own',
   'documents:write',
+  /** Document categories, required-document rules and the expiry warning threshold. */
+  'documents:manage-config',
   'reports:view',
   'settings:manage',
   'users:manage',
@@ -72,7 +78,7 @@ export const PERMISSIONS = [
 export type Permission = (typeof PERMISSIONS)[number];
 
 /** What every staff member can do for themselves (all roles are also employees). */
-const SELF_SERVICE: readonly Permission[] = ['profile:view', 'attendance:read:own', 'leave:read:own', 'leave:request', 'performance:read:own', 'payroll:read:own'];
+const SELF_SERVICE: readonly Permission[] = ['profile:view', 'attendance:read:own', 'leave:read:own', 'leave:request', 'performance:read:own', 'payroll:read:own', 'documents:read:own'];
 
 /** Full read/write on the HR areas. */
 const HR_CORE: readonly Permission[] = [
@@ -99,11 +105,11 @@ export const ROLE_PERMISSIONS: Readonly<Record<Role, readonly Permission[]>> = {
   /** Everything, including system settings and user/role management. */
   'system-admin': PERMISSIONS,
   /** All HR modules (read/write), payroll approval and HR settings — not user/role management. */
-  'hr-admin': [...SELF_SERVICE, ...HR_CORE, 'leave:manage-policies', 'performance:manage-config', 'payroll:read', 'payroll:write', 'payroll:approve', 'settings:manage'],
+  'hr-admin': [...SELF_SERVICE, ...HR_CORE, 'leave:manage-policies', 'performance:manage-config', 'payroll:read', 'payroll:write', 'payroll:approve', 'documents:manage-config', 'settings:manage'],
   /** HR modules (read/write) and leave approval; payroll read-only; no settings. */
   'hr-manager': [...SELF_SERVICE, ...HR_CORE, 'payroll:read'],
   /** Their own team only: employees, attendance and leave (incl. approving the team's leave), their team's recruitment (read-only) and performance (incl. manager reviews). */
-  'department-manager': [...SELF_SERVICE, 'dashboard:view', 'employees:read:team', 'attendance:read:team', 'leave:read:team', 'leave:approve:team', 'recruitment:read:team', 'performance:read:team', 'performance:review:team'],
+  'department-manager': [...SELF_SERVICE, 'dashboard:view', 'employees:read:team', 'attendance:read:team', 'leave:read:team', 'leave:approve:team', 'recruitment:read:team', 'performance:read:team', 'performance:review:team', 'documents:read:team'],
   /** Self-service only: own profile, attendance, leave, performance and payslips. */
   employee: SELF_SERVICE,
   /** Recruitment (read/write) and positions (read). */

@@ -1,7 +1,6 @@
-import { EXTERNAL_LINKS, industryAnchor, ROUTES } from '@/core/routes/paths';
+import { EXTERNAL_LINKS, industryAnchor, ROUTES, WORKSPACE_ROUTES } from '@/core/routes/paths';
 import type { Localized } from '@/i18n/languages';
 import type { NavColumn, NavItem, NavLink } from '@/core/types/navigation';
-import { HR_ADMIN_PORTAL_LOGIN_URL } from './hrAdminPortal';
 
 /* -------------------------------------------------------------------------- */
 /* Service columns (shared by the mega menu and the footer)                   */
@@ -148,10 +147,6 @@ const industryLinks = (locale: 'en' | 'ar'): NavLink[] =>
 /* Primary navigation                                                          */
 /* -------------------------------------------------------------------------- */
 
-/** DataHub's own item (not on the original site): only shown when the portal URL is configured. */
-const hrPortal = (label: string): NavItem[] =>
-  HR_ADMIN_PORTAL_LOGIN_URL ? [{ kind: 'app', label, href: HR_ADMIN_PORTAL_LOGIN_URL }] : [];
-
 export const PRIMARY_NAV: Localized<NavItem[]> = {
   en: [
     { kind: 'link', label: 'Home', href: ROUTES.home },
@@ -178,7 +173,8 @@ export const PRIMARY_NAV: Localized<NavItem[]> = {
     },
     { kind: 'link', label: 'Blog', href: ROUTES.blog },
     { kind: 'link', label: 'Contact Us', href: ROUTES.contact },
-    ...hrPortal('HR Portal'),
+    // DataHub's own item (not on the original site): the staff Portals sign-in.
+    { kind: 'app', label: 'Portals', href: WORKSPACE_ROUTES.root },
   ],
   ar: [
     { kind: 'link', label: 'الصفحة الرئيسية', href: ROUTES.home },
@@ -205,6 +201,6 @@ export const PRIMARY_NAV: Localized<NavItem[]> = {
     },
     { kind: 'link', label: 'مدونة', href: ROUTES.blog },
     { kind: 'link', label: 'تواصل معنا', href: ROUTES.contact },
-    ...hrPortal('بوابة الموارد البشرية'),
+    { kind: 'app', label: 'البوابات', href: WORKSPACE_ROUTES.root },
   ],
 };

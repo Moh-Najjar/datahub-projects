@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
+import LinearProgress from '@mui/material/LinearProgress';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Table from '@mui/material/Table';
@@ -28,6 +29,9 @@ import { formatDay, formatPercent, formatTimestamp } from '@/modules/payroll/uti
 import { CompensationStatusChip, IllustrativeChip, StateChip } from '../common/Chips';
 import { Code, Money } from '../common/Money';
 import { AssignmentDialog, CompensationFormDialog, EndAssignmentDialog } from './CompensationDialogs';
+
+// Payroll supporting documents live in Documents Management (one store); shown lazily, payroll categories only.
+const PayrollDocumentsPanel = lazy(() => import('@/modules/documents').then((m) => ({ default: m.PayrollDocumentsPanel })));
 
 const backIconSx = { transform: (theme: { direction: string }) => (theme.direction === 'rtl' ? 'scaleX(-1)' : undefined) };
 
@@ -249,6 +253,9 @@ function DetailView({ detail: d, notify }: { detail: EmployeeCompensationDetail;
           {t('tabs.deductions')}
         </Link>
       </Typography>
+      <Suspense fallback={<LinearProgress />}>
+        <PayrollDocumentsPanel employeeId={d.employeeId} />
+      </Suspense>
 
       {dialog?.kind === 'compensation' && <CompensationFormDialog detail={d} onClose={close} onDone={done(t('compensation.saved'))} />}
       {dialog?.kind === 'assign' && <AssignmentDialog kind={dialog.type} employeeId={d.employeeId} onClose={close} onDone={done(t('compensation.assigned'))} />}

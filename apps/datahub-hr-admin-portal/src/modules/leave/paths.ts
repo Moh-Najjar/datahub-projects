@@ -23,5 +23,7 @@ export const leavePaths = {
  */
 export const externalPaths = {
   employee: (employeeId: string) => `${navItem('employees').path}/${encodeURIComponent(employeeId)}`,
+  /** Documents directory searched by the request number (its attachment is registered there). */
+  documentsFor: (requestNumber: string) => `${navItem('documents').path}/directory?search=${encodeURIComponent(requestNumber)}`,
   attendanceHistory: (employeeId: string, month: string) => `${navItem('attendance').path}/history/${encodeURIComponent(employeeId)}?month=${month}`,
 };

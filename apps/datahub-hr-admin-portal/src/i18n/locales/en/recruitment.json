@@ -358,7 +358,8 @@
       "profile": "Profile",
       "timeline": "Timeline",
       "interviews": "Interviews",
-      "offers": "Offers"
+      "offers": "Offers",
+      "documents": "Documents"
     }
   },
   "pipeline": {

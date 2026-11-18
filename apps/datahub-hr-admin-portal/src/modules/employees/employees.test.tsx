@@ -46,7 +46,7 @@ describe('access by role (existing permission matrix)', () => {
     expect(screen.getByRole('button', { name: 'New employee' })).toBeTruthy();
   });
 
-  it('Payroll Officer: read-only directory and profiles, no documents', async () => {
+  it('Payroll Officer: read-only directory and profiles; the Documents tab shows payroll documents only', async () => {
     const { user } = await open('/employees', 'payroll-officer');
     expect(screen.getByText(/view-only access/)).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'New employee' })).toBeNull();
@@ -58,7 +58,8 @@ describe('access by role (existing permission matrix)', () => {
     await user.type(screen.getByRole('searchbox', { name: 'Search' }), 'dana');
     await user.click(await screen.findByRole('link', { name: 'Dana Yousef' }));
     await screen.findByRole('heading', { level: 2, name: 'Dana Yousef' });
-    expect(screen.queryByRole('tab', { name: 'Documents' })).toBeNull();
+    // Documents Management decides what the payroll role sees (payroll categories only — tested there).
+    expect(screen.getByRole('tab', { name: 'Documents' })).toBeTruthy();
     expect(screen.queryByRole('link', { name: 'Edit' })).toBeNull();
   });
 
@@ -76,7 +77,8 @@ describe('access by role (existing permission matrix)', () => {
     expect(await screen.findByText('This employee is not in your team.')).toBeTruthy();
     await router.navigate('/employees/emp-0014');
     expect(await screen.findByRole('heading', { level: 2, name: 'Hani Awad' })).toBeTruthy();
-    expect(screen.queryByRole('tab', { name: 'Documents' })).toBeNull();
+    // Team documents (standard confidentiality, manager-visible categories) — filtered by the Documents API.
+    expect(screen.getByRole('tab', { name: 'Documents' })).toBeTruthy();
   });
 
   it.each(['recruiter', 'employee'] as const)('%s: no Employees item and access denied', async (role) => {
@@ -293,23 +295,22 @@ describe('profile', () => {
     expect(screen.getByText('Relationship')).toBeTruthy();
   });
 
-  it('documents: metadata with statuses and a clearly simulated upload', async () => {
+  it('documents tab: Documents Management records, the checklist and a clearly simulated upload', async () => {
     const { user } = await open('/employees/emp-0001?tab=documents');
-    expect(await screen.findByText(/Simulated document storage/)).toBeTruthy();
+    expect(await screen.findByText(/file contents are not stored/, {}, { timeout: 8000 })).toBeTruthy();
     expect((await screen.findAllByText('Employment contract')).length).toBeGreaterThan(0);
     expect(document.querySelectorAll('[data-document-status]').length).toBeGreaterThanOrEqual(2);
+    expect(screen.getByRole('list', { name: 'Required documents' })).toBeTruthy();
 
     await user.click(screen.getByRole('button', { name: 'Upload document' }));
     const dialog = within(await screen.findByRole('dialog', { name: 'Upload document (simulated)' }));
+    expect(dialog.getByText(/Their content is not sent or stored/)).toBeTruthy();
+    await choose(user, /^Category/, 'Training Certificate');
+    await user.upload(dialog.getByTestId('document-file-input'), new File(['x'], 'first-aid.pdf', { type: 'application/pdf' }));
+    expect(dialog.getByText('first-aid.pdf')).toBeTruthy();
     await user.click(dialog.getByRole('button', { name: 'Upload document' }));
-    expect(await dialog.findByText('Choose a file.')).toBeTruthy();
-    await user.upload(dialog.getByLabelText('File'), new File(['x'], 'first-aid.pdf', { type: 'application/pdf' }));
-    await user.type(dialog.getByRole('textbox', { name: /^Document name/ }), 'First aid certificate');
-    await choose(user, /^Document type/, 'Certificate');
-    await user.click(dialog.getByRole('button', { name: 'Upload document' }));
-    expect(await screen.findByText('Document details saved (simulated upload).')).toBeTruthy();
-    expect(await screen.findByText('First aid certificate')).toBeTruthy();
-    expect(screen.getByText('Pending review')).toBeTruthy();
+    expect(await screen.findByText(/saved \(simulated upload, pending review\)/, {}, { timeout: 5000 })).toBeTruthy();
+    expect((await screen.findAllByText('Training Certificate')).length).toBeGreaterThan(0);
   });
 
   it('employment history', async () => {

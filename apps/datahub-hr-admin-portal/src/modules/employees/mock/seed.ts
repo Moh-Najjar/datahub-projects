@@ -1,7 +1,6 @@
 import type { Localized } from '@datahub/shared-types';
 import { DEPARTMENT_SEED, LOCATION_SEED, POSITION_SEED, SEED_HEADCOUNT } from '@/modules/organization/mock/seed';
 import type {
-  DocumentType,
   EmergencyContact,
   EmploymentStatus,
   EmploymentType,
@@ -52,19 +51,6 @@ export interface EmployeeRow {
   reportingDepartmentId: string | null;
   emergencyContact: EmergencyContact;
   createdAt: string;
-}
-
-export interface DocumentRow {
-  id: string;
-  employeeId: string;
-  name: string;
-  type: DocumentType;
-  fileName: string;
-  sizeBytes: number;
-  uploadedAt: string;
-  expiryDate: string | null;
-  /** Set for simulated uploads until HR reviews them; otherwise the status is computed from the expiry. */
-  pendingReview: boolean;
 }
 
 export interface HistoryRow {
@@ -288,24 +274,6 @@ function generate() {
 
 /* Documents and history (derived from the employees, deterministic) ------------------------------------- */
 
-function generateDocuments(employees: readonly EmployeeRow[]): DocumentRow[] {
-  const random = mulberry32(7_001);
-  const rows: DocumentRow[] = [];
-  let n = 1;
-  const add = (e: EmployeeRow, type: DocumentType, name: string, fileName: string, uploadedAt: string, expiryDate: string | null) =>
-    rows.push({ id: `doc-${String(n++).padStart(5, '0')}`, employeeId: e.id, name, type, fileName, sizeBytes: 80_000 + Math.floor(random() * 1_900_000), uploadedAt: `${uploadedAt}T10:00:00.000Z`, expiryDate, pendingReview: false });
-  for (const e of employees) {
-    add(e, 'contract', 'Employment contract', `contract-${e.employeeNumber}.pdf`, e.hireDate, e.contractEndDate);
-    const foreign = e.nationality !== 'JO';
-    // Identity documents expire: some already did or will soon, so every status appears.
-    const expiry = addDays(SEED_DATE, Math.floor(random() * 1400) - 120);
-    add(e, foreign ? 'passport' : 'national-id', foreign ? 'Passport copy' : 'National ID copy', `${foreign ? 'passport' : 'national-id'}-${e.employeeNumber}.pdf`, e.hireDate, expiry);
-    if (foreign) add(e, 'work-permit', 'Work permit', `work-permit-${e.employeeNumber}.pdf`, addDays(e.hireDate, 14), addDays(SEED_DATE, Math.floor(random() * 700) - 60));
-    if (random() < 0.45) add(e, 'certificate', 'University degree', `degree-${e.employeeNumber}.pdf`, addDays(e.hireDate, 3), null);
-  }
-  return rows;
-}
-
 function generateHistory(employees: readonly EmployeeRow[]): HistoryRow[] {
   const random = mulberry32(9_001);
   const rows: HistoryRow[] = [];
@@ -334,5 +302,4 @@ function generateHistory(employees: readonly EmployeeRow[]): HistoryRow[] {
 }
 
 export const EMPLOYEE_SEED: readonly EmployeeRow[] = generate();
-export const DOCUMENT_SEED: readonly DocumentRow[] = generateDocuments(EMPLOYEE_SEED);
 export const HISTORY_SEED: readonly HistoryRow[] = generateHistory(EMPLOYEE_SEED);

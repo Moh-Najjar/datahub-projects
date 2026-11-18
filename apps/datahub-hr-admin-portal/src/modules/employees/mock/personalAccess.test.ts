@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { ApiError } from '@/core/api/types';
 import { employeesApi as api } from '@/modules/employees/api/employeesApi';
-import { SENSITIVE_DOCUMENT_TYPES, type EmployeeScope } from '@/modules/employees/types/employee';
+import type { EmployeeScope } from '@/modules/employees/types/employee';
 import { EMPLOYEE_SEED } from './seed';
 
 /*
@@ -48,21 +48,6 @@ describe('employees:read:personal — enforced by the API', () => {
       const page = await api.getEmployees({ page: 1, pageSize: 50 }, scope);
       for (const row of page.items) for (const key of [...PERSONAL_KEYS, 'personal']) expect(Object.keys(row), key).not.toContain(key);
     }
-  });
-
-  it.each(WITHOUT_PERSONAL)('%s: identity and medical documents are not returned', async (role) => {
-    const all = await api.getEmployeeDocuments(ID, scopes['hr-admin']!);
-    expect(all.some((d) => SENSITIVE_DOCUMENT_TYPES.includes(d.type))).toBe(true);
-    const visible = await api.getEmployeeDocuments(ID, scopes[role]!);
-    expect(visible.some((d) => SENSITIVE_DOCUMENT_TYPES.includes(d.type))).toBe(false);
-    expect(visible.map((d) => d.type)).toContain('contract');
-  });
-
-  it('a sensitive document cannot be added without the permission', async () => {
-    const error = await api.addEmployeeDocument(ID, { name: 'Passport', type: 'passport', fileName: 'p.pdf', sizeBytes: 1000, expiryDate: null }, scopes['payroll-officer']!).catch((e: unknown) => e);
-    expect(error).toBeInstanceOf(ApiError);
-    expect((error as ApiError).code).toBe('FORBIDDEN');
-    expect((await api.addEmployeeDocument(ID, { name: 'Passport', type: 'passport', fileName: 'p.pdf', sizeBytes: 1000, expiryDate: null }, scopes['hr-manager']!)).status).toBe('pending-review');
   });
 
   it('write responses follow the same field rules as reads', async () => {

@@ -3,8 +3,8 @@ import type { Localized } from '@datahub/shared-types';
 import type { Permission, Role } from '@/core/config/permissions';
 
 /*
- * Client-side session state. In this phase the session comes from MOCK sign-in (modules/auth) and the
- * token is a random placeholder, not a credential. When the real backend exists, `signIn` will receive
+ * Client-side session state. The session comes from the DataHub Workspace's MOCK single sign-in (modules/auth, `/sso`)
+ * and the token is a random placeholder, not a credential. When the real backend exists, `signIn` will receive
  * its session and every request will carry the backend-issued token — authorization stays server-side.
  */
 

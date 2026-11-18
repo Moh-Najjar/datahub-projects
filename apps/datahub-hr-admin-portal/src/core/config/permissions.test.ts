@@ -49,7 +49,7 @@ describe('role/permission matrix (Phase 1)', () => {
   });
 
   it('Employee: self-service only (no dashboard, no other people)', () => {
-    expect(grants('employee')).toEqual(new Set(['profile:view', 'attendance:read:own', 'leave:read:own', 'leave:request', 'performance:read:own', 'payroll:read:own']));
+    expect(grants('employee')).toEqual(new Set(['profile:view', 'attendance:read:own', 'leave:read:own', 'leave:request', 'performance:read:own', 'payroll:read:own', 'documents:read:own']));
   });
 
   it('Recruiter: recruitment read/write and positions read; no employee records', () => {
@@ -68,6 +68,14 @@ describe('role/permission matrix (Phase 1)', () => {
     expect(p.has('leave:approve')).toBe(false);
     // Processing and approval are separated: the Payroll Officer prepares runs, the HR Administrator approves them.
     expect(p.has('payroll:approve')).toBe(false);
+  });
+
+  it('documents: configuration for System and HR Administrators; team documents for the Department Manager; own documents for everyone', () => {
+    expect(ROLES.filter((role) => hasPermission(role, 'documents:manage-config'))).toEqual(['system-admin', 'hr-admin']);
+    expect(ROLES.filter((role) => hasPermission(role, 'documents:read:team'))).toEqual(['system-admin', 'department-manager']);
+    expect(ROLES.filter((role) => hasPermission(role, 'documents:read'))).toEqual(['system-admin', 'hr-admin', 'hr-manager']);
+    expect(ROLES.filter((role) => hasPermission(role, 'documents:write'))).toEqual(['system-admin', 'hr-admin', 'hr-manager']);
+    for (const role of ROLES) expect(hasPermission(role, 'documents:read:own'), role).toBe(true);
   });
 
   it('payroll approval: System Administrator and HR Administrator only; own payslips for every role', () => {

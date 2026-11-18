@@ -134,38 +134,6 @@ export interface EmployeeInput {
  */
 export type EmployeeScope = { kind: 'organization'; role: Role } | { kind: 'team'; userId: string; role: Role };
 
-/* Documents ------------------------------------------------------------------------------------------ */
-
-export const DOCUMENT_TYPES = ['contract', 'national-id', 'passport', 'work-permit', 'certificate', 'medical', 'other'] as const;
-export type DocumentType = (typeof DOCUMENT_TYPES)[number];
-
-/** `pending-review` = uploaded, not yet checked by HR. Expiry-based states are computed by the backend. */
-export type DocumentStatus = 'valid' | 'expiring-soon' | 'expired' | 'pending-review';
-
-/** Identity and health documents: personal data, returned only with `employees:read:personal` (plus `documents:read`). */
-export const SENSITIVE_DOCUMENT_TYPES: readonly DocumentType[] = ['national-id', 'passport', 'work-permit', 'medical'];
-
-export interface EmployeeDocument {
-  id: string;
-  employeeId: string;
-  name: string;
-  type: DocumentType;
-  /** File metadata only — the file itself is NOT stored anywhere in this demo. */
-  fileName: string;
-  sizeBytes: number;
-  uploadedAt: string;
-  expiryDate: string | null;
-  status: DocumentStatus;
-}
-
-export interface DocumentInput {
-  name: string;
-  type: DocumentType;
-  fileName: string;
-  sizeBytes: number;
-  expiryDate: string | null;
-}
-
 /* Employment history --------------------------------------------------------------------------------- */
 
 export type HistoryEventType = 'joined' | 'department-changed' | 'position-changed' | 'manager-changed' | 'status-changed';

@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react
 import { useQueryClient } from '@tanstack/react-query';
 import { hasAnyPermission, hasPermission, isRole } from '@/core/config/permissions';
 import { AuthContext, SESSION_STORAGE_KEY, type AuthContextValue, type Session } from './authContext';
+import { recordWorkspaceEnded } from './workspaceEnded';
+import { WorkspaceSessionCheck } from './WorkspaceSessionCheck';
 
 function isSession(value: unknown): value is Session {
   const s = value as Session | null;
@@ -70,5 +72,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, [session, signIn, signOut]);
 
-  return <AuthContext value={value}>{children}</AuthContext>;
+  // The central Workspace session ended or changed (e.g. Sign out in another tab): end this one too. RequireAuth then
+  // sends the user back through the Workspace sign-in.
+  const onWorkspaceEnded = useCallback(() => {
+    recordWorkspaceEnded();
+    signOut();
+  }, [signOut]);
+
+  return (
+    <AuthContext value={value}>
+      {children}
+      {session && <WorkspaceSessionCheck email={session.user.email} onEnded={onWorkspaceEnded} />}
+    </AuthContext>
+  );
 }

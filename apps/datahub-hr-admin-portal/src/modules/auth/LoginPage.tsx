@@ -1,30 +1,41 @@
+import { useEffect, useState } from 'react';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import AppsOutlined from '@mui/icons-material/AppsOutlined';
 import { useTranslation } from 'react-i18next';
-import { isApiError } from '@/core/api/types';
-import type { LoginRequest } from '@/modules/auth/api/authApi';
-import { DemoAccountList } from '@/modules/auth/components/DemoAccountList';
-import { LoginForm } from '@/modules/auth/components/LoginForm';
-import { useLogin } from '@/modules/auth/hooks/useLogin';
+import { useLocation } from 'react-router-dom';
+import { workspaceOpenUrl } from '@/core/config/workspace';
+import { workspaceCheckLooping } from '@/core/context/workspaceEnded';
+import { useLanguage } from '@/i18n/useLanguage';
+import type { HandoffFailedState } from '@/modules/auth/SsoPage';
 import { BrandMark } from '@/modules/shared/BrandMark';
 import { DemoModeNotice } from '@/modules/shared/DemoModeNotice';
 import { LanguageSwitcher } from '@/modules/shared/LanguageSwitcher';
 import { ThemeModeSwitcher } from '@/modules/shared/ThemeModeSwitcher';
 
 /**
- * Mock sign-in: email form or one-click demo accounts, always under the demo-mode warning. After a
- * successful sign-in the /login route's guard redirects (to the requested page or the role's landing page).
+ * `/login` — this portal has NO sign-in form: signing in happens only in the DataHub Workspace. Signed-out visitors
+ * (RequireAuth sends them here) are forwarded at once to the Workspace's `/workspace/open/hr-admin/`, which signs them
+ * in when needed and comes back through `/sso`. The page stays (with a button instead of the automatic redirect) when
+ * a Workspace sign-in failed, when the session check keeps ending sessions (loop guard) or when no Workspace URL is
+ * configured.
  */
 export default function LoginPage() {
   const { t } = useTranslation('auth');
-  const login = useLogin();
-  const submit = (request: LoginRequest) => login.mutate(request);
+  const { language } = useLanguage();
+  const target = workspaceOpenUrl(language);
+  const handoffFailed = (useLocation().state as Partial<HandoffFailedState> | null)?.handoffFailed === true;
+  const [looping] = useState(() => workspaceCheckLooping());
+  const autoRedirect = Boolean(target) && !handoffFailed && !looping;
 
-  const error = login.error ? (isApiError(login.error) && login.error.code === 'UNAUTHORIZED' ? t('login.errors.unknownAccount') : t('login.errors.generic')) : null;
+  useEffect(() => {
+    if (autoRedirect && target) window.location.replace(target);
+  }, [autoRedirect, target]);
 
   return (
     <Box component="main" sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', bgcolor: 'background.default' }}>
@@ -44,22 +55,37 @@ export default function LoginPage() {
             </Typography>
             <Stack spacing={3}>
               <DemoModeNotice variant="full" />
-              {error && (
+              {handoffFailed && (
                 <Alert severity="error" role="alert">
-                  {error}
+                  {t('login.errors.handoff')}
                 </Alert>
               )}
-              <LoginForm onSubmit={submit} pending={login.isPending} />
-              <Divider />
-              <div>
-                <Typography variant="h6" component="h2">
-                  {t('login.demoAccountsTitle')}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, mb: 2 }}>
-                  {t('login.demoAccountsHint')}
-                </Typography>
-                <DemoAccountList onSelect={(email) => submit({ email, password: '' })} pending={login.isPending} />
-              </div>
+              {!handoffFailed && looping && (
+                <Alert severity="warning" role="alert">
+                  {t('login.errors.sessionCheck')}
+                </Alert>
+              )}
+              {!target && (
+                <Alert severity="info" role="alert">
+                  {t('login.notConfigured')}
+                </Alert>
+              )}
+              {target && (
+                <div>
+                  {autoRedirect && (
+                    <Box role="status" sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+                      <CircularProgress size={20} />
+                      <Typography>{t('login.redirecting')}</Typography>
+                    </Box>
+                  )}
+                  <Button component="a" href={target} variant="contained" fullWidth size="large" startIcon={<AppsOutlined />}>
+                    {t('login.workspace')}
+                  </Button>
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1, textAlign: 'center' }}>
+                    {t('login.workspaceHint')}
+                  </Typography>
+                </div>
+              )}
             </Stack>
           </Paper>
         </Stack>

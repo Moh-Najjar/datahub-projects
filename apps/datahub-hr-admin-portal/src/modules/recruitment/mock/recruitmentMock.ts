@@ -1461,3 +1461,42 @@ export function convertCandidateToEmployee(candidateId: string, input: EmployeeI
   c.history.push({ at: nowIso(), type: 'converted', from: null, to: null, by: actor(scope), note: employee.employeeNumber, refId: employee.id });
   return toCandidate(d, a, c);
 }
+
+/* Used by the documents mock (same simulated backend; documents → recruitment, never the other way) --------------- */
+
+export interface CandidateRecord {
+  id: string;
+  number: string;
+  name: Localized<string>;
+  stage: CandidateStage;
+  archived: boolean;
+  /** Department of the requisition applied for. */
+  departmentId: string;
+  /** Set once the candidate was converted to an employee. */
+  employeeId: string | null;
+  /** When the conversion happened (from the candidate's history), if converted. */
+  convertedAt: string | null;
+  appliedAt: string;
+}
+
+export const candidateRecords = {
+  /** Every candidate (any stage), with the requisition's department and the employee created from them, if any. */
+  all(): CandidateRecord[] {
+    const d = data();
+    const department = new Map(d.requisitions.map((r) => [r.id, r.departmentId]));
+    return d.candidates.map((c) => {
+      const conversion = [...c.history].reverse().find((h) => h.type === 'converted');
+      return {
+        id: c.id,
+        number: c.number,
+        name: { en: `${c.name.first.en} ${c.name.last.en}`, ar: `${c.name.first.ar} ${c.name.last.ar}` },
+        stage: c.stage,
+        archived: c.archived,
+        departmentId: department.get(c.requisitionId) ?? '',
+        employeeId: c.employeeId,
+        convertedAt: conversion?.at ?? null,
+        appliedAt: c.appliedAt,
+      };
+    });
+  },
+};

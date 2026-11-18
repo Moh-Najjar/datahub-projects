@@ -11,19 +11,19 @@ describe('role-based navigation', () => {
   });
 
   it('Employee sees only self-service items', () => {
-    expect(visibleKeys('employee')).toEqual(['profile', 'attendance', 'leave', 'performance', 'payroll']);
+    expect(visibleKeys('employee')).toEqual(['profile', 'attendance', 'leave', 'performance', 'payroll', 'documents']);
   });
 
   it('Department Manager sees team areas but not organisation-wide admin areas', () => {
-    expect(visibleKeys('department-manager')).toEqual(['dashboard', 'profile', 'employees', 'attendance', 'leave', 'recruitment', 'performance', 'payroll']);
+    expect(visibleKeys('department-manager')).toEqual(['dashboard', 'profile', 'employees', 'attendance', 'leave', 'recruitment', 'performance', 'payroll', 'documents']);
   });
 
   it('Recruiter sees recruitment and organization (positions)', () => {
-    expect(visibleKeys('recruiter')).toEqual(['dashboard', 'profile', 'organization', 'attendance', 'leave', 'recruitment', 'performance', 'payroll']);
+    expect(visibleKeys('recruiter')).toEqual(['dashboard', 'profile', 'organization', 'attendance', 'leave', 'recruitment', 'performance', 'payroll', 'documents']);
   });
 
   it('Payroll Officer sees payroll and employees', () => {
-    expect(visibleKeys('payroll-officer')).toEqual(['dashboard', 'profile', 'employees', 'attendance', 'leave', 'performance', 'payroll']);
+    expect(visibleKeys('payroll-officer')).toEqual(['dashboard', 'profile', 'employees', 'attendance', 'leave', 'performance', 'payroll', 'documents']);
   });
 
   it('HR Administrator sees settings but not users & roles', () => {
@@ -37,10 +37,10 @@ describe('role-based navigation', () => {
     expect(landingPath(canAnyFor('employee'))).toBe('/profile');
   });
 
-  it('only built pages are available (Organization, Employees, Attendance, Leave, Recruitment, Performance and Payroll since Phase 5); planned areas are marked unavailable', () => {
-    expect(NAV_ITEMS.filter((i) => i.available).map((i) => i.key)).toEqual(['dashboard', 'profile', 'employees', 'organization', 'attendance', 'leave', 'recruitment', 'performance', 'payroll']);
+  it('only built pages are available (Organization, Employees, Attendance, Leave, Recruitment, Performance, Payroll and Documents since Phase 5); planned areas are marked unavailable', () => {
+    expect(NAV_ITEMS.filter((i) => i.available).map((i) => i.key)).toEqual(['dashboard', 'profile', 'employees', 'organization', 'attendance', 'leave', 'recruitment', 'performance', 'payroll', 'documents']);
     expect(NAV_ITEMS.filter((i) => !i.available).map((i) => i.key)).toEqual(
-      expect.arrayContaining(['documents', 'reports', 'settings', 'users']),
+      expect.arrayContaining(['reports', 'settings', 'users']),
     );
   });
 });

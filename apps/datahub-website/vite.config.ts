@@ -12,6 +12,10 @@ export default defineConfig({
     // Monorepo safety: always bundle a single React, whatever npm hoists to the root.
     dedupe: ['react', 'react-dom'],
   },
+  server: {
+    port: 3000,
+    strictPort: true,
+  },
   css: {
     modules: {
       localsConvention: 'camelCaseOnly',
@@ -20,6 +24,11 @@ export default defineConfig({
   build: {
     target: 'es2022',
     rollupOptions: {
+      // The site, plus the hidden Workspace session check embedded by the HR Admin portal (no React, a few kB).
+      input: {
+        main: fileURLToPath(new URL('./index.html', import.meta.url)),
+        workspaceSession: fileURLToPath(new URL('./workspace-session.html', import.meta.url)),
+      },
       // Module barrels (src/modules/*/index.ts) only re-export. Marking them side-effect free lets
       // the bundler resolve each import to the module that defines it, so a barrel never drags a
       // module's other files into the importing page's chunk.

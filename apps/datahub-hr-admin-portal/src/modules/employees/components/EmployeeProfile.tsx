@@ -31,13 +31,14 @@ import { employeePaths } from '@/modules/employees/paths';
 import type { Employee } from '@/modules/employees/types/employee';
 import { displayName } from '@/modules/employees/utils/names';
 import { EmployeeAvatar } from './EmployeeAvatar';
-import { DocumentsSection } from './profile/DocumentsSection';
 import { HistorySection } from './profile/HistorySection';
 import { ContactSection, EmergencySection, EmploymentSection, OrganizationSection, PersonalSection } from './profile/ProfileSections';
 
 /** Leave tab from Leave Management, loaded on demand (keeps the leave UI out of this page's chunk). */
 const EmployeeLeaveTab = lazy(() => import('@/modules/leave').then((m) => ({ default: m.EmployeeLeaveTab })));
 /** Performance tab from Performance Management, loaded on demand. */
+// Documents Management owns every document (one source of truth); the profile shows its tab (lazy, no import cycle).
+const EmployeeDocumentsTab = lazy(() => import('@/modules/documents').then((m) => ({ default: m.EmployeeDocumentsTab })));
 const EmployeePerformanceTab = lazy(() => import('@/modules/performance').then((m) => ({ default: m.EmployeePerformanceTab })));
 
 const TABS = ['personal', 'contact', 'employment', 'organization', 'emergency', 'documents', 'leave', 'performance', 'history'] as const;
@@ -72,7 +73,7 @@ function ProfileView({ employee: e }: { employee: Employee }) {
   const { t } = useTranslation('employees');
   const { t: tCommon } = useTranslation();
   const { language } = useLanguage();
-  const { canManage, canReadDocuments } = useEmployeeAccess();
+  const { canManage } = useEmployeeAccess();
   const { canAny } = useAuth();
   // Link to Attendance only for roles that may read other people's attendance (organization or team).
   const canSeeAttendance = canAny(['attendance:read', 'attendance:read:team']);
@@ -80,6 +81,8 @@ function ProfileView({ employee: e }: { employee: Employee }) {
   const canSeeLeave = canAny(['leave:read', 'leave:read:team']);
   // Performance tab for roles that may read other people's performance (organization or team); the API scopes it.
   const canSeePerformance = canAny(['performance:read', 'performance:read:team']);
+  // HR documents, the team's permitted documents, or payroll documents (payroll roles): the API filters each.
+  const canReadDocuments = canAny(['documents:read', 'documents:read:team', 'payroll:read']);
   const feedback = useFeedback();
   const status = useEmployeeStatusFlow(feedback.notify);
   const [params, setParams] = useSearchParams();
@@ -164,7 +167,11 @@ function ProfileView({ employee: e }: { employee: Employee }) {
         {tab === 'employment' && <EmploymentSection employee={e} />}
         {tab === 'organization' && <OrganizationSection employee={e} />}
         {tab === 'emergency' && <EmergencySection employee={e} />}
-        {tab === 'documents' && <DocumentsSection employeeId={e.id} />}
+        {tab === 'documents' && (
+          <Suspense fallback={<LinearProgress aria-label={tCommon('shell.loading')} />}>
+            <EmployeeDocumentsTab employeeId={e.id} />
+          </Suspense>
+        )}
         {tab === 'leave' && (
           <Suspense fallback={<LinearProgress aria-label={tCommon('shell.loading')} />}>
             <EmployeeLeaveTab employeeId={e.id} />

@@ -208,7 +208,8 @@
     "attendanceNote": "Approved leave: these days appear as \"On leave\" in Attendance.",
     "draftNote": "Draft: only you can see it. Submit it to send it for approval.",
     "notFound": "This leave request does not exist.",
-    "forbidden": "This leave request is outside your access."
+    "forbidden": "This leave request is outside your access.",
+    "viewInDocuments": "View in Documents"
   },
   "balances": {
     "title": "Leave balances",

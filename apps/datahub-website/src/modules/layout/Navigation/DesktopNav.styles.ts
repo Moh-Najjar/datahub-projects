@@ -8,11 +8,11 @@ import { easing } from '@/core/theme/tokens';
  */
 
 /** Viewport width from which top-level items use the original (roomier) spacing, per direction. */
-const ROOMY_FROM = { ltr: 1540, rtl: 1800 } as const;
+const ROOMY_FROM = { ltr: 1580, rtl: 1800 } as const;
 
 /**
- * Below this width an `app` item (HR Portal) shows as an icon: even with the tight spacing the
- * Arabic menu is ~125px too wide for 1200–1439px with the full label.
+ * Below this width an `app` item (Workspace) shows as an icon: even with the tight spacing the menu does not fit
+ * 1200–1439px with the full label.
  */
 export const APP_ITEM_LABEL_FROM = 1440;
 
@@ -48,9 +48,9 @@ export const MenuItem = styled('li', { shouldForwardProp: noForward('active', 'o
       border: 0,
       cursor: 'pointer',
       '&:hover, &:focus-visible': { color: theme.palette.primary.main },
-      // Tighter items until the full menu (incl. Products and HR Portal) fits with the original spacing:
-      // measured, the menu needs 1099px (EN) / 1206px (AR) beside the logo, i.e. a viewport of about
-      // 1530px / 1740px (plus a margin). From ROOMY_FROM up the original spacing applies unchanged.
+      // Tighter items until the full menu (incl. Products and Workspace) fits with the original spacing:
+      // measured, the menu is 1112px (EN) / 1161px (AR) wide with it, which fits from about 1555px / 1650px
+      // (ROOMY_FROM keeps a margin). From ROOMY_FROM up the original spacing applies unchanged.
       [theme.breakpoints.between('xl', ROOMY_FROM[theme.direction])]: {
         margin: 0,
         padding: '22px 6px',

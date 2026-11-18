@@ -36,9 +36,14 @@ function useDebouncedValue<T>(value: T, delay: number): T {
  * Changing the search, a filter, the sort or the page size goes back to page 1. The search term is
  * debounced; TanStack Query caches each resulting page.
  */
-export function useListState<TFilters extends object, TSort extends string>(defaultSort: TSort, defaultDirection: SortDirection = 'asc'): ListState<TFilters, TSort> {
-  const [search, setSearchValue] = useState('');
-  const [filters, setFilters] = useState<Partial<TFilters>>({});
+export function useListState<TFilters extends object, TSort extends string>(
+  defaultSort: TSort,
+  defaultDirection: SortDirection = 'asc',
+  /** Optional starting search / filters (e.g. from the URL), so the FIRST request is already filtered. */
+  initial: { search?: string; filters?: Partial<TFilters> } = {},
+): ListState<TFilters, TSort> {
+  const [search, setSearchValue] = useState(initial.search ?? '');
+  const [filters, setFilters] = useState<Partial<TFilters>>(initial.filters ?? {});
   const [sortBy, setSortBy] = useState<TSort>(defaultSort);
   const [sortDirection, setSortDirection] = useState<SortDirection>(defaultDirection);
   const [page, setPage] = useState(1);

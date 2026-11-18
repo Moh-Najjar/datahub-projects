@@ -1635,3 +1635,15 @@ export function employeeOptions(search: string, scope: PayrollScope): EmployeeOp
     .slice(0, 25)
     .map((e) => ({ id: e.id, name: employeeRecords.fullName(e), employeeNumber: e.employeeNumber, department: deptRef(e.departmentId) }));
 }
+
+/* Used by the documents mock (same simulated backend; documents → payroll, never the other way) ------------------ */
+
+export const payslipRecords = {
+  /** The employee's issued payslips (approved / paid runs), newest first — Documents only REFERENCES them. */
+  forEmployee(employeeId: string): Array<{ id: string; number: string; periodStart: string; paymentDate: string }> {
+    return data()
+      .payslips.filter((p) => p.employeeId === employeeId)
+      .sort((a, b) => b.periodStart.localeCompare(a.periodStart))
+      .map((p) => ({ id: p.id, number: p.number, periodStart: p.periodStart, paymentDate: p.paymentDate }));
+  },
+};

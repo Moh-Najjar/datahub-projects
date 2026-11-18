@@ -17,12 +17,14 @@ import { AppLayout } from '@/modules/layout/AppLayout';
 type LazyPage = LazyExoticComponent<ComponentType>;
 
 const LoginPage: LazyPage = lazy(() => import('@/modules/auth/LoginPage'));
+const SsoPage: LazyPage = lazy(() => import('@/modules/auth/SsoPage'));
 const ProfilePage: LazyPage = lazy(() => import('@/modules/auth/ProfilePage'));
 const AttendancePage: LazyPage = lazy(() => import('@/modules/attendance/AttendancePage'));
 const LeavePage: LazyPage = lazy(() => import('@/modules/leave/LeavePage'));
 const RecruitmentPage: LazyPage = lazy(() => import('@/modules/recruitment/RecruitmentPage'));
 const PerformancePage: LazyPage = lazy(() => import('@/modules/performance/PerformancePage'));
 const PayrollPage: LazyPage = lazy(() => import('@/modules/payroll/PayrollPage'));
+const DocumentsPage: LazyPage = lazy(() => import('@/modules/documents/DocumentsPage'));
 const DashboardPage: LazyPage = lazy(() => import('@/modules/dashboard/DashboardPage'));
 const EmployeesPage: LazyPage = lazy(() => import('@/modules/employees/EmployeesPage'));
 const OrganizationPage: LazyPage = lazy(() => import('@/modules/organization/OrganizationPage'));
@@ -69,6 +71,8 @@ export const routes: RouteObject[] = [
     errorElement: <RouteError />,
     children: [
       { path: 'login', element: <LoginRoute /> },
+      // Single sign-in / sign-out with the DataHub Workspace (public; see modules/auth/SsoPage).
+      { path: 'sso', element: page(SsoPage) },
       {
         element: (
           <RequireAuth>
@@ -86,6 +90,7 @@ export const routes: RouteObject[] = [
           navRoute('recruitment', RecruitmentPage, { nested: true }),
           navRoute('performance', PerformancePage, { nested: true }),
           navRoute('payroll', PayrollPage, { nested: true }),
+          navRoute('documents', DocumentsPage, { nested: true }),
           { path: '*', element: page(NotFoundPage) },
         ],
       },

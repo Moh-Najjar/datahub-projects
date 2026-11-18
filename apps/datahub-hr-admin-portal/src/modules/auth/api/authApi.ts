@@ -1,27 +1,29 @@
 import { mockRequest } from '@/core/api/mock/mockRequest';
-import { ApiError } from '@/core/api/types';
-import type { Session, SessionUser } from '@/core/context/authContext';
+import type { Session } from '@/core/context/authContext';
+import { HandoffError, parseHandoffToken } from '@/modules/auth/handoff/workspaceHandoff';
 import { DEMO_ACCOUNTS } from '@/modules/auth/mock/demoAccounts';
 
 /*
- * Auth API — MOCK implementation. It does not authenticate anyone: `login` selects a demo account by
- * email and returns a placeholder session. The password is accepted, never stored, logged or compared.
- * The real backend will verify credentials and issue the token; only these function bodies change.
+ * Auth API — MOCK implementation. This portal has no sign-in form: users sign in once in the DataHub Workspace (the
+ * website), which hands them over to `/sso` with a short-lived token. Nothing is authenticated here; the real backend
+ * will verify a signed token (or its own SSO session) and issue the session — only this function body changes.
  */
-
-export interface LoginRequest {
-  email: string;
-  password: string;
-}
 
 const SESSION_HOURS = 8;
 
 export const authApi = {
-  login({ email }: LoginRequest, signal?: AbortSignal): Promise<Session> {
+  /**
+   * Single sign-in from the DataHub Workspace (`/sso#token=…`). MOCK: decodes the unsigned prototype token
+   * (`handoff/workspaceHandoff.ts`) and signs in as the demo account with that email — the same account the user
+   * chose in the Workspace. Throws `HandoffError` for a missing, malformed or expired token or an account this portal
+   * does not have (e.g. the Workspace's Blogs Administrator).
+   */
+  exchangeHandoff(token: string | null, signal?: AbortSignal): Promise<Session> {
     return mockRequest(
       () => {
-        const user = DEMO_ACCOUNTS.find((a) => a.email.toLowerCase() === email.trim().toLowerCase());
-        if (!user) throw new ApiError('UNAUTHORIZED', 'Unknown demo account');
+        const { email } = parseHandoffToken(token);
+        const user = DEMO_ACCOUNTS.find((a) => a.email.toLowerCase() === email.toLowerCase());
+        if (!user) throw new HandoffError('unknown-account');
         return {
           user,
           token: `mock-${crypto.randomUUID()}`,
@@ -30,10 +32,5 @@ export const authApi = {
       },
       { signal },
     );
-  },
-
-  /** The demo accounts offered on the sign-in page (mock only — a real backend has no such list). */
-  listDemoAccounts(signal?: AbortSignal): Promise<SessionUser[]> {
-    return mockRequest(() => [...DEMO_ACCOUNTS], { signal });
   },
 };

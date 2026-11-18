@@ -12,7 +12,8 @@
     "retry": "Try again",
     "signOut": "Sign out",
     "cancel": "Cancel",
-    "saving": "Saving…"
+    "saving": "Saving…",
+    "backToWorkspace": "DataHub Portals"
   },
   "pagination": {
     "first": "Go to first page",
@@ -59,7 +60,7 @@
   "demo": {
     "badge": "Demo mode",
     "title": "Demo Mode — Not Real Authentication",
-    "text": "This portal runs on simulated data. Sign-in only selects a demo account: any password is accepted, nothing is verified and no password is stored. Real authentication and authorization will be enforced by the backend."
+    "text": "This portal runs on simulated data. Sign-in comes from the DataHub Portals prototype: it only selects a demo account, nothing is verified and no password is stored. Real authentication and authorization will be enforced by the backend."
   },
   "nav": {
     "groups": {
@@ -129,7 +130,10 @@
     "performance_manage-config": "Configure performance reviews",
     "performance_write": "Manage performance",
     "documents_read": "View documents",
+    "documents_read_team": "View team documents",
+    "documents_read_own": "View own documents",
     "documents_write": "Manage documents",
+    "documents_manage-config": "Configure documents",
     "reports_view": "View reports",
     "settings_manage": "Manage HR settings",
     "users_manage": "Manage users and roles"

@@ -3,13 +3,13 @@
  * viewport width, then reports page heights side by side, console errors and horizontal
  * overflow on the local version.
  *
- * Usage: node scripts/compare-pages.ts [localBase=http://localhost:5173] [width=1440] [ar]
+ * Usage: node scripts/compare-pages.ts [localBase=http://localhost:3000] [width=1440] [ar]
  */
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { chromium, type Browser } from 'playwright';
 
-const [localBase = 'http://localhost:5173', widthArg = '1440', localeArg] = process.argv.slice(2);
+const [localBase = 'http://localhost:3000', widthArg = '1440', localeArg] = process.argv.slice(2);
 const width = Number(widthArg);
 const arabic = localeArg === 'ar';
 const ORIGIN = 'https://datahubanalytics.com';

@@ -86,7 +86,7 @@ export const NAV_GROUPS: readonly NavGroup[] = [
   {
     key: 'administration',
     items: [
-      { key: 'documents', path: '/documents', icon: DescriptionOutlined, anyOf: ['documents:read'], available: false },
+      { key: 'documents', path: '/documents', icon: DescriptionOutlined, anyOf: ['documents:read', 'documents:read:team', 'documents:read:own'], available: true },
       { key: 'reports', path: '/reports', icon: AssessmentOutlined, anyOf: ['reports:view'], available: false },
       { key: 'settings', path: '/settings', icon: SettingsOutlined, anyOf: ['settings:manage'], available: false },
       { key: 'users', path: '/users', icon: AdminPanelSettingsOutlined, anyOf: ['users:manage'], available: false },

@@ -117,6 +117,7 @@ const RESERVED_SLUGS = new Set([
   ...[...Object.values(ROUTES), ...Object.keys(LEGACY_REDIRECTS)].map((path) => path.split('/').filter(Boolean)[0] ?? '').filter(Boolean),
   'ar',
   'admin',
+  'workspace',
   'assets',
 ]);
 

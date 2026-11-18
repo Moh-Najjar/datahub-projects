@@ -26,7 +26,7 @@ DataHubProjects/
 | --- | --- | --- | --- |
 | **DataHub Website** | `apps/datahub-website` | React 19.3.0 · TypeScript 7 · Vite 8 · Material UI 9 · React Router 7 · Emotion (RTL) | Production-ready recreation of datahubanalytics.com (EN + AR) |
 | **DataHubHR** | `apps/datahub-hr` | Expo SDK 58 · React Native 0.88 · React 19.3.0 · Expo Router · TypeScript 6 | Configured foundation; HR features not started |
-| **DataHub HR Admin Portal** | `apps/datahub-hr-admin-portal` | React 19.3.0 · TypeScript 6 · Vite 8 · Material UI 9 · Apache ECharts 6 · React Router 7 · TanStack Query 5 · i18next (EN + AR, RTL) | Phase 5 (in progress): app shell, demo sign-in per role (mock — not real authentication), role-based navigation, HR dashboard (KPIs, Apache ECharts charts), Organization Management (departments, positions, locations, hierarchy), Employee Management (directory, profiles, create/edit, documents, history), Attendance Management (records, simulated check-in/out, shifts, history, reports, CSV), Leave Management (requests, approvals, balances, leave types, calendar, reports, CSV; approved leave shows in Attendance), Recruitment (requisitions, candidates, pipeline, interviews, offers, hire-to-employee conversion), Performance (review cycles, goals, self/manager reviews, competencies, development plans), Payroll (compensation history, allowances/deductions, payroll runs with approval workflow, decimal-safe calculation, bilingual payslips, reports, CSV). Mock data only — no backend yet |
+| **DataHub HR Admin Portal** | `apps/datahub-hr-admin-portal` | React 19.3.0 · TypeScript 6 · Vite 8 · Material UI 9 · Apache ECharts 6 · React Router 7 · TanStack Query 5 · i18next (EN + AR, RTL) | Phase 5 (in progress): app shell, demo sign-in per role (mock — not real authentication), role-based navigation, HR dashboard (KPIs, Apache ECharts charts), Organization Management (departments, positions, locations, hierarchy), Employee Management (directory, profiles, create/edit, documents, history), Attendance Management (records, simulated check-in/out, shifts, history, reports, CSV), Leave Management (requests, approvals, balances, leave types, calendar, reports, CSV; approved leave shows in Attendance), Recruitment (requisitions, candidates, pipeline, interviews, offers, hire-to-employee conversion), Performance (review cycles, goals, self/manager reviews, competencies, development plans), Payroll (compensation history, allowances/deductions, payroll runs with approval workflow, decimal-safe calculation, bilingual payslips, reports, CSV), Documents (categories, simulated upload, verification, expiry, required-document compliance; integrated with profiles, recruitment, leave and payroll). Mock data only — no backend yet |
 
 Each app owns its UI, routing, styling, i18n, services, utilities and configuration. Apps never import
 each other, and **UI code is never shared** — lint rules enforce this (see *Application boundaries*).
@@ -71,7 +71,7 @@ npm install                # installs every workspace (single root package-lock.
 ### DataHub Website
 
 ```bash
-npm run dev:website        # Vite dev server → http://localhost:5173
+npm run dev:website        # Vite dev server → http://localhost:3000
 npm run build:website      # type-check + production build → apps/datahub-website/dist
 npm run preview:website    # serve the production build
 npm run lint:website       # oxlint
@@ -97,7 +97,7 @@ Expo SDK 58. There is no web target for DataHubHR yet.
 ### DataHub HR Admin Portal
 
 ```bash
-npm run dev:admin          # Vite dev server → http://localhost:5174
+npm run dev:admin          # Vite dev server → http://localhost:3001
 npm run build:admin        # type-check + production build → apps/datahub-hr-admin-portal/dist
 npm run lint:admin         # oxlint (incl. architecture boundaries)
 npm run test:admin         # Vitest

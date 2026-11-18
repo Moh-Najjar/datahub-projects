@@ -95,6 +95,16 @@ export const LEGACY_REDIRECTS: Readonly<Record<string, AppPath>> = {
  * Admin area (blog management). English only, outside the public site layout, and not part of `ROUTES`
  * (public pages are generated from `ROUTES`). Available only when `ADMIN_ENABLED` (core/config/admin.ts).
  */
+/** The DataHub Workspace — central staff sign-in and application launcher (English + Arabic, outside the page catalogue). */
+export const WORKSPACE_ROUTES = {
+  root: '/workspace/',
+  login: '/workspace/login/',
+  /** Ends the Workspace session (every application's Sign out lands here), then shows the sign-in page. */
+  logout: '/workspace/logout/',
+  /** Opens an application as the signed-in user (sign-in first when needed). The HR portal sends signed-out users here. */
+  open: (app: string) => `/workspace/open/${encodeURIComponent(app)}/`,
+} as const;
+
 export const ADMIN_ROUTES = {
   root: '/admin/',
   login: '/admin/login/',

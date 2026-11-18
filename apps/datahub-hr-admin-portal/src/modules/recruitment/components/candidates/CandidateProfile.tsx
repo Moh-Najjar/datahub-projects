@@ -1,7 +1,9 @@
+import { lazy, Suspense } from 'react';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
+import LinearProgress from '@mui/material/LinearProgress';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Tab from '@mui/material/Tab';
@@ -28,7 +30,10 @@ import { OffersSection } from '../offers/OffersSection';
 import { useCandidateActions } from './useCandidateActions';
 
 const backIconSx = { transform: (theme: { direction: string }) => (theme.direction === 'rtl' ? 'scaleX(-1)' : undefined) };
-const TABS = ['profile', 'timeline', 'interviews', 'offers'] as const;
+const TABS = ['profile', 'timeline', 'interviews', 'offers', 'documents'] as const;
+
+// Candidate documents live in Documents Management (one store); shown lazily, for recruitment:read only.
+const CandidateDocumentsPanel = lazy(() => import('@/modules/documents').then((m) => ({ default: m.CandidateDocumentsPanel })));
 type TabKey = (typeof TABS)[number];
 
 /** `/recruitment/candidates/:candidateId` — profile, timeline (stage history), interviews and offers. */
@@ -59,7 +64,8 @@ function CandidateView({ candidate: c }: { candidate: Candidate }) {
   const feedback = useFeedback();
   const actions = useCandidateActions(feedback.notify, { includeView: false });
   const [params, setParams] = useSearchParams();
-  const tabs = TABS.filter((k) => k !== 'offers' || canSeeOffers);
+  const canSeeDocuments = canAny(['recruitment:read']);
+  const tabs = TABS.filter((k) => (k !== 'offers' || canSeeOffers) && (k !== 'documents' || canSeeDocuments));
   const requested = params.get('tab') as TabKey | null;
   const tab: TabKey = requested && tabs.includes(requested) ? requested : 'profile';
   const name = personName(c.name, language);
@@ -159,6 +165,11 @@ function CandidateView({ candidate: c }: { candidate: Candidate }) {
         {tab === 'timeline' && <Timeline candidateId={c.id} />}
         {tab === 'interviews' && <InterviewsSection candidateId={c.id} />}
         {tab === 'offers' && canSeeOffers && <OffersSection candidateId={c.id} />}
+        {tab === 'documents' && canSeeDocuments && (
+          <Suspense fallback={<LinearProgress />}>
+            <CandidateDocumentsPanel candidate={{ id: c.id, number: c.number, name: { en: `${c.name.first.en} ${c.name.last.en}`, ar: `${c.name.first.ar} ${c.name.last.ar}` } }} />
+          </Suspense>
+        )}
       </Box>
       {actions.dialogs}
       <Feedback {...feedback} />

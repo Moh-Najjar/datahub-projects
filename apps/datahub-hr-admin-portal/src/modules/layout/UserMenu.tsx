@@ -11,6 +11,7 @@ import AccountCircleOutlined from '@mui/icons-material/AccountCircleOutlined';
 import LogoutOutlined from '@mui/icons-material/LogoutOutlined';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { workspaceLogoutUrl } from '@/core/config/workspace';
 import { useAuth } from '@/core/context/authContext';
 import { useLanguage } from '@/i18n/useLanguage';
 
@@ -65,7 +66,10 @@ export function UserMenu() {
           onClick={() => {
             setAnchor(null);
             signOut();
-            navigate('/login', { replace: true });
+            // One central session: Sign out ends it in the DataHub Workspace, which then shows its sign-in page.
+            const workspaceLogout = workspaceLogoutUrl(language);
+            if (workspaceLogout) window.location.assign(workspaceLogout);
+            else navigate('/login', { replace: true });
           }}
         >
           <ListItemIcon>

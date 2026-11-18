@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
+import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { SmartLink } from '@/modules/shared/SmartLink';
 import { PRIMARY_NAV } from '@/core/config/navigation';
@@ -71,7 +71,7 @@ export function TopItem({ label, href, active, mega, lang, renderMenu }: TopItem
 }
 
 /**
- * Link to another DataHub application (HR Portal). Same tab, plain URL — no session is shared.
+ * DataHub's staff entry point (Workspace, `/workspace/`): the central sign-in and application launcher.
  * On narrow desktops it is an icon with the label as tooltip and accessible name; from
  * APP_ITEM_LABEL_FROM it shows the label like every other item.
  */
@@ -80,7 +80,7 @@ function AppItem({ label, href }: { label: string; href: string }) {
   const compact = useMediaQuery(theme.breakpoints.down(APP_ITEM_LABEL_FROM), { noSsr: true });
   const link = (
     <SmartLink href={href} className="nav-link" aria-label={compact ? label : undefined}>
-      <span className="nav-wrap">{compact ? <AdminPanelSettingsOutlinedIcon aria-hidden sx={{ fontSize: 22 }} /> : label}</span>
+      <span className="nav-wrap">{compact ? <WorkOutlineOutlinedIcon aria-hidden sx={{ fontSize: 22 }} /> : label}</span>
     </SmartLink>
   );
   return (

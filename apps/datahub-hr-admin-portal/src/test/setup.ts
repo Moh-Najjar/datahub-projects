@@ -4,6 +4,7 @@ import { afterEach, beforeEach, vi } from 'vitest';
 import i18n from '@/i18n';
 import { resetMockConfig, setMockConfig } from '@/core/api/mock/mockConfig';
 import { resetAttendanceMock } from '@/modules/attendance/mock/attendanceMock';
+import { resetDocumentsMock } from '@/modules/documents/mock/documentsMock';
 import { resetEmployeesMock } from '@/modules/employees/mock/employeesMock';
 import { resetLeaveStore } from '@/modules/leave/mock/leaveStore';
 import { resetOrganizationMock } from '@/modules/organization/mock/organizationMock';
@@ -39,6 +40,7 @@ afterEach(async () => {
   resetRecruitmentMock();
   resetPerformanceMock();
   resetPayrollMock();
+  resetDocumentsMock();
   localStorage.clear();
   sessionStorage.clear();
   document.documentElement.removeAttribute('data-color-scheme');

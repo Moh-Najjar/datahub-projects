@@ -1,12 +1,10 @@
 import { z } from 'zod';
 import {
-  DOCUMENT_TYPES,
   EMPLOYMENT_TYPES,
   FIXED_TERM_TYPES,
   GENDERS,
   MARITAL_STATUSES,
   RELATIONSHIPS,
-  type DocumentInput,
   type EmployeeInput,
 } from '@/modules/employees/types/employee';
 
@@ -159,26 +157,6 @@ export function toEmployeeFormValues(e: EmployeeInput): EmployeeFormValues {
   };
 }
 
-/* Documents (simulated upload) ---------------------------------------------------------------------- */
-
-export const ALLOWED_DOCUMENT_EXTENSIONS = ['pdf', 'jpg', 'jpeg', 'png', 'docx'] as const;
-export const MAX_DOCUMENT_BYTES = 10 * 1024 * 1024;
-
-export const documentFormSchema = z
-  .object({
-    name: required(100),
-    type: choice(DOCUMENT_TYPES),
-    expiryDate: optionalDate,
-    fileName: z.string().min(1, 'fileRequired'),
-    sizeBytes: z.number().int().nonnegative(),
-  })
-  .superRefine((v, ctx) => {
-    const extension = v.fileName.split('.').pop()?.toLowerCase() ?? '';
-    if (v.fileName && !(ALLOWED_DOCUMENT_EXTENSIONS as readonly string[]).includes(extension)) ctx.addIssue({ code: 'custom', path: ['fileName'], message: 'fileType' });
-    if (v.sizeBytes > MAX_DOCUMENT_BYTES) ctx.addIssue({ code: 'custom', path: ['fileName'], message: 'fileSize' });
-  });
-export type DocumentFormValues = z.input<typeof documentFormSchema>;
-
 /* Server-side validation (mock backend) ------------------------------------------------------------- */
 
 export type FieldErrors = Record<string, string[]>;
@@ -195,5 +173,3 @@ function issues(result: z.ZodSafeParseResult<unknown>): FieldErrors | undefined 
 
 export const validateEmployeeInput = (input: EmployeeInput) => issues(employeeFormSchema.safeParse(toEmployeeFormValues(input)));
 
-export const validateDocumentInput = (input: DocumentInput) =>
-  issues(documentFormSchema.safeParse({ name: input.name ?? '', type: input.type, expiryDate: input.expiryDate ?? '', fileName: input.fileName ?? '', sizeBytes: input.sizeBytes ?? 0 }));

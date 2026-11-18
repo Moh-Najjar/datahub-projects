@@ -134,10 +134,9 @@ describe('Department Manager team scoping (simulates the backend)', () => {
     expect([...departments].every((d) => d.startsWith('dep-eng'))).toBe(true);
   });
 
-  it('refuses profiles, documents and history outside the team', async () => {
+  it('refuses profiles and history outside the team (documents: see Documents Management)', async () => {
     expect((await api.getEmployeeById('emp-0014', TEAM)).department.id).toBe('dep-eng-mob');
     expect((await rejection(api.getEmployeeById('emp-0007', TEAM))).code).toBe('FORBIDDEN');
-    expect((await rejection(api.getEmployeeDocuments('emp-0007', TEAM))).code).toBe('FORBIDDEN');
     expect((await rejection(api.getEmployeeEmploymentHistory('emp-0007', TEAM))).code).toBe('FORBIDDEN');
   });
 
@@ -215,28 +214,7 @@ describe('status changes', () => {
   });
 });
 
-describe('documents and history', () => {
-  it('returns document metadata with computed statuses, newest first', async () => {
-    const docs = await api.getEmployeeDocuments('emp-0001', ORG);
-    expect(docs.length).toBeGreaterThanOrEqual(2);
-    expect(docs.map((d) => d.type)).toContain('contract');
-    expect(docs.every((d) => ['valid', 'expiring-soon', 'expired'].includes(d.status))).toBe(true);
-    // Across the organization every expiry state occurs.
-    const statuses = new Set<string>();
-    for (const id of ['emp-0001', 'emp-0002', 'emp-0003', 'emp-0010', 'emp-0040', 'emp-0080', 'emp-0120', 'emp-0160', 'emp-0200', 'emp-0240']) {
-      for (const d of await api.getEmployeeDocuments(id, ORG)) statuses.add(d.status);
-    }
-    expect(statuses.has('valid')).toBe(true);
-  });
-
-  it('simulated upload stores metadata only, pending review; validates type and size', async () => {
-    const added = await api.addEmployeeDocument('emp-0001', { name: 'First aid certificate', type: 'certificate', fileName: 'first-aid.pdf', sizeBytes: 120_000, expiryDate: '2028-01-01' }, ORG);
-    expect(added).toMatchObject({ status: 'pending-review', fileName: 'first-aid.pdf' });
-    expect((await api.getEmployeeDocuments('emp-0001', ORG))[0]!.id).toBe(added.id);
-    expect(await fieldErrors(api.addEmployeeDocument('emp-0001', { name: 'Script', type: 'other', fileName: 'run.exe', sizeBytes: 10, expiryDate: null }, ORG))).toEqual({ fileName: ['fileType'] });
-    expect(await fieldErrors(api.addEmployeeDocument('emp-0001', { name: 'Huge', type: 'other', fileName: 'scan.pdf', sizeBytes: 11 * 1024 * 1024, expiryDate: null }, ORG))).toEqual({ fileName: ['fileSize'] });
-  });
-
+describe('history', () => {
   it('every employee has a "joined" entry on their hire date; inactive employees have a status change', async () => {
     const dana = await api.getEmployeeById('emp-0001', ORG);
     const history = await api.getEmployeeEmploymentHistory('emp-0001', ORG);

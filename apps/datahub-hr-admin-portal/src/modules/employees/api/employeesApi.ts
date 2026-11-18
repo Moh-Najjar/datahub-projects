@@ -2,9 +2,7 @@ import { mockRequest } from '@/core/api/mock/mockRequest';
 import type { ListParams, Paginated } from '@/core/api/types';
 import * as mock from '@/modules/employees/mock/employeesMock';
 import type {
-  DocumentInput,
   Employee,
-  EmployeeDocument,
   EmployeeFilters,
   EmployeeInput,
   EmployeeOption,
@@ -22,9 +20,9 @@ import type {
  *
  * `scope` exists only because the mock has no token: the real backend derives who is asking (and so the
  * Department Manager's team) from the signed-in user and must refuse out-of-scope reads (`FORBIDDEN`). It must also
- * check `employees:write` / `documents:write` on every write — hiding buttons is not security.
+ * check `employees:write` on every write — hiding buttons is not security.
  *
- * Field-level access: the profile's `personal` block and identity/medical documents are returned only to roles with
+ * Field-level access: the profile's `personal` block is returned only to roles with
  * `employees:read:personal` (System Administrator, HR Administrator, HR Manager); others receive `personal: null`.
  */
 
@@ -38,11 +36,6 @@ export const employeesApi = {
   createEmployee: (input: EmployeeInput, scope: EmployeeScope): Promise<Employee> => mockRequest(() => mock.createEmployee(input, scope)),
   updateEmployee: (id: string, input: EmployeeInput, scope: EmployeeScope): Promise<Employee> => mockRequest(() => mock.updateEmployee(id, input, scope)),
   updateEmployeeStatus: (id: string, status: EmploymentStatus, scope: EmployeeScope): Promise<Employee> => mockRequest(() => mock.updateEmployeeStatus(id, status, scope)),
-
-  getEmployeeDocuments: (id: string, scope: EmployeeScope, signal?: Signal): Promise<EmployeeDocument[]> =>
-    mockRequest(() => mock.employeeDocuments(id, scope), { signal }),
-  /** SIMULATED upload: sends metadata only; no file content leaves the browser and nothing is stored. */
-  addEmployeeDocument: (id: string, input: DocumentInput, scope: EmployeeScope): Promise<EmployeeDocument> => mockRequest(() => mock.addEmployeeDocument(id, input, scope)),
 
   getEmployeeEmploymentHistory: (id: string, scope: EmployeeScope, signal?: Signal): Promise<EmploymentHistoryEntry[]> =>
     mockRequest(() => mock.employmentHistory(id, scope), { signal }),

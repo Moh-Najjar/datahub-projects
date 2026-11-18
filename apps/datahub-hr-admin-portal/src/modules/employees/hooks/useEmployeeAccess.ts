@@ -7,7 +7,7 @@ import type { EmployeeScope } from '@/modules/employees/types/employee';
  * - `employees:read` → whole organization; `employees:read:team` → own team only (Department Manager);
  * - `employees:read:personal` → personal details and identity documents (the API returns `personal: null` otherwise);
  * - `employees:write` → create / edit / activate / deactivate;
- * - `documents:read` / `documents:write` → the Documents tab / simulated upload.
+ * - documents (the profile's Documents tab) come from Documents Management, with its own permissions.
  * UI only — the backend must enforce the same rules and derive the scope from the signed-in user.
  */
 export function useEmployeeAccess() {
@@ -20,7 +20,5 @@ export function useEmployeeAccess() {
     scope,
     canManage: can('employees:write'),
     canReadPersonal: can('employees:read:personal'),
-    canReadDocuments: can('documents:read'),
-    canUploadDocuments: can('documents:write'),
   };
 }

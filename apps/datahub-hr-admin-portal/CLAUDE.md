@@ -5,16 +5,16 @@ employee/manager frontend; both will consume the same future HR backend).
 
 - **Original product.** Comparable in scope to established HR suites, but never copy another vendor's code, branding,
   logos, text or exact screen designs.
-- **Status: Phase 5 — Organization, Employee, Attendance, Leave, Recruitment, Performance and Payroll Management done** on top
+- **Status: Phase 5 — Organization, Employee, Attendance, Leave, Recruitment, Performance, Payroll and Documents Management done** on top
   of the foundation, shell, demo sign-in, permission guards, profile page and role-based HR dashboard (Phases 2–4).
-  Next, only after approval: documents / reports.
+  Next, only after approval: reports.
 - **No backend yet.** All data comes from the in-browser **mock API** with **fictional** data.
 
 ## Commands (from the monorepo root)
 
 | Command | Purpose |
 | --- | --- |
-| `npm run dev:admin` | Vite dev server → <http://localhost:5174> |
+| `npm run dev:admin` | Vite dev server → <http://localhost:3001> |
 | `npm run build:admin` | `tsc -b` + production build |
 | `npm run lint:admin` | oxlint, including architecture boundaries |
 | `npm run test:admin` | Vitest (jsdom + Testing Library) |
@@ -42,7 +42,7 @@ src/
 ├── core/                  application infrastructure — never imports modules (except the router)
 │   ├── api/               API contracts (ListParams, Paginated, ApiError), queryClient, mock/ toolkit
 │   ├── config/            permissions.ts — roles, permissions, role → permission matrix
-│   ├── context/           authContext.ts (Session types, useAuth), AuthProvider.tsx (session state),
+│   ├── context/           authContext.ts (Session types, useAuth), AuthProvider.tsx (session state), WorkspaceSessionCheck,
 │   │                      breadcrumbContext.ts + BreadcrumbProvider (pages add crumbs after their nav item)
 │   ├── guards/            RequireAuth / RedirectIfAuthenticated, RequirePermission (UI only)
 │   ├── routes/            index.tsx = the router; navigation.ts = nav map (sidebar, breadcrumbs, guards)
@@ -52,7 +52,8 @@ src/
 │   ├── shared/            reusable UI: LanguageSwitcher, ThemeModeSwitcher, DemoModeNotice, BrandMark, PageHeader,
 │   │                      list/form/page blocks (DataTable, ListToolbar, FormDialog, Panel…), charts/ (ECharts), hooks/, utils/
 │   ├── layout/            AppLayout, Sidebar, TopBar, AppBreadcrumbs, UserMenu
-│   ├── auth/              LoginPage, ProfilePage, api/authApi (mock), mock/demoAccounts, hooks, schemas, components
+│   ├── auth/              LoginPage (→ Workspace), SsoPage (/sso), ProfilePage, api/authApi (mock), handoff/ (token
+│   │                      parser), mock/demoAccounts
 │   ├── dashboard/         DashboardPage, access.ts (widget → permissions), api/, hooks/, mock/, types/, utils/,
 │   │                      charts/ (ECharts setup + pure option builders), components/ (+ components/charts/)
 │   ├── attendance/        AttendancePage (/attendance/*), paths.ts, api/, hooks/, mock/, schemas/, types/, utils/,
@@ -119,7 +120,7 @@ The router is `core/routes/index.tsx` (`createBrowserRouter`; tests use the expo
 each page is `lazy()`-loaded into its own chunk. URLs are English-only (`/employees/:id`); the language is a user
 preference, not part of the URL.
 
-- `/login` (public; signed-in users are redirected) → signed-in shell (`RequireAuth` + `AppLayout`): `/` redirects to
+- `/login` (public, forwards to the DataHub Workspace; signed-in users are redirected), `/sso` (public; Workspace sign-in, see Authentication) → signed-in shell (`RequireAuth` + `AppLayout`): `/` redirects to
   the role's landing page (first available nav item: dashboard, or profile for Employee), `/dashboard`, `/profile`,
   `/organization/*` (sub-routes inside the module: `departments[/:id]`, `positions`, `locations[/:id]`, `hierarchy`),
   and a 404 inside the shell.
@@ -132,14 +133,41 @@ preference, not part of the URL.
 
 ## Authentication and roles (Phase 3 — MOCK)
 
-- **Mock sign-in only**, under the permanent "Demo Mode — Not Real Authentication" warning (full notice on the
-  sign-in page, badge in the app bar). `modules/auth/api/authApi.ts` selects a demo account by email; **any password
-  is accepted and is never stored, logged or compared.** The token is a random `mock-…` placeholder.
+- **No sign-in of its own — the DataHub Workspace is the ONLY sign-in (prototype).** Staff sign in once on the public
+  website (`/workspace/login/`, with THESE demo accounts — mirrored in
+  `apps/datahub-website/src/modules/portals/data/accounts.ts`; keep both lists in sync). This portal has no
+  username/password form and no demo-account buttons.
+  - **Entering:** the Workspace opens `/sso#token=…` — base64url JSON (`WorkspaceHandoffPayload` from
+    `@datahub/shared-types`: issuer `datahub-workspace-prototype`, account email, ~2-minute expiry; no password, no
+    permissions) in the URL HASH (never sent to servers). `modules/auth/SsoPage.tsx` (public, outside `RequireAuth`)
+    reads it once, strips it from the URL, calls `authApi.exchangeHandoff(token)` (parser: `handoff/workspaceHandoff.ts`)
+    and stores the session for that demo account, then goes to `/` (the role's landing page). A missing, malformed,
+    expired (or > 5 min), wrong-issuer or unknown-account token (e.g. the Workspace's Blogs Administrator) ends any
+    session in this tab and shows `/login` with a short error and a "Continue to DataHub Workspace" button.
+  - **Signed out:** `RequireAuth` → `/login` (`LoginPage.tsx`), which forwards at once to the Workspace's
+    `/workspace/open/hr-admin/` (sign in there if needed, then back through `/sso`). No form.
+  - **Back to the Workspace:** the top bar's "DataHub Workspace" button (icon on phones; `workspaceHomeUrl`) opens the
+    Workspace dashboard in the same tab — the session stays.
+  - **Sign out** (user menu) clears this session and goes to the Workspace's `/workspace/logout/` (ends the central
+    session → Workspace sign-in).
+  - **Session check:** while signed in, `core/context/WorkspaceSessionCheck.tsx` (rendered by `AuthProvider`) embeds the
+    website's hidden `/workspace-session.html`, which reports the central session by `postMessage` (only messages from
+    the Workspace origin count; asked again on window focus). Signed out centrally (any tab) or another account → this
+    session ends and the user goes back through the Workspace. No answer changes nothing. Loop guard
+    (`core/context/workspaceEnded.ts`): two such sign-outs within 30 s → the sign-in page stops redirecting
+    automatically (happens when cross-site embeds get partitioned storage — deploy both apps on the same site).
+  - Workspace URL: `core/config/workspace.ts` (`VITE_WORKSPACE_URL`, dev default `http://localhost:3000`; production
+    without it cannot sign anyone in — the page says so). The token is **unsigned** — a backend token (or a backend SSO
+    session check) replaces only the parser, `exchangeHandoff`'s body and the session check.
+  - Tests: `auth.test.tsx`, `sso.test.tsx`, `handoff/workspaceHandoff.test.ts` (`test/handoffToken.ts`; tests stub
+    `window.location` for the cross-origin redirects).
+- Permanent "Demo Mode — Not Real Authentication" warning (full notice on `/login`, badge in the app bar). The token is
+  a random `mock-…` placeholder; no password ever reaches this portal.
 - Session: `AuthProvider` keeps it in `sessionStorage` (`datahub-hr-admin.session`, ends with the tab), validates its
   shape on load, expires it after 8 h and clears the TanStack Query cache on sign-out.
-- Demo accounts (fictional, `@demo.datahubhr.test`): `sysadmin` (System Administrator), `hr.admin` (HR Administrator),
-  `hr.manager` (HR Manager), `dept.manager` (Department Manager), `employee` (Employee), `recruiter` (Recruiter),
-  `payroll` (Payroll Officer). One-click buttons for each on the sign-in page.
+- Demo accounts (fictional, `@demo.datahubhr.test`, `mock/demoAccounts.ts`): `sysadmin` (System Administrator), `hr.admin`
+  (HR Administrator), `hr.manager` (HR Manager), `dept.manager` (Department Manager), `employee` (Employee),
+  `recruiter` (Recruiter), `payroll` (Payroll Officer). Tests sign in with `renderApp(path, { as: role })`.
 - Roles → permissions: `core/config/permissions.ts` (`ROLE_PERMISSIONS`, tested in `permissions.test.ts`).
   Permission strings are `<area>:<action>` (organisation-wide) with `:team` / `:own` scoped variants; every role has
   self-service (`profile:view`, own attendance/leave). Check with `useAuth().can(p)` / `canAny([...])`.
@@ -232,10 +260,10 @@ preference, not part of the URL.
 
 - **Routes** (inside `EmployeesPage`, `/employees/*`): directory (index), `new`, `:employeeId` (profile; tab in the URL,
   `?tab=documents`), `:employeeId/edit`. Breadcrumbs: Home › Employees › name › Edit (`useBreadcrumbs`).
-- **Data flow:** components → `hooks/useEmployees.ts` (`useEmployees`, `useEmployee`, `useEmployeeDocuments`,
-  `useEmploymentHistory`, `useManagerOptions`; mutations create / update / status / add document) →
+- **Data flow:** components → `hooks/useEmployees.ts` (`useEmployees`, `useEmployee`,
+  `useEmploymentHistory`, `useManagerOptions`; mutations create / update / status) →
   `api/employeesApi.ts` (`getEmployees`, `getEmployeeById`, `createEmployee`, `updateEmployee`, `updateEmployeeStatus`,
-  `getEmployeeDocuments`, `addEmployeeDocument`, `getEmployeeEmploymentHistory`, `getManagerOptions`) →
+  `getEmployeeEmploymentHistory`, `getManagerOptions`) →
   `mock/employeesMock.ts` (fictional, deterministic seed in `mock/seed.ts`: 248 people, `.test` e-mails, "000" phones).
   Keys `['employees', resource, scope, …]`; every employee write invalidates `employees` **and** `organization`
   (counts, manager names/options).
@@ -253,21 +281,21 @@ preference, not part of the URL.
 - **Permissions / scope (existing matrix):** `employees:read` → whole organization (System/HR Admin, HR Manager,
   Payroll Officer — read-only); `employees:read:team` → Department Manager, own team only (departments they manage +
   subdepartments; the mock maps demo accounts to employees and returns `FORBIDDEN` outside the team);
-  `employees:write` → create/edit/status; `documents:read`/`documents:write` → Documents tab / simulated upload;
+  `employees:write` → create/edit/status; the Documents tab is Documents Management's (see below);
   `employees:read:personal` (System Admin, HR Admin, HR Manager only) → personal details, see below.
   Recruiter and Employee have no access. `useEmployeeAccess` derives the scope from the session; the real backend
   must derive it from the token, never from the request.
 - **Personal information (`employees:read:personal`):** date of birth, gender, nationality, marital status, personal
   e-mail, phones, address (incl. city/country) and emergency contact form the profile's `personal` block, which the
   API returns as `null` without the permission (enforced in the mock from the viewer's role — the real backend must
-  decide from the token). Identity/medical documents (`SENSITIVE_DOCUMENT_TYPES`) are likewise not returned. The UI
+  decide from the token). (Identity and medical documents follow the same rule in Documents Management: highly confidential.) The UI
   shows a "restricted" notice and no Emergency tab; employment and organization data stay visible. Payroll Officers
   and Department Managers keep their read access (organization / own team) without personal details. Editing needs
   the personal block (`employeeToInput` throws without it); every role with `employees:write` holds the permission.
-- **Documents:** metadata only; the "upload" reads the file's name and size in the browser and stores nothing —
-  labelled as simulated in the UI. Statuses: valid / expiring soon (30 days) / expired / pending review.
+- **Documents:** the profile's Documents tab is `EmployeeDocumentsTab` from `@/modules/documents` (lazy). Employee
+  Management keeps NO document store of its own (one source of truth: Documents Management).
 - **Tests:** `mock/employeesBackend.test.ts` (seed consistency with Organization, directory, scoping, rules, status,
-  documents, history, manager options), `schemas/employeeSchemas.test.ts`, `hooks/useEmployees.test.tsx` (scoped
+  history, manager options), `schemas/employeeSchemas.test.ts`, `hooks/useEmployees.test.tsx` (scoped
   keys, cross-module invalidation), `employees.test.tsx` (roles, directory, create/edit, status, profile, documents,
   history, states, Arabic, dark).
 
@@ -419,11 +447,46 @@ preference, not part of the URL.
   ("Save as PDF"). No PDF library.
 - **Tests:** `utils/engine.test.ts`, `mock/payrollBackend.test.ts`, `charts/options.test.ts`, `payroll.test.tsx`.
 
+## Documents Management (`modules/documents`, Phase 5)
+
+- **Routes** (`/documents/*`): overview, `directory[/:documentId]` (`?search=` / `?status=` pre-filter it), `expiry`,
+  `required`, `categories`, `my`. Roles reading only their own documents get "My documents" at the index.
+- **One source of truth:** `mock/documentsMock.ts` holds every document record — employee documents (Employee
+  Management no longer stores any), candidate documents (owner = candidate; categories marked `transferOnHire` are
+  LINKED to the employee once the candidate is hired, no copy), leave attachments (registered once from Leave requests,
+  same file reference) and payroll supporting documents. Payslips stay in Payroll and are only referenced (links).
+  Read-only accessors used: `employeeRecords`, `orgTables`, `candidateRecords` (recruitment mock), `leaveData`,
+  `payslipRecords` (payroll mock). UI integration: `EmployeeDocumentsTab` (profile), `CandidateDocumentsPanel`
+  (candidate profile, `recruitment:read`), `PayrollDocumentsPanel` (compensation page) — all lazy imports of
+  `@/modules/documents`; Leave links to the directory by request number. Documents imports none of those UIs.
+- **Data flow:** components → `hooks/useDocuments.ts` (keys `['documents', resource, scope]`, scope = user + role;
+  every write invalidates `['documents']`) → `api/documentsApi.ts` → mock.
+- **Files are SIMULATED:** the browser sends file names and sizes only; nothing is stored; `downloadAvailable` is
+  always false and no download link exists anywhere. Future backend contract: authenticated upload, scanning, encrypted
+  storage, per-request authorised short-lived downloads, audit (documented on `FileRef`).
+- **Rules (mock):** category-driven validation (file types, size, max 5 files, expiry required, unique number),
+  issue ≤ today ≤ … expiry ≥ issue, owner active and eligible (owner type, employment type). Verification status
+  (pending / verified / rejected / archived / superseded) is separate from expiry (valid / expiring soon (threshold,
+  initially 30 days, configurable) / expired / no expiry); overall status `expired` overrides pending/verified.
+  Expired, archived or superseded documents cannot be verified; reject and archive need a reason; editing number,
+  dates or category returns a verified document to review; a replacement supersedes the previous document only when
+  verified (both kept and linked); nothing is deleted; every decision is in the history.
+- **Required documents:** rules (any of N categories × employment types × status × department) → per-employee
+  checklist (required within a 30-day grace period, missing, uploaded-with-replacement-requested, pending
+  verification, verified, expired) and completeness. Information only: never blocks payroll or changes status.
+- **Permissions (approved additions):** `documents:read:own` (every role), `documents:read:team` (Department
+  Manager: team, standard confidentiality, manager-visible categories), `documents:manage-config` (HR Admin).
+  Payroll roles see payroll categories (`payroll:read`), recruitment roles candidate documents (`recruitment:read`;
+  `recruitment:write` uploads/reviews them). Highly confidential documents also need `employees:read:personal`;
+  internal notes are never returned to owners, managers or payroll. Anything not visible → NOT_FOUND.
+- **Tests:** `mock/documentsBackend.test.ts`, `charts/options.test.ts`, `documents.test.tsx` (+ the profile tab in
+  `employees.test.tsx`).
+
 ## Shared building blocks (`modules/shared`)
 
 - Lists: `DataTable` (server-side sort/pagination, loading / error + retry / empty, `hideBelow` per column),
   `ListToolbar` + `FilterSelect`, `RowActions`, `StatusChip`; `hooks/useListState` (1-based params, 300 ms search
-  debounce). Forms: `FormDialog` (optional `secondaryAction`, `maxWidth`), `SelectField` (RHF-bound select),
+  debounce, optional initial search/filters — e.g. from the URL — so the first request is already filtered). Forms: `FormDialog` (optional `secondaryAction`, `maxWidth`), `SelectField` (RHF-bound select),
   `ConfirmDialog`, `formFields` (`textFieldProps`, `arabicInput`/`latinInput`), `utils/download` (CSV via Blob),
   `utils/serverErrors` (`applyServerErrors`). Pages: `Panel`, `DetailList`, `QueryBoundary`, `Feedback` +
   `hooks/useFeedback`, `hooks/useStatusFlow` (confirmed deactivation). Texts come from `common` (`list.*`, `status.*`).
@@ -433,10 +496,11 @@ preference, not part of the URL.
 
 ## Simulated backend across modules
 
-Organization, Employees, Attendance, Leave, Recruitment, Performance and Payroll mocks are ONE simulated backend: their `mock/`
+Organization, Employees, Attendance, Leave, Recruitment, Performance, Payroll and Documents mocks are ONE simulated backend: their `mock/`
 folders may import each other's `mock/` files (organization ⇄ employees; attendance → employees + organization + leave
 `leaveStore` only; leave → attendance + employees + organization; recruitment → employees + organization; performance →
-employees + organization; payroll → employees + organization + attendance + leave mocks) and nothing else of the other module — lint overrides allow exactly that. Never import
+employees + organization; payroll → employees + organization + attendance + leave mocks; documents → employees + organization + recruitment +
+leave + payroll mocks) and nothing else of the other module — lint overrides allow exactly that. Never import
 another module's mock from UI, hooks or API code. `test/setup.ts` resets every mock after each test.
 
 ## Security (even with mock data)
@@ -449,5 +513,5 @@ another module's mock from UI, hooks or API code. `test/setup.ts` resets every m
 ## Relationship with other workspaces
 
 - Never import website or DataHubHR code (lint-enforced); never share UI with React Native.
-- `@datahub/shared-types` only for contracts both frontends genuinely consume (today: `Locale`, `Direction`).
+- `@datahub/shared-types` only for contracts both frontends genuinely consume (today: `Locale`, `Direction` and the Workspace handoff token `WorkspaceHandoffPayload`).
   The API types written here are drafts of the future shared contract; promote one only when the mobile app uses it.
