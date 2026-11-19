@@ -208,7 +208,7 @@ function Toolbar({ editor, htmlMode, onToggleHtml }: { editor: Editor; htmlMode:
   const chain = () => editor.chain().focus();
   const off = htmlMode;
   return (
-    <Box role="toolbar" aria-label={T.toolbar} sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '2px', p: '6px', borderBottom: '1px solid', borderColor: 'divider', bgcolor: 'background.default', position: 'sticky', top: 64, zIndex: 2 }}>
+    <Box role="toolbar" aria-label={T.toolbar} sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '2px', p: '6px', borderBottom: '1px solid', borderColor: 'divider', bgcolor: 'background.default', borderTopLeftRadius: '10px', borderTopRightRadius: '10px' }}>
       <Select
         size="small"
         value={s.block}
@@ -338,7 +338,7 @@ export function RichTextEditor({ id, label, value, onChange, onBlur, error, help
       <Typography component="label" htmlFor={id} sx={{ display: 'block', mb: '6px', fontWeight: 500, color: error ? 'error.main' : 'brand.heading' }}>
         {label} *
       </Typography>
-      <Box sx={{ border: '1px solid', borderColor: error ? 'error.main' : 'divider', borderRadius: '10px', overflow: 'hidden', bgcolor: 'background.paper', '&:focus-within': { borderColor: error ? 'error.main' : 'primary.main', boxShadow: (theme) => `0 0 0 1px ${error ? theme.palette.error.main : theme.palette.primary.main}` } }}>
+      <Box sx={{ border: '1px solid', borderColor: error ? 'error.main' : 'divider', borderRadius: '10px', bgcolor: 'background.paper', '&:focus-within': { borderColor: error ? 'error.main' : 'primary.main', boxShadow: (theme) => `0 0 0 1px ${error ? theme.palette.error.main : theme.palette.primary.main}` } }}>
         <Toolbar
           editor={editor}
           htmlMode={htmlMode}
