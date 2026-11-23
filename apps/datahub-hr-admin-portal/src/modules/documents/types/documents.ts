@@ -379,8 +379,8 @@ export interface OwnerOption {
 
 /**
  * Who is asking. Access is the UNION of the caller's permissions (computed by the backend from the token): organization
- * documents (documents:read), team documents (documents:read:team), payroll documents (payroll:read), candidate documents
- * (recruitment:read) and own documents (documents:read:own).
+ * documents (hr.documents.view), team documents (hr.documents.view.team), payroll documents (hr.payroll.view), candidate documents
+ * (recruitment.jobs.view) and own documents (hr.documents.view.own).
  */
 export interface DocumentsScope {
   userId: string;

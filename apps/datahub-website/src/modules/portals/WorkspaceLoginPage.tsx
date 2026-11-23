@@ -4,9 +4,6 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -22,10 +19,10 @@ import { fill, UI } from '@/i18n';
 import { useLocale } from '@/i18n/LocaleContext';
 import { localizePath, stripLocale } from '@/i18n/paths';
 import { SmartLink } from '@/modules/shared/SmartLink';
-import { AuthError, signIn } from '@/modules/portals/api/workspaceAuth';
+import { AuthError } from '@/modules/portals/api/workspaceAuth';
 import { LanguageLink } from '@/modules/portals/components/LanguageLink';
-import { DEMO_ACCOUNTS } from '@/modules/portals/data/accounts';
 import { useWorkspaceSession } from '@/modules/portals/hooks/useWorkspaceSession';
+import { useSignIn } from '@/modules/portals/hooks/useSignIn';
 import type { WorkspaceLocationState } from '@/modules/portals/types';
 
 /** Only pages of this site's staff areas are valid return targets. */
@@ -37,9 +34,8 @@ function safeTarget(from: unknown): string | undefined {
 }
 
 /**
- * `/workspace/login/` — the ONE sign-in of DataHub's staff applications (MOCK, not real authentication). Username +
- * password; the demo accounts are listed to fill the username. The password is only checked for presence: it never
- * leaves this form (not stored, logged or sent) and is cleared after signing in.
+ * `/workspace/login/` — the ONE sign-in of DataHub's staff applications: email + password, verified by the backend
+ * (`POST /api/v1/auth/login`). The password is never stored or logged and is cleared after signing in.
  */
 export default function WorkspaceLoginPage() {
   const { locale } = useLocale();
@@ -49,6 +45,7 @@ export default function WorkspaceLoginPage() {
   const navigate = useNavigate();
   const state = (useLocation().state ?? null) as WorkspaceLocationState | null;
   const [error, setError] = useState<string>();
+  const signInMutation = useSignIn();
   const [showPassword, setShowPassword] = useState(false);
 
   const schema = z.object({
@@ -56,7 +53,7 @@ export default function WorkspaceLoginPage() {
     password: z.string().min(1, T.passwordRequired),
   });
   type Values = z.infer<typeof schema>;
-  const { register, handleSubmit, formState, setValue, reset } = useForm<Values>({ resolver: zodResolver(schema), defaultValues: { username: '', password: '' } });
+  const { register, handleSubmit, formState, reset } = useForm<Values>({ resolver: zodResolver(schema), defaultValues: { username: '', password: '' } });
 
   const target = safeTarget(state?.from) ?? localizePath(WORKSPACE_ROUTES.root, locale);
   // Already signed in (e.g. the header's Workspace link in another tab): straight to the Workspace.
@@ -65,7 +62,7 @@ export default function WorkspaceLoginPage() {
   const onSubmit = handleSubmit(async ({ username, password }) => {
     setError(undefined);
     try {
-      await signIn(username, password);
+      await signInMutation.mutateAsync({ username, password });
       reset({ username, password: '' });
       navigate(target, { replace: true });
     } catch (e) {
@@ -102,12 +99,12 @@ export default function WorkspaceLoginPage() {
           </Typography>
 
           <Box component="form" noValidate onSubmit={onSubmit} sx={{ mt: '28px', display: 'grid', gap: '18px' }}>
-            <Alert severity="warning">{T.prototype}</Alert>
             {error && <Alert severity="error">{error}</Alert>}
             {!error && state?.signedOut && <Alert severity="success">{T.signedOut}</Alert>}
             {!error && !state?.signedOut && state?.from && <Alert severity="info">{T.signInRequired}</Alert>}
             <TextField
               label={T.username}
+              type="email"
               autoComplete="username"
               autoFocus
               required
@@ -141,29 +138,6 @@ export default function WorkspaceLoginPage() {
             </Button>
           </Box>
 
-          <Box component="section" aria-labelledby="demo-accounts" sx={{ mt: '28px', pt: '22px', borderTop: '1px solid #ededed' }}>
-            <Typography id="demo-accounts" component="h2" sx={{ fontSize: 16, fontWeight: 500, color: 'brand.heading' }}>
-              {T.demoTitle}
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mt: '4px', fontSize: 13 }}>
-              {T.demoHint}
-            </Typography>
-            <List dense disablePadding sx={{ mt: '10px' }}>
-              {DEMO_ACCOUNTS.map((account) => (
-                <ListItemButton
-                  key={account.username}
-                  onClick={() => setValue('username', account.username, { shouldValidate: formState.isSubmitted })}
-                  sx={{ borderRadius: '6px', px: '10px' }}
-                >
-                  <ListItemText
-                    primary={`${account.name[locale]} · ${t.roles[account.role]}`}
-                    secondary={account.username}
-                    slotProps={{ primary: { sx: { fontSize: 14 } }, secondary: { dir: 'ltr', sx: { fontSize: 12, textAlign: locale === 'ar' ? 'right' : 'left' } } }}
-                  />
-                </ListItemButton>
-              ))}
-            </List>
-          </Box>
         </Paper>
       </Box>
     </Box>

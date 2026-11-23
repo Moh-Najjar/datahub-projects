@@ -32,7 +32,7 @@ function useFormat() {
   };
 }
 
-/** Shown instead of personal details when the API withheld them (no `employees:read:personal`). */
+/** Shown instead of personal details when the API withheld them (no `hr.employees.view.personal`). */
 function Restricted() {
   const { t } = useTranslation('employees');
   return (

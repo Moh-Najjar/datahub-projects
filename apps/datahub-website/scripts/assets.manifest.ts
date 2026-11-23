@@ -3,7 +3,7 @@
  *
  * Every entry maps an original URL to a descriptive local path under `public/`.
  * Run `npm run assets` to (re)download anything that is missing.
- * Blog images are handled separately by `scripts/export-blog.ts`.
+ * Blog images are served by the backend (blog posts come from its API).
  */
 export interface AssetEntry {
   /** Original URL (absolute, or a path relative to the origin). */

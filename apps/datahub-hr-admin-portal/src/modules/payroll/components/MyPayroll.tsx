@@ -25,7 +25,7 @@ import { IllustrativeChip } from './common/Chips';
 import { Code, Money } from './common/Money';
 
 /**
- * My payroll (payroll:read:own — every staff member): own compensation, allowances and deductions in force, and the
+ * My payroll (hr.payroll.view.own — every staff member): own compensation, allowances and deductions in force, and the
  * payroll history from own payslips. Nothing about other employees or the organisation is requested.
  */
 export function MyPayroll() {

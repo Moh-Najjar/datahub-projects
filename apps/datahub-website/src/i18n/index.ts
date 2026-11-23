@@ -9,6 +9,8 @@ import en from './locales/en.json';
 export interface UiStrings {
   siteName: string;
   skipToContent: string;
+  /** The floating "back to top" button. */
+  backToTop: string;
   openMenu: string;
   closeMenu: string;
   toggleSubmenu: string;
@@ -69,6 +71,15 @@ export interface UiStrings {
     loading: string;
     error: string;
   };
+  /** Blog index, homepage blog section and post pages (states of the backend data). */
+  blog: {
+    loading: string;
+    error: string;
+    retry: string;
+    empty: string;
+    postError: string;
+    loadMore: string;
+  };
   /**
    * DataHub Workspace (central staff sign-in + application launcher; DataHub's own copy). `{name}`-style placeholders
    * are filled with `fill()` from `@/i18n`.
@@ -80,7 +91,6 @@ export interface UiStrings {
     login: {
       title: string;
       subtitle: string;
-      prototype: string;
       username: string;
       password: string;
       showPassword: string;
@@ -93,8 +103,6 @@ export interface UiStrings {
       generic: string;
       signInRequired: string;
       signedOut: string;
-      demoTitle: string;
-      demoHint: string;
       backToSite: string;
     };
     home: {

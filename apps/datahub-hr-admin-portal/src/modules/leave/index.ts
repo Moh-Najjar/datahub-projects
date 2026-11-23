@@ -6,3 +6,6 @@
 export { EmployeeLeaveTab } from './components/EmployeeLeaveTab';
 export { leaveKeys } from './hooks/useLeave';
 export { leavePaths } from './paths';
+/** For Reports & Analytics: the module's own API service and contracts (balances are computed by Leave only). */
+export { leaveApi } from './api/leaveApi';
+export type { LeaveBalance, LeaveReport, LeaveRequest, LeaveScope, LeaveSummary, LeaveType } from './types/leave';

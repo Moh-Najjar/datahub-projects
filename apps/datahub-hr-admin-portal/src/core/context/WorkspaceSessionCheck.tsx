@@ -19,6 +19,11 @@ interface WorkspaceSessionCheckProps {
  * and whenever it changes — e.g. Sign out in a Workspace or Blogs Admin tab. Only messages from the Workspace origin
  * are trusted. When the report says "signed out" or names another account, `onEnded` ends this session.
  * No answer (website unreachable) changes nothing. A backend session check replaces this with real SSO.
+ *
+ * "Signed out" counts only after the frame has once reported THIS user: on different sites (e.g. two
+ * `*.azurewebsites.net` hosts — a public suffix) browsers give the embedded page its own partitioned storage, so it can
+ * never see the central session and would always say "signed out". Until confirmed, only "another user" ends the
+ * session; the token's expiry still does (AuthProvider).
  */
 export function WorkspaceSessionCheck({ email, onEnded }: WorkspaceSessionCheckProps) {
   const frame = useRef<HTMLIFrameElement>(null);
@@ -30,12 +35,19 @@ export function WorkspaceSessionCheck({ email, onEnded }: WorkspaceSessionCheckP
   useEffect(() => {
     if (!WORKSPACE_ORIGIN) return;
     const origin = WORKSPACE_ORIGIN;
+    let confirmed = false;
     const onMessage = (event: MessageEvent<unknown>) => {
       if (event.origin !== origin || event.source !== frame.current?.contentWindow) return;
       const status = event.data as Partial<WorkspaceSessionStatus> | null;
       if (status?.type !== 'datahub-workspace:session') return;
       const central = status.session;
-      if (!central || central.email.toLowerCase() !== email.toLowerCase()) ended.current();
+      if (!central) {
+        if (confirmed) ended.current();
+      } else if (central.email.toLowerCase() === email.toLowerCase()) {
+        confirmed = true;
+      } else {
+        ended.current();
+      }
     };
     const ask = () => frame.current?.contentWindow?.postMessage(REQUEST, origin);
     const onVisible = () => document.visibilityState === 'visible' && ask();

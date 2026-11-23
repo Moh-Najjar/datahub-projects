@@ -111,9 +111,9 @@ import {
  * and approved leave are read through those modules' backend accessors (`attendanceFacts`, `leaveFacts`). Rules the real
  * backend must enforce on every request:
  *
- * - Scope: `organization` (payroll:read) or `own` (payroll:read:own: own compensation and payslips only). Anything else
+ * - Scope: `organization` (hr.payroll.view) or `own` (hr.payroll.view.own: own compensation and payslips only). Anything else
  *   → `FORBIDDEN`; another employee's payslip is `NOT_FOUND` for own scope (no existence leak through URLs).
- * - Writes need payroll:write; approving / rejecting needs payroll:approve and NEVER the run's creator.
+ * - Writes need hr.payroll.manage; approving / rejecting needs hr.payroll.approve and NEVER the run's creator.
  * - Compensation and assignments are immutable history: changes start a new record; nothing may reach into a payroll
  *   period that is already approved or paid for the employee.
  * - Runs: one calendar month, no two non-cancelled runs over the same employees and overlapping periods; workflow
@@ -296,14 +296,14 @@ interface Access {
 function access(scope: PayrollScope): Access {
   const base = { me: meOf(scope), userId: scope.userId, name: actor(scope) };
   if (scope.kind === 'organization') {
-    if (!hasPermission(scope.role, 'payroll:read')) forbidden();
-    return { ...base, org: true, write: hasPermission(scope.role, 'payroll:write'), approve: hasPermission(scope.role, 'payroll:approve') };
+    if (!hasPermission(scope.role, 'hr.payroll.view')) forbidden();
+    return { ...base, org: true, write: hasPermission(scope.role, 'hr.payroll.manage'), approve: hasPermission(scope.role, 'hr.payroll.approve') };
   }
-  if (!hasPermission(scope.role, 'payroll:read:own')) forbidden();
+  if (!hasPermission(scope.role, 'hr.payroll.view.own')) forbidden();
   return { ...base, org: false, write: false, approve: false };
 }
-const requireOrg = (a: Access) => !a.org && forbidden('payroll:read is required');
-const requireWrite = (a: Access) => !a.write && forbidden('payroll:write is required');
+const requireOrg = (a: Access) => !a.org && forbidden('hr.payroll.view is required');
+const requireWrite = (a: Access) => !a.write && forbidden('hr.payroll.manage is required');
 
 function data(): Db {
   if (!db) db = generate();
@@ -1269,7 +1269,7 @@ export function submitRun(id: string, scope: PayrollScope): PayrollRun {
 function decide(id: string, scope: PayrollScope) {
   const { d, a } = begin(scope);
   requireOrg(a);
-  if (!a.approve) forbidden('payroll:approve is required');
+  if (!a.approve) forbidden('hr.payroll.approve is required');
   const r = findRun(d, id);
   if (r.status !== 'pending-approval') invalid({ status: ['notPending'] });
   // Segregation of duties: the creator of a run never approves or rejects it (no permission allows it).

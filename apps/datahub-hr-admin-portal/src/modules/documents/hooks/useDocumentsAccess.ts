@@ -4,22 +4,22 @@ import type { DocumentsScope } from '@/modules/documents/types/documents';
 
 /**
  * What the signed-in role may do in Documents (permission matrix). Reading is the UNION of:
- * - `documents:read` → organization documents (highly confidential ones also need `employees:read:personal`);
- * - `documents:read:team` → the Department Manager's team (standard confidentiality, manager-visible categories);
- * - `payroll:read` → payroll documents; `recruitment:read` → candidate documents;
- * - `documents:read:own` (every role) → own documents of employee-visible categories.
- * Writes: `documents:write` (employee documents), `recruitment:write` (candidate documents); configuration:
- * `documents:manage-config`. UI only — the API enforces every rule on each request.
+ * - `hr.documents.view` → organization documents (highly confidential ones also need `hr.employees.view.personal`);
+ * - `hr.documents.view.team` → the Department Manager's team (standard confidentiality, manager-visible categories);
+ * - `hr.payroll.view` → payroll documents; `recruitment.jobs.view` → candidate documents;
+ * - `hr.documents.view.own` (every role) → own documents of employee-visible categories.
+ * Writes: `hr.documents.manage` (employee documents), `recruitment.jobs.manage` (candidate documents); configuration:
+ * `hr.documents.config.manage`. UI only — the API enforces every rule on each request.
  */
 export function useDocumentsAccess() {
   const { can, user } = useAuth();
   const userId = user?.id ?? '';
   const role = user?.role ?? 'employee';
   const scope = useMemo<DocumentsScope>(() => ({ userId, role }), [userId, role]);
-  const organization = can('documents:read');
-  const team = can('documents:read:team');
-  const payroll = can('payroll:read');
-  const candidates = can('recruitment:read');
+  const organization = can('hr.documents.view');
+  const team = can('hr.documents.view.team');
+  const payroll = can('hr.payroll.view');
+  const candidates = can('recruitment.jobs.view');
   return {
     scope,
     organization,
@@ -28,9 +28,9 @@ export function useDocumentsAccess() {
     candidates,
     /** Sees more than their own documents (gets the full Documents workspace). */
     beyondOwn: organization || team || payroll || candidates,
-    canWrite: can('documents:write'),
-    canWriteCandidates: can('recruitment:write') || can('documents:write'),
-    canConfigure: can('documents:manage-config'),
+    canWrite: can('hr.documents.manage'),
+    canWriteCandidates: can('recruitment.jobs.manage') || can('hr.documents.manage'),
+    canConfigure: can('hr.documents.config.manage'),
     canSeeCompliance: organization || team,
   };
 }

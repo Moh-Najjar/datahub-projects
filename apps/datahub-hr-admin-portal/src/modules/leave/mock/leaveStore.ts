@@ -5,7 +5,8 @@ import { employeeRecords } from '@/modules/employees/mock/employeesMock';
 import { orgTables } from '@/modules/organization/mock/organizationMock';
 import type { LeaveDocument, LeaveHistoryEntry, LeaveStatus, LeaveType, NamedRef } from '@/modules/leave/types/leave';
 import { addDays, allocationFor, countLeaveDays, datesBetween, overlaps } from '@/modules/leave/utils/rules';
-import { LEAVE_TYPE_SEED, PUBLIC_HOLIDAYS, SEED_REJECTION_REASONS } from './seed';
+import { settingsData } from '@/modules/settings/mock/settingsMock';
+import { LEAVE_TYPE_SEED, SEED_REJECTION_REASONS } from './seed';
 
 /*
  * The leave DATA of the simulated backend (lowest layer): leave types, requests and the "approved leave on a date"
@@ -137,11 +138,11 @@ function generate(): LeaveRow[] {
       let counted = 0;
       for (let d = start; d <= latestEnd && counted < count; d = addDays(d, 1)) {
         end = d;
-        counted = countLeaveDays(start, d, working, type, PUBLIC_HOLIDAYS).days;
+        counted = countLeaveDays(start, d, working, type, settingsData.holidayCalendar()).days;
       }
       if (counted < count || end > latestEnd || start < earliest) return;
       if (inactiveSince && end >= inactiveSince) return;
-      const { days } = countLeaveDays(start, end, working, type, PUBLIC_HOLIDAYS);
+      const { days } = countLeaveDays(start, end, working, type, settingsData.holidayCalendar());
       if (type.maxConsecutiveDays !== null && days > type.maxConsecutiveDays) return;
       const allocation = allocationFor(type, e, year);
       if (allocation !== null && (status === 'approved' || status === 'pending') && reserved(typeId) + days > allocation) return;
@@ -253,7 +254,11 @@ export const leaveData = {
     ensure();
     return approvedIndex.get(employeeId)?.get(date) ?? null;
   },
-  holidays: PUBLIC_HOLIDAYS,
+  /** Public holidays: the organisation's calendar in System Settings (one source of truth). Requests keep the days
+   * counted when they were made — a later calendar change affects new requests and quotes only. */
+  get holidays() {
+    return settingsData.holidayCalendar();
+  },
 };
 
 /** Restore the initial state (tests). Requests are regenerated on next use, relative to the current date. */

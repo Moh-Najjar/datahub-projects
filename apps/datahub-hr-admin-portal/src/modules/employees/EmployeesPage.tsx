@@ -10,9 +10,9 @@ import { EmployeeProfile } from '@/modules/employees/components/EmployeeProfile'
 import { CreateEmployeePage, EditEmployeePage } from '@/modules/employees/components/form/EmployeeFormPages';
 
 /**
- * Employee Management (`/employees/*`): one lazy-loaded page. The router guards it with `employees:read` or
- * `employees:read:team`; the directory/profile then use the role's scope (organization or own team) and only roles
- * with `employees:write` get create / edit / status actions. UI only — the backend must enforce all of it.
+ * Employee Management (`/employees/*`): one lazy-loaded page. The router guards it with `organization.employees.view` or
+ * `hr.employees.view.team`; the directory/profile then use the role's scope (organization or own team) and only roles
+ * with `organization.employees.manage` get create / edit / status actions. UI only — the backend must enforce all of it.
  */
 export default function EmployeesPage() {
   const { t } = useTranslation('employees');

@@ -211,7 +211,7 @@ describe('candidate → employee conversion', () => {
     expect(screen.getByRole('button', { name: 'Create employee' })).toBeTruthy();
   }, 30_000);
 
-  it('a Recruiter (no employees:write) cannot convert', async () => {
+  it('a Recruiter (no organization.employees.manage) cannot convert', async () => {
     const ready = (await recruitmentApi.getCandidates({ page: 1, pageSize: 100, filters: { stage: 'hired' } }, HR)).items.find((c) => c.can.convert)!;
     await open(`/recruitment/candidates/${ready.id}`, 'recruiter');
     expect(await screen.findByText(/An HR user with permission to create employees can convert/)).toBeTruthy();

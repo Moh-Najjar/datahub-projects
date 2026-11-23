@@ -119,7 +119,7 @@ describe('payroll runs', () => {
     expect(paid.history.every((h) => h.by.en && h.at)).toBe(true);
   });
 
-  it('creators never approve their own run; only payroll:approve roles decide', async () => {
+  it('creators never approve their own run; only hr.payroll.approve roles decide', async () => {
     const own = await api.createPayrollRun(dec(null), HR);
     await prepare(own.id, HR);
     const view = await api.getPayrollRunById(own.id, HR);
@@ -354,7 +354,7 @@ describe('permissions and data scope', () => {
       await rejects(api.getAllowanceTypes({ page: 1, pageSize: 10 }, own), 'FORBIDDEN');
       await rejects(api.getPayrollReports({ page: 1, pageSize: 10, filters: { type: 'summary', fromMonth: '2026-01', toMonth: '2026-10', departmentId: '', locationId: '', employeeId: '' } }, own), 'FORBIDDEN');
       await rejects(api.exportPayrollReport({ type: 'employee', fromMonth: '2026-01', toMonth: '2026-10', departmentId: '', locationId: '', employeeId: '' }, 'en', own), 'FORBIDDEN');
-      // Claiming organization scope without payroll:read is refused too.
+      // Claiming organization scope without hr.payroll.view is refused too.
       await rejects(api.getPayrollRuns({ page: 1, pageSize: 10 }, scopeOf(role, 'organization')), 'FORBIDDEN');
       const my = await api.getMyPayroll(own);
       expect(my.history.every((h) => h.id.endsWith(my.employee.id.slice(4)))).toBe(true);

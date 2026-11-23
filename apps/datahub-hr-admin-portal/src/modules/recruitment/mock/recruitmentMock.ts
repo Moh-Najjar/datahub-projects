@@ -76,9 +76,9 @@ import { BENEFITS, CITIES, COMPANIES, FIRST_FEMALE, FIRST_MALE, LANGUAGES, LAST_
  * ids, and converting a hired candidate creates the employee through Employee Management's own `createEmployee` (same
  * validation, same employee-number rules) — there is no second employee table. Rules the real backend must enforce:
  *
- * - Scope: `organization` (recruitment:read) or `team` (recruitment:read:team — read-only: requisitions of the
+ * - Scope: `organization` (recruitment.jobs.view) or `team` (hr.recruitment.view.team — read-only: requisitions of the
  *   departments the user manages or where they are the hiring manager, those candidates and interviews, the user's own
- *   interview feedback; never salaries or offers). Writes need `recruitment:write`; conversion also `employees:write`.
+ *   interview feedback; never salaries or offers). Writes need `recruitment.jobs.manage`; conversion also `organization.employees.manage`.
  * - Workflows: requisition statuses, candidate pipeline (utils/pipeline.ts), interviews and offers with their own
  *   transitions; "hired" only through an accepted offer; hired/rejected are final unless explicitly reopened.
  * - Nothing is sent: job publishing, interview invitations and offers are SIMULATED status changes.
@@ -628,15 +628,15 @@ interface Access {
 function access(scope: RecruitmentScope): Access {
   const me = meOf(scope);
   if (scope.kind === 'organization') {
-    if (!hasPermission(scope.role, 'recruitment:read')) forbidden();
-    return { role: scope.role, org: true, write: hasPermission(scope.role, 'recruitment:write'), me, units: new Set() };
+    if (!hasPermission(scope.role, 'recruitment.jobs.view')) forbidden();
+    return { role: scope.role, org: true, write: hasPermission(scope.role, 'recruitment.jobs.manage'), me, units: new Set() };
   }
-  if (!hasPermission(scope.role, 'recruitment:read:team')) forbidden();
+  if (!hasPermission(scope.role, 'hr.recruitment.view.team')) forbidden();
   return { role: scope.role, org: false, write: false, me, units: employeeRecords.teamUnits(scope.userId) };
 }
 
 function requireWrite(a: Access) {
-  if (!a.write) forbidden('recruitment:write is required');
+  if (!a.write) forbidden('recruitment.jobs.manage is required');
 }
 
 const reqVisible = (a: Access, q: RequisitionRow) => a.org || a.units.has(q.departmentId) || (a.me !== null && q.hiringManagerId === a.me);
@@ -746,7 +746,7 @@ function toCandidate(d: Db, a: Access, c: CandidateRow): Candidate {
       reopen: a.write && !c.archived && c.stage === 'rejected',
       schedule: a.write && !c.archived && INTERVIEW_STAGES.includes(c.stage),
       offer: a.org && a.write && !c.archived && OFFER_STAGES.includes(c.stage) && !activeOfferOf(d, c.id),
-      convert: canConvert && hasPermission(a.role, 'employees:write'),
+      convert: canConvert && hasPermission(a.role, 'organization.employees.manage'),
     },
   };
 }
@@ -1411,7 +1411,7 @@ export function staffOptions(search: string, scope: RecruitmentScope): StaffOpti
 function convertible(scope: RecruitmentScope, candidateId: string) {
   const { d, a } = begin(scope);
   requireWrite(a);
-  if (!hasPermission(scope.role, 'employees:write')) forbidden('employees:write is required to create employees');
+  if (!hasPermission(scope.role, 'organization.employees.manage')) forbidden('organization.employees.manage is required to create employees');
   const c = visibleCandidate(a, d, candidateId);
   if (c.employeeId) conflict(`Candidate ${c.number} is already employee ${c.employeeId}`);
   const offer = acceptedOfferOf(d, c.id);

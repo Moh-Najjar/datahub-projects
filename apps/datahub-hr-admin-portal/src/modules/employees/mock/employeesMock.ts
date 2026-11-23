@@ -26,20 +26,27 @@ import { ACCOUNT_EMPLOYEE, EMPLOYEE_SEED, HISTORY_SEED, type EmployeeRow, type H
  * unique employee numbers and work e-mails, valid and ACTIVE organization references (department, position of that
  * department, location), valid managers (active, not the employee, not someone who reports to them, working in the
  * employee's department or a parent department), team scoping for Department Managers (`FORBIDDEN` outside the
- * team), field-level access (personal details and identity documents only with `employees:read:personal`), and
+ * team), field-level access (personal details and identity documents only with `hr.employees.view.personal`), and
  * status rules. Called only by `employeesApi.ts` — and by the organization mock, because both simulate
  * ONE backend (department counts, department managers and manager options come from employee records).
  *
- * Write authorization (`employees:write`, `documents:write`) is NOT simulated: the real backend must check it.
+ * Write authorization (`organization.employees.manage`, `hr.documents.manage`) is NOT simulated: the real backend must check it.
  */
 
 const employees = createMockStore<EmployeeRow>(EMPLOYEE_SEED, 'emp');
 const history = createMockStore<HistoryRow>(HISTORY_SEED, 'hist');
 
 /** Restore the seed data (tests). */
+/**
+ * Sign-in accounts → their employee record (the backend links user accounts to employees). Every module scopes
+ * "own" and "team" requests with it; Users & Roles links and unlinks accounts here (one link table, no copy).
+ */
+let accountLinks = new Map<string, string>(Object.entries(ACCOUNT_EMPLOYEE));
+
 export function resetEmployeesMock(): void {
   employees.reset();
   history.reset();
+  accountLinks = new Map(Object.entries(ACCOUNT_EMPLOYEE));
 }
 
 const today = () => new Date().toISOString().slice(0, 10);
@@ -69,7 +76,7 @@ function departmentChain(id: string): Set<string> {
 
 /** Units a team-scoped user may see: the departments they manage and everything below them. */
 function teamUnits(userId: string): Set<string> {
-  const employeeId = ACCOUNT_EMPLOYEE[userId];
+  const employeeId = accountLinks.get(userId);
   const units = new Set<string>();
   if (!employeeId) return units;
   const all = orgTables.departments();
@@ -92,8 +99,8 @@ function getVisible(id: string, scope: EmployeeScope): EmployeeRow {
   return row;
 }
 
-/** Field-level access: personal details and sensitive documents require `employees:read:personal`. */
-export const canReadPersonal = (scope: EmployeeScope) => hasPermission(scope.role, 'employees:read:personal');
+/** Field-level access: personal details and sensitive documents require `hr.employees.view.personal`. */
+export const canReadPersonal = (scope: EmployeeScope) => hasPermission(scope.role, 'hr.employees.view.personal');
 
 /* Mapping ----------------------------------------------------------------------------------------------- */
 
@@ -133,7 +140,7 @@ function personalDetails(row: EmployeeRow): PersonalDetails {
   };
 }
 
-/** The profile as `scope` may see it: without `employees:read:personal` the personal block is not sent at all. */
+/** The profile as `scope` may see it: without `hr.employees.view.personal` the personal block is not sent at all. */
 function toEmployee(row: EmployeeRow, scope: EmployeeScope): Employee {
   const manager = row.managerId ? employees.all().find((e) => e.id === row.managerId) : undefined;
   return {
@@ -352,7 +359,14 @@ export const employeeRecords = {
     return changes.map((h) => h.date).sort().at(-1) ?? null;
   },
   /** The employee record linked to a sign-in account (the backend links accounts to employees). */
-  employeeIdOf: (userId: string): string | undefined => ACCOUNT_EMPLOYEE[userId],
+  employeeIdOf: (userId: string): string | undefined => accountLinks.get(userId),
+  /** The account linked to an employee, if any (one account per employee). */
+  accountOf: (employeeId: string): string | undefined => [...accountLinks].find(([, e]) => e === employeeId)?.[0],
+  /** Link an account to an employee (`null` unlinks). Validated by the Users mock. */
+  linkAccount(userId: string, employeeId: string | null): void {
+    if (employeeId) accountLinks.set(userId, employeeId);
+    else accountLinks.delete(userId);
+  },
   /** Departments a team-scoped user manages, with their subdepartments. */
   teamUnits: (userId: string): Set<string> => teamUnits(userId),
 };

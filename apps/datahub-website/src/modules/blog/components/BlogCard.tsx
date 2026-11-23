@@ -4,17 +4,21 @@ import Typography from '@mui/material/Typography';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import EastIcon from '@mui/icons-material/East';
 import { useTheme } from '@mui/material/styles';
+import type { BlogListItem } from '@/core/types/blog';
 import { SmartLink } from '@/modules/shared/SmartLink';
 import { useLocale } from '@/i18n/LocaleContext';
-import type { BlogPostSummary } from '@/modules/blog/types/blog';
+import { PostImage } from '@/modules/blog/components/PostImage';
 import { formatPostDate, trimExcerpt } from '@/modules/blog/utils/date';
 
 interface BlogCardProps {
-  post: BlogPostSummary;
+  post: BlogListItem;
   readMore: string;
 }
 
-/** Post card from the original "grid-masonry" blog style (image, date, title, excerpt, "Read more" bar). */
+/**
+ * Post card from the original "grid-masonry" blog style (image, date, title, excerpt, "Read more" bar). What the
+ * backend does not provide is left out (no date, no excerpt — never invented); a missing image keeps its space.
+ */
 export function BlogCard({ post, readMore }: BlogCardProps) {
   const { locale } = useLocale();
   const { direction } = useTheme();
@@ -33,33 +37,26 @@ export function BlogCard({ post, readMore }: BlogCardProps) {
         '&:hover': { transform: 'translateY(-5px)' },
       }}
     >
-      {post.image && (
-        <SmartLink href={href} tabIndex={-1} aria-hidden="true">
-          <Box
-            component="img"
-            src={post.image.card}
-            alt={post.image.alt || post.title}
-            width={370}
-            height={207}
-            loading="lazy"
-            decoding="async"
-            sx={{ display: 'block', width: '100%', height: 'auto', aspectRatio: '370 / 207', objectFit: 'cover', borderRadius: '5px 5px 0 0' }}
-          />
-        </SmartLink>
-      )}
+      <SmartLink href={href} tabIndex={-1} aria-hidden="true">
+        <PostImage src={post.featuredImageUrl} alt={post.title} width={370} height={207} radius="5px 5px 0 0" />
+      </SmartLink>
       <Box sx={{ pt: '29px', px: '25px', pb: '83px' }}>
-        <Typography component="div" sx={{ mb: '6px', display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: 14 }}>
-          <CalendarTodayOutlinedIcon sx={{ fontSize: 14 }} />
-          <time dateTime={post.date}>{formatPostDate(post.date, locale)}</time>
-        </Typography>
+        {post.publishedAtUtc && (
+          <Typography component="div" sx={{ mb: '6px', display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: 14 }}>
+            <CalendarTodayOutlinedIcon sx={{ fontSize: 14 }} />
+            <time dateTime={post.publishedAtUtc}>{formatPostDate(post.publishedAtUtc, locale)}</time>
+          </Typography>
+        )}
         <Typography component="h3" sx={{ fontSize: 24, lineHeight: 1.46, mb: '11px' }} dir="ltr">
           <Box component={SmartLink} href={href} sx={{ color: 'brand.heading', '&:hover': { color: 'info.main' } }}>
             {post.title}
           </Box>
         </Typography>
-        <Typography sx={{ mt: '10px' }} dir="ltr">
-          {trimExcerpt(post.excerpt)}
-        </Typography>
+        {post.excerpt && (
+          <Typography sx={{ mt: '10px' }} dir="ltr">
+            {trimExcerpt(post.excerpt)}
+          </Typography>
+        )}
       </Box>
       <Box
         component={SmartLink}

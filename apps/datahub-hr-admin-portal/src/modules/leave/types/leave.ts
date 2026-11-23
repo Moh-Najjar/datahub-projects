@@ -241,8 +241,8 @@ export interface CsvExport {
 /* Scope ------------------------------------------------------------------------------------------------ */
 
 /**
- * Who is asking: `organization` (leave:read), `team` (leave:read:team — departments the user manages) or `own`
- * (leave:read:own), plus the role for the action rules. The real backend derives all of it from the token.
+ * Who is asking: `organization` (hr.leave.view), `team` (hr.leave.view.team — departments the user manages) or `own`
+ * (hr.leave.view.own), plus the role for the action rules. The real backend derives all of it from the token.
  */
 export interface LeaveScope {
   kind: 'organization' | 'team' | 'own';

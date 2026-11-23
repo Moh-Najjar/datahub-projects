@@ -3,20 +3,21 @@ import userEvent from '@testing-library/user-event';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { createQueryClient } from '@/core/api/queryClient';
-import type { Role } from '@/core/config/permissions';
+import { ROLE_PERMISSIONS, type Role } from '@/core/config/permissions';
 import { SESSION_STORAGE_KEY, type Session } from '@/core/context/authContext';
 import { AuthProvider } from '@/core/context/AuthProvider';
 import { routes } from '@/core/routes';
 import { AppThemeProvider } from '@/core/theme/AppThemeProvider';
-import { DEMO_ACCOUNTS } from '@/modules/auth/mock/demoAccounts';
+import { DIRECTORY_SEED } from '@/modules/users/mock/seed';
 
+/** The fictional directory account of a role (the simulated backend links it to an employee). */
 export function demoAccount(role: Role) {
-  return DEMO_ACCOUNTS.find((a) => a.role === role)!;
+  return DIRECTORY_SEED.find((a) => a.role === role)!;
 }
 
-/** A stored (mock) session for the role's demo account, as if they had signed in. */
+/** A stored session for the role's account with the role's reference permissions, as if its token said so. */
 export function storeSessionFor(role: Role, expiresInMs = 3_600_000): Session {
-  const session: Session = { user: demoAccount(role), token: 'mock-test-token', expiresAt: new Date(Date.now() + expiresInMs).toISOString() };
+  const session: Session = { user: demoAccount(role), token: 'test-token', permissions: [...ROLE_PERMISSIONS[role]], expiresAt: new Date(Date.now() + expiresInMs).toISOString() };
   sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
   return session;
 }

@@ -376,8 +376,8 @@ export type EmployeeOption = EmployeeRef;
 /* Scope ------------------------------------------------------------------------------------------------- */
 
 /**
- * Who is asking: `organization` (performance:read), `team` (performance:read:team — the departments the user manages,
- * plus their own records) or `own` (performance:read:own). The real backend derives it from the token.
+ * Who is asking: `organization` (hr.performance.view), `team` (hr.performance.view.team — the departments the user manages,
+ * plus their own records) or `own` (hr.performance.view.own). The real backend derives it from the token.
  */
 export interface PerformanceScope {
   kind: 'organization' | 'team' | 'own';

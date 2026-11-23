@@ -1,9 +1,5 @@
 import { memo, type ReactNode } from 'react';
 import Box from '@mui/material/Box';
-import Tooltip from '@mui/material/Tooltip';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
-import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { SmartLink } from '@/modules/shared/SmartLink';
 import { PRIMARY_NAV } from '@/core/config/navigation';
@@ -12,7 +8,7 @@ import { useHoverMenu } from '@/modules/layout/Navigation/useHoverMenu';
 import { useLocalized } from '@/i18n/LocaleContext';
 import type { NavItem, NavLink } from '@/core/types/navigation';
 import { MegaMenu } from './MegaMenu';
-import { APP_ITEM_LABEL_FROM, DropdownPanel, MenuItem, MenuList, subLinkSx } from './DesktopNav.styles';
+import { DropdownPanel, MenuItem, MenuList, subLinkSx } from './DesktopNav.styles';
 import { LanguageSwitcher } from './LanguageSwitcher';
 
 /**
@@ -70,32 +66,6 @@ export function TopItem({ label, href, active, mega, lang, renderMenu }: TopItem
   );
 }
 
-/**
- * DataHub's staff entry point (Workspace, `/workspace/`): the central sign-in and application launcher.
- * On narrow desktops it is an icon with the label as tooltip and accessible name; from
- * APP_ITEM_LABEL_FROM it shows the label like every other item.
- */
-function AppItem({ label, href }: { label: string; href: string }) {
-  const theme = useTheme();
-  const compact = useMediaQuery(theme.breakpoints.down(APP_ITEM_LABEL_FROM), { noSsr: true });
-  const link = (
-    <SmartLink href={href} className="nav-link" aria-label={compact ? label : undefined}>
-      <span className="nav-wrap">{compact ? <WorkOutlineOutlinedIcon aria-hidden sx={{ fontSize: 22 }} /> : label}</span>
-    </SmartLink>
-  );
-  return (
-    <MenuItem active={false} open={false}>
-      {compact ? (
-        <Tooltip title={label}>
-          {link}
-        </Tooltip>
-      ) : (
-        link
-      )}
-    </MenuItem>
-  );
-}
-
 interface DropdownProps {
   items: NavLink[];
   open: boolean;
@@ -136,10 +106,9 @@ function DesktopNavComponent() {
           const active = hrefsOf(item).some(isActive);
           switch (item.kind) {
             case 'link':
-              return <TopItem key={item.label} label={item.label} href={item.href} active={active} />;
             case 'app':
-              return <AppItem key={item.label} label={item.label} href={item.href} />;
-            case 'dropdown':
+              return <TopItem key={item.label} label={item.label} href={item.href} active={active} />;
+             case 'dropdown':
               return (
                 <TopItem
                   key={item.label}

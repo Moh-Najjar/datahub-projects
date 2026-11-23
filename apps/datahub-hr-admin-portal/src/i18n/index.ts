@@ -11,6 +11,9 @@ import arOrganization from './locales/ar/organization.json';
 import arPayroll from './locales/ar/payroll.json';
 import arPerformance from './locales/ar/performance.json';
 import arRecruitment from './locales/ar/recruitment.json';
+import arReports from './locales/ar/reports.json';
+import arSettings from './locales/ar/settings.json';
+import arUsers from './locales/ar/users.json';
 import enAttendance from './locales/en/attendance.json';
 import enAuth from './locales/en/auth.json';
 import enCommon from './locales/en/common.json';
@@ -22,6 +25,9 @@ import enOrganization from './locales/en/organization.json';
 import enPayroll from './locales/en/payroll.json';
 import enPerformance from './locales/en/performance.json';
 import enRecruitment from './locales/en/recruitment.json';
+import enReports from './locales/en/reports.json';
+import enSettings from './locales/en/settings.json';
+import enUsers from './locales/en/users.json';
 import { DEFAULT_LANGUAGE, isLocale, LANGUAGE_DIRECTION, LANGUAGES, type Locale } from './languages';
 
 /*
@@ -29,11 +35,11 @@ import { DEFAULT_LANGUAGE, isLocale, LANGUAGE_DIRECTION, LANGUAGES, type Locale 
  * `locales/<lang>/<namespace>.json`. Add a namespace here and in `i18next.d.ts` when a module needs one.
  */
 export const resources = {
-  en: { common: enCommon, attendance: enAttendance, auth: enAuth, dashboard: enDashboard, documents: enDocuments, employees: enEmployees, leave: enLeave, organization: enOrganization, payroll: enPayroll, performance: enPerformance, recruitment: enRecruitment },
-  ar: { common: arCommon, attendance: arAttendance, auth: arAuth, dashboard: arDashboard, documents: arDocuments, employees: arEmployees, leave: arLeave, organization: arOrganization, payroll: arPayroll, performance: arPerformance, recruitment: arRecruitment },
+  en: { common: enCommon, attendance: enAttendance, auth: enAuth, dashboard: enDashboard, documents: enDocuments, employees: enEmployees, leave: enLeave, organization: enOrganization, payroll: enPayroll, performance: enPerformance, recruitment: enRecruitment, reports: enReports, settings: enSettings, users: enUsers },
+  ar: { common: arCommon, attendance: arAttendance, auth: arAuth, dashboard: arDashboard, documents: arDocuments, employees: arEmployees, leave: arLeave, organization: arOrganization, payroll: arPayroll, performance: arPerformance, recruitment: arRecruitment, reports: arReports, settings: arSettings, users: arUsers },
 } as const;
 
-export const NAMESPACES = ['common', 'attendance', 'auth', 'dashboard', 'documents', 'employees', 'leave', 'organization', 'payroll', 'performance', 'recruitment'] as const;
+export const NAMESPACES = ['common', 'attendance', 'auth', 'dashboard', 'documents', 'employees', 'leave', 'organization', 'payroll', 'performance', 'recruitment', 'reports', 'settings', 'users'] as const;
 
 const STORAGE_KEY = 'datahub-hr-admin.language';
 

@@ -7,6 +7,8 @@ interface ImportMetaEnv {
   readonly VITE_HR_ADMIN_PORTAL_URL?: string;
   /** `true` enables the admin area (blog management prototype) in a production build. Always on in development. */
   readonly VITE_ENABLE_ADMIN?: string;
+  /** Origin of the DataHub Analytics backend API (public, e.g. https://…azurewebsites.net). Development proxies `/api` to it. */
+  readonly VITE_API_URL?: string;
 }
 
 interface ImportMeta {

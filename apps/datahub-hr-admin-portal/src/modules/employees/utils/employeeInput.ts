@@ -2,11 +2,11 @@ import type { Employee, EmployeeInput } from '@/modules/employees/types/employee
 
 /**
  * The editable fields of a loaded employee, as the update payload (pre-fills the edit form). Editing needs the
- * personal details, so it requires a profile loaded with `employees:read:personal` (every role that may write has it).
+ * personal details, so it requires a profile loaded with `hr.employees.view.personal` (every role that may write has it).
  */
 export function employeeToInput(e: Employee): EmployeeInput {
   const p = e.personal;
-  if (!p) throw new Error('Editing an employee requires their personal details (employees:read:personal).');
+  if (!p) throw new Error('Editing an employee requires their personal details (hr.employees.view.personal).');
   return {
     employeeNumber: e.employeeNumber,
     name: e.name,

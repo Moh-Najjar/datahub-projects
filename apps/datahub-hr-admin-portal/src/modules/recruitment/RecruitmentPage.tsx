@@ -30,7 +30,7 @@ function currentTab(pathname: string): TabKey {
 }
 
 /**
- * Recruitment (`/recruitment/*`): one lazy-loaded page, guarded by `recruitment:read` or `recruitment:read:team`.
+ * Recruitment (`/recruitment/*`): one lazy-loaded page, guarded by `recruitment.jobs.view` or `hr.recruitment.view.team`.
  * Team scope (Department Manager) is read-only and has no Offers section. The API enforces the same scopes.
  */
 export default function RecruitmentPage() {

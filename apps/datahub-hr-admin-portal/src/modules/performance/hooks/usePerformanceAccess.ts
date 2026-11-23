@@ -4,26 +4,26 @@ import type { PerformanceScope } from '@/modules/performance/types/performance';
 
 /**
  * What the signed-in role may do in Performance (permission matrix):
- * - `performance:read` → organization; `performance:read:team` → the Department Manager's team (+ own);
- *   `performance:read:own` (every role) → own goals, self-assessments, results and development plans;
- * - `performance:write` → goals, plans, manager reviews and reopening (organization);
- *   `performance:review:team` → the same for the user's team;
- * - `performance:manage-config` → cycles, templates, competencies and the rating scale.
+ * - `hr.performance.view` → organization; `hr.performance.view.team` → the Department Manager's team (+ own);
+ *   `hr.performance.view.own` (every role) → own goals, self-assessments, results and development plans;
+ * - `hr.performance.manage` → goals, plans, manager reviews and reopening (organization);
+ *   `hr.performance.review.team` → the same for the user's team;
+ * - `hr.performance.config.manage` → cycles, templates, competencies and the rating scale.
  * UI only — the backend must enforce the same rules and derive the scope from the signed-in user.
  */
 export function usePerformanceAccess() {
   const { can, user } = useAuth();
   const userId = user?.id ?? '';
   const role = user?.role ?? 'employee';
-  const kind: PerformanceScope['kind'] = can('performance:read') ? 'organization' : can('performance:read:team') ? 'team' : 'own';
+  const kind: PerformanceScope['kind'] = can('hr.performance.view') ? 'organization' : can('hr.performance.view.team') ? 'team' : 'own';
   const scope = useMemo<PerformanceScope>(() => ({ kind, userId, role }), [kind, userId, role]);
   return {
     scope,
     canReadBeyondOwn: kind !== 'own',
     /** Write goals, plans and manager reviews (organization or team). */
-    canManage: can('performance:write') || can('performance:review:team'),
-    canReopen: can('performance:write'),
-    canConfigure: can('performance:manage-config'),
-    canReadOrganization: can('organization:read'),
+    canManage: can('hr.performance.manage') || can('hr.performance.review.team'),
+    canReopen: can('hr.performance.manage'),
+    canConfigure: can('hr.performance.config.manage'),
+    canReadOrganization: can('organization.departments.view'),
   };
 }

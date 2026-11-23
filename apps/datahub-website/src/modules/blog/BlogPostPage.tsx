@@ -1,145 +1,122 @@
-import { use } from 'react';
+import { useMemo } from 'react';
+import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import Container from '@mui/material/Container';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
-import FacebookIcon from '@mui/icons-material/Facebook';
 import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import XIcon from '@mui/icons-material/X';
 import { useParams } from 'react-router-dom';
-import { LinkedInIcon } from '@/modules/shared/LinkedInIcon';
+import { isBlogNotFound, useBlog } from '@/core/hooks/useBlogs';
+import { UI } from '@/i18n';
+import { useLocale } from '@/i18n/LocaleContext';
 import { Seo, SITE_URL } from '@/modules/shared/Seo';
-import { SmartLink } from '@/modules/shared/SmartLink';
-import { loadBlogBody, loadBlogIndex } from '@/modules/blog/data/blog';
-import type { BlogPostSummary } from '@/modules/blog/types/blog';
+import { NotFoundPage } from '@/modules/errors';
+import { PostNavigation } from '@/modules/blog/components/PostNavigation';
+import { ShareButton } from '@/modules/blog/components/ShareButton';
 import { articleSx } from '@/modules/blog/utils/articleStyles';
 import { formatPostDate } from '@/modules/blog/utils/date';
-import { useLocale } from '@/i18n/LocaleContext';
-import { NotFoundPage } from '@/modules/errors';
+import { sanitizeHtml } from '@/modules/blog/utils/sanitizeHtml';
 
-function NavCard({ post, label, align }: { post: BlogPostSummary; label: string; align: 'left' | 'right' }) {
-  return (
-    <Box
-      component={SmartLink}
-      href={`/${post.slug}/`}
-      sx={{
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        minHeight: 120,
-        p: '20px 30px',
-        overflow: 'hidden',
-        borderRadius: '5px',
-        textAlign: align,
-        color: 'common.white',
-        bgcolor: 'brand.dark',
-        backgroundImage: post.image ? `linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)), url("${post.image.grid}")` : undefined,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        '&:hover': { color: 'common.white', opacity: 0.92 },
-      }}
-    >
-      <Typography sx={{ fontSize: 13, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '1px', color: 'inherit', opacity: 0.8 }}>{label}</Typography>
-      <Typography sx={{ mt: '6px', fontSize: 16, fontWeight: 500, lineHeight: 1.4, color: 'inherit' }}>{post.title}</Typography>
-    </Box>
-  );
-}
-
-/** Single blog post (`/<slug>/`) — content exported from the original WordPress site. */
+/**
+ * Single blog post (`/<slug>/`) from the backend (`GET /api/blogs/{slug}`). Unknown slugs and drafts answer 404 →
+ * the site's 404 page. Only what the backend provides is shown: the categories (above the title), author, date, image and
+ * tags (footer) are left out when missing. Footer: tags + "Share this post"; then the previous / next post (neighbours in
+ * the blog's order, from the cached list of every published post).
+ */
 export default function BlogPostPage() {
   const { slug = '' } = useParams();
   const { locale } = useLocale();
-  const index = use(loadBlogIndex());
-  const body = use(loadBlogBody(slug));
-  const position = index.findIndex((p) => p.slug === slug);
-  const post = index[position];
-  if (!post || !body) return <NotFoundPage />;
+  const t = UI[locale].blog;
+  const { data: post, status, error, refetch } = useBlog(slug);
+  // The article HTML comes from the backend: always sanitized before it is rendered.
+  const html = useMemo(() => (post ? sanitizeHtml(post.contentHtml) : ''), [post]);
 
-  const newer = index[position - 1];
-  const older = index[position + 1];
+  if (status === 'pending') {
+    return (
+      <Box role="status" aria-label={t.loading} sx={{ minHeight: '60vh', display: 'grid', placeItems: 'center' }}>
+        <CircularProgress size={32} thickness={3} />
+      </Box>
+    );
+  }
+  if (status === 'error') {
+    if (isBlogNotFound(error)) return <NotFoundPage />;
+    return (
+      <Container sx={{ py: '120px' }}>
+        <Alert severity="error" action={<Button color="inherit" onClick={() => void refetch()}>{t.retry}</Button>}>
+          {t.postError}
+        </Alert>
+      </Container>
+    );
+  }
+
   const url = `${SITE_URL}/${post.slug}/`;
-  const share = [
-    { label: 'Facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, Icon: FacebookIcon },
-    { label: 'X', href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(post.title)}`, Icon: XIcon },
-    { label: 'LinkedIn', href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, Icon: LinkedInIcon },
-    { label: 'Email', href: `mailto:?subject=${encodeURIComponent(post.title)}&body=${encodeURIComponent(url)}`, Icon: EmailOutlinedIcon },
-  ];
 
   return (
     <>
-      <Seo title={`${post.title} Datahub Analytics`} description={post.excerpt} path={`/${post.slug}/`} image={post.image && !post.image.large.startsWith('data:') ? post.image.large : undefined} type="article" locales={['en']} />
+      <Seo
+        title={post.metaTitle ?? `${post.title} Datahub Analytics`}
+        description={post.metaDescription ?? post.excerpt ?? undefined}
+        path={`/${post.slug}/`}
+        canonicalUrl={post.canonicalUrl ?? undefined}
+        image={post.featuredImageUrl ?? undefined}
+        type="article"
+        locales={['en']}
+      />
       <Box component="article" dir="ltr" sx={{ pt: { xs: '60px', md: '120px' }, pb: '100px' }}>
         <Container>
-          {post.image && (
-            <Box
-              component="img"
-              src={post.image.large}
-              alt={post.image.alt || post.title}
-              width={post.image.width || undefined}
-              height={post.image.height || undefined}
-              decoding="async"
-              sx={{ display: 'block', width: '100%', height: 'auto', borderRadius: '5px' }}
-            />
+          {post.featuredImageUrl && (
+            <Box component="img" src={post.featuredImageUrl} alt={post.title} decoding="async" sx={{ display: 'block', width: '100%', height: 'auto', borderRadius: '5px' }} />
           )}
           <Box sx={{ maxWidth: 800, mx: 'auto', px: '15px', mt: '40px' }}>
             <Box component="header" sx={{ textAlign: 'center' }}>
               {post.categories.length > 0 && (
                 <Typography sx={{ color: 'brand.green', fontSize: 14, fontWeight: 500, textTransform: 'uppercase', '& span + span::before': { content: '" | "', color: 'text.primary', mx: '6px' } }}>
                   {post.categories.map((c) => (
-                    <span key={c}>{c}</span>
+                    <span key={c.id}>{c.name}</span>
                   ))}
                 </Typography>
               )}
               <Typography variant="h1" sx={{ mt: '12px', mb: '16px', fontSize: { xs: 28, md: 40 }, lineHeight: 1.4 }}>
                 {post.title}
               </Typography>
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px 16px', fontSize: 14 }}>
-                {post.author && (
-                  <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                    <PersonOutlineOutlinedIcon sx={{ fontSize: 16 }} />
-                    {post.author}
-                  </Box>
-                )}
-                <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                  <CalendarTodayOutlinedIcon sx={{ fontSize: 14 }} />
-                  <time dateTime={post.date}>{formatPostDate(post.date, locale)}</time>
+              {(post.authorName || post.publishedAtUtc) && (
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px 16px', fontSize: 14 }}>
+                  {post.authorName && (
+                    <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                      <PersonOutlineOutlinedIcon sx={{ fontSize: 16 }} />
+                      {post.authorName}
+                    </Box>
+                  )}
+                  {post.publishedAtUtc && (
+                    <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                      <CalendarTodayOutlinedIcon sx={{ fontSize: 14 }} />
+                      <time dateTime={post.publishedAtUtc}>{formatPostDate(post.publishedAtUtc, locale)}</time>
+                    </Box>
+                  )}
                 </Box>
-              </Box>
+              )}
             </Box>
 
-            <Box sx={{ mt: '50px', ...articleSx }} dangerouslySetInnerHTML={{ __html: body.html }} />
+            <Box sx={{ mt: '50px', ...articleSx }} dangerouslySetInnerHTML={{ __html: html }} />
 
-            <Box component="footer" sx={{ mt: '50px', pt: '30px', borderTop: '1px solid #ededed', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '20px' }}>
+            <Box component="footer" sx={{ mt: '50px', pb: '36px', borderBottom: '1px solid #ededed', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '20px' }}>
               {post.tags.length > 0 && (
                 <Box sx={{ display: 'flex', gap: '10px', alignItems: 'flex-start', flex: '1 1 300px' }}>
                   <LocalOfferOutlinedIcon sx={{ fontSize: 16, mt: '3px', color: 'brand.footerLink' }} />
-                  <Typography component="ul" sx={{ display: 'flex', flexWrap: 'wrap', gap: '4px 10px', color: 'brand.footerLink', fontSize: 13, fontWeight: 500 }}>
+                  <Typography component="ul" aria-label="Tags" sx={{ display: 'flex', flexWrap: 'wrap', gap: '4px 10px', color: 'brand.footerLink', fontSize: 13, fontWeight: 500, listStyle: 'none', m: 0, p: 0 }}>
                     {post.tags.map((t) => (
-                      <li key={t}>{t}</li>
+                      <li key={t.id}>{t.name}</li>
                     ))}
                   </Typography>
                 </Box>
               )}
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Typography sx={{ fontWeight: 500 }}>Share this post</Typography>
-                {share.map(({ label, href, Icon }) => (
-                  <IconButton key={label} component="a" href={href} target="_blank" rel="noopener noreferrer" aria-label={`Share on ${label}`} sx={{ color: 'text.primary', '&:hover': { color: 'info.main' } }}>
-                    <Icon sx={{ fontSize: 18 }} />
-                  </IconButton>
-                ))}
-              </Box>
+              <ShareButton url={url} title={post.title} />
             </Box>
 
-            {(older || newer) && (
-              <Box component="nav" aria-label="Post navigation" sx={{ mt: '50px', display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: '30px' }}>
-                <Box>{older && <NavCard post={older} label="Prev" align="left" />}</Box>
-                <Box>{newer && <NavCard post={newer} label="Next" align="right" />}</Box>
-              </Box>
-            )}
+            <PostNavigation slug={post.slug} />
           </Box>
         </Container>
       </Box>

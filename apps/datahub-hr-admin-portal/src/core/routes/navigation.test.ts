@@ -15,15 +15,15 @@ describe('role-based navigation', () => {
   });
 
   it('Department Manager sees team areas but not organisation-wide admin areas', () => {
-    expect(visibleKeys('department-manager')).toEqual(['dashboard', 'profile', 'employees', 'attendance', 'leave', 'recruitment', 'performance', 'payroll', 'documents']);
+    expect(visibleKeys('department-manager')).toEqual(['dashboard', 'profile', 'employees', 'attendance', 'leave', 'recruitment', 'performance', 'payroll', 'documents', 'reports']);
   });
 
   it('Recruiter sees recruitment and organization (positions)', () => {
-    expect(visibleKeys('recruiter')).toEqual(['dashboard', 'profile', 'organization', 'attendance', 'leave', 'recruitment', 'performance', 'payroll', 'documents']);
+    expect(visibleKeys('recruiter')).toEqual(['dashboard', 'profile', 'organization', 'attendance', 'leave', 'recruitment', 'performance', 'payroll', 'documents', 'reports']);
   });
 
   it('Payroll Officer sees payroll and employees', () => {
-    expect(visibleKeys('payroll-officer')).toEqual(['dashboard', 'profile', 'employees', 'attendance', 'leave', 'performance', 'payroll', 'documents']);
+    expect(visibleKeys('payroll-officer')).toEqual(['dashboard', 'profile', 'employees', 'attendance', 'leave', 'performance', 'payroll', 'documents', 'reports']);
   });
 
   it('HR Administrator sees settings but not users & roles', () => {
@@ -37,10 +37,8 @@ describe('role-based navigation', () => {
     expect(landingPath(canAnyFor('employee'))).toBe('/profile');
   });
 
-  it('only built pages are available (Organization, Employees, Attendance, Leave, Recruitment, Performance, Payroll and Documents since Phase 5); planned areas are marked unavailable', () => {
-    expect(NAV_ITEMS.filter((i) => i.available).map((i) => i.key)).toEqual(['dashboard', 'profile', 'employees', 'organization', 'attendance', 'leave', 'recruitment', 'performance', 'payroll', 'documents']);
-    expect(NAV_ITEMS.filter((i) => !i.available).map((i) => i.key)).toEqual(
-      expect.arrayContaining(['reports', 'settings', 'users']),
-    );
+  it('every page is built and available (System Settings and Users & Roles since Phase 11)', () => {
+    expect(NAV_ITEMS.filter((i) => !i.available).map((i) => i.key)).toEqual([]);
+    expect(NAV_ITEMS.map((i) => i.key)).toEqual(['dashboard', 'profile', 'employees', 'organization', 'attendance', 'leave', 'recruitment', 'performance', 'payroll', 'documents', 'reports', 'settings', 'users']);
   });
 });

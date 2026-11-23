@@ -417,7 +417,7 @@ export interface ConversionDraft {
 /* Scope ----------------------------------------------------------------------------------------------- */
 
 /**
- * Who is asking: `organization` (recruitment:read) or `team` (recruitment:read:team — the departments the user
+ * Who is asking: `organization` (recruitment.jobs.view) or `team` (hr.recruitment.view.team — the departments the user
  * manages and requisitions where they are the hiring manager, read-only, no salaries/offers). The real backend
  * derives it from the token.
  */

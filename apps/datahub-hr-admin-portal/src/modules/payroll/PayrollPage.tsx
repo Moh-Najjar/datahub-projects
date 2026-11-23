@@ -27,8 +27,8 @@ function currentTab(pathname: string): TabKey {
 }
 
 /**
- * Payroll (`/payroll/*`): one lazy-loaded page. Payroll roles (payroll:read) get the organization's payroll; every
- * other staff member gets "My payroll" (own compensation and payslips only — payroll:read:own).
+ * Payroll (`/payroll/*`): one lazy-loaded page. Payroll roles (hr.payroll.view) get the organization's payroll; every
+ * other staff member gets "My payroll" (own compensation and payslips only — hr.payroll.view.own).
  */
 export default function PayrollPage() {
   const { t } = useTranslation('payroll');

@@ -107,10 +107,19 @@ describe('Workspace session check (signed out elsewhere, other user)', () => {
     const { replace } = stubLocation();
     const { router } = renderApp('/dashboard', { as: 'hr-manager' });
     await screen.findByRole('button', { name: `Account menu for ${demoAccount('hr-manager').name.en}` });
+    reportWorkspaceSession({ email: demoAccount('hr-manager').email, expiresAt: new Date(Date.now() + 60_000).toISOString() });
     reportWorkspaceSession(central);
     await waitFor(() => expect(router.state.location.pathname).toBe('/login'));
     expect(storedSession()).toBeNull();
     await waitFor(() => expect(replace).toHaveBeenCalledWith(`${WORKSPACE}/workspace/open/hr-admin/`));
+  });
+
+  it('ignores "signed out" until the frame has once seen this user (partitioned storage on another site)', async () => {
+    const { router } = renderApp('/dashboard', { as: 'hr-manager' });
+    await screen.findByRole('button', { name: `Account menu for ${demoAccount('hr-manager').name.en}` });
+    reportWorkspaceSession(null);
+    expect(storedSession()).not.toBeNull();
+    expect(router.state.location.pathname).toBe('/dashboard');
   });
 
   it('ignores reports from any other origin', async () => {

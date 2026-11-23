@@ -90,7 +90,7 @@ describe('access by role (existing permission matrix)', () => {
   });
 });
 
-describe('personal information (employees:read:personal)', () => {
+describe('personal information (hr.employees.view.personal)', () => {
   const RESTRICTED = /Personal information .* is available only to HR roles\./;
   const PERSONAL_LABELS = ['Date of birth', 'Gender', 'Nationality', 'Marital status', 'Personal email', 'Address'];
 

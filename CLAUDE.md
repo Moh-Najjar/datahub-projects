@@ -21,11 +21,12 @@ all inside its own folder. There is deliberately **no** shared runtime package.
 - DataHubHR must not import MUI, Emotion, React DOM, React Router or website code (ESLint).
 - Admin Portal must not import React Native, Expo, website or DataHubHR code (oxlint `no-restricted-imports`).
 - shared-types must not import React, React DOM, React Native, Expo, MUI or app code (oxlint).
-- **Central staff sign-in (prototype):** the website's Workspace (`/workspace/login/`, HR demo accounts) is the ONLY
-  sign-in. Blogs Admin (`/admin/`) reads that session; the HR Admin Portal has no sign-in form — it receives a
-  short-lived handoff token at `/sso` and follows the central session through the website's hidden
-  `/workspace-session.html` (contracts: `WorkspaceHandoffPayload`, `WorkspaceSessionStatus` in shared-types). Every Sign
-  out goes to `/workspace/logout/`. Not real authentication — see both apps' CLAUDE.md.
+- **Central staff sign-in:** the website's Workspace (`/workspace/login/`) is the ONLY sign-in, verified by the backend
+  (`POST /api/v1/auth/login`; no demo accounts). Blogs Admin (`/admin/`) uses that session's access token; the HR Admin
+  Portal has no sign-in form — it receives the access token in a short-lived handoff at `/sso`, reads the user, role and
+  permissions (backend names, e.g. `hr.leave.approve.team`) from it, and follows the central session through the
+  website's hidden `/workspace-session.html` (contracts: `WorkspaceHandoffPayload`, `WorkspaceSessionStatus` in
+  shared-types). Every Sign out goes to `/workspace/logout/`. HR data is still simulated — see both apps' CLAUDE.md.
 - **Stay in scope:** when working on one app, do not modify the other. A change to shared-types must keep both
   apps building: run `npm run typecheck` afterwards.
 

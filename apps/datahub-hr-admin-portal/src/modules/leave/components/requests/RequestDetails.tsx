@@ -54,8 +54,8 @@ function RequestView({ request: r }: { request: LeaveRequest }) {
   const actions = useRequestActions(feedback.notify, { includeView: false });
   useBreadcrumbs([...(canReadBeyondOwn ? [{ label: t('tabs.requests'), to: leavePaths.requests }] : []), { label: r.number }]);
   const name = r.employee.name[language];
-  const canSeeEmployee = can('employees:read') || can('employees:read:team');
-  const canSeeAttendance = can('attendance:read') || can('attendance:read:team');
+  const canSeeEmployee = can('organization.employees.view') || can('hr.employees.view.team');
+  const canSeeAttendance = can('hr.attendance.view') || can('hr.attendance.view.team');
 
   return (
     <>
@@ -105,7 +105,7 @@ function RequestView({ request: r }: { request: LeaveRequest }) {
                   <>
                     <Box component="span" dir="ltr">{t('details.document', { name: r.document.fileName, size: Math.ceil(r.document.sizeBytes / 1024) })}</Box>
                     {/* The attachment is registered in Documents Management (same file reference, not a copy). */}
-                    {can('documents:read') && (
+                    {can('hr.documents.view') && (
                       <Link component={RouterLink} to={externalPaths.documentsFor(r.number)} sx={{ display: 'block' }}>
                         {t('details.viewInDocuments')}
                       </Link>

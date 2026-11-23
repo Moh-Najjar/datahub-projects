@@ -9,12 +9,12 @@ import type { ActivityType, DashboardScope, PendingActionType } from '@/modules/
 
 export const WIDGET_ACCESS = {
   /** Headcount KPIs and the employee growth chart (org-wide or own team). */
-  headcount: ['employees:read', 'employees:read:team'],
+  headcount: ['organization.employees.view', 'hr.employees.view.team'],
   /** Department distribution — organisation-wide employee data only. */
-  departments: ['employees:read'],
-  attendance: ['attendance:read', 'attendance:read:team'],
-  leave: ['leave:read', 'leave:read:team'],
-  recruitment: ['recruitment:read'],
+  departments: ['organization.employees.view'],
+  attendance: ['hr.attendance.view', 'hr.attendance.view.team'],
+  leave: ['hr.leave.view', 'hr.leave.view.team'],
+  recruitment: ['recruitment.jobs.view'],
 } as const satisfies Record<string, readonly Permission[]>;
 
 export const ACTIVITY_ACCESS: Record<ActivityType, readonly Permission[]> = {
@@ -24,19 +24,19 @@ export const ACTIVITY_ACCESS: Record<ActivityType, readonly Permission[]> = {
   'leave-approved': WIDGET_ACCESS.leave,
   'attendance-updated': WIDGET_ACCESS.attendance,
   'position-created': WIDGET_ACCESS.recruitment,
-  'user-role-changed': ['users:manage'],
+  'user-role-changed': ['identity.users.manage'],
 };
 
 export const PENDING_ACTION_ACCESS: Record<PendingActionType, readonly Permission[]> = {
-  'leave-approvals': ['leave:approve', 'leave:approve:team'],
-  'probation-reviews': ['employees:write', 'employees:read:team'],
-  'documents-expiring': ['documents:read'],
-  'attendance-corrections': ['attendance:write', 'attendance:read:team'],
-  'open-positions': ['recruitment:read'],
-  'payroll-changes': ['payroll:read'],
+  'leave-approvals': ['hr.leave.approve', 'hr.leave.approve.team'],
+  'probation-reviews': ['organization.employees.manage', 'hr.employees.view.team'],
+  'documents-expiring': ['hr.documents.view'],
+  'attendance-corrections': ['hr.attendance.manage', 'hr.attendance.view.team'],
+  'open-positions': ['recruitment.jobs.view'],
+  'payroll-changes': ['hr.payroll.view'],
 };
 
 /** Organisation-wide for HR, payroll and recruitment roles; the own department for department managers. */
 export function dashboardScope(can: (permission: Permission) => boolean): DashboardScope {
-  return can('employees:read') || can('recruitment:read') || can('payroll:read') ? 'organization' : 'team';
+  return can('organization.employees.view') || can('recruitment.jobs.view') || can('hr.payroll.view') ? 'organization' : 'team';
 }

@@ -318,7 +318,7 @@ describe('permissions and scope (enforced by the API)', () => {
   });
 
   it('a role without any attendance permission is refused', async () => {
-    // Every existing role has at least attendance:read:own; a scope claiming more than the role grants fails.
+    // Every existing role has at least hr.attendance.view.own; a scope claiming more than the role grants fails.
     expect((await rejection(api.getAttendanceRecords(ALL, { kind: 'organization', userId: 'usr-0007', role: 'payroll-officer' }))).code).toBe('FORBIDDEN');
     expect((await rejection(api.getAttendanceRecords(ALL, { kind: 'team', userId: 'usr-0006', role: 'recruiter' }))).code).toBe('FORBIDDEN');
   });

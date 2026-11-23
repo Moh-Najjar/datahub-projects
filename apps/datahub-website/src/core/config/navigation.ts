@@ -174,7 +174,7 @@ export const PRIMARY_NAV: Localized<NavItem[]> = {
     { kind: 'link', label: 'Blog', href: ROUTES.blog },
     { kind: 'link', label: 'Contact Us', href: ROUTES.contact },
     // DataHub's own item (not on the original site): the staff Portals sign-in.
-    { kind: 'app', label: 'Portals', href: WORKSPACE_ROUTES.root },
+    { kind: 'link', label: 'Portals', href: WORKSPACE_ROUTES.root },
   ],
   ar: [
     { kind: 'link', label: 'الصفحة الرئيسية', href: ROUTES.home },
@@ -201,6 +201,6 @@ export const PRIMARY_NAV: Localized<NavItem[]> = {
     },
     { kind: 'link', label: 'مدونة', href: ROUTES.blog },
     { kind: 'link', label: 'تواصل معنا', href: ROUTES.contact },
-    { kind: 'app', label: 'البوابات', href: WORKSPACE_ROUTES.root },
+    { kind: 'link', label: 'البوابات', href: WORKSPACE_ROUTES.root },
   ],
 };

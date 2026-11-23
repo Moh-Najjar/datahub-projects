@@ -7,21 +7,21 @@ import { setViewportWidth } from '@/test/matchMedia';
 const navigation = async () => within(await screen.findByRole('navigation', { name: 'Main navigation' }));
 
 describe('role-based navigation (sidebar)', () => {
-  it('System Administrator: available pages are links; planned areas are disabled "Soon" items', async () => {
+  it('System Administrator: every page is a link (no planned "Soon" items left)', async () => {
     renderApp('/dashboard', { as: 'system-admin' });
     const nav = await navigation();
     expect(nav.getByRole('link', { name: 'Dashboard' }).getAttribute('aria-current')).toBe('page');
     expect(nav.getByRole('link', { name: 'My profile' })).toBeTruthy();
-    const usersItem = nav.getByRole('button', { name: /Users & roles/ });
-    expect(usersItem.getAttribute('aria-disabled')).toBe('true');
-    expect(nav.queryByRole('link', { name: /Users & roles/ })).toBeNull();
+    expect(nav.getByRole('link', { name: 'Settings' })).toBeTruthy();
+    expect(nav.getByRole('link', { name: 'Users & roles' })).toBeTruthy();
+    expect(nav.queryByText('Soon')).toBeNull();
   });
 
   it('Employee: no dashboard, no admin areas', async () => {
     renderApp('/profile', { as: 'employee' });
     const nav = await navigation();
     expect(nav.queryByRole('link', { name: 'Dashboard' })).toBeNull();
-    // Own payslips only (My payroll): every staff member has payroll:read:own.
+    // Own payslips only (My payroll): every staff member has hr.payroll.view.own.
     expect(nav.getByRole('link', { name: 'Payroll' })).toBeTruthy();
     expect(nav.queryByText('Settings')).toBeNull();
     expect(nav.getByRole('link', { name: 'My profile' })).toBeTruthy();
@@ -87,7 +87,7 @@ describe('English LTR / Arabic RTL', () => {
     expect(await screen.findByRole('heading', { level: 1, name: 'تسجيل الدخول' })).toBeTruthy();
     expect(document.documentElement.dir).toBe('rtl');
     expect(document.documentElement.lang).toBe('ar');
-    expect(screen.getByText('وضع تجريبي — ليست مصادقة حقيقية')).toBeTruthy();
+    expect(screen.getByText('بيانات تجريبية — سجلات موارد بشرية محاكاة')).toBeTruthy();
   });
 
   it('renders the app shell in Arabic (navigation, breadcrumbs, roles)', async () => {

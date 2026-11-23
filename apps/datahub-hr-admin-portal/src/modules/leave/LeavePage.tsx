@@ -26,7 +26,7 @@ function currentTab(pathname: string): TabKey {
 /**
  * Leave (`/leave/*`): one lazy-loaded page. The router guards it with any leave read permission. Organization- and
  * team-scoped roles get the overview, requests, approvals, their own leave, balances, calendar, reports and types;
- * roles with only `leave:read:own` (self-service) get "My leave". The API enforces the same scopes.
+ * roles with only `hr.leave.view.own` (self-service) get "My leave". The API enforces the same scopes.
  */
 export default function LeavePage() {
   const { t } = useTranslation('leave');

@@ -5,7 +5,7 @@ import type { EmployeeScope } from '@/modules/employees/types/employee';
 import { EMPLOYEE_SEED } from './seed';
 
 /*
- * Field-level access to personal information (`employees:read:personal`), enforced by the simulated backend:
+ * Field-level access to personal information (`hr.employees.view.personal`), enforced by the simulated backend:
  * unauthorized fields must not be RETURNED (not merely hidden by the UI).
  */
 
@@ -26,7 +26,7 @@ const seed = EMPLOYEE_SEED.find((e) => e.id === ID)!;
 const SECRETS = [seed.dateOfBirth, seed.personalEmail, seed.phone, seed.address, seed.emergencyContact.name, seed.emergencyContact.phone];
 const PERSONAL_KEYS = ['dateOfBirth', 'gender', 'nationality', 'maritalStatus', 'personalEmail', 'phone', 'alternativePhone', 'address', 'city', 'country', 'emergencyContact'];
 
-describe('employees:read:personal — enforced by the API', () => {
+describe('hr.employees.view.personal — enforced by the API', () => {
   it.each(WITH_PERSONAL)('%s receives the personal details', async (role) => {
     const employee = await api.getEmployeeById(ID, scopes[role]!);
     expect(employee.personal).toMatchObject({ dateOfBirth: seed.dateOfBirth, personalEmail: seed.personalEmail, emergencyContact: seed.emergencyContact });

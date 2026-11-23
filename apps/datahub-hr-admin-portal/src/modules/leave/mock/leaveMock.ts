@@ -38,16 +38,16 @@ import { employeeSnapshot, leaveData, leaveTypes, todayIso, type LedgerEntry, ty
  * reads the attendance mock for each employee's working days and recorded check-ins (one-way: leave → attendance).
  * Rules the real backend must enforce:
  *
- * - Scope: `organization` (leave:read), `team` (leave:read:team — the departments the user manages, plus their own
- *   requests) or `own` (leave:read:own). Outside the scope → `FORBIDDEN`; lists are filtered. Drafts are visible to
+ * - Scope: `organization` (hr.leave.view), `team` (hr.leave.view.team — the departments the user manages, plus their own
+ *   requests) or `own` (hr.leave.view.own). Outside the scope → `FORBIDDEN`; lists are filtered. Drafts are visible to
  *   their owner only. Reasons and documents are returned only to the requester and to whoever may decide the request.
- * - Requests: employees submit for THEMSELVES only (`leave:request`; the matrix has no on-behalf permission). Days =
+ * - Requests: employees submit for THEMSELVES only (`hr.leave.request`; the matrix has no on-behalf permission). Days =
  *   working days of the employee's shift schedule, minus public holidays when the type excludes them. No overlaps with
  *   pending/approved leave, no days already worked (check-in recorded), inactive employees and inactive / ineligible
  *   types refused, document and balance required on submission, one calendar year per request.
  * - Balance: remaining = allocated − used − pending. Pending requests RESERVE days; approval turns the reservation
  *   into "used"; rejection or cancellation releases it; cancelling approved leave restores the days.
- * - Decisions: `leave:approve` (organization) or `leave:approve:team` (the manager's departments); never one's own
+ * - Decisions: `hr.leave.approve` (organization) or `hr.leave.approve.team` (the manager's departments); never one's own
  *   request; only pending requests (`CONFLICT` otherwise — no double approval, no approving a rejected request).
  * - Attendance: approved leave shows as "On leave" there (attendance reads the approved index on every read).
  */
@@ -108,23 +108,23 @@ type Scoped = { employeeId: string; employee: { department: NamedRef } };
 function readFilter(scope: LeaveScope): (row: Scoped) => boolean {
   const me = meOf(scope);
   if (scope.kind === 'organization') {
-    if (!hasPermission(scope.role, 'leave:read')) forbidden();
+    if (!hasPermission(scope.role, 'hr.leave.view')) forbidden();
     return () => true;
   }
   if (scope.kind === 'team') {
-    if (!hasPermission(scope.role, 'leave:read:team')) forbidden();
+    if (!hasPermission(scope.role, 'hr.leave.view.team')) forbidden();
     const units = employeeRecords.teamUnits(scope.userId);
     return (row) => row.employeeId === me || units.has(row.employee.department.id);
   }
-  if (!hasPermission(scope.role, 'leave:read:own')) forbidden();
+  if (!hasPermission(scope.role, 'hr.leave.view.own')) forbidden();
   return (row) => row.employeeId === me;
 }
 
 /** May the caller approve / reject this request (ignoring its status)? Never their own. */
 function mayDecide(scope: LeaveScope, row: Scoped): boolean {
   if (row.employeeId === meOf(scope)) return false;
-  if (hasPermission(scope.role, 'leave:approve')) return true;
-  return hasPermission(scope.role, 'leave:approve:team') && employeeRecords.teamUnits(scope.userId).has(row.employee.department.id);
+  if (hasPermission(scope.role, 'hr.leave.approve')) return true;
+  return hasPermission(scope.role, 'hr.leave.approve.team') && employeeRecords.teamUnits(scope.userId).has(row.employee.department.id);
 }
 
 const editable = (row: LeaveRow, today: string) => row.status === 'draft' || (row.status === 'pending' && row.startDate > today);
@@ -179,7 +179,7 @@ function toRequest(row: LeaveRow, scope: LeaveScope, today = todayIso()): LeaveR
     cancelledAt: row.cancelledAt,
     history: row.history,
     can: {
-      edit: own && hasPermission(scope.role, 'leave:request') && editable(row, today),
+      edit: own && hasPermission(scope.role, 'hr.leave.request') && editable(row, today),
       cancel: cancellable(row, today, own, decider),
       approve: decider && row.status === 'pending',
     },
@@ -189,10 +189,10 @@ function toRequest(row: LeaveRow, scope: LeaveScope, today = todayIso()): LeaveR
 /* Leave types ------------------------------------------------------------------------------------------- */
 
 function requireAnyRead(scope: LeaveScope) {
-  if (!(['leave:read', 'leave:read:team', 'leave:read:own'] as const).some((p) => hasPermission(scope.role, p))) forbidden();
+  if (!(['hr.leave.view', 'hr.leave.view.team', 'hr.leave.view.own'] as const).some((p) => hasPermission(scope.role, p))) forbidden();
 }
 function requirePolicies(scope: LeaveScope) {
-  if (!hasPermission(scope.role, 'leave:manage-policies')) forbidden('leave:manage-policies is required');
+  if (!hasPermission(scope.role, 'hr.policies.manage')) forbidden('hr.policies.manage is required');
 }
 
 export function listLeaveTypes(params: ListParams<LeaveTypeFilters>, scope: LeaveScope): Paginated<LeaveType> {
@@ -406,7 +406,7 @@ export function getRequest(id: string, scope: LeaveScope): LeaveRequest {
 
 /** The caller's own employee record: requests are self-service only (no on-behalf permission in the matrix). */
 function requester(input: Pick<LeaveRequestInput, 'employeeId'>, scope: LeaveScope): Employee {
-  if (!hasPermission(scope.role, 'leave:request')) forbidden('leave:request is required');
+  if (!hasPermission(scope.role, 'hr.leave.request')) forbidden('hr.leave.request is required');
   const me = meOf(scope);
   if (!me) forbidden('No employee record is linked to this account');
   if (input.employeeId && input.employeeId !== me) forbidden('Leave can only be requested for yourself');

@@ -8,6 +8,7 @@ import { localeFromPath } from '@/i18n/paths';
 import { UI } from '@/i18n';
 import { AppThemeProvider } from '@/core/theme/AppThemeProvider';
 import { layout } from '@/core/theme/tokens';
+import { BackToTop } from '@/modules/layout/BackToTop';
 import { Footer } from '@/modules/layout/Footer/Footer';
 import { Header, SITE_SHELL_ID } from '@/modules/layout/Header/Header';
 
@@ -64,6 +65,7 @@ export function SiteLayout() {
             </Box>
             <Footer />
           </Box>
+          <BackToTop />
         </MotionConfig>
       </AppThemeProvider>
     </LocaleProvider>

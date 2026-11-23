@@ -25,7 +25,7 @@ import type {
  * before the contract exists).
  *
  * `scope` (organization / team / own + role) exists only because the mock has no token: the real backend must
- * derive it from the signed-in user, refuse out-of-scope reads (`FORBIDDEN`) and require `attendance:write` for
+ * derive it from the signed-in user, refuse out-of-scope reads (`FORBIDDEN`) and require `hr.attendance.manage` for
  * every write. Check-in/check-out are SIMULATED operations — nothing records real-world presence.
  */
 

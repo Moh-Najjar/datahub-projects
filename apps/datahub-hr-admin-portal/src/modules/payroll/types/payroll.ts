@@ -576,8 +576,8 @@ export interface EmployeeOption {
 }
 
 /**
- * Who is asking: `organization` (payroll:read) or `own` (payroll:read:own), plus the role for the action rules
- * (payroll:write, payroll:approve). The real backend derives all of it from the signed-in user's token.
+ * Who is asking: `organization` (hr.payroll.view) or `own` (hr.payroll.view.own), plus the role for the action rules
+ * (hr.payroll.manage, hr.payroll.approve). The real backend derives all of it from the signed-in user's token.
  */
 export interface PayrollScope {
   kind: 'organization' | 'own';

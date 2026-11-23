@@ -45,7 +45,7 @@ export function ReportsSection() {
   const query = useLeaveReport({ page: list.params.page, pageSize: list.params.pageSize, filters });
   const exporter = useExportLeaveReport();
   const types = useLeaveTypes({ page: 1, pageSize: 100, sortBy: `name.${language}`, sortDirection: 'asc' });
-  const { options: departments } = useDepartmentOptions({ enabled: can('organization:read') });
+  const { options: departments } = useDepartmentOptions({ enabled: can('organization.departments.view') });
   const feedback = useFeedback();
   const fieldError = (field: 'from' | 'to') => (isApiError(query.error) ? fieldErrorText(t, query.error.fieldErrors?.[field]?.[0]) : undefined);
   const rangeError = fieldError('from') ?? fieldError('to');

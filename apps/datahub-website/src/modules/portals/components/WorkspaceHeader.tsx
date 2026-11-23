@@ -9,6 +9,7 @@ import { UI } from '@/i18n';
 import { useLocale } from '@/i18n/LocaleContext';
 import { SmartLink } from '@/modules/shared/SmartLink';
 import type { WorkspaceSession } from '@/modules/portals/api/workspaceAuth';
+import { roleLabel } from '@/modules/portals/utils/roleLabel';
 import { LanguageLink } from './LanguageLink';
 
 /** Workspace bar: DataHub logo + Workspace label, website link, language, signed-in user and role, sign out. */
@@ -35,7 +36,7 @@ export function WorkspaceHeader({ session }: { session: WorkspaceSession }) {
             {session.name[locale]}
           </Typography>
           <Typography variant="caption" color="text.secondary" noWrap component="p">
-            {t.roles[session.role]}
+            {roleLabel(session, t.roles)}
           </Typography>
         </Box>
         <Button

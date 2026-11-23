@@ -22,7 +22,7 @@ import type {
  * SIMULATED backend (`mock/`); with the .NET backend each body becomes an HTTP call returning the same types
  * (the backend contract is not defined yet, so no URLs are invented here).
  *
- * Every write must be authorized server-side (`organization:write`); hiding buttons in the UI is not security.
+ * Every write must be authorized server-side (`organization.departments.manage`); hiding buttons in the UI is not security.
  * Failures are `ApiError`s: `NOT_FOUND`, and `VALIDATION` with `fieldErrors` (e.g. `{ code: ['duplicate'] }`).
  */
 

@@ -21,7 +21,7 @@ export default function WorkspaceOpenPage() {
   const { app } = useParams();
   const { pathname } = useLocation();
   const session = useWorkspaceSession();
-  const allowed = session ? applicationsFor(session.role).includes(app as ApplicationId) : false;
+  const allowed = session ? applicationsFor(session).includes(app as ApplicationId) : false;
   const openHr = session !== null && allowed && app === 'hr-admin' && HR_ADMIN_PORTAL_URL !== undefined;
 
   useEffect(() => {

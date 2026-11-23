@@ -1,4 +1,4 @@
-import type { LeaveType, PublicHoliday } from '@/modules/leave/types/leave';
+import type { LeaveType } from '@/modules/leave/types/leave';
 
 /*
  * FICTIONAL leave configuration for the simulated backend. The allocations and rules are EXAMPLES for the demo — they
@@ -19,14 +19,7 @@ export const LEAVE_TYPE_SEED: readonly LeaveType[] = [
   type({ id: 'lt-08', code: 'OTHER', name: { en: 'Other Leave', ar: 'إجازة أخرى' }, description: 'Other approved absences; a supporting document is required.', paid: false, annualAllocation: null, seniorityYears: 0, seniorityExtraDays: 0, prorateFirstYear: false, maxConsecutiveDays: 10, requiresApproval: true, requiresDocument: true, eligibility: 'all', excludesPublicHolidays: false }),
 ];
 
-/** EXAMPLE public holidays for the demo (not an official calendar). */
-export const PUBLIC_HOLIDAYS: readonly PublicHoliday[] = [
-  { date: '2026-01-01', name: { en: "New Year's Day", ar: 'رأس السنة الميلادية' } },
-  { date: '2026-05-01', name: { en: 'Labour Day', ar: 'عيد العمال' } },
-  { date: '2026-11-26', name: { en: 'Company Day (example)', ar: 'يوم الشركة (مثال)' } },
-  { date: '2026-12-31', name: { en: 'Year-End Closure (example)', ar: 'إغلاق نهاية العام (مثال)' } },
-  { date: '2027-01-01', name: { en: "New Year's Day", ar: 'رأس السنة الميلادية' } },
-];
+// Public holidays live in System Settings (modules/settings/mock/seed.ts — the calendar Leave counts days with).
 
 /** Rejection reasons used by the fictional history. */
 export const SEED_REJECTION_REASONS = [

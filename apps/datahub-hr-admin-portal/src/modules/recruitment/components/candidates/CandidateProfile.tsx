@@ -32,7 +32,7 @@ import { useCandidateActions } from './useCandidateActions';
 const backIconSx = { transform: (theme: { direction: string }) => (theme.direction === 'rtl' ? 'scaleX(-1)' : undefined) };
 const TABS = ['profile', 'timeline', 'interviews', 'offers', 'documents'] as const;
 
-// Candidate documents live in Documents Management (one store); shown lazily, for recruitment:read only.
+// Candidate documents live in Documents Management (one store); shown lazily, for recruitment.jobs.view only.
 const CandidateDocumentsPanel = lazy(() => import('@/modules/documents').then((m) => ({ default: m.CandidateDocumentsPanel })));
 type TabKey = (typeof TABS)[number];
 
@@ -64,7 +64,7 @@ function CandidateView({ candidate: c }: { candidate: Candidate }) {
   const feedback = useFeedback();
   const actions = useCandidateActions(feedback.notify, { includeView: false });
   const [params, setParams] = useSearchParams();
-  const canSeeDocuments = canAny(['recruitment:read']);
+  const canSeeDocuments = canAny(['recruitment.jobs.view']);
   const tabs = TABS.filter((k) => (k !== 'offers' || canSeeOffers) && (k !== 'documents' || canSeeDocuments));
   const requested = params.get('tab') as TabKey | null;
   const tab: TabKey = requested && tabs.includes(requested) ? requested : 'profile';
@@ -103,7 +103,7 @@ function CandidateView({ candidate: c }: { candidate: Candidate }) {
       {c.employeeId && (
         <Alert severity="info">
           {t('conversion.converted')}{' '}
-          {canAny(['employees:read', 'employees:read:team']) && (
+          {canAny(['organization.employees.view', 'hr.employees.view.team']) && (
             <Link component={RouterLink} to={employeeProfilePath(c.employeeId)}>
               {t('conversion.openEmployee')}
             </Link>

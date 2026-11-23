@@ -49,7 +49,7 @@ describe('role-based dashboard', () => {
     expect(pendingTypes()).toContain('leave-approvals');
   });
 
-  it('HR Manager: payroll item only because the matrix grants payroll:read', async () => {
+  it('HR Manager: payroll item only because the matrix grants hr.payroll.view', async () => {
     await openDashboard('hr-manager');
     expect(pendingTypes()).toContain('payroll-changes');
     expect(chartsShown()).toEqual(CHARTS);

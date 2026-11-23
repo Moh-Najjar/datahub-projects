@@ -346,11 +346,11 @@ describe('candidate → employee conversion', () => {
     expect(employeeRecords.all().length).toBe(before + 1);
   });
 
-  it("Employee Management's rules apply (duplicate number), and only roles with employees:write may convert", async () => {
+  it("Employee Management's rules apply (duplicate number), and only roles with organization.employees.manage may convert", async () => {
     const c = await readyCandidate();
     const draft = await api.getConversionDraft(c.id, HR);
     expect(await reasons(api.convertCandidateToEmployee(c.id, employeeInput({ ...draft, employeeNumber: 'EMP-0001' }), HR))).toMatchObject({ employeeNumber: ['duplicate'] });
-    expect(await code(api.convertCandidateToEmployee(c.id, employeeInput(draft), RECRUITER))).toBe('FORBIDDEN'); // recruiter has no employees:write
+    expect(await code(api.convertCandidateToEmployee(c.id, employeeInput(draft), RECRUITER))).toBe('FORBIDDEN'); // recruiter has no organization.employees.manage
     const notHired = (await api.getCandidates({ ...ALL, filters: { stage: 'interview' } }, HR)).items[0]!;
     expect(await reasons(api.getConversionDraft(notHired.id, HR))).toEqual({ candidateId: ['notHired'] });
   });
@@ -379,7 +379,7 @@ describe('permissions and scope', () => {
     }
   });
 
-  it('HR Manager and Recruiter manage recruitment; staff options need recruitment:write', async () => {
+  it('HR Manager and Recruiter manage recruitment; staff options need recruitment.jobs.manage', async () => {
     expect((await api.getStaffOptions('', RECRUITER)).length).toBeGreaterThan(0);
     expect(await code(api.getStaffOptions('', MANAGER))).toBe('FORBIDDEN');
     expect((await api.createCandidate(await candidateInput({ email: 'hrm@candidates.example.test' }), scopeOf('hr-manager'))).stage).toBe('new');

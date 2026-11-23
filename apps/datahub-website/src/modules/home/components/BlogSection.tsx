@@ -1,13 +1,23 @@
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import { BlogCard, useLatestPosts } from '@/modules/blog';
+import Typography from '@mui/material/Typography';
+import { useBlogs } from '@/core/hooks/useBlogs';
+import { UI } from '@/i18n';
+import { useLocale } from '@/i18n/LocaleContext';
+import { BlogCard } from '@/modules/blog';
 import { Reveal } from '@/modules/shared/Reveal';
 import { SectionHeading } from '@/modules/home/components/SectionHeading';
 import type { HomeContent } from '@/modules/home/data/homeContent';
 
-/** The three newest published blog posts (masonry cards). */
+/**
+ * The first three published posts of the backend's list (masonry cards). While loading, the cards' space is kept
+ * empty (no layout jump); an error or an empty blog shows one short line instead of the cards.
+ */
 export function BlogSection({ content }: { content: HomeContent['blog'] }) {
-  const posts = useLatestPosts(3);
+  const { locale } = useLocale();
+  const t = UI[locale].blog;
+  const { data, status } = useBlogs({ pageNumber: 1, pageSize: 3 });
+  const posts = data?.items ?? [];
   return (
     <Box component="section" aria-label={content.label} sx={{ pt: '50px', pb: '106px' }}>
       <Container>
@@ -22,11 +32,13 @@ export function BlogSection({ content }: { content: HomeContent['blog'] }) {
           }}
         >
           {posts.map((post, i) => (
-            <Reveal key={post.slug} delay={i * 0.1}>
+            <Reveal key={post.id} delay={i * 0.1}>
               <BlogCard post={post} readMore={content.readMore} />
             </Reveal>
           ))}
         </Box>
+        {status === 'error' && <Typography sx={{ textAlign: 'center' }}>{t.error}</Typography>}
+        {status === 'success' && posts.length === 0 && <Typography sx={{ textAlign: 'center' }}>{t.empty}</Typography>}
       </Container>
     </Box>
   );

@@ -46,7 +46,7 @@ export function ReportsSection() {
   const query = useAttendanceReport({ page: list.params.page, pageSize: list.params.pageSize, filters });
   const exporter = useExportAttendanceReport();
   const feedback = useFeedback();
-  const { options: departments } = useDepartmentOptions({ enabled: can('organization:read') });
+  const { options: departments } = useDepartmentOptions({ enabled: can('organization.departments.view') });
   const rangeError = query.isError ? fieldErrorText(t, firstReason(query.error)) : undefined;
 
   const chooseType = (next: ReportType) => {
@@ -146,7 +146,7 @@ export function ReportsSection() {
             slotProps={{ inputLabel: { shrink: true }, htmlInput: { dir: 'ltr', min: from, max: today } }}
           />
         )}
-        {can('organization:read') && (
+        {can('organization.departments.view') && (
           <FilterSelect
             label={t('reports.department')}
             value={departmentId}

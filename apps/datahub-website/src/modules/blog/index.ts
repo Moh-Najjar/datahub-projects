@@ -1,20 +1,9 @@
-/** What other modules may use from the blog module. */
+/**
+ * What other modules may use from the blog module. Blog DATA comes from the backend through the hooks in
+ * `core/hooks/useBlogs.ts` (public) and `core/hooks/useAdminBlogs.ts` (Blogs Admin) — this module only renders it.
+ */
 export { BlogCard } from './components/BlogCard';
 export { BlogGrid } from './components/BlogGrid';
-export { useLatestPosts } from './hooks/useLatestPosts';
+export { PostImage } from './components/PostImage';
 export { articleSx } from './utils/articleStyles';
-export type { BlogCover, BlogPost, BlogPostInput, BlogPostListItem, BlogPostSummary, BlogStatus } from './types/blog';
-/** Blog management (used by the admin module). */
-export {
-  BlogApiError,
-  createPost,
-  deletePost,
-  getAllPosts,
-  getCoverLibrary,
-  getPostById,
-  getTaxonomy,
-  setPostStatus,
-  SLUG_PATTERN,
-  subscribeToBlog,
-  updatePost,
-} from './api/blogApi';
+export { isEmptyHtml, sanitizeHtml } from './utils/sanitizeHtml';

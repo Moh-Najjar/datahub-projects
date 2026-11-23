@@ -10,3 +10,6 @@ export { EmployeeAvatar } from './components/EmployeeAvatar';
 export { EmployeeForm, type ExternalCreate } from './components/form/EmployeeForm';
 export { employeeKeys } from './hooks/useEmployees';
 export type { EmployeeInput, EmployeeSummary, PersonName } from './types/employee';
+/** For Reports & Analytics: the module's own API service and contracts (the API enforces scope and personal-data rules). */
+export { employeesApi } from './api/employeesApi';
+export type { Employee, EmployeeScope, EmploymentHistoryEntry, EmploymentStatus, EmploymentType } from './types/employee';

@@ -76,13 +76,13 @@ function ProfileView({ employee: e }: { employee: Employee }) {
   const { canManage } = useEmployeeAccess();
   const { canAny } = useAuth();
   // Link to Attendance only for roles that may read other people's attendance (organization or team).
-  const canSeeAttendance = canAny(['attendance:read', 'attendance:read:team']);
+  const canSeeAttendance = canAny(['hr.attendance.view', 'hr.attendance.view.team']);
   // Leave tab (Leave Management) for roles that may read other people's leave; its API applies the same scope.
-  const canSeeLeave = canAny(['leave:read', 'leave:read:team']);
+  const canSeeLeave = canAny(['hr.leave.view', 'hr.leave.view.team']);
   // Performance tab for roles that may read other people's performance (organization or team); the API scopes it.
-  const canSeePerformance = canAny(['performance:read', 'performance:read:team']);
+  const canSeePerformance = canAny(['hr.performance.view', 'hr.performance.view.team']);
   // HR documents, the team's permitted documents, or payroll documents (payroll roles): the API filters each.
-  const canReadDocuments = canAny(['documents:read', 'documents:read:team', 'payroll:read']);
+  const canReadDocuments = canAny(['hr.documents.view', 'hr.documents.view.team', 'hr.payroll.view']);
   const feedback = useFeedback();
   const status = useEmployeeStatusFlow(feedback.notify);
   const [params, setParams] = useSearchParams();

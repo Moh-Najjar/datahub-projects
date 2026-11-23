@@ -15,7 +15,7 @@ import { formatDay } from '@/modules/payroll/utils/format';
 import { CompensationStatusChip } from '../common/Chips';
 import { Code, Money } from '../common/Money';
 
-/** Employee compensation (payroll:read only — salaries never appear in the general employee directory). */
+/** Employee compensation (hr.payroll.view only — salaries never appear in the general employee directory). */
 export function CompensationSection() {
   const { t } = useTranslation('payroll');
   const { language } = useLanguage();

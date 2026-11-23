@@ -20,7 +20,7 @@ import { accountInitials } from '@/modules/shared/accountInitials';
 export function UserMenu() {
   const { t } = useTranslation();
   const { language } = useLanguage();
-  const { user, can, signOut } = useAuth();
+  const { user, can, signOut, signOutTo } = useAuth();
   const navigate = useNavigate();
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
   if (!user) return null;
@@ -53,7 +53,7 @@ export function UserMenu() {
           </Typography>
         </Box>
         <Divider sx={{ my: 0.5 }} />
-        {can('profile:view') && (
+        {can('hr.profile.view') && (
           <MenuItem onClick={() => go('/profile')}>
             <ListItemIcon>
               <AccountCircleOutlined fontSize="small" />
@@ -64,11 +64,14 @@ export function UserMenu() {
         <MenuItem
           onClick={() => {
             setAnchor(null);
-            signOut();
             // One central session: Sign out ends it in the DataHub Workspace, which then shows its sign-in page.
             const workspaceLogout = workspaceLogoutUrl(language);
-            if (workspaceLogout) window.location.assign(workspaceLogout);
-            else navigate('/login', { replace: true });
+            if (workspaceLogout) {
+              signOutTo(workspaceLogout);
+            } else {
+              signOut();
+              navigate('/login', { replace: true });
+            }
           }}
         >
           <ListItemIcon>

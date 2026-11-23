@@ -10,7 +10,7 @@ npm run dev           # http://localhost:3000
 npm run build         # type-check + production build
 ```
 
-Content tooling (re-sync from the live site): `npm run pages:convert`, `npm run blog:export`;
+Content tooling (re-sync from the live site): `npm run pages:convert`;
 QA: `npm run check:links`, `npm run compare -- http://localhost:3000 1440 [ar]`.
 
 **Deploying:** this is a client-side routed SPA with WordPress-style URLs (`/about-us/`, `/ar/...`, `/<post-slug>/`).

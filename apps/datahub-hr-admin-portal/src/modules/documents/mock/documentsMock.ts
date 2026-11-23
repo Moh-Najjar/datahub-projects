@@ -55,14 +55,14 @@ import { CATEGORY_SEED, categoryByCode, CREATED, GRACE_DAYS, RULE_SEED } from '.
  *   payslips stay in Payroll and are only referenced.
  *
  * Rules the real backend must enforce on every request (frontend checks are not security):
- * - Read access is the UNION of: organization documents (documents:read; highly confidential ones also need
- *   employees:read:personal), team documents (documents:read:team: team members, standard confidentiality,
- *   manager-visible categories), payroll documents (payroll:read: payroll categories, not highly confidential), candidate
- *   documents (recruitment:read) and own documents (documents:read:own: employee-visible categories). Anything else is
- *   NOT_FOUND (no existence leak). Internal notes only for documents:read (employee documents) / recruitment:read
+ * - Read access is the UNION of: organization documents (hr.documents.view; highly confidential ones also need
+ *   hr.employees.view.personal), team documents (hr.documents.view.team: team members, standard confidentiality,
+ *   manager-visible categories), payroll documents (hr.payroll.view: payroll categories, not highly confidential), candidate
+ *   documents (recruitment.jobs.view) and own documents (hr.documents.view.own: employee-visible categories). Anything else is
+ *   NOT_FOUND (no existence leak). Internal notes only for hr.documents.view (employee documents) / recruitment.jobs.view
  *   (candidate documents).
- * - Writes: documents:write (employee documents; highly confidential ones need employees:read:personal too),
- *   recruitment:write (candidate documents); configuration: documents:manage-config.
+ * - Writes: hr.documents.manage (employee documents; highly confidential ones need hr.employees.view.personal too),
+ *   recruitment.jobs.manage (candidate documents); configuration: hr.documents.config.manage.
  * - Files are SIMULATED: only metadata; `downloadAvailable` is always false.
  */
 
@@ -217,19 +217,19 @@ interface Access {
 
 function access(scope: DocumentsScope): Access {
   const can = (p: Parameters<typeof hasPermission>[1]) => hasPermission(scope.role, p);
-  const team = can('documents:read:team');
+  const team = can('hr.documents.view.team');
   return {
-    org: can('documents:read'),
+    org: can('hr.documents.view'),
     team,
     units: team ? employeeRecords.teamUnits(scope.userId) : new Set(),
-    payroll: can('payroll:read'),
-    candidates: can('recruitment:read'),
-    own: can('documents:read:own'),
+    payroll: can('hr.payroll.view'),
+    candidates: can('recruitment.jobs.view'),
+    own: can('hr.documents.view.own'),
     me: meOf(scope),
-    personal: can('employees:read:personal'),
-    write: can('documents:write'),
-    recruitWrite: can('recruitment:write'),
-    config: can('documents:manage-config'),
+    personal: can('hr.employees.view.personal'),
+    write: can('hr.documents.manage'),
+    recruitWrite: can('recruitment.jobs.manage'),
+    config: can('hr.documents.config.manage'),
     name: actorName(scope),
   };
 }
@@ -822,14 +822,14 @@ export function employeeDocuments(employeeId: string, scope: DocumentsScope): Em
     .filter((s) => s.owner.type === 'employee' || s.linkedEmployeeId === employeeId)
     .sort((x, y) => y.uploadedAt.localeCompare(x.uploadedAt));
   // Payslips: Payroll's own records, referenced only for payroll roles and the employee themselves.
-  const payslips = a.payroll || (employeeId === a.me && hasPermission(scope.role, 'payroll:read:own')) ? payslipRecords.forEmployee(employeeId) : null;
+  const payslips = a.payroll || (employeeId === a.me && hasPermission(scope.role, 'hr.payroll.view.own')) ? payslipRecords.forEmployee(employeeId) : null;
   const compliance = a.org || a.team || employeeId === a.me ? complianceOf(d, a, e) : null;
   return { owner: { type: 'employee', id: e.id, name: employeeRecords.fullName(e), number: e.employeeNumber, employmentType: e.employmentType }, documents, payslips, compliance };
 }
 
 export function candidateDocuments(candidateId: string, scope: DocumentsScope): DocumentSummary[] {
   const { d, a } = begin(scope);
-  if (!a.candidates) forbidden('recruitment:read is required');
+  if (!a.candidates) forbidden('recruitment.jobs.view is required');
   if (!candidateRecords.all().some((c) => c.id === candidateId)) notFound('Candidate', candidateId);
   return summaries(d, a, { ownerType: 'candidate', ownerId: candidateId, includeHistorical: 'true' }).sort((x, y) => y.uploadedAt.localeCompare(x.uploadedAt));
 }
@@ -878,7 +878,7 @@ function checkCategory(d: Db, input: CategoryInput, exceptId?: string) {
 
 export function createCategory(input: CategoryInput, scope: DocumentsScope): DocumentCategory {
   const { d, a } = begin(scope);
-  if (!a.config) forbidden('documents:manage-config is required');
+  if (!a.config) forbidden('hr.documents.config.manage is required');
   checkCategory(d, input);
   d.seq.category++;
   const row: CategoryRow = { ...input, id: `cat-${pad(d.seq.category, 2)}`, status: 'active', createdAt: nowIso() };
@@ -889,7 +889,7 @@ export function createCategory(input: CategoryInput, scope: DocumentsScope): Doc
 /** Existing documents keep their metadata; new rules (file types, size, expiry) apply to new uploads and edits. */
 export function updateCategory(id: string, input: CategoryInput, scope: DocumentsScope): DocumentCategory {
   const { d, a } = begin(scope);
-  if (!a.config) forbidden('documents:manage-config is required');
+  if (!a.config) forbidden('hr.documents.config.manage is required');
   const c = d.categories.find((x) => x.id === id) ?? notFound('Category', id);
   checkCategory(d, input, id);
   // Owners already holding documents of the category cannot be removed from it.
@@ -901,7 +901,7 @@ export function updateCategory(id: string, input: CategoryInput, scope: Document
 
 export function updateCategoryStatus(id: string, status: RecordStatus, scope: DocumentsScope): DocumentCategory {
   const { d, a } = begin(scope);
-  if (!a.config) forbidden('documents:manage-config is required');
+  if (!a.config) forbidden('hr.documents.config.manage is required');
   const c = d.categories.find((x) => x.id === id) ?? notFound('Category', id);
   if (c.status === status) conflict('Status unchanged');
   // An inactive category accepts no new uploads; documents keep it. A category required by an active rule stays active.
@@ -920,7 +920,7 @@ export function getSettings(scope: DocumentsScope): DocumentSettings {
 
 export function updateSettings(input: { expiryWarningDays: number }, scope: DocumentsScope): DocumentSettings {
   const { d, a } = begin(scope);
-  if (!a.config) forbidden('documents:manage-config is required');
+  if (!a.config) forbidden('hr.documents.config.manage is required');
   if (!Number.isInteger(input.expiryWarningDays) || input.expiryWarningDays < 1 || input.expiryWarningDays > 180) invalid({ expiryWarningDays: ['invalidThreshold'] });
   d.settings = { expiryWarningDays: input.expiryWarningDays, updatedAt: nowIso(), updatedBy: a.name };
   return d.settings;
@@ -967,7 +967,7 @@ function checkRule(d: Db, input: RequiredRuleInput) {
 
 export function createRule(input: RequiredRuleInput, scope: DocumentsScope): RequiredRule {
   const { d, a } = begin(scope);
-  if (!a.config) forbidden('documents:manage-config is required');
+  if (!a.config) forbidden('hr.documents.config.manage is required');
   checkRule(d, input);
   d.seq.rule++;
   const row: RuleRow = { id: `req-${pad(d.seq.rule, 2)}`, name: input.name, categoryIds: [...new Set(input.categoryIds)], employmentTypes: input.employmentTypes, employmentStatus: input.employmentStatus, departmentId: input.departmentId, status: 'active', createdAt: nowIso() };
@@ -977,7 +977,7 @@ export function createRule(input: RequiredRuleInput, scope: DocumentsScope): Req
 
 export function updateRule(id: string, input: RequiredRuleInput, scope: DocumentsScope): RequiredRule {
   const { d, a } = begin(scope);
-  if (!a.config) forbidden('documents:manage-config is required');
+  if (!a.config) forbidden('hr.documents.config.manage is required');
   const r = d.rules.find((x) => x.id === id) ?? notFound('Rule', id);
   checkRule(d, input);
   Object.assign(r, { name: input.name, categoryIds: [...new Set(input.categoryIds)], employmentTypes: input.employmentTypes, employmentStatus: input.employmentStatus, departmentId: input.departmentId });
@@ -986,7 +986,7 @@ export function updateRule(id: string, input: RequiredRuleInput, scope: Document
 
 export function updateRuleStatus(id: string, status: RecordStatus, scope: DocumentsScope): RequiredRule {
   const { d, a } = begin(scope);
-  if (!a.config) forbidden('documents:manage-config is required');
+  if (!a.config) forbidden('hr.documents.config.manage is required');
   const r = d.rules.find((x) => x.id === id) ?? notFound('Rule', id);
   if (r.status === status) conflict('Status unchanged');
   // Re-activating restarts the grace period for everyone it applies to.
@@ -1151,7 +1151,7 @@ export function overview(scope: DocumentsScope): DocumentsOverview {
   };
 }
 
-/** Self-service: the caller's own employee documents (documents:read:own) with their checklist and payslip references. */
+/** Self-service: the caller's own employee documents (hr.documents.view.own) with their checklist and payslip references. */
 export function myDocuments(scope: DocumentsScope): EmployeeDocuments {
   const me = meOf(scope);
   if (!me) notFound('Employee record for account', scope.userId);

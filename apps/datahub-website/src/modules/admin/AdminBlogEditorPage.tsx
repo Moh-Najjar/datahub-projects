@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -6,45 +6,54 @@ import Typography from '@mui/material/Typography';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined';
 import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
+import { BlogStatusNotChangedError, isAdminBlogNotFound, useAdminBlog, useSaveBlog } from '@/core/hooks/useAdminBlogs';
 import { ADMIN_ROUTES } from '@/core/routes/paths';
-import { BlogApiError, createPost, getPostById, updatePost, type BlogPost, type BlogPostInput } from '@/modules/blog';
 import { ADMIN_TEXT } from '@/modules/admin/data/adminText';
-import { emptyFormValues, toFormValues } from '@/modules/admin/schemas/blogPostSchema';
-import { BlogForm } from './components/BlogForm';
+import { emptyFormValues, toFormValues, toStatus, toWriteBody, type BlogPostFormValues } from '@/modules/admin/schemas/blogPostSchema';
+import { adminErrorMessage } from '@/modules/admin/utils/apiErrors';
+import { useBlogPermissions } from '@/modules/admin/hooks/useBlogPermissions';
+import { BlogForm, type BlogFormBase, type SavedNotice } from './components/BlogForm';
 import { PageLoading } from './components/PageLoading';
 import { StatusChip } from './components/StatusChip';
 
 const E = ADMIN_TEXT.editor;
 
-type Loaded = { kind: 'loading' } | { kind: 'ready'; post: BlogPost | null } | { kind: 'error'; notFound: boolean };
-
-/** `/admin/blogs/new/` and `/admin/blogs/:postId/edit/` — create or edit a blog post. */
+/**
+ * `/admin/blogs/new/` and `/admin/blogs/:postId/edit/` — create or edit a blog post in the backend. Editing loads the
+ * post's latest version (with its `rowVersion`); saving sends that `rowVersion`, so a change made meanwhile by someone
+ * else is reported (conflict) instead of being overwritten.
+ */
 export default function AdminBlogEditorPage() {
   const { postId } = useParams();
   const navigate = useNavigate();
   const isNew = !postId;
-  const [loaded, setLoaded] = useState<Loaded>(isNew ? { kind: 'ready', post: null } : { kind: 'loading' });
-
-  useEffect(() => {
-    if (!postId) return;
-    let active = true;
-    getPostById(postId).then(
-      (post) => active && setLoaded({ kind: 'ready', post }),
-      (e: unknown) => active && setLoaded({ kind: 'error', notFound: e instanceof BlogApiError && e.code === 'not-found' }),
-    );
-    return () => {
-      active = false;
-    };
-  }, [postId]);
-
-  const save = async (input: BlogPostInput) => {
-    const post = postId ? await updatePost(postId, input) : await createPost(input);
-    return postId ? E.saved(post.summary.title) : E.created(post.summary.title);
+  const can = useBlogPermissions();
+  const allowed = isNew ? can.create : can.update;
+  const { data: post, status, error, refetch, isRefetching } = useAdminBlog(allowed ? postId : undefined);
+  const save = useSaveBlog();
+  /** Bumped after loading the latest version (conflict): the form restarts from it. */
+  const [formVersion, setFormVersion] = useState(0);
+  const reloadLatest = async () => {
+    await refetch();
+    setFormVersion((v) => v + 1);
   };
-  const onSaved = useCallback((notice: string) => navigate(ADMIN_ROUTES.blogs, { state: { notice } }), [navigate]);
 
-  const post = loaded.kind === 'ready' ? loaded.post : null;
+  const submit = async (values: BlogPostFormValues, base: BlogFormBase | undefined): Promise<SavedNotice> => {
+    const title = values.title.trim();
+    const done = base ? E.saved(title) : E.created(title);
+    try {
+      await save.mutateAsync({ body: toWriteBody(values), status: values.status, existing: base });
+    } catch (e) {
+      // The content was saved; only publishing / unpublishing failed.
+      if (e instanceof BlogStatusNotChangedError) return { text: `${done} ${E.statusNotChanged(e.status)}`, severity: 'warning' };
+      throw e;
+    }
+    return { text: done, severity: 'success' };
+  };
+  const onSaved = useCallback((notice: SavedNotice) => navigate(ADMIN_ROUTES.blogs, { state: { notice } }), [navigate]);
+
   const heading = isNew ? E.newTitle : E.editTitle;
+  const published = post ? toStatus(post.status) === 'Published' : false;
 
   return (
     <>
@@ -57,18 +66,38 @@ export default function AdminBlogEditorPage() {
           {heading}
         </Typography>
         {post && <StatusChip status={post.status} />}
-        {post?.status === 'published' && (
-          <Button component="a" href={`/${post.summary.slug}/`} target="_blank" rel="noopener" startIcon={<OpenInNewOutlinedIcon />} sx={{ height: 36, px: 1.5, ml: { sm: 'auto' } }}>
+        {post && published && (
+          <Button component="a" href={`/${post.slug}/`} target="_blank" rel="noopener" startIcon={<OpenInNewOutlinedIcon />} sx={{ height: 36, px: 1.5, ml: { sm: 'auto' } }}>
             {E.viewOnSite}
           </Button>
         )}
       </Box>
 
-      {loaded.kind === 'loading' && <PageLoading />}
-      {loaded.kind === 'error' && <Alert severity={loaded.notFound ? 'warning' : 'error'}>{loaded.notFound ? E.notFound : E.loadError}</Alert>}
-      {loaded.kind === 'ready' && (
-        <BlogForm key={post?.id ?? 'new'} isNew={isNew} defaultValues={post ? toFormValues(post) : emptyFormValues()} onSubmit={save} onSaved={onSaved} onCancel={() => navigate(ADMIN_ROUTES.blogs)} />
-      )}
+      {!allowed ? (
+        <Alert severity="warning">{isNew ? ADMIN_TEXT.validation.noCreate : ADMIN_TEXT.validation.noUpdate}</Alert>
+      ) : isNew ? (
+        <BlogForm key="new" isNew canPublish={can.publish} defaultValues={emptyFormValues()} onSubmit={submit} onSaved={onSaved} onCancel={() => navigate(ADMIN_ROUTES.blogs)} />
+      ) : status === 'pending' || (isRefetching && !post) ? (
+        <PageLoading />
+      ) : status === 'error' && !post ? (
+        <Alert severity={isAdminBlogNotFound(error) ? 'warning' : 'error'} action={!isAdminBlogNotFound(error) && <Button color="inherit" onClick={() => void refetch()}>{ADMIN_TEXT.list.retry}</Button>}>
+          {isAdminBlogNotFound(error) ? E.notFound : `${E.loadError} ${adminErrorMessage(error)}`}
+        </Alert>
+      ) : post ? (
+        // Reloading after a conflict gives a fresh form with the latest content (and rowVersion).
+        <BlogForm
+          key={`${post.id}:${formVersion}`}
+          isNew={false}
+          canPublish={can.publish}
+          terms={{ categories: post.categories, tags: post.tags }}
+          base={{ id: post.id, rowVersion: post.rowVersion, status: toStatus(post.status) }}
+          defaultValues={toFormValues(post)}
+          onSubmit={submit}
+          onSaved={onSaved}
+          onCancel={() => navigate(ADMIN_ROUTES.blogs)}
+          onReloadLatest={() => void reloadLatest()}
+        />
+      ) : null}
     </>
   );
 }

@@ -3,6 +3,7 @@ import { cleanup, configure } from '@testing-library/react';
 import { afterEach, beforeEach, vi } from 'vitest';
 import i18n from '@/i18n';
 import { resetMockConfig, setMockConfig } from '@/core/api/mock/mockConfig';
+import { setSignedInPermissions } from '@/core/config/permissions';
 import { resetAttendanceMock } from '@/modules/attendance/mock/attendanceMock';
 import { resetDocumentsMock } from '@/modules/documents/mock/documentsMock';
 import { resetEmployeesMock } from '@/modules/employees/mock/employeesMock';
@@ -11,6 +12,9 @@ import { resetOrganizationMock } from '@/modules/organization/mock/organizationM
 import { resetPayrollMock } from '@/modules/payroll/mock/payrollMock';
 import { resetPerformanceMock } from '@/modules/performance/mock/performanceMock';
 import { resetRecruitmentMock } from '@/modules/recruitment/mock/recruitmentMock';
+import { resetSavedReportsMock } from '@/modules/reports/mock/savedReportsMock';
+import { resetSettingsMock } from '@/modules/settings/mock/settingsMock';
+import { resetUsersMock } from '@/modules/users/mock/usersMock';
 import { recordedCharts } from './echartsStub';
 import { setViewportWidth } from './matchMedia';
 
@@ -41,6 +45,10 @@ afterEach(async () => {
   resetPerformanceMock();
   resetPayrollMock();
   resetDocumentsMock();
+  resetSavedReportsMock();
+  resetSettingsMock();
+  resetUsersMock();
+  setSignedInPermissions(null);
   localStorage.clear();
   sessionStorage.clear();
   document.documentElement.removeAttribute('data-color-scheme');

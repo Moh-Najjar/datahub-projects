@@ -25,7 +25,7 @@ import { leavePaths } from '@/modules/leave/paths';
 import type { LeaveType, LeaveTypeFilters, LeaveTypeSortField, RecordStatus } from '@/modules/leave/types/leave';
 import { TypeFormDialog } from './TypeFormDialog';
 
-/** Leave types: search, status / paid filters, create, edit, activate / deactivate (leave:manage-policies). */
+/** Leave types: search, status / paid filters, create, edit, activate / deactivate (hr.policies.manage). */
 export function TypesSection() {
   const { t } = useTranslation('leave');
   const { t: tCommon } = useTranslation();

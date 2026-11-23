@@ -1,36 +1,29 @@
-import { mockRequest } from '@/core/api/mock/mockRequest';
+import { isRole, permissionsFromToken } from '@/core/config/permissions';
 import type { Session } from '@/core/context/authContext';
-import { HandoffError, parseHandoffToken } from '@/modules/auth/handoff/workspaceHandoff';
-import { DEMO_ACCOUNTS } from '@/modules/auth/mock/demoAccounts';
+import { HandoffError, parseHandoffToken, readAccessToken } from '@/modules/auth/handoff/workspaceHandoff';
 
 /*
- * Auth API — MOCK implementation. This portal has no sign-in form: users sign in once in the DataHub Workspace (the
- * website), which hands them over to `/sso` with a short-lived token. Nothing is authenticated here; the real backend
- * will verify a signed token (or its own SSO session) and issue the session — only this function body changes.
+ * Auth API. This portal has no sign-in form: users sign in once in the DataHub Workspace (the website, verified by the
+ * backend), which hands them over to `/sso` with the backend access token. The session is read from that token: user,
+ * role (the first role this portal knows), permissions (backend names, plus the interim fallbacks of
+ * core/config/permissions.ts) and expiry. Every future HR API request will carry the same token.
  */
-
-const SESSION_HOURS = 8;
 
 export const authApi = {
   /**
-   * Single sign-in from the DataHub Workspace (`/sso#token=…`). MOCK: decodes the unsigned prototype token
-   * (`handoff/workspaceHandoff.ts`) and signs in as the demo account with that email — the same account the user
-   * chose in the Workspace. Throws `HandoffError` for a missing, malformed or expired token or an account this portal
-   * does not have (e.g. the Workspace's Blogs Administrator).
+   * Single sign-in from the DataHub Workspace (`/sso#token=…`). Throws `HandoffError` for a missing, malformed or
+   * expired token, or a user without an HR role this portal knows (`unknown-account`) — all shown with one message.
    */
-  exchangeHandoff(token: string | null, signal?: AbortSignal): Promise<Session> {
-    return mockRequest(
-      () => {
-        const { email } = parseHandoffToken(token);
-        const user = DEMO_ACCOUNTS.find((a) => a.email.toLowerCase() === email.toLowerCase());
-        if (!user) throw new HandoffError('unknown-account');
-        return {
-          user,
-          token: `mock-${crypto.randomUUID()}`,
-          expiresAt: new Date(Date.now() + SESSION_HOURS * 3_600_000).toISOString(),
-        };
-      },
-      { signal },
-    );
+  async exchangeHandoff(token: string | null): Promise<Session> {
+    const { accessToken } = parseHandoffToken(token);
+    const claims = readAccessToken(accessToken);
+    const role = claims.roles.find(isRole);
+    if (!role) throw new HandoffError('unknown-account');
+    return {
+      user: { id: claims.userId, email: claims.email, name: { en: claims.displayName, ar: claims.displayName }, role },
+      token: accessToken,
+      permissions: permissionsFromToken(claims.permissions),
+      expiresAt: new Date(claims.expiresAt).toISOString(),
+    };
   },
 };

@@ -13,7 +13,7 @@ import type { Employee } from '@/modules/employees/types/employee';
 import { displayName } from '@/modules/employees/utils/names';
 import { EmployeeForm } from './EmployeeForm';
 
-/** Roles without `employees:write` never see the form (the backend must refuse their writes as well). */
+/** Roles without `organization.employees.manage` never see the form (the backend must refuse their writes as well). */
 function NoPermission() {
   const { t } = useTranslation('employees');
   return <Alert severity="warning">{t('noPermission')}</Alert>;

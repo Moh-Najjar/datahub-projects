@@ -9,6 +9,9 @@ import type enOrganization from './locales/en/organization.json';
 import type enPayroll from './locales/en/payroll.json';
 import type enPerformance from './locales/en/performance.json';
 import type enRecruitment from './locales/en/recruitment.json';
+import type enReports from './locales/en/reports.json';
+import type enSettings from './locales/en/settings.json';
+import type enUsers from './locales/en/users.json';
 
 /** Type-checked translation keys: `t('nav.items.dashboard')` compiles, a typo does not. */
 declare module 'i18next' {
@@ -26,6 +29,9 @@ declare module 'i18next' {
       payroll: typeof enPayroll;
       performance: typeof enPerformance;
       recruitment: typeof enRecruitment;
+      reports: typeof enReports;
+      settings: typeof enSettings;
+      users: typeof enUsers;
     };
   }
 }

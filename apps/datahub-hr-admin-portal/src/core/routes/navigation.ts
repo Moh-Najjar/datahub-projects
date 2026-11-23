@@ -54,42 +54,42 @@ export const NAV_GROUPS: readonly NavGroup[] = [
   {
     key: 'overview',
     items: [
-      { key: 'dashboard', path: '/dashboard', icon: SpaceDashboardOutlined, anyOf: ['dashboard:view'], available: true },
-      { key: 'profile', path: '/profile', icon: AccountCircleOutlined, anyOf: ['profile:view'], available: true },
+      { key: 'dashboard', path: '/dashboard', icon: SpaceDashboardOutlined, anyOf: ['hr.dashboard.view'], available: true },
+      { key: 'profile', path: '/profile', icon: AccountCircleOutlined, anyOf: ['hr.profile.view'], available: true },
     ],
   },
   {
     key: 'people',
     items: [
-      { key: 'employees', path: '/employees', icon: PeopleAltOutlined, anyOf: ['employees:read', 'employees:read:team'], available: true },
-      { key: 'organization', path: '/organization', icon: AccountTreeOutlined, anyOf: ['organization:read'], available: true },
+      { key: 'employees', path: '/employees', icon: PeopleAltOutlined, anyOf: ['organization.employees.view', 'hr.employees.view.team'], available: true },
+      { key: 'organization', path: '/organization', icon: AccountTreeOutlined, anyOf: ['organization.departments.view'], available: true },
     ],
   },
   {
     key: 'time',
     items: [
-      { key: 'attendance', path: '/attendance', icon: AccessTimeOutlined, anyOf: ['attendance:read', 'attendance:read:team', 'attendance:read:own'], available: true },
-      { key: 'leave', path: '/leave', icon: EventAvailableOutlined, anyOf: ['leave:read', 'leave:read:team', 'leave:read:own'], available: true },
+      { key: 'attendance', path: '/attendance', icon: AccessTimeOutlined, anyOf: ['hr.attendance.view', 'hr.attendance.view.team', 'hr.attendance.view.own'], available: true },
+      { key: 'leave', path: '/leave', icon: EventAvailableOutlined, anyOf: ['hr.leave.view', 'hr.leave.view.team', 'hr.leave.view.own'], available: true },
     ],
   },
   {
     key: 'talent',
     items: [
-      { key: 'recruitment', path: '/recruitment', icon: WorkOutlineOutlined, anyOf: ['recruitment:read', 'recruitment:read:team'], available: true },
-      { key: 'performance', path: '/performance', icon: TrendingUpOutlined, anyOf: ['performance:read', 'performance:read:team', 'performance:read:own'], available: true },
+      { key: 'recruitment', path: '/recruitment', icon: WorkOutlineOutlined, anyOf: ['recruitment.jobs.view', 'hr.recruitment.view.team'], available: true },
+      { key: 'performance', path: '/performance', icon: TrendingUpOutlined, anyOf: ['hr.performance.view', 'hr.performance.view.team', 'hr.performance.view.own'], available: true },
     ],
   },
   {
     key: 'finance',
-    items: [{ key: 'payroll', path: '/payroll', icon: PaymentsOutlined, anyOf: ['payroll:read', 'payroll:read:own'], available: true }],
+    items: [{ key: 'payroll', path: '/payroll', icon: PaymentsOutlined, anyOf: ['hr.payroll.view', 'hr.payroll.view.own'], available: true }],
   },
   {
     key: 'administration',
     items: [
-      { key: 'documents', path: '/documents', icon: DescriptionOutlined, anyOf: ['documents:read', 'documents:read:team', 'documents:read:own'], available: true },
-      { key: 'reports', path: '/reports', icon: AssessmentOutlined, anyOf: ['reports:view'], available: false },
-      { key: 'settings', path: '/settings', icon: SettingsOutlined, anyOf: ['settings:manage'], available: false },
-      { key: 'users', path: '/users', icon: AdminPanelSettingsOutlined, anyOf: ['users:manage'], available: false },
+      { key: 'documents', path: '/documents', icon: DescriptionOutlined, anyOf: ['hr.documents.view', 'hr.documents.view.team', 'hr.documents.view.own'], available: true },
+      { key: 'reports', path: '/reports', icon: AssessmentOutlined, anyOf: ['hr.reports.view', 'hr.reports.view.team', 'hr.payroll.view', 'recruitment.jobs.view'], available: true },
+      { key: 'settings', path: '/settings', icon: SettingsOutlined, anyOf: ['hr.settings.manage'], available: true },
+      { key: 'users', path: '/users', icon: AdminPanelSettingsOutlined, anyOf: ['identity.users.manage'], available: true },
     ],
   },
 ];

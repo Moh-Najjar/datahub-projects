@@ -7,3 +7,6 @@
 export { EmployeeDocumentsTab, CandidateDocumentsPanel, PayrollDocumentsPanel } from './components/integration/OwnerPanels';
 export { documentKeys } from './hooks/useDocuments';
 export { documentPaths } from './paths';
+/** For Reports & Analytics: the module's own API service and contracts (confidentiality is enforced by this API). */
+export { documentsApi } from './api/documentsApi';
+export type { DocumentsOverview, DocumentsScope, DocumentSummary, EmployeeCompliance } from './types/documents';

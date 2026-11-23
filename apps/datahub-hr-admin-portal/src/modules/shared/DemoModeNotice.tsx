@@ -6,8 +6,8 @@ import ScienceOutlined from '@mui/icons-material/ScienceOutlined';
 import { useTranslation } from 'react-i18next';
 
 /**
- * The permanent "Demo Mode — Not Real Authentication" warning. `full` on the sign-in page, `compact`
- * (badge with the full text as tooltip) in the app bar. Remove only when real backend auth replaces mock sign-in.
+ * The permanent "Demo data" notice (the HR data is simulated; sign-in is the backend's). `full` on the sign-in page, `compact`
+ * (badge with the full text as tooltip) in the app bar. Remove once the HR backend provides real data.
  */
 export function DemoModeNotice({ variant }: { variant: 'full' | 'compact' }) {
   const { t } = useTranslation();

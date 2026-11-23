@@ -10,12 +10,6 @@ import { easing } from '@/core/theme/tokens';
 /** Viewport width from which top-level items use the original (roomier) spacing, per direction. */
 const ROOMY_FROM = { ltr: 1580, rtl: 1800 } as const;
 
-/**
- * Below this width an `app` item (Workspace) shows as an icon: even with the tight spacing the menu does not fit
- * 1200–1439px with the full label.
- */
-export const APP_ITEM_LABEL_FROM = 1440;
-
 const noForward =(...names: string[]) => (prop: PropertyKey) => !names.includes(String(prop));
 
 export const MenuList = styled('ul')({

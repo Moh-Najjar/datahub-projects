@@ -175,7 +175,7 @@ describe('categories and settings', () => {
     // Part-time employees are not eligible and inactive categories accept no uploads.
     expect((await failure(api.createDocument({ ...(await input('TRAINING-CERT')), categoryId: created.id, expiryDate: '2028-01-01' }, HR))).fieldErrors).toMatchObject({ categoryId: ['categoryInactive'] });
     expect((await failure(api.updateDocumentCategoryStatus((await cat('EMP-CONTRACT')).id, 'inactive', HR))).fieldErrors).toMatchObject({ status: ['categoryRequired'] });
-    // Configuration needs documents:manage-config (the HR Manager may not).
+    // Configuration needs hr.documents.config.manage (the HR Manager may not).
     expect((await failure(api.createDocumentCategory({ ...created, code: 'NEW-ONE' }, HRM))).code).toBe('FORBIDDEN');
   });
 
@@ -292,13 +292,13 @@ describe('permissions and confidentiality (enforced by the API)', () => {
     const forEmployee = await api.getEmployeeDocuments('emp-0025', PAYROLL);
     expect(forEmployee.payslips!.length).toBeGreaterThan(0);
     expect(forEmployee.payslips![0]!.number).toMatch(/^PS-/);
-    // Roles without payroll:read get no payslip references (a manager for their team); the employee gets their own.
+    // Roles without hr.payroll.view get no payslip references (a manager for their team); the employee gets their own.
     const teamMember = employeeRecords.all().find((e) => e.id !== 'emp-0001' && employeeRecords.teamUnits('usr-0004').has(e.departmentId))!;
     expect((await api.getEmployeeDocuments(teamMember.id, MANAGER)).payslips).toBeNull();
     expect((await api.getEmployeeDocuments('emp-0025', EMPLOYEE)).payslips!.length).toBeGreaterThan(0);
   });
 
-  it('highly confidential documents need employees:read:personal even for document readers', async () => {
+  it('highly confidential documents need hr.employees.view.personal even for document readers', async () => {
     // Every HR document role holds the personal permission; the rule is checked on each read.
     const id = (await allDocs(HR, { categoryId: (await cat('NATIONAL-ID')).id }))[0]!;
     expect((await api.getDocumentById(id.id, HRM)).confidentiality).toBe('highly-confidential');
@@ -328,7 +328,7 @@ describe('integrations', () => {
     expect(docs.some((d) => d.category.code === 'CV')).toBe(true);
     expect((await failure(api.getCandidateDocuments(candidate.id, PAYROLL))).code).toBe('FORBIDDEN');
     expect((await failure(api.getCandidateDocuments(candidate.id, EMPLOYEE))).code).toBe('FORBIDDEN');
-    // A recruiter uploads a certificate for the candidate (recruitment:write), but cannot see employee documents.
+    // A recruiter uploads a certificate for the candidate (recruitment.jobs.manage), but cannot see employee documents.
     const cert = await api.createDocument({ ...(await input('PROFESSIONAL-CERT')), ownerType: 'candidate', ownerId: candidate.id }, RECRUITER);
     expect((await failure(api.getEmployeeDocuments('emp-0025', RECRUITER))).code).toBe('FORBIDDEN');
     // Convert: the certificate is LINKED to the new employee (one record, history kept); the CV stays with the candidate.

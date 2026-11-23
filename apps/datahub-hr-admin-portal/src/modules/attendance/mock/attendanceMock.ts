@@ -40,9 +40,9 @@ import { hash, initialShiftId, prng, SHIFT_SEED, WINDOW_MONTHS, type ShiftRow } 
  * employees and organization mocks: records reference EXISTING employee ids and resolve names through them; it
  * keeps no employee table of its own. Rules the real backend must enforce:
  *
- * - Scope: `organization` (attendance:read), `team` (attendance:read:team — departments the user manages) or
- *   `own` (attendance:read:own). Anything outside the scope → `FORBIDDEN`, lists are filtered.
- * - Writes (records, punches, shifts, assignments) need `attendance:write` → `FORBIDDEN` otherwise.
+ * - Scope: `organization` (hr.attendance.view), `team` (hr.attendance.view.team — departments the user manages) or
+ *   `own` (hr.attendance.view.own). Anything outside the scope → `FORBIDDEN`, lists are filtered.
+ * - Writes (records, punches, shifts, assignments) need `hr.attendance.manage` → `FORBIDDEN` otherwise.
  * - Punch rules: no second check-in or check-out for a session, no check-out before check-in, no future times.
  * - Status, worked time and lateness are computed (utils/time.ts), never stored.
  * - History: each record keeps a snapshot of the employee's department/position and of the shift on that day.
@@ -249,22 +249,22 @@ function allRows(): RecordRow[] {
 
 function scopeFilter(scope: AttendanceScope): (row: { employeeId: string; employee: { department: NamedRef } }) => boolean {
   if (scope.kind === 'organization') {
-    if (!hasPermission(scope.role, 'attendance:read')) forbidden();
+    if (!hasPermission(scope.role, 'hr.attendance.view')) forbidden();
     return () => true;
   }
   if (scope.kind === 'team') {
-    if (!hasPermission(scope.role, 'attendance:read:team')) forbidden();
+    if (!hasPermission(scope.role, 'hr.attendance.view.team')) forbidden();
     const units = employeeRecords.teamUnits(scope.userId);
     // Team = the department the record was made in (history stays with the department it belongs to).
     return (row) => units.has(row.employee.department.id);
   }
-  if (!hasPermission(scope.role, 'attendance:read:own')) forbidden();
+  if (!hasPermission(scope.role, 'hr.attendance.view.own')) forbidden();
   const me = employeeRecords.employeeIdOf(scope.userId);
   return (row) => row.employeeId === me;
 }
 
 function requireWrite(scope: AttendanceScope) {
-  if (!hasPermission(scope.role, 'attendance:write')) forbidden('attendance:write is required');
+  if (!hasPermission(scope.role, 'hr.attendance.manage')) forbidden('hr.attendance.manage is required');
 }
 
 /** May the scope see this employee at all (current department / own record)? */
@@ -553,7 +553,7 @@ function toShift(row: ShiftRow): Shift {
 
 /** Shifts are reference data for anyone who may read attendance beyond their own records. */
 function requireShiftRead(scope: AttendanceScope) {
-  if (!hasPermission(scope.role, 'attendance:read') && !hasPermission(scope.role, 'attendance:read:team')) forbidden();
+  if (!hasPermission(scope.role, 'hr.attendance.view') && !hasPermission(scope.role, 'hr.attendance.view.team')) forbidden();
 }
 
 export function listShifts(params: ListParams<ShiftFilters>, scope: AttendanceScope): Paginated<Shift> {

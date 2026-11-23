@@ -20,10 +20,10 @@ import type {
  *
  * `scope` exists only because the mock has no token: the real backend derives who is asking (and so the
  * Department Manager's team) from the signed-in user and must refuse out-of-scope reads (`FORBIDDEN`). It must also
- * check `employees:write` on every write — hiding buttons is not security.
+ * check `organization.employees.manage` on every write — hiding buttons is not security.
  *
  * Field-level access: the profile's `personal` block is returned only to roles with
- * `employees:read:personal` (System Administrator, HR Administrator, HR Manager); others receive `personal: null`.
+ * `hr.employees.view.personal` (System Administrator, HR Administrator, HR Manager); others receive `personal: null`.
  */
 
 type Signal = AbortSignal | undefined;

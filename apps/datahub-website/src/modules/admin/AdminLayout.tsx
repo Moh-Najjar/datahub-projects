@@ -1,4 +1,4 @@
-import { Suspense, useMemo, type ReactNode } from 'react';
+import { Suspense, useEffect, useMemo, type ReactNode } from 'react';
 import Alert from '@mui/material/Alert';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
@@ -10,14 +10,17 @@ import AppsOutlinedIcon from '@mui/icons-material/AppsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined';
 import { ThemeProvider, useTheme } from '@mui/material/styles';
+import { useQueryClient } from '@tanstack/react-query';
 import { Link as RouterLink, Navigate, Outlet, ScrollRestoration, useLocation } from 'react-router-dom';
+import { adminBlogKeys } from '@/core/hooks/useAdminBlogs';
 import { AppThemeProvider } from '@/core/theme/AppThemeProvider';
 import { ADMIN_ROUTES, ROUTES, WORKSPACE_ROUTES } from '@/core/routes/paths';
 import { UI } from '@/i18n';
 import { LocaleProvider } from '@/i18n/LocaleProvider';
 import { createAdminTheme } from '@/modules/admin/adminTheme';
 import { ADMIN_TEXT } from '@/modules/admin/data/adminText';
-import { canOpen, useWorkspaceSession, type WorkspaceLocationState, type WorkspaceSession } from '@/modules/portals';
+import { formatLocalTime } from '@/modules/admin/utils/date';
+import { canOpen, hasPermission, roleLabel, useWorkspaceSession, type WorkspaceLocationState, type WorkspaceSession } from '@/modules/portals';
 import { PageLoading } from './components/PageLoading';
 
 const T = ADMIN_TEXT;
@@ -39,7 +42,7 @@ function AdminTheme({ children }: { children: ReactNode }) {
 
 function AdminBar({ session }: { session: WorkspaceSession }) {
   const name = session.name.en;
-  const role = UI.en.workspace.roles[session.role];
+  const role = roleLabel(session, UI.en.workspace.roles);
   return (
     <AppBar position="sticky" color="inherit" elevation={0} sx={{ borderBottom: '1px solid', borderColor: 'divider', bgcolor: 'background.paper' }}>
       <Toolbar sx={{ gap: { xs: 1, sm: 1.5 }, minHeight: 64, px: { xs: '16px', md: '28px' } }}>
@@ -76,17 +79,34 @@ function AdminBar({ session }: { session: WorkspaceSession }) {
 
 /**
  * Root of Blogs Admin (`/admin/…`): the site theme in English, a slim admin bar, and the route guard. There is no
- * separate admin sign-in: the guard uses the central Workspace session. Signed-out users go to the Workspace sign-in
- * (then back to the requested page); roles without Blogs Admin access go to the Workspace dashboard with a notice.
+ * separate admin sign-in: the guard uses the central Workspace session, which must be a backend session whose
+ * applications include Blogs Admin (its access token authorises the admin API). Signed-out users — also when the token
+ * expires or is refused — go to the Workspace sign-in (then back to the requested page); others go to the Workspace
+ * dashboard with a notice.
  */
 export default function AdminLayout() {
   const location = useLocation();
   const session = useWorkspaceSession();
+  const queryClient = useQueryClient();
+
+  // Signed out (here, in another tab, or the token expired): forget the admin data of the previous user.
+  useEffect(() => {
+    if (!session) queryClient.removeQueries({ queryKey: adminBlogKeys.all });
+  }, [session, queryClient]);
+
+  // The former browser-only blog editor kept its posts under this key; posts now live in the API only.
+  useEffect(() => {
+    try {
+      localStorage.removeItem('datahub-website.blog.v1');
+    } catch {
+      // Storage blocked: nothing to clean.
+    }
+  }, []);
 
   let content;
   if (!session) {
     content = <Navigate to={WORKSPACE_ROUTES.login} replace state={{ from: `${location.pathname}${location.search}` } satisfies WorkspaceLocationState} />;
-  } else if (!canOpen(session.role, 'blogs-admin')) {
+  } else if (!canOpen(session, 'blogs-admin') || !hasPermission(session, 'cms.blogs.view')) {
     content = <Navigate to={WORKSPACE_ROUTES.root} replace state={{ denied: 'blogs-admin' } satisfies WorkspaceLocationState} />;
   } else {
     content = (
@@ -94,7 +114,7 @@ export default function AdminLayout() {
         <AdminBar session={session} />
         <Box component="main" sx={{ maxWidth: 1280, mx: 'auto', px: { xs: '16px', md: '28px' }, py: { xs: '20px', md: '28px' } }}>
           <Alert severity="info" variant="outlined" sx={{ mb: '20px', bgcolor: 'background.paper', borderRadius: '10px' }}>
-            {T.prototypeNotice}
+            {T.prototypeNotice} {T.sessionNotice(formatLocalTime(session.expiresAt))}
           </Alert>
           <Suspense fallback={<PageLoading />}>
             <Outlet />

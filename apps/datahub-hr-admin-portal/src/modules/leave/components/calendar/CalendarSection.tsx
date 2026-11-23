@@ -56,7 +56,7 @@ export function CalendarSection() {
   const [filters, setFilters] = useState<CalendarFilters>({});
   const query = useLeaveCalendar(month, filters);
   const types = useLeaveTypes({ page: 1, pageSize: 100, sortBy: `name.${language}`, sortDirection: 'asc' });
-  const { options: departments } = useDepartmentOptions({ enabled: can('organization:read') });
+  const { options: departments } = useDepartmentOptions({ enabled: can('organization.departments.view') });
   const [openDay, setOpenDay] = useState<string | null>(null);
   const rtl = theme.direction === 'rtl';
 

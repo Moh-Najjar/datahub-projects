@@ -92,7 +92,7 @@ export function usePayrollLine(id: string, employeeId: string) {
   const { scope } = usePayrollAccess();
   return useQuery({ queryKey: payrollKeys.line(scope, id, employeeId), queryFn: ({ signal }) => payrollApi.getPayrollLine(id, employeeId, scope, signal) });
 }
-/** Organization payslips (payroll:read), or the caller's OWN payslips (own scope, or `own` = true for My payroll). */
+/** Organization payslips (hr.payroll.view), or the caller's OWN payslips (own scope, or `own` = true for My payroll). */
 export function usePayslips(params: ListParams<PayslipFilters>, own = false) {
   const { scope } = usePayrollAccess();
   return useQuery({

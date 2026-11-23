@@ -31,7 +31,7 @@ function currentTab(pathname: string): (typeof TABS)[number]['key'] {
 /**
  * Organization Management (`/organization/*`): one lazy-loaded page whose tabs are URLs, so each section
  * and every department/location detail can be linked and bookmarked. The router guards the whole page with
- * `organization:read`; write actions additionally require `organization:write` (UI only — see the API).
+ * `organization.departments.view`; write actions additionally require `organization.departments.manage` (UI only — see the API).
  */
 export default function OrganizationPage() {
   const { t } = useTranslation('organization');

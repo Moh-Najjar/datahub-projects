@@ -15,10 +15,10 @@ function stubLocation() {
 afterEach(() => vi.unstubAllGlobals());
 
 describe('sign-in page (the DataHub Workspace is the only sign-in)', () => {
-  it('has no form and no demo accounts — only the demo-mode warning and the Workspace', async () => {
+  it('has no form and no demo accounts — only the demo-data notice and the Workspace', async () => {
     stubLocation();
     renderApp('/login');
-    expect(await screen.findByText('Demo Mode — Not Real Authentication')).toBeTruthy();
+    expect(await screen.findByText('Demo data — simulated HR records')).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Continue to DataHub Portals' }).getAttribute('href')).toBe('http://localhost:3000/workspace/open/hr-admin/');
     expect(document.querySelector('input, form')).toBeNull();
     expect(screen.queryByRole('button', { name: /^Sign in/ })).toBeNull();
@@ -51,12 +51,16 @@ describe('protected routes and sign-out', () => {
 
   it('signs out through the Workspace: clears this session and ends the central one', async () => {
     const { user, router } = renderApp('/dashboard', { as: 'hr-admin' });
-    const { assign } = stubLocation();
+    const { assign, replace } = stubLocation();
     await user.click(await screen.findByRole('button', { name: `Account menu for ${demoAccount('hr-admin').name.en}` }));
     await user.click(within(await screen.findByRole('menu')).getByRole('menuitem', { name: 'Sign out' }));
     expect(assign).toHaveBeenCalledWith('http://localhost:3000/workspace/logout/');
     expect(sessionStorage.getItem(SESSION_STORAGE_KEY)).toBeNull();
-    await waitFor(() => expect(router.state.location.pathname).toBe('/login'));
+    // Regression: rendering /login here would replace the logout with /workspace/open/hr-admin/, which signs the
+    // user straight back in (the central session was never ended).
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(replace).not.toHaveBeenCalled();
+    expect(router.state.location.pathname).toBe('/dashboard');
   });
 
   it('the top bar links back to the DataHub Workspace (in the user language)', async () => {

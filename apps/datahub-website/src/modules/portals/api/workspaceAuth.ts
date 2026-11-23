@@ -1,36 +1,46 @@
+import { authApi, decodeAccessToken } from '@/core/api/auth';
+import { configureHttpAuth, HttpError } from '@/core/helpers/http';
 import type { Localized } from '@/i18n/languages';
-import { DEMO_ACCOUNTS, type WorkspaceRole } from '@/modules/portals/data/accounts';
+import { APPLICATION_IDS, type ApplicationId } from '@/modules/portals/data/applications';
+import { isWorkspaceRole, type WorkspaceRole } from '@/modules/portals/data/roles';
 
 /*
- * The Workspace's central sign-in — MOCK, NOT real authentication and NOT production-secure.
+ * The Workspace's central sign-in — the ONE sign-in of DataHub's staff applications, verified by the backend
+ * (`POST /api/v1/auth/login`). The session holds the access token (JWT, ~15 minutes), the roles and permissions it
+ * carries, and the applications the backend lists (`GET /api/v1/auth/portals`). It ends when the token expires (the
+ * backend's refresh endpoint is not usable yet) or when the backend refuses the token (401).
  *
- * `signIn` selects a demo account by username; any non-empty password is accepted and is never stored, logged or sent
- * anywhere. The session is kept in `localStorage` (shared by this site's tabs, 8 hours) — readable by any script on the
- * page, which is acceptable only for a prototype. The Workspace dashboard and Blogs Admin (`/admin/`) read it; the HR
- * Admin portal (another origin) receives a short-lived handoff token (`hrHandoff.ts`) and checks that this session still
- * exists through the hidden session bridge (`sessionBridge.ts`).
- *
- * The real backend will verify credentials and issue the session; only these function bodies change — the pages use
- * `signIn`, `signOut`, `getSession` and `subscribeToSession` (through `useWorkspaceSession`).
+ * Kept in `localStorage` (shared by this site's tabs: signing out in one tab signs out all). The access token is
+ * therefore readable by scripts of this origin — accepted for now; the password is never stored.
  */
 
 export interface WorkspaceSession {
+  /** The account's email. */
   username: string;
+  /** The backend's display name (one name, shown in both languages). */
   name: Localized<string>;
-  role: WorkspaceRole;
-  /** Epoch milliseconds. */
+  /** The first role this site has a label for (`null` if none). */
+  role: WorkspaceRole | null;
+  /** Roles as the backend sent them. */
+  roles: string[];
+  /** Applications from `/api/v1/auth/portals` (known ids only). */
+  applications: ApplicationId[];
+  /** The token's `permission` claims (e.g. `cms.blogs.publish`) — UI only, the backend checks every request. */
+  permissions: string[];
+  accessToken: string;
+  /** Epoch milliseconds (the token's expiry). */
   expiresAt: number;
 }
 
+/** Wrong email or password. */
 export class AuthError extends Error {
   constructor() {
-    super('Unknown account');
+    super('Wrong email or password');
     this.name = 'AuthError';
   }
 }
 
 const SESSION_KEY = 'datahub-website.workspace-session';
-const SESSION_MS = 8 * 60 * 60 * 1000;
 
 const listeners = new Set<() => void>();
 let cached: { raw: string | null; session: WorkspaceSession | null } = { raw: null, session: null };
@@ -53,13 +63,11 @@ function readRaw(): string | null {
 function parse(raw: string | null): WorkspaceSession | null {
   if (!raw) return null;
   try {
-    const value = JSON.parse(raw) as Partial<WorkspaceSession>;
-    // Re-read the account: a stored role can never grant more than the account list says.
-    const account = DEMO_ACCOUNTS.find((a) => a.username === value.username);
-    if (!account || value.role !== account.role || typeof value.expiresAt !== 'number') return null;
-    return { username: account.username, name: account.name, role: account.role, expiresAt: value.expiresAt };
+    const session = JSON.parse(raw) as WorkspaceSession;
+    // Permissions always come from the token itself, never from storage.
+    return { ...session, permissions: decodeAccessToken(session.accessToken).permissions };
   } catch {
-    return null;
+    return null; // e.g. a session of the former demo sign-in (no token)
   }
 }
 
@@ -96,18 +104,33 @@ export function getSession(): WorkspaceSession | null {
   return cached.session;
 }
 
-/** Mock sign-in (simulated latency like a real request). Throws `AuthError` for an unknown username. */
-export async function signIn(username: string, password: string): Promise<WorkspaceSession> {
-  await new Promise((resolve) => setTimeout(resolve, 400));
-  const account = DEMO_ACCOUNTS.find((a) => a.username.toLowerCase() === username.trim().toLowerCase());
-  // MOCK: the password is only required to be non-empty — never compared or kept.
-  if (!account || !password) throw new AuthError();
-  const session: WorkspaceSession = { username: account.username, name: account.name, role: account.role, expiresAt: Date.now() + SESSION_MS };
+/** Signs in with the backend. Throws `AuthError` for wrong credentials; other failures (network, server) as they are. */
+export async function signIn(email: string, password: string): Promise<WorkspaceSession> {
+  if (!email.trim() || !password) throw new AuthError();
+  const login = await authApi.login(email.trim(), password).catch((e: unknown) => {
+    // 400 `Authentication.InvalidCredentials`.
+    throw e instanceof HttpError && (e.status === 400 || e.status === 401) ? new AuthError() : e;
+  });
+  const portals = await authApi.getPortals(login.accessToken);
+  const claims = decodeAccessToken(login.accessToken);
+  const session: WorkspaceSession = {
+    username: login.email,
+    name: { en: login.displayName, ar: login.displayName },
+    role: login.roles.find(isWorkspaceRole) ?? null,
+    roles: login.roles,
+    applications: portals.map((p) => p.key).filter((key): key is ApplicationId => (APPLICATION_IDS as readonly string[]).includes(key)),
+    permissions: claims.permissions,
+    accessToken: login.accessToken,
+    expiresAt: claims.exp * 1000,
+  };
   save(session);
   return session;
 }
 
-/** Ends the central session: this site's tabs at once, the HR portal through the session bridge. */
+/**
+ * Ends the central session: this site's tabs at once, the HR portal through the session bridge. The backend's logout
+ * endpoint is not usable yet (403), so the token stays valid until it expires — it is only forgotten here.
+ */
 export function signOut(): void {
   save(null);
 }
@@ -122,3 +145,10 @@ export function subscribeToSession(listener: () => void): () => void {
     window.removeEventListener('storage', onStorage);
   };
 }
+
+export const hasPermission = (session: WorkspaceSession | null, permission: string): boolean => Boolean(session?.permissions.includes(permission));
+
+export const getAccessToken = (): string | null => getSession()?.accessToken ?? null;
+
+// Backend requests made with `auth: true` use the session's token; a 401 ends the session.
+configureHttpAuth({ getAccessToken, onUnauthorized: signOut });

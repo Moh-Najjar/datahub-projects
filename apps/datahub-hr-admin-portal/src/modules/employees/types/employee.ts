@@ -55,7 +55,7 @@ export interface EmployeeSummary {
 }
 
 /**
- * Personal (private) details. Returned only to viewers with `employees:read:personal`; for everyone else the
+ * Personal (private) details. Returned only to viewers with `hr.employees.view.personal`; for everyone else the
  * backend sends `personal: null` — the values never leave the server, the UI does not merely hide them.
  */
 export interface PersonalDetails {
@@ -84,7 +84,7 @@ export interface Employee extends EmployeeSummary {
   /** Optional dotted-line department (when the employee also reports to another unit). */
   reportingDepartment: NamedRef | null;
   createdAt: string;
-  /** `null` when the viewer lacks `employees:read:personal`. */
+  /** `null` when the viewer lacks `hr.employees.view.personal`. */
   personal: PersonalDetails | null;
 }
 
@@ -128,7 +128,7 @@ export interface EmployeeInput {
 
 /**
  * Who is asking: which employees they may see (organization / own team) and their role, from which the backend
- * decides field-level access (`employees:read:personal`, sensitive documents). The real backend derives all of
+ * decides field-level access (`hr.employees.view.personal`, sensitive documents). The real backend derives all of
  * this from the signed-in user's token and NEVER trusts values sent by the browser; the mock receives them
  * explicitly because it has no token.
  */

@@ -8,3 +8,6 @@ export { useDepartmentOptions, type DepartmentOption } from './hooks/useDepartme
 export { countryName, LOCATION_COUNTRIES } from './utils/countries';
 export { orgPaths } from './paths';
 export type { Location, Position, RecordStatus } from './types/organization';
+/** For Reports & Analytics: the department hierarchy and locations (names, top-level departments). */
+export { organizationApi } from './api/organizationApi';
+export type { HierarchyNode } from './types/organization';

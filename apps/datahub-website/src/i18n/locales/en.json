@@ -1,6 +1,7 @@
 {
   "siteName": "Datahub Analytics",
   "skipToContent": "Skip to content",
+  "backToTop": "Back to top",
   "openMenu": "Open menu",
   "closeMenu": "Close menu",
   "toggleSubmenu": "Toggle submenu",
@@ -63,6 +64,14 @@
     "loading": "Loading products",
     "error": "The products could not be loaded. Please try again later."
   },
+  "blog": {
+    "loading": "Loading posts",
+    "error": "The blog posts could not be loaded. Please try again.",
+    "retry": "Try again",
+    "empty": "No blog posts have been published yet.",
+    "postError": "This post could not be loaded. Please try again.",
+    "loadMore": "Load more posts"
+  },
   "workspace": {
     "name": "Portals",
     "pageTitle": "{page} · Datahub Analytics Portals",
@@ -70,21 +79,18 @@
     "login": {
       "title": "Sign in to Portals",
       "subtitle": "One sign-in for the DataHub applications you use at work.",
-      "prototype": "Prototype — not real authentication. Sign in with one of the demo accounts below; any password is accepted and it is never stored. Company sign-in will replace this page.",
-      "username": "Username",
+      "username": "Email",
       "password": "Password",
       "showPassword": "Show password",
       "hidePassword": "Hide password",
       "submit": "Sign in",
       "submitting": "Signing in…",
-      "usernameRequired": "Enter your username.",
-      "passwordRequired": "Enter your password (any password works for the demo accounts).",
-      "invalid": "There is no account with this username. Use one of the demo accounts below.",
+      "usernameRequired": "Enter your email.",
+      "passwordRequired": "Enter your password.",
+      "invalid": "The email or password is incorrect.",
       "generic": "Sign-in failed. Please try again.",
       "signInRequired": "Sign in to continue.",
       "signedOut": "You have signed out.",
-      "demoTitle": "Demo accounts",
-      "demoHint": "Fictional users from the HR portal (plus a Blogs Administrator). Select one to fill in the username.",
       "backToSite": "Back to website"
     },
     "home": {

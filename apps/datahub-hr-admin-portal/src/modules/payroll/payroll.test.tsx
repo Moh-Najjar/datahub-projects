@@ -171,7 +171,7 @@ describe('compensation', () => {
     expect(within(history).getByText('JOD 1,234.567')).toBeTruthy();
   }, 30_000);
 
-  it('the list filters by employment status and shows salaries only here (payroll:read)', async () => {
+  it('the list filters by employment status and shows salaries only here (hr.payroll.view)', async () => {
     const { user } = await open('/payroll/compensation');
     const table = await screen.findByRole('table', { name: 'Employee compensation' });
     expect(within(table).getAllByText(/^JOD /).length).toBeGreaterThan(0);

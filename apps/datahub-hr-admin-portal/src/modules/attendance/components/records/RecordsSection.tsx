@@ -47,7 +47,7 @@ export function RecordsSection() {
   const sortBy = list.sortBy === 'employee.name.en' || list.sortBy === 'employee.name.ar' ? (`employee.name.${language}` as const) : list.sortBy;
   const query = useAttendanceRecords({ ...list.params, sortBy, filters: { ...list.params.filters, ...(date ? { date } : {}), ...(employee ? { employeeId: employee.id } : {}) } });
   // Departments come from Organization Management (only for roles that may read the organization structure).
-  const { options: departments } = useDepartmentOptions({ enabled: can('organization:read') });
+  const { options: departments } = useDepartmentOptions({ enabled: can('organization.departments.view') });
   const shifts = useShifts({ page: 1, pageSize: 100, sortBy: 'code', sortDirection: 'asc' });
   const feedback = useFeedback();
   const [dialog, setDialog] = useState<Dialog>(null);
@@ -135,7 +135,7 @@ export function RecordsSection() {
                 sx={{ flex: '1 1 220px', minWidth: 200, maxWidth: { sm: 280 } }}
               />
             )}
-            {can('organization:read') && (
+            {can('organization.departments.view') && (
               <FilterSelect
                 label={t('fields.department')}
                 value={list.filters.departmentId ?? ''}

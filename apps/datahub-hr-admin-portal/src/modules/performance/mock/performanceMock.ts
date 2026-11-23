@@ -66,12 +66,12 @@ import { ACTIVITY_POOL, COMPETENCY_SEED, DEFAULT_SCALE, GOAL_POOL, OBJECTIVE_POO
  * organization mocks (participants, goal owners and plans reference EXISTING employee ids; departments are Organization
  * ids). Rules the real backend must enforce:
  *
- * - Scope: `organization` (performance:read), `team` (performance:read:team — departments the user manages, plus their
- *   own records) or `own` (performance:read:own). Outside it → `FORBIDDEN`; lists are filtered.
- * - Configuration (cycles, templates, competencies, rating scale) needs `performance:manage-config`.
+ * - Scope: `organization` (hr.performance.view), `team` (hr.performance.view.team — departments the user manages, plus their
+ *   own records) or `own` (hr.performance.view.own). Outside it → `FORBIDDEN`; lists are filtered.
+ * - Configuration (cycles, templates, competencies, rating scale) needs `hr.performance.config.manage`.
  * - Self-assessments: only by the employee, in an open cycle, final once submitted (until HR reopens it). A manager sees
  *   a self-assessment only once submitted; the employee sees the manager review only once submitted.
- * - Manager reviews: `performance:write` (organization) or `performance:review:team` (team), never one's own, after the
+ * - Manager reviews: `hr.performance.manage` (organization) or `hr.performance.review.team` (team), never one's own, after the
  *   self-assessment (or its deadline); ratings must exist on the configured scale.
  * - Cycles: valid dates, no overlapping review periods; draft → active → (in progress → completed: automatic) → closed.
  */
@@ -452,16 +452,16 @@ interface Access {
 
 function access(scope: PerformanceScope): Access {
   const me = meOf(scope);
-  const base = { role: scope.role, kind: scope.kind, me, config: hasPermission(scope.role, 'performance:manage-config') };
+  const base = { role: scope.role, kind: scope.kind, me, config: hasPermission(scope.role, 'hr.performance.config.manage') };
   if (scope.kind === 'organization') {
-    if (!hasPermission(scope.role, 'performance:read')) forbidden();
-    return { ...base, units: new Set(), write: hasPermission(scope.role, 'performance:write'), teamReview: false };
+    if (!hasPermission(scope.role, 'hr.performance.view')) forbidden();
+    return { ...base, units: new Set(), write: hasPermission(scope.role, 'hr.performance.manage'), teamReview: false };
   }
   if (scope.kind === 'team') {
-    if (!hasPermission(scope.role, 'performance:read:team')) forbidden();
-    return { ...base, units: employeeRecords.teamUnits(scope.userId), write: false, teamReview: hasPermission(scope.role, 'performance:review:team') };
+    if (!hasPermission(scope.role, 'hr.performance.view.team')) forbidden();
+    return { ...base, units: employeeRecords.teamUnits(scope.userId), write: false, teamReview: hasPermission(scope.role, 'hr.performance.review.team') };
   }
-  if (!hasPermission(scope.role, 'performance:read:own')) forbidden();
+  if (!hasPermission(scope.role, 'hr.performance.view.own')) forbidden();
   return { ...base, units: new Set(), write: false, teamReview: false, config: false };
 }
 
@@ -484,7 +484,7 @@ function manages(a: Access, employeeId: string): boolean {
 const managesDepartment = (a: Access, departmentId: string) => a.write || (a.teamReview && a.units.has(departmentId));
 
 function requireConfig(a: Access) {
-  if (!a.config) forbidden('performance:manage-config is required');
+  if (!a.config) forbidden('hr.performance.config.manage is required');
 }
 
 const begin = (scope: PerformanceScope) => ({ d: data(), a: access(scope) });
@@ -1017,7 +1017,7 @@ export function submitManagerReview(id: string, input: ManagerReviewInput, scope
 export function reopenReview(id: string, part: 'self' | 'manager', scope: PerformanceScope): Review {
   const { d, a } = begin(scope);
   const r = visibleReview(a, d, id);
-  if (!a.write) forbidden('performance:write is required');
+  if (!a.write) forbidden('hr.performance.manage is required');
   const c = d.cycles.find((x) => x.id === r.cycleId)!;
   if (!OPEN_CYCLE_STATUSES.includes(c.status) && c.status !== 'completed') conflict(`Cycle ${c.id} is ${c.status}`);
   const target = part === 'self' ? r.self : r.manager;

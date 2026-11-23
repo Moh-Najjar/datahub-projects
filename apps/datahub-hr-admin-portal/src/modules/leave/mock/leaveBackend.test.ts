@@ -148,7 +148,7 @@ describe('leave types (configurable rules)', () => {
     expect(await reasons(api.createLeaveType(input({ name: { en: 'Study', ar: 'Study' }, maxConsecutiveDays: 0 }), HR))).toEqual({ nameAr: ['arabicRequired'], maxConsecutiveDays: ['dayRange'] });
   });
 
-  it('needs leave:manage-policies (HR Admin, System Admin)', async () => {
+  it('needs hr.policies.manage (HR Admin, System Admin)', async () => {
     await api.createLeaveType(input({ code: 'SYS' }), scopeOf('system-admin'));
     for (const role of ['hr-manager', 'department-manager', 'employee', 'payroll-officer', 'recruiter'] as const) {
       expect((await rejection(api.createLeaveType(input({ code: `X${role.length}` }), scopeOf(role)))).code).toBe('FORBIDDEN');

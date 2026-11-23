@@ -116,7 +116,7 @@ function LinkDialog({ editor, onClose }: { editor: Editor; onClose: () => void }
 }
 
 function ImageDialog({ editor, onClose }: { editor: Editor; onClose: () => void }) {
-  const C = ADMIN_TEXT.cover;
+  const C = ADMIN_TEXT.image;
   const [src, setSrc] = useState('');
   const [alt, setAlt] = useState('');
   const [error, setError] = useState<string>();

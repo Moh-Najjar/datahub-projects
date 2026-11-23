@@ -65,3 +65,4 @@ export function createAdminTheme(base: Theme): Theme {
     },
   });
 }
+  

@@ -9,6 +9,7 @@ import { localizePath } from '@/i18n/paths';
 import { ApplicationCard } from '@/modules/portals/components/ApplicationCard';
 import { WorkspaceHeader } from '@/modules/portals/components/WorkspaceHeader';
 import { applicationsFor } from '@/modules/portals/data/applications';
+import { roleLabel } from '@/modules/portals/utils/roleLabel';
 import { useWorkspaceSession } from '@/modules/portals/hooks/useWorkspaceSession';
 import type { WorkspaceLocationState } from '@/modules/portals/types';
 
@@ -23,7 +24,7 @@ export default function WorkspacePage() {
   if (!session) {
     return <Navigate to={localizePath(WORKSPACE_ROUTES.login, locale)} replace state={{ from: location.pathname } satisfies WorkspaceLocationState} />;
   }
-  const apps = applicationsFor(session.role);
+  const apps = applicationsFor(session);
 
   return (
     <>
@@ -34,7 +35,7 @@ export default function WorkspacePage() {
           {t.home.title}
         </Typography>
         <Typography color="text.secondary" sx={{ mt: '8px', mb: '28px' }}>
-          {fill(t.home.subtitle, { role: t.roles[session.role] })}
+          {fill(t.home.subtitle, { role: roleLabel(session, t.roles) })}
         </Typography>
         {state?.denied && (
           <Alert severity="warning" sx={{ mb: '24px' }}>

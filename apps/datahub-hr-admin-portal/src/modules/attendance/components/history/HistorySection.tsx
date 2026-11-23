@@ -74,7 +74,7 @@ function HistoryView({ history: h, own, onMonth }: { history: EmployeeAttendance
   const index = h.availableMonths.indexOf(h.month);
   const older = h.availableMonths[index + 1];
   const newer = h.availableMonths[index - 1];
-  const canOpenProfile = !own && (can('employees:read') || can('employees:read:team'));
+  const canOpenProfile = !own && (can('organization.employees.view') || can('hr.employees.view.team'));
   const flip = { transform: (theme: { direction: string }) => (theme.direction === 'rtl' ? 'scaleX(-1)' : undefined) };
 
   const totals = [

@@ -49,7 +49,7 @@ describe('access by role (existing permission matrix)', () => {
     expect(screen.getByRole('button', { name: 'New location' })).toBeTruthy();
   });
 
-  it('Recruiter: read-only (organization:read without organization:write)', async () => {
+  it('Recruiter: read-only (organization.departments.view without organization.departments.manage)', async () => {
     const { user } = await open('/organization/departments', 'recruiter');
     expect(screen.getByText(/view-only access/)).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'New department' })).toBeNull();
@@ -70,17 +70,16 @@ describe('access by role (existing permission matrix)', () => {
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it('unfinished modules stay disabled "Soon" items', async () => {
+  it('finished modules are links (Settings since Phase 11)', async () => {
     await open('/organization');
     const nav = within(screen.getByRole('navigation', { name: 'Main navigation' }));
-    for (const name of ['Reports']) {
-      expect(nav.getByText(name).closest('[aria-disabled="true"]'), name).not.toBeNull();
-    }
+    expect(nav.getByRole('link', { name: 'Settings' })).toBeTruthy();
     expect(nav.getByRole('link', { name: 'Employees' })).toBeTruthy();
     expect(nav.getByRole('link', { name: 'Attendance' })).toBeTruthy();
     expect(nav.getByRole('link', { name: 'Leave' })).toBeTruthy();
     expect(nav.getByRole('link', { name: 'Payroll' })).toBeTruthy();
     expect(nav.getByRole('link', { name: 'Documents' })).toBeTruthy();
+    expect(nav.getByRole('link', { name: 'Reports' })).toBeTruthy();
   });
 });
 

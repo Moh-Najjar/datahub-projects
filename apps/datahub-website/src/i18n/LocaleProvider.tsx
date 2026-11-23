@@ -16,6 +16,7 @@ export function LocaleProvider({ locale, children }: LocaleProviderProps) {
 
   useLayoutEffect(() => {
     const html = document.documentElement;
+    console.log('html', html.lang);
     html.lang = locale;
     html.dir = value.dir;
   }, [locale, value.dir]);

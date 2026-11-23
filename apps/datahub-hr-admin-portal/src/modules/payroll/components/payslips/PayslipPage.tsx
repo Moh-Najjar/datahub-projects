@@ -19,7 +19,7 @@ import { usePayslip } from '@/modules/payroll/hooks/usePayroll';
 import { usePayrollAccess } from '@/modules/payroll/hooks/usePayrollAccess';
 import { payrollPaths } from '@/modules/payroll/paths';
 import type { Payslip } from '@/modules/payroll/types/payroll';
-import { printDocument } from '@/modules/payroll/utils/printPayslip';
+import { printDocument } from '@/modules/shared/utils/print';
 import { PayslipDocument, type PayslipTexts } from './PayslipDocument';
 
 const backIconSx = { transform: (theme: { direction: string }) => (theme.direction === 'rtl' ? 'scaleX(-1)' : undefined) };

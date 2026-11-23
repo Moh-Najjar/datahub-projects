@@ -145,8 +145,8 @@ export interface PunchInput {
 /* Scope ----------------------------------------------------------------------------------------------- */
 
 /**
- * Who is asking. `organization` (attendance:read), `team` (attendance:read:team — the departments the user
- * manages) or `own` (attendance:read:own — the user's employee record). The real backend derives all of it from the
+ * Who is asking. `organization` (hr.attendance.view), `team` (hr.attendance.view.team — the departments the user
+ * manages) or `own` (hr.attendance.view.own — the user's employee record). The real backend derives all of it from the
  * signed-in user's token and never trusts these values; the mock receives them because it has no token.
  */
 export interface AttendanceScope {

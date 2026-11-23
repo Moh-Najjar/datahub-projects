@@ -52,7 +52,7 @@ export function RequestsSection({ awaiting = false, employeeId, allowCreate = tr
     filters: { ...list.params.filters, ...(fixedEmployee ? { employeeId: fixedEmployee } : {}), ...(awaiting ? { awaitingMe: 'true' as const, status: undefined } : {}) },
   });
   const types = useLeaveTypes({ page: 1, pageSize: 100, sortBy: `name.${language}`, sortDirection: 'asc' });
-  const { options: departments } = useDepartmentOptions({ enabled: can('organization:read') && !employeeId });
+  const { options: departments } = useDepartmentOptions({ enabled: can('organization.departments.view') && !employeeId });
   const feedback = useFeedback();
   const actions = useRequestActions(feedback.notify);
   const [creating, setCreating] = useState(false);

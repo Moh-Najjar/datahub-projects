@@ -13,7 +13,7 @@ import { DocumentList } from './common/DocumentList';
 import { ComplianceChecklist } from './compliance/ComplianceChecklist';
 
 /**
- * My documents (documents:read:own — every staff member): own documents of employee-visible categories and the own
+ * My documents (hr.documents.view.own — every staff member): own documents of employee-visible categories and the own
  * checklist. Restricted categories and internal HR notes are never sent to the browser.
  */
 export function MyDocuments() {

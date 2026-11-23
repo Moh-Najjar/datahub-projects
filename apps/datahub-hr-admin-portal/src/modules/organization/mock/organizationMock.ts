@@ -35,7 +35,7 @@ import { DEPARTMENT_SEED, LOCATION_SEED, POSITION_SEED, type DepartmentRow, type
  * employees mock (`orgTables`), because both simulate ONE backend: department managers are employees, employee
  * counts come from employee records, and employees reference departments, positions and locations.
  *
- * Authorization is NOT simulated here: the real backend must also check `organization:write` for every write.
+ * Authorization is NOT simulated here: the real backend must also check `organization.departments.manage` for every write.
  */
 
 const departments = createMockStore<DepartmentRow>(DEPARTMENT_SEED, 'dep');

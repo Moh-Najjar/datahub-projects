@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { FORMAT_LOCALE } from '@/i18n/languages';
 import { useLanguage } from '@/i18n/useLanguage';
 import { displayName, type EmployeeSummary } from '@/modules/employees';
+import { useWorkingWeek } from '@/modules/settings';
 import { arabicInput, latinInput, textFieldProps } from '@/modules/shared/formFields';
 import { FormDialog } from '@/modules/shared/FormDialog';
 import { applyServerErrors } from '@/modules/shared/utils/serverErrors';
@@ -57,18 +58,24 @@ export function ShiftFormDialog({ shift, onClose, onSaved }: { shift?: Shift; on
   const create = useCreateShift();
   const update = useUpdateShift();
   const [formError, setFormError] = useState<string>();
+  // A NEW shift starts with the organisation's working week (System Settings); existing shifts keep their own days.
+  const week = useWorkingWeek(!shift);
+  const defaults: ShiftFormValues = {
+    code: shift?.code ?? '',
+    nameEn: shift?.name.en ?? '',
+    nameAr: shift?.name.ar ?? '',
+    startTime: shift?.startTime ?? '08:00',
+    endTime: shift?.endTime ?? '16:00',
+    breakMinutes: shift?.breakMinutes ?? 60,
+    graceMinutes: shift?.graceMinutes ?? 10,
+    workDays: shift?.workDays ?? week.data?.workDays ?? [0, 1, 2, 3, 4],
+  };
   const { register, control, handleSubmit, formState, setError } = useForm<ShiftFormValues>({
     resolver: zodResolver(shiftFormSchema),
-    defaultValues: {
-      code: shift?.code ?? '',
-      nameEn: shift?.name.en ?? '',
-      nameAr: shift?.name.ar ?? '',
-      startTime: shift?.startTime ?? '08:00',
-      endTime: shift?.endTime ?? '16:00',
-      breakMinutes: shift?.breakMinutes ?? 60,
-      graceMinutes: shift?.graceMinutes ?? 10,
-      workDays: shift?.workDays ?? [0, 1, 2, 3, 4],
-    },
+    defaultValues: defaults,
+    // When the working week arrives after the dialog opened, apply it unless the user already changed the days.
+    values: !shift && week.data ? defaults : undefined,
+    resetOptions: { keepDirtyValues: true },
   });
   const translate = (reason: string | undefined) => fieldErrorText(t, reason);
   const field = (name: (typeof FIELDS)[number], helper?: string) => textFieldProps(register, formState, name, translate, helper);

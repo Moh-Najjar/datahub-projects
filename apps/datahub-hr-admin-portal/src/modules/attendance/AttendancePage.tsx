@@ -30,7 +30,7 @@ function currentTab(pathname: string): (typeof TABS)[number]['key'] {
 /**
  * Attendance (`/attendance/*`): one lazy-loaded page. The router guards it with any attendance read permission.
  * Organization- and team-scoped roles get the overview, records, shifts, history and reports; roles with only
- * `attendance:read:own` (self-service) get "My attendance". The API enforces the same scopes.
+ * `hr.attendance.view.own` (self-service) get "My attendance". The API enforces the same scopes.
  */
 export default function AttendancePage() {
   const { t } = useTranslation('attendance');

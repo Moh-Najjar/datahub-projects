@@ -25,6 +25,9 @@ const RecruitmentPage: LazyPage = lazy(() => import('@/modules/recruitment/Recru
 const PerformancePage: LazyPage = lazy(() => import('@/modules/performance/PerformancePage'));
 const PayrollPage: LazyPage = lazy(() => import('@/modules/payroll/PayrollPage'));
 const DocumentsPage: LazyPage = lazy(() => import('@/modules/documents/DocumentsPage'));
+const ReportsPage: LazyPage = lazy(() => import('@/modules/reports/ReportsPage'));
+const SettingsPage: LazyPage = lazy(() => import('@/modules/settings/SettingsPage'));
+const UsersPage: LazyPage = lazy(() => import('@/modules/users/UsersPage'));
 const DashboardPage: LazyPage = lazy(() => import('@/modules/dashboard/DashboardPage'));
 const EmployeesPage: LazyPage = lazy(() => import('@/modules/employees/EmployeesPage'));
 const OrganizationPage: LazyPage = lazy(() => import('@/modules/organization/OrganizationPage'));
@@ -91,6 +94,9 @@ export const routes: RouteObject[] = [
           navRoute('performance', PerformancePage, { nested: true }),
           navRoute('payroll', PayrollPage, { nested: true }),
           navRoute('documents', DocumentsPage, { nested: true }),
+          navRoute('reports', ReportsPage, { nested: true }),
+          navRoute('settings', SettingsPage, { nested: true }),
+          navRoute('users', UsersPage, { nested: true }),
           { path: '*', element: page(NotFoundPage) },
         ],
       },

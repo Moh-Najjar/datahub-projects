@@ -3,9 +3,9 @@ import type { Localized } from '@datahub/shared-types';
 import type { Permission, Role } from '@/core/config/permissions';
 
 /*
- * Client-side session state. The session comes from the DataHub Workspace's MOCK single sign-in (modules/auth, `/sso`)
- * and the token is a random placeholder, not a credential. When the real backend exists, `signIn` will receive
- * its session and every request will carry the backend-issued token — authorization stays server-side.
+ * Client-side session state, from the DataHub Workspace's sign-in (modules/auth, `/sso`): the user, role, permissions
+ * and expiry come from the backend access token (JWT). Authorization stays server-side: the backend checks the token
+ * on every request.
  */
 
 export interface SessionUser {
@@ -18,8 +18,10 @@ export interface SessionUser {
 
 export interface Session {
   user: SessionUser;
-  /** Opaque token from the auth API (mock: a random placeholder). */
+  /** The backend access token (JWT). */
   token: string;
+  /** The token's permission claims this portal knows (plus interim fallbacks, see core/config/permissions.ts). */
+  permissions: Permission[];
   /** ISO date-time after which the session is discarded. */
   expiresAt: string;
 }
@@ -33,6 +35,11 @@ export interface AuthContextValue {
   canAny: (permissions: readonly Permission[]) => boolean;
   signIn: (session: Session) => void;
   signOut: () => void;
+  /**
+   * Ends this session and LEAVES the portal for `url` (the Workspace logout). The page keeps its state until the browser
+   * unloads it: a local sign-out would render `/login`, whose own redirect to the Workspace would replace this one.
+   */
+  signOutTo: (url: string) => void;
 }
 
 /** sessionStorage: the session ends when the tab closes. Never contains passwords. */

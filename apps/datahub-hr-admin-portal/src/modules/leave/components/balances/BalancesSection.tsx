@@ -31,7 +31,7 @@ export function BalancesSection() {
   const year = list.filters.year ?? String(currentYear);
   const query = useLeaveBalances({ ...list.params, sortBy, filters: { ...list.params.filters, year } });
   const types = useLeaveTypes({ page: 1, pageSize: 100, sortBy: `name.${language}`, sortDirection: 'asc' });
-  const { options: departments } = useDepartmentOptions({ enabled: can('organization:read') });
+  const { options: departments } = useDepartmentOptions({ enabled: can('organization.departments.view') });
   const n = (v: number | null) => (v === null ? '—' : formatNumber(v, language, { maximumFractionDigits: 1 }));
 
   const columns: Column<LeaveBalance, LeaveBalanceSortField>[] = [

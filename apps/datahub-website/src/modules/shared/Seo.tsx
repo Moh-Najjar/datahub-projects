@@ -14,6 +14,8 @@ interface SeoProps {
   type?: 'website' | 'article';
   /** Locales the page exists in — controls `hreflang` alternates. */
   locales?: readonly Locale[];
+  /** Absolute canonical URL set by the content (e.g. a blog post's `canonicalUrl`); overrides the one built from `path`. */
+  canonicalUrl?: string;
 }
 
 const OG_LOCALE: Record<Locale, string> = { en: 'en_US', ar: 'ar' };
@@ -21,9 +23,9 @@ const OG_LOCALE: Record<Locale, string> = { en: 'en_US', ar: 'ar' };
 /**
  * Page metadata. React 19 hoists `<title>`, `<meta>` and `<link>` into `<head>`.
  */
-export function Seo({ title, description, path, image, type = 'website', locales = ['en', 'ar'] }: SeoProps) {
+export function Seo({ title, description, path, image, type = 'website', locales = ['en', 'ar'], canonicalUrl }: SeoProps) {
   const { locale } = useLocale();
-  const url = `${SITE_URL}${localizePath(path, locale)}`;
+  const url = canonicalUrl && /^https?:\/\//.test(canonicalUrl) ? canonicalUrl : `${SITE_URL}${localizePath(path, locale)}`;
   const imageUrl = image ? (image.startsWith('http') ? image : `${SITE_URL}${image}`) : undefined;
 
   return (
