@@ -42,8 +42,8 @@ export const MenuItem = styled('li', { shouldForwardProp: noForward('active', 'o
       border: 0,
       cursor: 'pointer',
       '&:hover, &:focus-visible': { color: theme.palette.primary.main },
-      // Tighter items until the full menu (incl. Products and Workspace) fits with the original spacing:
-      // measured, the menu is 1112px (EN) / 1161px (AR) wide with it, which fits from about 1555px / 1650px
+      // Tighter items until the full menu (incl. Portals) fits with the original spacing (measured with the former Products item too —
+      // now narrower, so these thresholds are safe): the menu was 1112px (EN) / 1161px (AR) wide, fitting from about 1555px / 1650px
       // (ROOMY_FROM keeps a margin). From ROOMY_FROM up the original spacing applies unchanged.
       [theme.breakpoints.between('xl', ROOMY_FROM[theme.direction])]: {
         margin: 0,

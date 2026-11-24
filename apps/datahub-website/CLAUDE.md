@@ -2,8 +2,8 @@
 
 Faithful recreation of <https://datahubanalytics.com/> (a WordPress/Mitech site) in React 19 + TypeScript + Vite + **Material UI**.
 This is a **recreation, not a redesign**: the live site is the source of truth for content, layout, spacing and behaviour.
-DataHub is also adding **its own pages** that the original site doesn't have (starting with **Products**, `/products/`),
-built in the same visual identity. Full plan and decisions: [docs/PLAN.md](docs/PLAN.md).
+DataHub may add **its own pages** that the original site doesn't have (none at the moment — the former Products page was
+removed on 2026-11-24), built in the same visual identity. Full plan and decisions: [docs/PLAN.md](docs/PLAN.md).
 
 ## Commands
 
@@ -23,7 +23,7 @@ Run `npm run typecheck && npm run lint && npm test && npm run build` before cons
 
 1. **No invented content.** Every string, number, image and link on a **recreated** page must come from the original site.
    Keep the original's wording verbatim (including its typos, e.g. "Big Data Analyics"). If something can't be obtained,
-   say so — don't guess. **Exception — DataHub's own pages** (currently only Products): their copy is written by
+   say so — don't guess. **Exception — DataHub's own pages** (none at the moment): their copy is written by
    DataHub, not copied. It must never claim that an unfinished product is available or has features that don't exist,
    and placeholder copy must be marked as such in its data file. Recreated pages keep following the original-content rule.
 2. **No fake assets.** Never draw, generate or substitute logos/images. Add new originals to `scripts/assets.manifest.ts`
@@ -40,8 +40,8 @@ Run `npm run typecheck && npm run lint && npm test && npm run build` before cons
   augmentation in `src/core/theme/augmentation.d.ts`. Custom palette lives under `palette.brand.*`; shadows under `theme.customShadows`.
 - Spacing unit is **5px** (`sx={{ p: 6 }}` = 30px). Pixel strings (`'30px'`) are fine when copying measured values.
 - Breakpoints mirror the original grid: `sm 544 · md 768 · lg 992 · xl 1200`. The desktop menu shows from `xl`.
-  With the added Products and Workspace items, top-level menu items use tighter spacing from 1200px until the
-  menu fits with the original spacing (`ROOMY_FROM` in `Navigation/DesktopNav.styles.ts`: 1580px EN, 1800px AR),
+  With the added Workspace (Portals) item, top-level menu items use tighter spacing from 1200px until the
+  menu fits with the original spacing (`ROOMY_FROM` in `Navigation/DesktopNav.styles.ts`: 1580px EN, 1800px AR — measured while a Products item still existed, so the narrower menu fits safely),
   and the Workspace item is an icon (label as tooltip/accessible name) below 1440px. Re-check the fit (EN and AR,
   1200–1920px) whenever a top-level menu item is added.
 - Button variants: `solid`, `gradient`, `textArrow`, `pill` (use `ButtonLink` for links).
@@ -105,8 +105,6 @@ src/
 │   ├── contact/             api/appointment.ts, components/ (AppointmentForm, ConsultationSection), schemas/, data/
 │   ├── page-blocks/         BlockPage.tsx — renders every generated page (about-us, services, solutions, contact,
 │   │                        careers, blog list…) from src/content/pages; components/ + widgets/, types/, utils/
-│   ├── products/            ProductsPage.tsx (DataHub's own page) — api/productsApi.ts, hooks/useProducts.ts,
-│   │                        data/mockProducts.ts, types/product.ts, components/ (ProductCard, ProductGrid)
 │   └── errors/              NotFoundPage.tsx, RouteError.tsx
 └── content/                 GENERATED only (pages/*.json, chrome.json) — never hand-edit. Blog posts come from the API.
 ```
@@ -118,10 +116,9 @@ Images and fonts stay in `public/` (generated content references them by URL). C
 | I want to… | Go to |
 | --- | --- |
 | Find or add a URL | `src/core/routes/paths.ts` (`ROUTES`) + `src/core/config/pages.ts` (locales, SEO title/description) |
-| See how a URL is rendered | `src/core/routes/index.tsx`: `home` → `modules/home/HomePage`, `products` → `modules/products/ProductsPage`, every other route → `modules/page-blocks/BlockPage` (document `src/content/pages/<routeKey>.<locale>.json`), `/<slug>/` → `modules/blog/BlogPostPage` |
+| See how a URL is rendered | `src/core/routes/index.tsx`: `home` → `modules/home/HomePage`, every other route → `modules/page-blocks/BlockPage` (document `src/content/pages/<routeKey>.<locale>.json`), `/<slug>/` → `modules/blog/BlogPostPage` |
 | Manage blog posts | `/admin/` (see "Blog & admin" below); data only through `core/hooks/useAdminBlogs.ts` (backend API) |
 | Change who may open an internal application | `src/modules/portals/data/applications.ts` (see "Portals" below) |
-| Add or change a product | `src/modules/products/data/mockProducts.ts` (until a backend exists) — see "Products" below |
 | Write an API call | Backend API: `core/api/<resource>.ts` + a hook in `core/hooks/` (see Rules). Other endpoints: the module's `api/` (e.g. `modules/contact/api/appointment.ts`) |
 | Change a translation | `src/i18n/locales/en.json` + `ar.json` (same key in both; add new keys to `UiStrings` in `i18n/index.ts`) |
 | Change page copy | Generated pages: regenerate (`npm run pages:convert`). Homepage: `modules/home/data/homeContent.ts` |
@@ -226,19 +223,6 @@ Images and fonts stay in `public/` (generated content references them by URL). C
   (no list of authors yet).
 - **Editor:** TipTap (`@tiptap/*`, admin chunk only — excluded from the `react` manual chunk in `vite.config.ts`) with
   headings, lists, quotes, links, images, tables and an HTML source mode; it uses the article page's `articleSx`.
-
-## Products (`modules/products`)
-
-- **Data flow:** `ProductsPage` / `ProductCard` → `hooks/useProducts` (loading, error, one shared request) →
-  `api/productsApi` (`getProducts`, `getProductBySlug`) → `data/mockProducts`. Components never import the mock data;
-  `productsApi.ts` is the only file that knows where products come from. Moving to a backend = replace its function
-  bodies with HTTP calls returning the same `Product` type.
-- **Add a product:** append an entry to `MOCK_PRODUCTS` (`types/product.ts` describes every field; all text is
-  `Localized<string>`, i.e. `{ en, ar }`). It appears on the page automatically, ordered by `displayOrder`. Add `logo`
-  only with real artwork (cards show an initials badge until then) and `links` only with real destinations.
-- **Status** (`available` / `in-development` / `coming-soon`) drives the card's chip; only `available` products may be
-  described as usable. Page labels (title, intro, status names) are in `i18n/locales/*.json` under `products`.
-- **Not products:** administrative portals (e.g. the DataHub HR Admin Portal) stay out of the catalogue.
 
 ## Portals — central staff sign-in (`modules/portals`)
 

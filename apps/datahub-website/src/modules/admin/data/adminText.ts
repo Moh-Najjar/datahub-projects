@@ -12,7 +12,6 @@ export const ADMIN_TEXT = {
     appByline: 'Blogs Admin',
     mainNavigation: 'Main navigation',
     groupContent: 'Content',
-    groupLinks: 'DataHub',
     openMenu: 'Open menu',
     collapse: 'Collapse sidebar',
     expand: 'Expand sidebar',
@@ -22,7 +21,7 @@ export const ADMIN_TEXT = {
     newPost: 'New post',
     editPost: 'Edit post',
   },
-  nav: { blogs: 'Blog posts', viewSite: 'View website', signOut: 'Sign out', workspace: 'Portals', signedInAs: (name: string, role: string) => `${name} · ${role}` },
+  nav: { blogs: 'Blog posts', signOut: 'Sign out', workspace: 'Portals', signedInAs: (name: string, role: string) => `${name} · ${role}` },
   list: {
     title: 'Blog posts',
     subtitle: 'Create, edit, publish and delete the posts shown on the website’s blog.',

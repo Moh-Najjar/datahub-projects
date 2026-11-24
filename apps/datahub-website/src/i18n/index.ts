@@ -57,20 +57,6 @@ export interface UiStrings {
     text: string;
     backHome: string;
   };
-  /** Products page (DataHub's own copy, not from the original site). */
-  products: {
-    title: string;
-    breadcrumbHome: string;
-    introHeading: string;
-    introText: string;
-    status: {
-      available: string;
-      inDevelopment: string;
-      comingSoon: string;
-    };
-    loading: string;
-    error: string;
-  };
   /** Blog index, homepage blog section and post pages (states of the backend data). */
   blog: {
     loading: string;

@@ -11,13 +11,11 @@ import ListSubheader from '@mui/material/ListSubheader';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
-import AppsOutlinedIcon from '@mui/icons-material/AppsOutlined';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import ChevronLeftOutlinedIcon from '@mui/icons-material/ChevronLeftOutlined';
 import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined';
-import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
-import { ADMIN_ROUTES, ROUTES, WORKSPACE_ROUTES } from '@/core/routes/paths';
+import { ADMIN_ROUTES } from '@/core/routes/paths';
 import { layout } from '@/modules/admin/adminTokens';
 import { ADMIN_TEXT } from '@/modules/admin/data/adminText';
 import { useBlogPermissions } from '@/modules/admin/hooks/useBlogPermissions';
@@ -32,9 +30,6 @@ interface Entry {
   label: string;
   icon: ElementType;
   to: string;
-  /** Opens outside the admin (a new tab). */
-  external?: boolean;
-  group: 'content' | 'links';
   match?: (pathname: string) => boolean;
 }
 
@@ -66,10 +61,10 @@ function Wordmark({ compact }: { compact: boolean }) {
 
 function NavEntry({ entry, selected, collapsed, onNavigate }: { entry: Entry; selected: boolean; collapsed: boolean; onNavigate?: () => void }) {
   const Icon = entry.icon;
-  const link = entry.external ? { component: 'a', href: entry.to, target: '_blank', rel: 'noopener' } : { component: RouterLink, to: entry.to };
   const button = (
     <ListItemButton
-      {...link}
+      component={RouterLink}
+      to={entry.to}
       onClick={onNavigate}
       selected={selected}
       aria-current={selected ? 'page' : undefined}
@@ -94,7 +89,6 @@ function NavEntry({ entry, selected, collapsed, onNavigate }: { entry: Entry; se
         </ListItemIcon>
       )}
       {!collapsed && <ListItemText primary={entry.label} slotProps={{ primary: { sx: { fontWeight: selected ? 600 : 500, fontSize: 14 } } }} />}
-      {!collapsed && entry.external && <OpenInNewOutlinedIcon sx={{ fontSize: 15, color: 'grey.400' }} />}
     </ListItemButton>
   );
   return collapsed ? (
@@ -111,15 +105,11 @@ function SidebarContent({ permanent, collapsed, onToggle, onNavigate }: { perman
   const can = useBlogPermissions();
   const narrow = permanent && collapsed;
   const entries: Entry[] = [
-    { key: 'blogs', label: ADMIN_TEXT.nav.blogs, icon: ArticleOutlinedIcon, to: ADMIN_ROUTES.blogs, group: 'content', match: (p) => p.startsWith(ADMIN_ROUTES.blogs) && !p.startsWith(ADMIN_ROUTES.newBlog) },
-    ...(can.create ? [{ key: 'new', label: T.newPost, icon: NoteAddOutlinedIcon, to: ADMIN_ROUTES.newBlog, group: 'content' as const }] : []),
-    { key: 'workspace', label: ADMIN_TEXT.nav.workspace, icon: AppsOutlinedIcon, to: WORKSPACE_ROUTES.root, group: 'links' },
-    { key: 'site', label: ADMIN_TEXT.nav.viewSite, icon: OpenInNewOutlinedIcon, to: ROUTES.blog, external: true, group: 'links' },
+    { key: 'blogs', label: ADMIN_TEXT.nav.blogs, icon: ArticleOutlinedIcon, to: ADMIN_ROUTES.blogs, match: (p) => p.startsWith(ADMIN_ROUTES.blogs) && !p.startsWith(ADMIN_ROUTES.newBlog) },
+    ...(can.create ? [{ key: 'new', label: T.newPost, icon: NoteAddOutlinedIcon, to: ADMIN_ROUTES.newBlog }] : []),
   ];
-  const groups = [
-    { key: 'content', title: T.groupContent, entries: entries.filter((e) => e.group === 'content') },
-    { key: 'links', title: T.groupLinks, entries: entries.filter((e) => e.group === 'links') },
-  ];
+  // One group: Portals is in the top bar.
+  const groups = [{ key: 'content', title: T.groupContent, entries }];
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>

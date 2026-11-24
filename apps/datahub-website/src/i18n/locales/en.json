@@ -51,19 +51,6 @@
     "text": "The page you are looking for does not exist or has been moved.",
     "backHome": "Go back to homepage"
   },
-  "products": {
-    "title": "Products",
-    "breadcrumbHome": "Home",
-    "introHeading": "Products built by DataHub",
-    "introText": "Alongside our data and analytics services, we are building our own software products. Here you can follow what we are working on.",
-    "status": {
-      "available": "Available",
-      "inDevelopment": "In development",
-      "comingSoon": "Coming soon"
-    },
-    "loading": "Loading products",
-    "error": "The products could not be loaded. Please try again later."
-  },
   "blog": {
     "loading": "Loading posts",
     "error": "The blog posts could not be loaded. Please try again.",

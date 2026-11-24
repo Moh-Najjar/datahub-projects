@@ -24,8 +24,8 @@ const OUT_DIR = join(ROOT, 'src', 'content', 'pages');
 const PUBLIC = join(ROOT, 'public');
 const WIDTHS = { xl: 1440, md: 800, xs: 390 } as const;
 
-/* Pages rendered by dedicated React components instead of block documents (products is DataHub's own page, not on the original site). */
-const SKIP = new Set(['home', 'products']);
+/* Pages rendered by dedicated React components instead of block documents. */
+const SKIP = new Set(['home']);
 
 type StyleMap = Record<string, string>;
 interface Captured {

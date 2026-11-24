@@ -215,14 +215,6 @@ export const PAGES: Record<RouteKey, PageEntry> = {
       ar: { title: 'خدمات داتا هب - Datahub Analytics', description: undefined },
     },
   },
-  // DataHub's own page (not on the original site): metadata written by DataHub, not copied.
-  products: {
-    locales: ['en', 'ar'],
-    seo: {
-      en: { title: 'Products - Datahub Analytics', description: 'Discover the software products DataHub is building: DataHub HR, BI Custom Visuals and DataHub Trainee.' },
-      ar: { title: 'المنتجات - Datahub Analytics', description: 'تعرّف على المنتجات البرمجية التي تعمل داتا هب على تطويرها: DataHub HR وBI Custom Visuals وDataHub Trainee.' },
-    },
-  },
   careers: {
     locales: ['en'],
     seo: {

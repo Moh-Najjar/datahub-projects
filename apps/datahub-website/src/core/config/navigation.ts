@@ -151,7 +151,6 @@ export const PRIMARY_NAV: Localized<NavItem[]> = {
   en: [
     { kind: 'link', label: 'Home', href: ROUTES.home },
     { kind: 'mega', label: 'Solutions & Services', columns: megaColumns.en },
-    { kind: 'link', label: 'Products', href: ROUTES.products },
     {
       kind: 'dropdown',
       label: 'XaaS',
@@ -179,7 +178,6 @@ export const PRIMARY_NAV: Localized<NavItem[]> = {
   ar: [
     { kind: 'link', label: 'الصفحة الرئيسية', href: ROUTES.home },
     { kind: 'mega', label: 'الحلول و الخدمات', columns: megaColumns.ar },
-    { kind: 'link', label: 'المنتجات', href: ROUTES.products },
     {
       kind: 'dropdown',
       label: 'الحلول كخدمة',

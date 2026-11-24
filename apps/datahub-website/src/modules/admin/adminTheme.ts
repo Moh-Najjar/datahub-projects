@@ -123,7 +123,13 @@ export function createAdminTheme(): Theme {
       MuiAppBar: {
         styleOverrides: { root: { backgroundImage: 'none' } },
       },
+      // Menus, selects and popovers don't lock page scrolling: the lock hides the scrollbar and pads <body>, which shifts the
+      // sticky top bar and sidebar sideways while a menu is open. (Dialogs still lock: they are modal.)
+      MuiPopover: {
+        defaultProps: { disableScrollLock: true },
+      },
       MuiMenu: {
+        defaultProps: { disableScrollLock: true },
         styleOverrides: {
           paper: ({ theme }) => ({
             boxShadow: shadows.md,

@@ -23,7 +23,6 @@ const BlogPostPage: LazyPage = lazy(() => import('@/modules/blog/BlogPostPage'))
 
 const NotFoundPage: LazyPage = lazy(() => import('@/modules/errors/NotFoundPage'));
 
-const ProductsPage: LazyPage = lazy(() => import('@/modules/products/ProductsPage'));
 
 /** The DataHub Workspace (central staff sign-in + application launcher): its own layout and lazy pages. */
 const WorkspaceLayout: LazyPage = lazy(() => import('@/modules/portals/WorkspaceLayout'));
@@ -40,7 +39,6 @@ const AdminBlogEditorPage: LazyPage = lazy(() => import('@/modules/admin/AdminBl
 /** Pages with dedicated React implementations. */
 const DEDICATED_PAGES: Partial<Record<RouteKey, LazyPage>> = {
   home: HomePage,
-  products: ProductsPage,
 };
 
 /** `/about-us/` → `about-us` (React Router paths are relative to the parent). */

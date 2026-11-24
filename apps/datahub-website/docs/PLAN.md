@@ -71,8 +71,7 @@ src/
   core/         routes (router + paths/ROUTES), config (page SEO registry, navigation), theme, hooks, types
   i18n/         locales/en.json + ar.json (UI strings), LocaleProvider/useLocale, languages, path helpers
   modules/      shared (reusable components), layout (header/footer/menus), home, blog, contact (incl. api/),
-                page-blocks (renders every generated page), products (DataHub's own catalogue page,
-                api → mock data), errors (404, route error)
+                page-blocks (renders every generated page), errors (404, route error)
   content/      generated page documents and blog data (never hand-edited)
 scripts/        download-assets, export-blog, convert-pages, screenshot/compare (Playwright)
 public/         assets/ (logos, clients, technologies, backgrounds, blog, docs), fonts/
