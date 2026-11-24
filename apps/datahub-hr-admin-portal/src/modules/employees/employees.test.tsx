@@ -362,10 +362,4 @@ describe('language and theme', () => {
     expect(document.body.textContent).not.toMatch(/[٠-٩]/);
   });
 
-  it('dark mode applies to the module', async () => {
-    const { user } = await open('/employees');
-    await user.click(screen.getByRole('button', { name: 'Switch to dark mode' }));
-    await waitFor(() => expect(document.documentElement.getAttribute('data-color-scheme')).toBe('dark'));
-    expect(screen.getByRole('table', { name: 'Employee directory' })).toBeTruthy();
-  });
 });

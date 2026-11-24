@@ -183,14 +183,12 @@ describe('saved reports and builder', () => {
   }, 40_000);
 });
 
-describe('Arabic, RTL and dark mode', () => {
+describe('Arabic and RTL', () => {
   it('translated, right-to-left, charts mirrored, identifiers left-to-right', async () => {
     const { user } = await open('/reports/employees?report=employees.by-department');
-    await user.click(screen.getByRole('button', { name: 'Switch to dark mode' }));
     await user.click(screen.getByRole('button', { name: 'Switch to العربية' }));
     expect(await screen.findByRole('heading', { level: 1, name: 'التقارير والتحليلات' })).toBeTruthy();
     expect(document.documentElement.dir).toBe('rtl');
-    expect(document.documentElement.getAttribute('data-color-scheme')).toBe('dark');
     expect(await screen.findByRole('heading', { name: 'عدد الموظفين حسب القسم' })).toBeTruthy();
     expect(screen.getByRole('tab', { name: 'منشئ التقارير' })).toBeTruthy();
     await waitFor(() => expect(recordedCharts.some((c) => (c.option.xAxis as { inverse?: boolean } | undefined)?.inverse === true)).toBe(true));

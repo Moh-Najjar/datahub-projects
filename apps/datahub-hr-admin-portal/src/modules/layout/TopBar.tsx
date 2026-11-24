@@ -12,7 +12,6 @@ import { layout } from '@/core/theme/tokens';
 import { useLanguage } from '@/i18n/useLanguage';
 import { DemoModeNotice } from '@/modules/shared/DemoModeNotice';
 import { LanguageSwitcher } from '@/modules/shared/LanguageSwitcher';
-import { ThemeModeSwitcher } from '@/modules/shared/ThemeModeSwitcher';
 import { AppBreadcrumbs } from './AppBreadcrumbs';
 import { UserMenu } from './UserMenu';
 
@@ -49,7 +48,6 @@ export function TopBar({ onOpenNavigation }: { onOpenNavigation?: () => void }) 
         )}
         <DemoModeNotice variant="compact" />
         <LanguageSwitcher />
-        <ThemeModeSwitcher />
         <UserMenu />
       </Toolbar>
     </AppBar>

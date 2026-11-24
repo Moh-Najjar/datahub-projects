@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
 import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import type { SvgIconComponent } from '@mui/icons-material';
 import { WORKSPACE_ROUTES } from '@/core/routes/paths';
 import { UI } from '@/i18n';
@@ -13,7 +14,7 @@ import { useLocale } from '@/i18n/LocaleContext';
 import { SmartLink } from '@/modules/shared/SmartLink';
 import type { ApplicationId } from '@/modules/portals/data/applications';
 
-const ICONS: Record<ApplicationId, SvgIconComponent> = { 'hr-admin': BadgeOutlinedIcon, 'blogs-admin': EditNoteOutlinedIcon };
+const ICONS: Record<ApplicationId, SvgIconComponent> = { 'hr-admin': BadgeOutlinedIcon, 'blogs-admin': EditNoteOutlinedIcon, 'trainee-app': SchoolOutlinedIcon };
 
 /**
  * One application of the launcher — a link (same tab, static text only) to `/workspace/open/<app>/`, which opens the

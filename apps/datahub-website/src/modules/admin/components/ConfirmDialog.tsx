@@ -21,7 +21,7 @@ interface ConfirmDialogProps {
 export function ConfirmDialog({ open, title, text, confirmLabel, cancelLabel, danger, pending, onConfirm, onCancel }: ConfirmDialogProps) {
   return (
     <Dialog open={open} onClose={pending ? undefined : onCancel} aria-labelledby="confirm-title" aria-describedby="confirm-text" maxWidth="xs" fullWidth>
-      <DialogTitle id="confirm-title" sx={{ fontSize: 20, color: 'brand.heading' }}>
+      <DialogTitle id="confirm-title" sx={{ color: 'text.primary' }}>
         {title}
       </DialogTitle>
       <DialogContent>

@@ -1,0 +1,2269 @@
+{
+  "$schema": "../../node_modules/oxlint/configuration_schema.json",
+  "plugins": [
+    "react",
+    "typescript",
+    "oxc"
+  ],
+  "rules": {
+    "react/rules-of-hooks": "error",
+    "react/only-export-components": [
+      "warn",
+      {
+        "allowConstantExport": true
+      }
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": [
+              "react-native",
+              "react-native/*",
+              "react-native-*",
+              "expo",
+              "expo/*",
+              "expo-*",
+              "@expo/*"
+            ],
+            "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+          },
+          {
+            "group": [
+              "**/datahub-hr",
+              "**/datahub-hr/**",
+              "datahub-hr",
+              "datahub-hr/*",
+              "**/datahub-website",
+              "**/datahub-website/**",
+              "datahub-website",
+              "datahub-website/*",
+              "**/datahub-hr-admin-portal",
+              "**/datahub-hr-admin-portal/**",
+              "datahub-hr-admin-portal",
+              "datahub-hr-admin-portal/*"
+            ],
+            "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+          }
+        ]
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "src/i18n/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/core",
+                  "@/core/**",
+                  "@/modules",
+                  "@/modules/**",
+                  "**/core/**",
+                  "**/modules/**"
+                ],
+                "message": "i18n holds translations and localization only: it must not import core or modules."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/core/**"
+      ],
+      "excludeFiles": [
+        "src/core/routes/index.tsx"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules",
+                  "@/modules/**",
+                  "**/modules/**"
+                ],
+                "message": "core is application infrastructure: it must not import modules (only the router, core/routes/index.tsx, does)."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/shared/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*",
+                  "@/modules/*/**",
+                  "!@/modules/shared/**"
+                ],
+                "message": "modules/shared is used by every module, so it must not import other modules."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              },
+              {
+                "group": [
+                  "**/mock/**",
+                  "@/core/api/mock/**"
+                ],
+                "message": "Components, hooks and schemas never touch mock data: go through the module API service (modules/<name>/api)."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/auth/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*/**",
+                  "!@/modules/auth/**",
+                  "!@/modules/shared/**"
+                ],
+                "message": "Use another module only through its index.ts: import from '@/modules/<name>'."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/auth/components/**",
+        "src/modules/auth/hooks/**",
+        "src/modules/auth/schemas/**",
+        "src/modules/auth/*.tsx"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*/**",
+                  "!@/modules/auth/**",
+                  "!@/modules/shared/**"
+                ],
+                "message": "Use another module only through its index.ts: import from '@/modules/<name>'."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              },
+              {
+                "group": [
+                  "**/mock/**",
+                  "@/core/api/mock/**"
+                ],
+                "message": "Components, hooks and schemas never touch mock data: go through the module API service (modules/<name>/api)."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/auth/mock/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*",
+                  "@/modules/*/**",
+                  "!@/modules/auth/**"
+                ],
+                "message": "A module's mock uses only core and its own module (all shared records live in core/api/mock)."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/layout/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*/**",
+                  "!@/modules/layout/**",
+                  "!@/modules/shared/**"
+                ],
+                "message": "Use another module only through its index.ts: import from '@/modules/<name>'."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/layout/components/**",
+        "src/modules/layout/hooks/**",
+        "src/modules/layout/schemas/**",
+        "src/modules/layout/*.tsx"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*/**",
+                  "!@/modules/layout/**",
+                  "!@/modules/shared/**"
+                ],
+                "message": "Use another module only through its index.ts: import from '@/modules/<name>'."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              },
+              {
+                "group": [
+                  "**/mock/**",
+                  "@/core/api/mock/**"
+                ],
+                "message": "Components, hooks and schemas never touch mock data: go through the module API service (modules/<name>/api)."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/layout/mock/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*",
+                  "@/modules/*/**",
+                  "!@/modules/layout/**"
+                ],
+                "message": "A module's mock uses only core and its own module (all shared records live in core/api/mock)."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/errors/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*/**",
+                  "!@/modules/errors/**",
+                  "!@/modules/shared/**"
+                ],
+                "message": "Use another module only through its index.ts: import from '@/modules/<name>'."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/errors/components/**",
+        "src/modules/errors/hooks/**",
+        "src/modules/errors/schemas/**",
+        "src/modules/errors/*.tsx"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*/**",
+                  "!@/modules/errors/**",
+                  "!@/modules/shared/**"
+                ],
+                "message": "Use another module only through its index.ts: import from '@/modules/<name>'."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              },
+              {
+                "group": [
+                  "**/mock/**",
+                  "@/core/api/mock/**"
+                ],
+                "message": "Components, hooks and schemas never touch mock data: go through the module API service (modules/<name>/api)."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/errors/mock/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*",
+                  "@/modules/*/**",
+                  "!@/modules/errors/**"
+                ],
+                "message": "A module's mock uses only core and its own module (all shared records live in core/api/mock)."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/dashboard/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*/**",
+                  "!@/modules/dashboard/**",
+                  "!@/modules/shared/**"
+                ],
+                "message": "Use another module only through its index.ts: import from '@/modules/<name>'."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/dashboard/components/**",
+        "src/modules/dashboard/hooks/**",
+        "src/modules/dashboard/schemas/**",
+        "src/modules/dashboard/*.tsx"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*/**",
+                  "!@/modules/dashboard/**",
+                  "!@/modules/shared/**"
+                ],
+                "message": "Use another module only through its index.ts: import from '@/modules/<name>'."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              },
+              {
+                "group": [
+                  "**/mock/**",
+                  "@/core/api/mock/**"
+                ],
+                "message": "Components, hooks and schemas never touch mock data: go through the module API service (modules/<name>/api)."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/dashboard/mock/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*",
+                  "@/modules/*/**",
+                  "!@/modules/dashboard/**"
+                ],
+                "message": "A module's mock uses only core and its own module (all shared records live in core/api/mock)."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/trainings/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*/**",
+                  "!@/modules/trainings/**",
+                  "!@/modules/shared/**"
+                ],
+                "message": "Use another module only through its index.ts: import from '@/modules/<name>'."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/trainings/components/**",
+        "src/modules/trainings/hooks/**",
+        "src/modules/trainings/schemas/**",
+        "src/modules/trainings/*.tsx"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*/**",
+                  "!@/modules/trainings/**",
+                  "!@/modules/shared/**"
+                ],
+                "message": "Use another module only through its index.ts: import from '@/modules/<name>'."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              },
+              {
+                "group": [
+                  "**/mock/**",
+                  "@/core/api/mock/**"
+                ],
+                "message": "Components, hooks and schemas never touch mock data: go through the module API service (modules/<name>/api)."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/trainings/mock/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*",
+                  "@/modules/*/**",
+                  "!@/modules/trainings/**"
+                ],
+                "message": "A module's mock uses only core and its own module (all shared records live in core/api/mock)."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/enrollments/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*/**",
+                  "!@/modules/enrollments/**",
+                  "!@/modules/shared/**"
+                ],
+                "message": "Use another module only through its index.ts: import from '@/modules/<name>'."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/enrollments/components/**",
+        "src/modules/enrollments/hooks/**",
+        "src/modules/enrollments/schemas/**",
+        "src/modules/enrollments/*.tsx"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*/**",
+                  "!@/modules/enrollments/**",
+                  "!@/modules/shared/**"
+                ],
+                "message": "Use another module only through its index.ts: import from '@/modules/<name>'."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              },
+              {
+                "group": [
+                  "**/mock/**",
+                  "@/core/api/mock/**"
+                ],
+                "message": "Components, hooks and schemas never touch mock data: go through the module API service (modules/<name>/api)."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/enrollments/mock/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*",
+                  "@/modules/*/**",
+                  "!@/modules/enrollments/**"
+                ],
+                "message": "A module's mock uses only core and its own module (all shared records live in core/api/mock)."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/users/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*/**",
+                  "!@/modules/users/**",
+                  "!@/modules/shared/**"
+                ],
+                "message": "Use another module only through its index.ts: import from '@/modules/<name>'."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/users/components/**",
+        "src/modules/users/hooks/**",
+        "src/modules/users/schemas/**",
+        "src/modules/users/*.tsx"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*/**",
+                  "!@/modules/users/**",
+                  "!@/modules/shared/**"
+                ],
+                "message": "Use another module only through its index.ts: import from '@/modules/<name>'."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              },
+              {
+                "group": [
+                  "**/mock/**",
+                  "@/core/api/mock/**"
+                ],
+                "message": "Components, hooks and schemas never touch mock data: go through the module API service (modules/<name>/api)."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/users/mock/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*",
+                  "@/modules/*/**",
+                  "!@/modules/users/**"
+                ],
+                "message": "A module's mock uses only core and its own module (all shared records live in core/api/mock)."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/departments/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*/**",
+                  "!@/modules/departments/**",
+                  "!@/modules/shared/**"
+                ],
+                "message": "Use another module only through its index.ts: import from '@/modules/<name>'."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/departments/components/**",
+        "src/modules/departments/hooks/**",
+        "src/modules/departments/schemas/**",
+        "src/modules/departments/*.tsx"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*/**",
+                  "!@/modules/departments/**",
+                  "!@/modules/shared/**"
+                ],
+                "message": "Use another module only through its index.ts: import from '@/modules/<name>'."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              },
+              {
+                "group": [
+                  "**/mock/**",
+                  "@/core/api/mock/**"
+                ],
+                "message": "Components, hooks and schemas never touch mock data: go through the module API service (modules/<name>/api)."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/departments/mock/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*",
+                  "@/modules/*/**",
+                  "!@/modules/departments/**"
+                ],
+                "message": "A module's mock uses only core and its own module (all shared records live in core/api/mock)."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/rankings/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*/**",
+                  "!@/modules/rankings/**",
+                  "!@/modules/shared/**"
+                ],
+                "message": "Use another module only through its index.ts: import from '@/modules/<name>'."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/rankings/components/**",
+        "src/modules/rankings/hooks/**",
+        "src/modules/rankings/schemas/**",
+        "src/modules/rankings/*.tsx"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*/**",
+                  "!@/modules/rankings/**",
+                  "!@/modules/shared/**"
+                ],
+                "message": "Use another module only through its index.ts: import from '@/modules/<name>'."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              },
+              {
+                "group": [
+                  "**/mock/**",
+                  "@/core/api/mock/**"
+                ],
+                "message": "Components, hooks and schemas never touch mock data: go through the module API service (modules/<name>/api)."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/rankings/mock/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*",
+                  "@/modules/*/**",
+                  "!@/modules/rankings/**"
+                ],
+                "message": "A module's mock uses only core and its own module (all shared records live in core/api/mock)."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/evaluations/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*/**",
+                  "!@/modules/evaluations/**",
+                  "!@/modules/shared/**"
+                ],
+                "message": "Use another module only through its index.ts: import from '@/modules/<name>'."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/evaluations/components/**",
+        "src/modules/evaluations/hooks/**",
+        "src/modules/evaluations/schemas/**",
+        "src/modules/evaluations/*.tsx"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*/**",
+                  "!@/modules/evaluations/**",
+                  "!@/modules/shared/**"
+                ],
+                "message": "Use another module only through its index.ts: import from '@/modules/<name>'."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              },
+              {
+                "group": [
+                  "**/mock/**",
+                  "@/core/api/mock/**"
+                ],
+                "message": "Components, hooks and schemas never touch mock data: go through the module API service (modules/<name>/api)."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/evaluations/mock/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*",
+                  "@/modules/*/**",
+                  "!@/modules/evaluations/**"
+                ],
+                "message": "A module's mock uses only core and its own module (all shared records live in core/api/mock)."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/certificates/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*/**",
+                  "!@/modules/certificates/**",
+                  "!@/modules/shared/**"
+                ],
+                "message": "Use another module only through its index.ts: import from '@/modules/<name>'."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/certificates/components/**",
+        "src/modules/certificates/hooks/**",
+        "src/modules/certificates/schemas/**",
+        "src/modules/certificates/*.tsx"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*/**",
+                  "!@/modules/certificates/**",
+                  "!@/modules/shared/**"
+                ],
+                "message": "Use another module only through its index.ts: import from '@/modules/<name>'."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              },
+              {
+                "group": [
+                  "**/mock/**",
+                  "@/core/api/mock/**"
+                ],
+                "message": "Components, hooks and schemas never touch mock data: go through the module API service (modules/<name>/api)."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/modules/certificates/mock/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              },
+              {
+                "group": [
+                  "@/modules/*",
+                  "@/modules/*/**",
+                  "!@/modules/certificates/**"
+                ],
+                "message": "A module's mock uses only core and its own module (all shared records live in core/api/mock)."
+              },
+              {
+                "group": [
+                  "@/core/routes/index"
+                ],
+                "message": "Only App.tsx imports the router."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "src/test/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react-native",
+                  "react-native/*",
+                  "react-native-*",
+                  "expo",
+                  "expo/*",
+                  "expo-*",
+                  "@expo/*"
+                ],
+                "message": "The Trainee App is a React DOM app: React Native/Expo belong to apps/datahub-hr."
+              },
+              {
+                "group": [
+                  "**/datahub-hr",
+                  "**/datahub-hr/**",
+                  "datahub-hr",
+                  "datahub-hr/*",
+                  "**/datahub-website",
+                  "**/datahub-website/**",
+                  "datahub-website",
+                  "datahub-website/*",
+                  "**/datahub-hr-admin-portal",
+                  "**/datahub-hr-admin-portal/**",
+                  "datahub-hr-admin-portal",
+                  "datahub-hr-admin-portal/*"
+                ],
+                "message": "Apps must not import each other. Share only types through @datahub/shared-types."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

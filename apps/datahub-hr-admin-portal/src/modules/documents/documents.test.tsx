@@ -50,13 +50,11 @@ describe('overview', () => {
     expectNoDownloads();
   }, 20_000);
 
-  it('Arabic + dark: translated, RTL, mirrored charts, Latin digits', async () => {
+  it('Arabic: translated, RTL, mirrored charts, Latin digits', async () => {
     const { user } = await open('/documents');
-    await user.click(screen.getByRole('button', { name: 'Switch to dark mode' }));
     await user.click(screen.getByRole('button', { name: 'Switch to العربية' }));
     expect(await screen.findByRole('heading', { level: 1, name: 'المستندات' })).toBeTruthy();
     expect(document.documentElement.dir).toBe('rtl');
-    expect(document.documentElement.getAttribute('data-color-scheme')).toBe('dark');
     expect(screen.getByRole('tab', { name: 'الانتهاء' })).toBeTruthy();
     expect(kpi('total')).toMatch(/^[0-9,]+$/);
     await waitFor(() => expect(recordedCharts.some((c) => (c.option.xAxis as { inverse?: boolean } | undefined)?.inverse === true)).toBe(true));

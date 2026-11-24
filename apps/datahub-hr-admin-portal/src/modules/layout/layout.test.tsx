@@ -1,6 +1,5 @@
-import { screen, waitFor, within } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { COLOR_MODE_STORAGE_KEY } from '@/core/theme/AppThemeProvider';
 import { renderApp } from '@/test/renderApp';
 import { setViewportWidth } from '@/test/matchMedia';
 
@@ -59,23 +58,6 @@ describe('permission guards', () => {
     const crumbs = within(await screen.findByRole('navigation', { name: 'Breadcrumb' }));
     expect(crumbs.getByRole('link', { name: 'Home' }).getAttribute('href')).toBe('/dashboard');
     expect(crumbs.getByText('My profile').getAttribute('aria-current')).toBe('page');
-  });
-});
-
-describe('theme switching', () => {
-  it('defaults to light; switching to dark updates the page and remembers the choice', async () => {
-    const { user } = renderApp('/dashboard', { as: 'hr-admin' });
-    await user.click(await screen.findByRole('button', { name: 'Switch to dark mode' }));
-    await waitFor(() => expect(document.documentElement.getAttribute('data-color-scheme')).toBe('dark'));
-    expect(localStorage.getItem(COLOR_MODE_STORAGE_KEY)).toBe('dark');
-    await user.click(screen.getByRole('button', { name: 'Switch to light mode' }));
-    await waitFor(() => expect(document.documentElement.getAttribute('data-color-scheme')).toBe('light'));
-  });
-
-  it('starts in light mode when nothing is stored', async () => {
-    renderApp('/login');
-    await screen.findByRole('button', { name: 'Switch to dark mode' });
-    expect(document.documentElement.getAttribute('data-color-scheme')).toBe('light');
   });
 });
 

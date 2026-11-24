@@ -55,10 +55,6 @@
     "expandNavigation": "Expand navigation",
     "loading": "Loading…"
   },
-  "theme": {
-    "switchToDark": "Switch to dark mode",
-    "switchToLight": "Switch to light mode"
-  },
   "demo": {
     "badge": "Demo data",
     "title": "Demo data — simulated HR records",

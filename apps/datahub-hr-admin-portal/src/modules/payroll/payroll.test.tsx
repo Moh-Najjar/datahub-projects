@@ -49,13 +49,11 @@ describe('overview', () => {
     expect(screen.getByText(/Payments, bank transfers and e-mails are never made/)).toBeTruthy();
   }, 20_000);
 
-  it('Arabic + dark: translated, RTL, charts mirrored, amounts and codes left-to-right', async () => {
+  it('Arabic: translated, RTL, charts mirrored, amounts and codes left-to-right', async () => {
     const { user } = await open('/payroll');
-    await user.click(screen.getByRole('button', { name: 'Switch to dark mode' }));
     await user.click(screen.getByRole('button', { name: 'Switch to العربية' }));
     expect(await screen.findByRole('heading', { level: 1, name: 'الرواتب' })).toBeTruthy();
     expect(document.documentElement.dir).toBe('rtl');
-    expect(document.documentElement.getAttribute('data-color-scheme')).toBe('dark');
     expect(screen.getByRole('tab', { name: 'مسيرات الرواتب' })).toBeTruthy();
     const gross = document.querySelector('[data-kpi="gross"] [dir="ltr"]');
     expect(gross?.textContent).toMatch(/^JOD [0-9,]+\.\d{3}$/);

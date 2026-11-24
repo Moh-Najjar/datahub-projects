@@ -1,8 +1,6 @@
 import { useCallback, useState } from 'react';
 import Alert from '@mui/material/Alert';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined';
 import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
@@ -12,6 +10,7 @@ import { ADMIN_TEXT } from '@/modules/admin/data/adminText';
 import { emptyFormValues, toFormValues, toStatus, toWriteBody, type BlogPostFormValues } from '@/modules/admin/schemas/blogPostSchema';
 import { adminErrorMessage } from '@/modules/admin/utils/apiErrors';
 import { useBlogPermissions } from '@/modules/admin/hooks/useBlogPermissions';
+import { AdminPageHeader } from './components/AdminPageHeader';
 import { BlogForm, type BlogFormBase, type SavedNotice } from './components/BlogForm';
 import { PageLoading } from './components/PageLoading';
 import { StatusChip } from './components/StatusChip';
@@ -58,20 +57,20 @@ export default function AdminBlogEditorPage() {
   return (
     <>
       <title>{ADMIN_TEXT.pageTitle(heading)}</title>
-      <Button component={RouterLink} to={ADMIN_ROUTES.blogs} startIcon={<ArrowBackIcon />} sx={{ height: 36, px: 1, mb: '12px', color: 'text.secondary' }}>
+      <Button component={RouterLink} to={ADMIN_ROUTES.blogs} startIcon={<ArrowBackIcon />} sx={{ mb: 1.5, color: 'text.secondary' }}>
         {E.back}
       </Button>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '12px', mb: '20px' }}>
-        <Typography variant="h1" sx={{ fontSize: { xs: 26, md: 30 }, fontWeight: 700, letterSpacing: '-0.02em', color: 'text.primary' }}>
-          {heading}
-        </Typography>
-        {post && <StatusChip status={post.status} />}
-        {post && published && (
-          <Button component="a" href={`/${post.slug}/`} target="_blank" rel="noopener" startIcon={<OpenInNewOutlinedIcon />} sx={{ height: 36, px: 1.5, ml: { sm: 'auto' } }}>
-            {E.viewOnSite}
-          </Button>
-        )}
-      </Box>
+      <AdminPageHeader
+        title={heading}
+        eyebrow={post ? <StatusChip status={post.status} /> : undefined}
+        actions={
+          post && published ? (
+            <Button component="a" href={`/${post.slug}/`} target="_blank" rel="noopener" variant="outlined" startIcon={<OpenInNewOutlinedIcon />}>
+              {E.viewOnSite}
+            </Button>
+          ) : undefined
+        }
+      />
 
       {!allowed ? (
         <Alert severity="warning">{isNew ? ADMIN_TEXT.validation.noCreate : ADMIN_TEXT.validation.noUpdate}</Alert>

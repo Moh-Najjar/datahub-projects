@@ -11,7 +11,8 @@ DataHubProjects/
 ├── apps/
 │   ├── datahub-website/   React + Vite + MUI website (own CLAUDE.md, docs, scripts)
 │   ├── datahub-hr/        Expo + React Native app (routes in src/app/)
-│   └── datahub-hr-admin-portal/   React + Vite + MUI admin web app for DataHubHR (own CLAUDE.md)
+│   ├── datahub-hr-admin-portal/   React + Vite + MUI admin web app for DataHubHR (own CLAUDE.md)
+│   └── datahub-trainee-app/       React + Vite + MUI training management app (own CLAUDE.md)
 ├── packages/
 │   └── shared-types/      @datahub/shared-types — shared TypeScript types only
 ├── package.json           workspaces, root scripts, React version policy
@@ -27,6 +28,7 @@ DataHubProjects/
 | **DataHub Website** | `apps/datahub-website` | React 19.3.0 · TypeScript 7 · Vite 8 · Material UI 9 · React Router 7 · Emotion (RTL) | Production-ready recreation of datahubanalytics.com (EN + AR) |
 | **DataHubHR** | `apps/datahub-hr` | Expo SDK 58 · React Native 0.88 · React 19.3.0 · Expo Router · TypeScript 6 | Configured foundation; HR features not started |
 | **DataHub HR Admin Portal** | `apps/datahub-hr-admin-portal` | React 19.3.0 · TypeScript 6 · Vite 8 · Material UI 9 · Apache ECharts 6 · React Router 7 · TanStack Query 5 · i18next (EN + AR, RTL) | Phase 5 (in progress): app shell, demo sign-in per role (mock — not real authentication), role-based navigation, HR dashboard (KPIs, Apache ECharts charts), Organization Management (departments, positions, locations, hierarchy), Employee Management (directory, profiles, create/edit, documents, history), Attendance Management (records, simulated check-in/out, shifts, history, reports, CSV), Leave Management (requests, approvals, balances, leave types, calendar, reports, CSV; approved leave shows in Attendance), Recruitment (requisitions, candidates, pipeline, interviews, offers, hire-to-employee conversion), Performance (review cycles, goals, self/manager reviews, competencies, development plans), Payroll (compensation history, allowances/deductions, payroll runs with approval workflow, decimal-safe calculation, bilingual payslips, reports, CSV), Documents (categories, simulated upload, verification, expiry, required-document compliance; integrated with profiles, recruitment, leave and payroll). Mock data only — no backend yet |
+| **DataHub Trainee App** | `apps/datahub-trainee-app` | React 19.3.0 · TypeScript 6 · Vite 8 · Material UI 9 · React Router 7 · TanStack Query 5 · React Hook Form + Zod · own EN/AR i18n (RTL) · Vitest | Training management, a modern replacement of the original Training Portal: dashboard, trainings (content, assignments, submissions, drag-and-drop order), enrollments with progress, users, departments, evaluations, rankings, activity timeline and printable certificates. Signs in ONLY through the DataHub Workspace (SSO handoff). All training data is a persistent mock API — no backend yet |
 
 Each app owns its UI, routing, styling, i18n, services, utilities and configuration. Apps never import
 each other, and **UI code is never shared** — lint rules enforce this (see *Application boundaries*).
@@ -93,6 +95,18 @@ npm run doctor:hr          # expo-doctor dependency/config checks
 
 Add native-compatible libraries with `npx expo install <pkg>` **inside `apps/datahub-hr`** so versions match
 Expo SDK 58. There is no web target for DataHubHR yet.
+
+### DataHub Trainee App
+
+```bash
+npm run dev:trainee        # http://localhost:3002 (open it from the Workspace: /workspace/open/trainee-app/)
+npm run build:trainee      # type-check + production build → apps/datahub-trainee-app/dist
+npm run lint:trainee       # oxlint, including architecture boundaries
+npm run test:trainee       # Vitest (backend rules, auth/SSO, permissions, UI workflows, EN/AR)
+```
+
+There is no login page: the app is opened from the DataHub Workspace. Details and rules:
+[apps/datahub-trainee-app/CLAUDE.md](apps/datahub-trainee-app/CLAUDE.md).
 
 ### DataHub HR Admin Portal
 

@@ -59,13 +59,11 @@ describe('overview', () => {
     expect(within(screen.getByRole('list', { name: 'Recent activity' })).getAllByRole('listitem')).toHaveLength(s.recent.length);
   }, 20_000);
 
-  it('Arabic + dark: translated, RTL charts, Latin digits', async () => {
+  it('Arabic: translated, RTL charts, Latin digits', async () => {
     const { user } = await open('/recruitment');
-    await user.click(screen.getByRole('button', { name: 'Switch to dark mode' }));
     await user.click(screen.getByRole('button', { name: 'Switch to العربية' }));
     expect(await screen.findByRole('heading', { level: 1, name: 'التوظيف' })).toBeTruthy();
     expect(document.documentElement.dir).toBe('rtl');
-    expect(document.documentElement.getAttribute('data-color-scheme')).toBe('dark');
     expect(screen.getByRole('tab', { name: 'مسار التوظيف' })).toBeTruthy();
     expect(kpi('totalCandidates')).toMatch(/^[0-9,]+$/);
     await waitFor(() => expect(recordedCharts.some((c) => (c.option.xAxis as { inverse?: boolean } | undefined)?.inverse === true)).toBe(true));

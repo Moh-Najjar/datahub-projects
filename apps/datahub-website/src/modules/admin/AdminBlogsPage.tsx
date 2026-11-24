@@ -38,6 +38,7 @@ import { adminErrorMessage } from '@/modules/admin/utils/apiErrors';
 import { formatAdminDate } from '@/modules/admin/utils/date';
 import { useBlogPermissions } from '@/modules/admin/hooks/useBlogPermissions';
 import type { SavedNotice } from './components/BlogForm';
+import { AdminPageHeader } from './components/AdminPageHeader';
 import { ConfirmDialog } from './components/ConfirmDialog';
 import { PageLoading } from './components/PageLoading';
 import { StatusChip } from './components/StatusChip';
@@ -125,21 +126,17 @@ export default function AdminBlogsPage() {
   return (
     <>
       <title>{ADMIN_TEXT.pageTitle(T.title)}</title>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: '16px', mb: '20px' }}>
-        <Box>
-          <Typography variant="h1" sx={{ fontSize: { xs: 26, md: 30 }, fontWeight: 700, letterSpacing: '-0.02em', color: 'text.primary' }}>
-            {T.title}
-          </Typography>
-          <Typography color="text.secondary" sx={{ mt: '4px', maxWidth: 640 }}>
-            {T.subtitle}
-          </Typography>
-        </Box>
-        {can.create && (
-          <Button component={RouterLink} to={ADMIN_ROUTES.newBlog} variant="contained" startIcon={<AddIcon />} sx={{ height: 40, px: 2 }}>
-            {T.newPost}
-          </Button>
-        )}
-      </Box>
+      <AdminPageHeader
+        title={T.title}
+        subtitle={T.subtitle}
+        actions={
+          can.create ? (
+            <Button component={RouterLink} to={ADMIN_ROUTES.newBlog} variant="contained" startIcon={<AddIcon />}>
+              {T.newPost}
+            </Button>
+          ) : undefined
+        }
+      />
 
       {totals && (
         <Box component="ul" aria-label={T.counts(totals.all, totals.published, totals.drafts)} sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, minmax(0, 1fr))' }, gap: '12px', mb: '16px', p: 0, m: 0, listStyle: 'none' }}>

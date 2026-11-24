@@ -21,11 +21,15 @@
     "build:admin": "npm run build --workspace=apps/datahub-hr-admin-portal",
     "lint:admin": "npm run lint --workspace=apps/datahub-hr-admin-portal",
     "test:admin": "npm run test --workspace=apps/datahub-hr-admin-portal",
+    "dev:trainee": "npm run dev --workspace=apps/datahub-trainee-app",
+    "build:trainee": "npm run build --workspace=apps/datahub-trainee-app",
+    "lint:trainee": "npm run lint --workspace=apps/datahub-trainee-app",
+    "test:trainee": "npm run test --workspace=apps/datahub-trainee-app",
     "lint:packages": "npm run lint --workspace=packages/shared-types",
-    "lint": "npm run lint:website && npm run lint:hr && npm run lint:admin && npm run lint:packages",
+    "lint": "npm run lint:website && npm run lint:hr && npm run lint:admin && npm run lint:trainee && npm run lint:packages",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "typecheck:packages": "npm run typecheck --workspace=packages/shared-types",
-    "verify": "npm run typecheck && npm run lint && npm run build:website && npm run build:admin && npm run test:admin && npm run config:hr && npm run doctor:hr"
+    "verify": "npm run typecheck && npm run lint && npm run build:website && npm run build:admin && npm run test:admin && npm run build:trainee && npm run test:trainee && npm run config:hr && npm run doctor:hr"
   },
   "engines": {
     "node": ">=20.19.4",

@@ -54,13 +54,11 @@ describe('overview', () => {
     expect(slices.some((d) => d.name === 'Absent')).toBe(summary.absent > 0); // nobody is absent before a shift ends
   }, 20_000);
 
-  it('Arabic + dark: translated KPIs, RTL charts, Latin digits', async () => {
+  it('Arabic: translated KPIs, RTL charts, Latin digits', async () => {
     const { user } = await open('/attendance');
-    await user.click(screen.getByRole('button', { name: 'Switch to dark mode' }));
     await user.click(screen.getByRole('button', { name: 'Switch to العربية' }));
     expect(await screen.findByRole('heading', { level: 1, name: 'الحضور' })).toBeTruthy();
     expect(document.documentElement.dir).toBe('rtl');
-    expect(document.documentElement.getAttribute('data-color-scheme')).toBe('dark');
     expect(screen.getByText('الحاضرون اليوم')).toBeTruthy();
     await waitFor(() => expect(screen.getByRole('img', { name: 'آخر 7 أيام' })).toBeTruthy());
     const trendOption = recordedCharts.filter((c) => (c.option.series as Array<{ stack?: string }>)[0]?.stack === 'records').at(-1)!.option;

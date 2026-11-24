@@ -52,13 +52,11 @@ describe('overview', () => {
     expect(((dist.option.series as Array<{ data: Array<{ value: number }> }>)[0]!.data).map((d) => d.value)).toEqual(s.distribution.map((d) => d.count));
   }, 20_000);
 
-  it('Arabic + dark: translated, RTL charts, Latin digits', async () => {
+  it('Arabic: translated, RTL charts, Latin digits', async () => {
     const { user } = await open('/performance');
-    await user.click(screen.getByRole('button', { name: 'Switch to dark mode' }));
     await user.click(screen.getByRole('button', { name: 'Switch to العربية' }));
     expect(await screen.findByRole('heading', { level: 1, name: 'الأداء' })).toBeTruthy();
     expect(document.documentElement.dir).toBe('rtl');
-    expect(document.documentElement.getAttribute('data-color-scheme')).toBe('dark');
     expect(screen.getByRole('tab', { name: 'دورات المراجعة' })).toBeTruthy();
     expect(kpi('inReview')).toMatch(/^[0-9,]+$/);
     await waitFor(() => expect(recordedCharts.some((c) => (c.option.xAxis as { inverse?: boolean } | undefined)?.inverse === true)).toBe(true));

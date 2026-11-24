@@ -99,7 +99,7 @@
       "open": "Open application",
       "empty": "No applications are available for your role yet.",
       "accessDenied": "Your role does not have access to {app}.",
-      "sessionNote": "Signing out ends your session in every DataHub application (HR Admin and Blogs Admin), in all tabs."
+      "sessionNote": "Signing out ends your session in every DataHub application (HR Admin, Blogs Admin and Trainee App), in all tabs."
     },
     "header": {
       "signOut": "Sign out",
@@ -113,6 +113,10 @@
       "blogs-admin": {
         "name": "Blogs Admin",
         "description": "Manage DataHub website blog posts and content."
+      },
+      "trainee-app": {
+        "name": "Trainee App",
+        "description": "Manage trainings, enrollments, evaluations and certificates."
       }
     },
     "roles": {

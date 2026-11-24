@@ -63,7 +63,7 @@ function ToolButton({ label, active, disabled, onClick, children }: { label: str
           onChange={onClick}
           aria-label={label}
           aria-pressed={active === undefined ? undefined : active}
-          sx={{ border: 0, borderRadius: '4px', p: '6px', color: 'brand.heading' }}
+          sx={{ border: 0, borderRadius: '4px', p: '6px', color: 'text.primary' }}
         >
           {children}
         </ToggleButton>
@@ -85,7 +85,7 @@ function LinkDialog({ editor, onClose }: { editor: Editor; onClose: () => void }
   };
   return (
     <Dialog open onClose={onClose} maxWidth="xs" fullWidth>
-      <DialogTitle sx={{ color: 'brand.heading' }}>{T.linkTitle}</DialogTitle>
+      <DialogTitle sx={{ color: 'text.primary' }}>{T.linkTitle}</DialogTitle>
       <DialogContent sx={{ display: 'grid', gap: 1 }}>
         <TextField
           autoFocus
@@ -151,7 +151,7 @@ function ImageDialog({ editor, onClose }: { editor: Editor; onClose: () => void 
   };
   return (
     <Dialog open onClose={busy ? undefined : onClose} maxWidth="sm" fullWidth>
-      <DialogTitle sx={{ color: 'brand.heading' }}>{T.imageTitle}</DialogTitle>
+      <DialogTitle sx={{ color: 'text.primary' }}>{T.imageTitle}</DialogTitle>
       <DialogContent sx={{ display: 'grid', gap: 2 }}>
         <TextField margin="dense" label={T.imageAlt} value={alt} onChange={(e) => setAlt(e.target.value)} />
         <Box>
@@ -335,7 +335,7 @@ export function RichTextEditor({ id, label, value, onChange, onBlur, error, help
 
   return (
     <Box>
-      <Typography component="label" htmlFor={id} sx={{ display: 'block', mb: '6px', fontWeight: 500, color: error ? 'error.main' : 'brand.heading' }}>
+      <Typography component="label" htmlFor={id} sx={{ display: 'block', mb: '6px', fontWeight: 500, color: error ? 'error.main' : 'text.primary' }}>
         {label} *
       </Typography>
       <Box sx={{ border: '1px solid', borderColor: error ? 'error.main' : 'divider', borderRadius: '10px', bgcolor: 'background.paper', '&:focus-within': { borderColor: error ? 'error.main' : 'primary.main', boxShadow: (theme) => `0 0 0 1px ${error ? theme.palette.error.main : theme.palette.primary.main}` } }}>

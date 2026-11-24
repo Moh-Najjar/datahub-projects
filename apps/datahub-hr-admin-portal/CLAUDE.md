@@ -49,7 +49,7 @@ src/
 │   │                      breadcrumbContext.ts + BreadcrumbProvider (pages add crumbs after their nav item)
 │   ├── guards/            RequireAuth / RedirectIfAuthenticated, RequirePermission (UI only)
 │   ├── routes/            index.tsx = the router; navigation.ts = nav map (sidebar, breadcrumbs, guards)
-│   └── theme/             tokens.ts (design tokens, light + dark), theme.ts, emotionCache.ts (RTL), AppThemeProvider
+│   └── theme/             tokens.ts (design tokens, light only), theme.ts, emotionCache.ts (RTL), AppThemeProvider
 ├── i18n/                  i18next setup, languages, format (Latin digits), locales/<lang>/<namespace>.json
 ├── modules/               all product functionality, one folder per module
 │   ├── shared/            reusable UI: LanguageSwitcher, ThemeModeSwitcher, DemoModeNotice, BrandMark, PageHeader,
@@ -211,9 +211,14 @@ preference, not part of the URL.
 - Use MUI components directly (no wrappers around Button/TextField/etc.); add theme `components` overrides for global
   look. Prefer plain pages with sections and tables over stacks of cards and dialogs.
 - Every data view needs loading, empty and error states; destructive actions need a confirmation dialog.
-- Light/dark: MUI colour schemes as CSS variables (`<html data-color-scheme>`), light by default, choice remembered by
-  MUI under `datahub-hr-admin.color-mode`; switch with `useColorScheme()` (`ThemeModeSwitcher`). Dark-only styles use
-  `theme.applyStyles('dark', …)`. Both schemes' foreground colours are checked for WCAG AA (see `tokens.ts`).
+- **Light only** (since the DataHub admin apps share one look; the light/dark switch was removed). MUI colour scheme as CSS
+  variables (`<html data-color-scheme="light">`). The chart builders still accept a `mode`, but only `light` is used; `chartColors.dark`
+  is dormant.
+- **Shared design language:** this portal is the REFERENCE for the Trainee App and Blogs Admin. `core/theme/tokens.ts` and
+  `theme.ts` are mirrored in `apps/datahub-trainee-app/src/core/theme/` and `apps/datahub-website/src/modules/admin/adminTokens.ts` +
+  `adminTheme.ts` (apps never import each other, so the files are copies). Change a token, radius or component default here
+  and mirror it there. The shell (sidebar with group headings and start-edge marker, top bar with breadcrumbs, avatar menu,
+  account block) is mirrored too.
 
 ## Dashboard (`modules/dashboard`)
 

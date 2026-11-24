@@ -1,14 +1,12 @@
 import { createTheme, type Theme } from '@mui/material/styles';
 import type { Direction } from '@/i18n/languages';
-import { brand, breakpoints, control, dark, fontFamily, fontSize, neutral, radius, shadows, spacingUnit, status } from './tokens';
+import { brand, breakpoints, control, fontFamily, fontSize, neutral, radius, shadows, spacingUnit, status } from './tokens';
 
 /** `<html data-color-scheme="light|dark">` — set by MUI from the user's choice. */
 export const COLOR_SCHEME_ATTRIBUTE = 'data-color-scheme';
 
 /**
- * MUI theme for one text direction, with a light (default) and a dark colour scheme served as CSS
- * variables: switching scheme swaps variables instead of rebuilding styles. Dark-only tweaks use
- * `theme.applyStyles('dark', …)`.
+ * MUI theme for one text direction (light only), served as CSS variables.
  *
  * Component defaults here are the portal-wide design system. Screens should not restyle MUI
  * primitives with one-off colours; they compose these defaults.
@@ -31,20 +29,6 @@ export function createAppTheme(direction: Direction): Theme {
           background: { default: neutral[50], paper: neutral[0] },
           grey: neutral,
           action: { hover: 'rgba(20, 27, 38, 0.04)', selected: 'rgba(20, 86, 200, 0.08)' },
-        },
-      },
-      dark: {
-        palette: {
-          primary: { main: dark.primary, contrastText: dark.onAccent },
-          secondary: { main: dark.secondary, contrastText: dark.onAccent },
-          success: { main: dark.success, contrastText: dark.onAccent },
-          warning: { main: dark.warning, contrastText: dark.onAccent },
-          error: { main: dark.error, contrastText: dark.onAccent },
-          info: { main: dark.info, contrastText: dark.onAccent },
-          text: { primary: dark.textPrimary, secondary: dark.textSecondary, disabled: dark.textDisabled },
-          divider: dark.divider,
-          background: { default: dark.background, paper: dark.paper },
-          grey: neutral,
         },
       },
     },
@@ -113,7 +97,6 @@ export function createAppTheme(direction: Direction): Theme {
           outlined: ({ theme }) => ({
             borderColor: (theme.vars ?? theme).palette.divider,
             boxShadow: shadows.sm,
-            ...theme.applyStyles('dark', { boxShadow: 'none' }),
           }),
         },
       },
@@ -125,7 +108,6 @@ export function createAppTheme(direction: Direction): Theme {
             borderColor: (theme.vars ?? theme).palette.divider,
             boxShadow: shadows.sm,
             backgroundImage: 'none',
-            ...theme.applyStyles('dark', { boxShadow: 'none' }),
           }),
         },
       },

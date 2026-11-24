@@ -16,7 +16,6 @@ import type { HandoffFailedState } from '@/modules/auth/SsoPage';
 import { BrandMark } from '@/modules/shared/BrandMark';
 import { DemoModeNotice } from '@/modules/shared/DemoModeNotice';
 import { LanguageSwitcher } from '@/modules/shared/LanguageSwitcher';
-import { ThemeModeSwitcher } from '@/modules/shared/ThemeModeSwitcher';
 
 /**
  * `/login` — this portal has NO sign-in form: signing in happens only in the DataHub Workspace. Signed-out visitors
@@ -69,7 +68,6 @@ export default function LoginPage() {
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 1, p: 2 }}>
           <LanguageSwitcher />
-          <ThemeModeSwitcher />
         </Box>
         <Box sx={{ flex: 1, display: 'grid', placeItems: 'center', px: 2, pb: 6 }}>
           <Stack spacing={3} sx={{ width: '100%', maxWidth: 460 }}>

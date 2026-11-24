@@ -3,7 +3,6 @@ import { describe, expect, it, vi } from 'vitest';
 import { ApiError } from '@/core/api/types';
 import type { Role } from '@/core/config/permissions';
 import { setMockConfig } from '@/core/api/mock/mockConfig';
-import { chartColors } from '@/core/theme/tokens';
 import { dashboardApi } from '@/modules/dashboard/api/dashboardApi';
 import * as mock from '@/modules/dashboard/mock/dashboardMock';
 import { recordedCharts } from '@/test/echartsStub';
@@ -142,13 +141,6 @@ describe('dashboard content and states', () => {
 });
 
 describe('theme and language', () => {
-  it('chart colours follow the light/dark theme', async () => {
-    const { user } = await openDashboard('hr-admin');
-    expect(chartProps('Employee growth').option.color).toEqual([chartColors.light.blue, chartColors.light.reference]);
-    await user.click(screen.getByRole('button', { name: 'Switch to dark mode' }));
-    await waitFor(() => expect(chartProps('Employee growth').option.color).toEqual([chartColors.dark.blue, chartColors.dark.reference]));
-  });
-
   it('Arabic: translated dashboard, Arabic chart labels and RTL chart layout', async () => {
     const { user } = await openDashboard('hr-admin');
     await user.click(screen.getByRole('button', { name: 'Switch to العربية' }));
