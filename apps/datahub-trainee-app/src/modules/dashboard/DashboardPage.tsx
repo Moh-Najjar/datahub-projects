@@ -14,6 +14,7 @@ import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOu
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/core/auth/authContext';
 import { isLearnerRole } from '@/core/auth/trainingPolicy';
+import { usesMockData } from '@/core/config/api';
 import { ROUTES } from '@/core/routes/paths';
 import { fill } from '@/i18n';
 import { formatNumber, formatPercent } from '@/i18n/format';
@@ -85,7 +86,9 @@ export default function DashboardPage() {
   const { actor } = useAuth();
   const [params, setParams] = useSearchParams();
   const isLearner = actor ? isLearnerRole(actor.role) : false;
-  const canPickDepartment = actor?.role === 'SuperAdmin';
+  // Filters exist only with the simulated backend (the real dashboard endpoint takes none).
+  const offersFilters = usesMockData;
+  const canPickDepartment = offersFilters && actor?.role === 'SuperAdmin';
 
   const tab: DashboardTab = isTab(params.get('tab')) ? (params.get('tab') as DashboardTab) : 'overview';
   const filters: DashboardFilters = {
@@ -121,7 +124,7 @@ export default function DashboardPage() {
             {subtitle}
           </Typography>
         </Box>
-        {!isLearner && (
+        {!isLearner && offersFilters && (
           <Stack direction="row" spacing={1.5} useFlexGap sx={{ flexWrap: 'wrap' }}>
             {canPickDepartment && (
               <FilterSelect

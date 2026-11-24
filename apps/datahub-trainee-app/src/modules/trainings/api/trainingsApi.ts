@@ -17,12 +17,15 @@ import type {
   UpdateAssignmentInput,
 } from '../types/content';
 import type { CreateTrainingInput, ReorderInput, TrainingDto, TrainingFilters, TrainingOption, TrainingRosterEntry, UpdateTrainingInput } from '../types/training';
+import { usesMockData } from '@/core/config/api';
+import { trainingsHttpApi } from './trainingsHttp';
+import { materialsHttpApi, assignmentsHttpApi } from './contentHttp';
 
 /**
- * The ONLY data entry points of the Trainings module (today: the simulated backend; later: HTTP, same types).
+ * The ONLY data entry points of the Trainings module (the real backend over HTTP, or the simulated one — same types).
  * `trainingsApi` — trainings; `materialsApi` — training content; `assignmentsApi` — assignments and submissions.
  */
-export const trainingsApi = {
+const mockTrainingsApi = {
   list: (params: ListParams<TrainingFilters>, signal?: AbortSignal): Promise<Paginated<TrainingDto>> => mockRequest(() => trainingsMock.list(params), { signal }),
   options: (signal?: AbortSignal): Promise<TrainingOption[]> => mockRequest(() => trainingsMock.options(), { signal }),
   get: (id: string, signal?: AbortSignal): Promise<TrainingDto> => mockRequest(() => trainingsMock.get(id), { signal }),
@@ -33,7 +36,7 @@ export const trainingsApi = {
   roster: (id: string, signal?: AbortSignal): Promise<TrainingRosterEntry[]> => mockRequest(() => trainingsMock.roster(id), { signal }),
 };
 
-export const materialsApi = {
+const mockMaterialsApi = {
   list: (trainingId: string, signal?: AbortSignal): Promise<MaterialDto[]> => mockRequest(() => materialsMock.list(trainingId), { signal }),
   addText: (trainingId: string, input: TextMaterialInput): Promise<MaterialDto> => mockRequest(() => materialsMock.addText(trainingId, input)),
   addLinks: (trainingId: string, input: LinkMaterialInput): Promise<MaterialDto> => mockRequest(() => materialsMock.addLinks(trainingId, input)),
@@ -48,7 +51,7 @@ export const materialsApi = {
   reorder: (trainingId: string, input: ReorderInput): Promise<void> => mockRequest(() => materialsMock.reorder(trainingId, input)),
 };
 
-export const assignmentsApi = {
+const mockAssignmentsApi = {
   list: (trainingId: string, signal?: AbortSignal): Promise<AssignmentDto[]> => mockRequest(() => assignmentsMock.list(trainingId), { signal }),
   create: (trainingId: string, input: CreateAssignmentInput): Promise<AssignmentDto> => mockRequest(() => assignmentsMock.create(trainingId, input)),
   update: (assignmentId: string, input: UpdateAssignmentInput): Promise<AssignmentDto> => mockRequest(() => assignmentsMock.update(assignmentId, input)),
@@ -59,3 +62,8 @@ export const assignmentsApi = {
   submit: (trainingId: string, assignmentId: string, input: SubmissionInput): Promise<AssignmentSubmissionDto> => mockRequest(() => assignmentsMock.submit(trainingId, assignmentId, input)),
   deleteSubmissionAttachment: (trainingId: string, assignmentId: string, attachmentId: string): Promise<void> => mockRequest(() => assignmentsMock.deleteSubmissionAttachment(trainingId, assignmentId, attachmentId)),
 };
+
+// Real backend by default; the simulated one in tests and with `VITE_TRAINEE_DATA=mock` (core/config/api.ts).
+export const trainingsApi: typeof mockTrainingsApi = usesMockData ? mockTrainingsApi : trainingsHttpApi;
+export const materialsApi: typeof mockMaterialsApi = usesMockData ? mockMaterialsApi : materialsHttpApi;
+export const assignmentsApi: typeof mockAssignmentsApi = usesMockData ? mockAssignmentsApi : assignmentsHttpApi;

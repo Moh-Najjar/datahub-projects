@@ -82,7 +82,7 @@ describe('single sign-in from the DataHub Workspace (/sso)', () => {
     const { router } = renderApp(`/sso${hash()}`);
     expect((await screen.findByRole('alert')).textContent).toMatch(/Workspace sign-in didn't work/);
     expect(router.state.location.pathname).toBe('/login');
-    expect(screen.getByRole('link', { name: 'Continue to DataHub Workspace' }).getAttribute('href')).toBe(`${WORKSPACE}/workspace/open/trainee-app/`);
+    expect(screen.getByRole('link', { name: 'Continue to DataHub Workspace' }).getAttribute('href')).toBe(`${WORKSPACE}/workspace/open/academy-admin/`);
     expect(document.querySelector('input')).toBeNull();
     expect(replace).not.toHaveBeenCalled();
     expect(storedSession()).toBeNull();
@@ -101,7 +101,7 @@ describe('signed-out visitors and the central login', () => {
     const { replace } = stubLocation();
     const { router } = renderApp('/trainings');
     await waitFor(() => expect(router.state.location.pathname).toBe('/login'));
-    await waitFor(() => expect(replace).toHaveBeenCalledWith(`${WORKSPACE}/workspace/open/trainee-app/`));
+    await waitFor(() => expect(replace).toHaveBeenCalledWith(`${WORKSPACE}/workspace/open/academy-admin/`));
     expect(document.querySelector('input')).toBeNull();
     expect(screen.queryByLabelText(/password/i)).toBeNull();
     expect(screen.queryByText(/username|e-mail address/i)).toBeNull();
@@ -110,7 +110,7 @@ describe('signed-out visitors and the central login', () => {
   it('goes to the Workspace in the user\'s language (Arabic pages are under /ar)', async () => {
     const { replace } = stubLocation();
     renderApp('/login', { locale: 'ar' });
-    await waitFor(() => expect(replace).toHaveBeenCalledWith(`${WORKSPACE}/ar/workspace/open/trainee-app/`));
+    await waitFor(() => expect(replace).toHaveBeenCalledWith(`${WORKSPACE}/ar/workspace/open/academy-admin/`));
   });
 
   it('stops redirecting automatically when the session check keeps ending sessions (loop guard)', async () => {

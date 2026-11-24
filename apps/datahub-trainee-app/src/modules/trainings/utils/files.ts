@@ -31,9 +31,9 @@ export function fileProblem(file: { fileName: string; fileSizeBytes: number }): 
 /** The value for an `<input type="file" accept>`. */
 export const FILE_ACCEPT = ALLOWED_FILE_EXTENSIONS.join(',');
 
-/** Metadata of browser `File` objects (the bytes stay in the browser). */
-export function toFileInputs(files: readonly File[]): { fileName: string; contentType: string; fileSizeBytes: number }[] {
-  return files.map((file) => ({ fileName: file.name, contentType: file.type || 'application/octet-stream', fileSizeBytes: file.size }));
+/** Browser `File` objects → upload inputs (metadata + the file itself for the real backend's multipart upload). */
+export function toFileInputs(files: readonly File[]): { fileName: string; contentType: string; fileSizeBytes: number; file: File }[] {
+  return files.map((file) => ({ fileName: file.name, contentType: file.type || 'application/octet-stream', fileSizeBytes: file.size, file }));
 }
 
 /** True when every file passes the original rules (and there is at least one when `required`). */

@@ -17,22 +17,22 @@ export const apiPaths = {
   },
   blogs: {
     /** `GET` published posts. Query: `pageNumber`, `pageSize`. */
-    list: '/api/blogs',
+    list: '/api/v1/blogs',
     /** `GET` one published post by its slug. */
-    bySlug: (slug: string) => `/api/blogs/${segment(slug)}`,
+    bySlug: (slug: string) => `/api/v1/blogs/${segment(slug)}`,
     /** `GET` every category. Create and update send these ids in `categoryIds`. */
-    categories: '/api/blogs/categories',
+    categories: '/api/v1/blogs/categories',
     /** `GET` every tag. Create and update send these ids in `tagIds`. */
-    tags: '/api/blogs/tags',
+    tags: '/api/v1/blogs/tags',
     admin: {
       /** `GET` every post (drafts included). Query: `pageNumber`, `pageSize`, optional `search`, `status`. */
-      list: '/api/admin/blogs',
+      list: '/api/v1/admin/blogs',
       /** `GET` one post, `PUT` to replace it, `DELETE` to soft-delete it. */
-      byId: (id: string) => `/api/admin/blogs/${segment(id)}`,
+      byId: (id: string) => `/api/v1/admin/blogs/${segment(id)}`,
       /** `POST` publish a draft. Body: `{ rowVersion }`. */
-      publish: (id: string) => `/api/admin/blogs/${segment(id)}/publish`,
+      publish: (id: string) => `/api/v1/admin/blogs/${segment(id)}/publish`,
       /** `POST` return a post to draft. Body: `{ rowVersion }`. */
-      unpublish: (id: string) => `/api/admin/blogs/${segment(id)}/unpublish`,
+      unpublish: (id: string) => `/api/v1/admin/blogs/${segment(id)}/unpublish`,
     },
   },
 } as const;

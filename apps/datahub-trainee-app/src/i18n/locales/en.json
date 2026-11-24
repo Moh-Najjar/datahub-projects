@@ -64,6 +64,11 @@
     "reload": "Reload page"
   },
   "apiReasons": {
+    "api.notSupported": "This action isn't available yet.",
+    "api.noIdReturned": "The server did not confirm the change. Please reload and check.",
+    "evaluation.enrollmentRequired": "This person has no training enrollment to attach the evaluation to.",
+    "submission.notEnrolled": "You aren't enrolled in this training.",
+    "certificate.notFound": "That certificate doesn't exist.",
     "permission.denied": "Your role doesn't allow this action.",
     "field.required": "This field is required.",
     "field.tooLong": "This text is too long.",

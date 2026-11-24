@@ -1,8 +1,9 @@
 export interface DepartmentDto {
   id: string;
   name: string;
-  userCount: number;
-  trainingCount: number;
+  /** `null` = unknown (the real backend has no per-department counts). */
+  userCount: number | null;
+  trainingCount: number | null;
 }
 
 export interface DepartmentInput {

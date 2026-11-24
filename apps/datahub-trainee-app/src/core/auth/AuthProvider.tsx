@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { configureHttpAuth } from '@/core/api/http';
 import { actorForUser, resolveMockIdentity } from '@/core/api/mock/identity';
+import { usesMockData } from '@/core/config/api';
+import { actorFromSession, trainingPermissionsFromToken } from './apiIdentity';
 import { AuthContext, SESSION_STORAGE_KEY, SIMULATION_STORAGE_KEY, type AuthContextValue, type Session } from './authContext';
 import { setCurrentActor } from './actor';
 import { actorCan, type TrainingActor } from './trainingPolicy';
@@ -45,11 +48,19 @@ function readSimulatedUser(): string | null {
 }
 
 function identityFor(session: Session | null): string | null {
+  if (!usesMockData) return null;
   return session ? resolveMockIdentity({ email: session.user.email, name: session.user.name, roles: session.user.workspaceRoles }) : null;
 }
 
-/** The mock training backend is the only data source, so "view as" is available. It goes away with the mock. */
-const SIMULATION_ENABLED = true;
+/** "View as" exists only with the simulated backend (it switches the mock directory user, never the session). */
+const SIMULATION_ENABLED = usesMockData;
+
+/**
+ * The HTTP client reads the access token straight from storage (so the first queries already have it) and ends the
+ * session on a 401 through the provider's current sign-out.
+ */
+let endSession: () => void = () => undefined;
+configureHttpAuth({ getAccessToken: () => readStoredSession()?.token ?? null, onUnauthorized: () => endSession() });
 
 /** Holds the session; `useAuth()` reads it. Must sit inside the QueryClientProvider (sign-out clears the cache). */
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -60,6 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [simulatedUserId, setSimulatedUserId] = useState<string | null>(() => (SIMULATION_ENABLED ? readSimulatedUser() : null));
 
   const actor = useMemo<TrainingActor | null>(() => {
+    if (!usesMockData) return session ? actorFromSession(session) : null;
     const simulated = session && simulatedUserId ? actorForUser(simulatedUserId) : null;
     const resolved = simulated ?? (session && identityUserId ? actorForUser(identityUserId) : null);
     // The simulated backend reads the caller from here (a real backend reads the token). Set before children query.
@@ -86,6 +98,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Never leave one user's cached data visible to the next.
     queryClient.clear();
   }, [queryClient]);
+
+  useEffect(() => {
+    endSession = signOut;
+  }, [signOut]);
 
   const signOutTo = useCallback((url: string) => {
     try {
@@ -138,7 +154,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user: session?.user ?? null,
       isAuthenticated: !!session,
       actor,
-      can: (permission) => actorCan(actor, permission),
+      // Real backend: the token's permissions; simulated backend: the mock directory role's.
+      can: (permission) => (usesMockData ? actorCan(actor, permission) : !!session && trainingPermissionsFromToken(session.permissions).includes(permission)),
       signIn,
       signOut,
       signOutTo,

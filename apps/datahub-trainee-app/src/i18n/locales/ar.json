@@ -64,6 +64,11 @@
     "reload": "إعادة تحميل الصفحة"
   },
   "apiReasons": {
+    "api.notSupported": "هذا الإجراء غير متاح بعد.",
+    "api.noIdReturned": "لم يؤكد الخادم التغيير. يُرجى إعادة التحميل والتحقق.",
+    "evaluation.enrollmentRequired": "لا يوجد لهذا الشخص تسجيل في تدريب لربط التقييم به.",
+    "submission.notEnrolled": "أنت غير مسجَّل في هذا التدريب.",
+    "certificate.notFound": "هذه الشهادة غير موجودة.",
     "permission.denied": "دورك لا يسمح بهذا الإجراء.",
     "field.required": "هذا الحقل مطلوب.",
     "field.tooLong": "هذا النص طويل جدًا.",

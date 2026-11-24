@@ -3,14 +3,15 @@ import type { AssignmentStatus, MaterialType } from '@/core/domain/training';
 export type { AssignmentStatus, MaterialType };
 
 /**
- * A file the user picked. The simulated backend validates and records its metadata only (name, type, size) —
- * the bytes are not stored, so there is no download.
+ * A file the user picked: its metadata (validated by both backends) and the browser `File` the real backend uploads
+ * (multipart). The simulated backend records the metadata only.
  */
 export interface FileInput {
   fileName: string;
   contentType: string;
   fileSizeBytes: number;
   title?: string | null;
+  file?: File;
 }
 
 export interface FileItemDto {

@@ -21,7 +21,7 @@ import { LanguageSwitcher } from '@/modules/shared/LanguageSwitcher';
 
 /**
  * `/login` — this app has NO sign-in form: signing in happens only in the DataHub Workspace. Signed-out visitors
- * (RequireAuth sends them here) are forwarded at once to the Workspace's `/workspace/open/trainee-app/`, which signs
+ * (RequireAuth sends them here) are forwarded at once to the Workspace's `/workspace/open/academy-admin/`, which signs
  * them in when needed and comes back through `/sso`. The page stays (with a button instead of the automatic redirect)
  * when a Workspace sign-in failed, when the session check keeps ending sessions (loop guard) or when no Workspace URL
  * is configured.

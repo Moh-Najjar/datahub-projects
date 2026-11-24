@@ -1,12 +1,13 @@
 import type { Locale } from '@/i18n/languages';
 
 /** The id of this application in the Workspace's application catalog (`apps/datahub-website`). */
-export const WORKSPACE_APP_ID = 'trainee-app';
+/** This app's key in the backend's portal list (`GET /api/v1/auth/portals`) and in the Workspace's `/workspace/open/<key>/`. */
+export const WORKSPACE_APP_ID = 'academy-admin';
 
 /**
  * The DataHub Workspace — the ONE sign-in of DataHub's staff applications, on the public website
  * (`apps/datahub-website`, `/workspace/`). This app has no sign-in form of its own:
- * - signed-out visitors go to the Workspace's `/workspace/open/trainee-app/` (sign in there, then come back via `/sso`);
+ * - signed-out visitors go to the Workspace's `/workspace/open/academy-admin/` (sign in there, then come back via `/sso`);
  * - Sign out goes to the Workspace's `/workspace/logout/` (ends the central session, shows the Workspace sign-in);
  * - while signed in, the hidden `/workspace-session.html` page reports whether the central session still exists.
  *

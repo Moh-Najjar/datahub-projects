@@ -101,7 +101,7 @@
         "name": "Blogs Admin",
         "description": "Manage DataHub website blog posts and content."
       },
-      "trainee-app": {
+      "academy-admin": {
         "name": "Trainee App",
         "description": "Manage trainings, enrollments, evaluations and certificates."
       }

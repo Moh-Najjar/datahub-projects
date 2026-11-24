@@ -181,11 +181,11 @@ Images and fonts stay in `public/` (generated content references them by URL). C
 
 ## Blog & admin (`modules/blog`, `modules/admin`)
 
-- **One data source: the backend API** (no local posts, no mock, no fallback). Endpoints (verified 2026-11-22, see
-  `core/api/blogs.ts`): public `GET /api/blogs?pageNumber&pageSize` (1–100, published only) and `GET /api/blogs/{slug}`
-  (404 `Cms.BlogNotFound` for unknown slugs and drafts), `GET /api/blogs/categories` and `GET /api/blogs/tags` (every
-  category / tag: `{ id, name, slug, description }`; posts carry `{ id, name, slug }`); admin (Bearer) `GET /api/admin/blogs?pageNumber&pageSize&search&status`,
-  `GET/PUT/DELETE /api/admin/blogs/{id}`, `POST /api/admin/blogs` (creates a draft → `{ id }`), `POST …/{id}/publish` and
+- **One data source: the backend API** (no local posts, no mock, no fallback). Endpoints (verified 2026-11-22; moved under `/api/v1` on 2026-11-24, see
+  `core/api/blogs.ts`): public `GET /api/v1/blogs?pageNumber&pageSize` (1–100, published only) and `GET /api/v1/blogs/{slug}`
+  (404 `Cms.BlogNotFound` for unknown slugs and drafts), `GET /api/v1/blogs/categories` and `GET /api/v1/blogs/tags` (every
+  category / tag: `{ id, name, slug, description }`; posts carry `{ id, name, slug }`); admin (Bearer) `GET /api/v1/admin/blogs?pageNumber&pageSize&search&status`,
+  `GET/PUT/DELETE /api/v1/admin/blogs/{id}`, `POST /api/v1/admin/blogs` (creates a draft → `{ id }`), `POST …/{id}/publish` and
   `…/unpublish`. Writes answer 204 without a body.
 - **Public pages** (`core/hooks/useBlogs.ts`): `BlogGrid` (`/blog/`, 10 per server page, infinite loading + "Load
   more"), `BlogPostPage` (`/<slug>/`, HTML sanitized before rendering, 404 → the 404 page), homepage `BlogSection`
@@ -252,8 +252,9 @@ application. Every account is a backend account (`api/workspaceAuth.ts`); there 
   `workspaceAuth.ts` (CORS must allow credentials for the site's origin), nothing else changes.
 - Session storage: `localStorage` (`datahub-website.workspace-session`, shared by the site's tabs; sign-out in one tab
   signs out all). The access token is therefore readable by scripts of this origin (accepted for now).
-- **Applications and access** (`data/applications.ts`): the portals the backend lists (known ids only), plus **HR Admin**
-  for tokens with `hr.*` permissions (`/portals` does not list `hr-admin` yet). Cards, the
+- **Applications and access** (`data/applications.ts`): exactly the portals the backend lists — ids are its keys
+  (`hr-admin`, `blogs-admin`, `academy-admin` = Trainee App; verified 2026-11-24). `/workspace/open/trainee-app/` (the
+  former id) still works as an alias of `academy-admin`. Cards, the
   Blogs Admin guard and the HR handoff use `canOpen(session, app)` / `applicationsFor(session)`. To add an application:
   its id in `APPLICATION_IDS`, who may open it, strings under `workspace.apps.<id>`, and how `ApplicationCard` opens it.
 - **Blogs Admin** (same origin) reads the same session — see "Blog & admin".

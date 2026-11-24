@@ -62,8 +62,9 @@ export function actorCan(actor: TrainingActor | null, permission: TrainingPermis
   return !!actor && roleCan(actor.role, permission);
 }
 
-/** A DepartmentAdmin works inside one department; SuperAdmin is global. */
-export const isDepartmentScoped = (actor: TrainingActor): boolean => actor.role === 'DepartmentAdmin';
+/** A DepartmentAdmin works inside one (known) department; SuperAdmin is global. With the real backend the department may
+ * be unknown — the UI is then not scoped and the backend enforces the scope. */
+export const isDepartmentScoped = (actor: TrainingActor): boolean => actor.role === 'DepartmentAdmin' && !!actor.departmentId;
 
 /** May the actor manage things (trainings, enrollments, evaluations…) that belong to this department? */
 export function canManageDepartment(actor: TrainingActor, departmentId: string | null): boolean {

@@ -59,7 +59,7 @@ function useDebounced<T>(value: T, delay: number): T {
 
 /**
  * `/admin/blogs/` — every blog post of the backend (published and drafts). Search, status filter and paging run on
- * the server (`GET /api/admin/blogs`); publish / unpublish / delete use the post's current `rowVersion`.
+ * the server (`GET /api/v1/admin/blogs`); publish / unpublish / delete use the post's current `rowVersion`.
  */
 export default function AdminBlogsPage() {
   const location = useLocation();

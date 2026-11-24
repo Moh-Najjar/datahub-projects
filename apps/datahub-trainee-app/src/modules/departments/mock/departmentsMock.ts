@@ -51,8 +51,8 @@ export const departmentsMock = {
       searchFields: (d) => [d.name],
       sorters: {
         name: (a, b) => a.name.localeCompare(b.name),
-        users: (a, b) => a.userCount - b.userCount,
-        trainings: (a, b) => a.trainingCount - b.trainingCount,
+        users: (a, b) => (a.userCount ?? 0) - (b.userCount ?? 0),
+        trainings: (a, b) => (a.trainingCount ?? 0) - (b.trainingCount ?? 0),
       },
       defaultSort: (a, b) => a.name.localeCompare(b.name),
     });

@@ -17,13 +17,17 @@ import type { WorkspaceLocationState } from '@/modules/portals/types';
  * - Blogs Admin (same site) → `/admin/blogs/`.
  * - HR Admin / Trainee App (other origins) → `<app>/sso#token=…`, with a handoff token created now (it lives ~2 minutes).
  */
+/** Former id of the Trainee App (before the backend's `academy-admin` key): still accepted by `/workspace/open/…/`. */
+const ALIASES: Readonly<Record<string, ApplicationId>> = { 'trainee-app': 'academy-admin' };
+
 export default function WorkspaceOpenPage() {
   const { locale } = useLocale();
-  const { app } = useParams();
+  const { app: requested } = useParams();
+  const app = requested && ALIASES[requested] ? ALIASES[requested] : requested;
   const { pathname } = useLocation();
   const session = useWorkspaceSession();
   const allowed = session ? applicationsFor(session).includes(app as ApplicationId) : false;
-  const externalUrl = app === 'hr-admin' ? HR_ADMIN_PORTAL_URL : app === 'trainee-app' ? TRAINEE_APP_URL : undefined;
+  const externalUrl = app === 'hr-admin' ? HR_ADMIN_PORTAL_URL : app === 'academy-admin' ? TRAINEE_APP_URL : undefined;
   const openExternal = session !== null && allowed && externalUrl !== undefined;
 
   useEffect(() => {
@@ -33,7 +37,7 @@ export default function WorkspaceOpenPage() {
 
   if (!session) return <Navigate to={localizePath(WORKSPACE_ROUTES.login, locale)} replace state={{ from: pathname } satisfies WorkspaceLocationState} />;
   if (!allowed) {
-    const known = app === 'hr-admin' || app === 'blogs-admin' || app === 'trainee-app';
+    const known = app === 'hr-admin' || app === 'blogs-admin' || app === 'academy-admin';
     return <Navigate to={localizePath(WORKSPACE_ROUTES.root, locale)} replace state={known ? ({ denied: app } satisfies WorkspaceLocationState) : null} />;
   }
   if (app === 'blogs-admin') return <Navigate to={ADMIN_ROUTES.blogs} replace />;

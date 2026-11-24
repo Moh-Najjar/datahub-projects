@@ -103,7 +103,7 @@ export interface UiStrings {
       signOut: string;
       viewSite: string;
     };
-    apps: Record<'hr-admin' | 'blogs-admin' | 'trainee-app', { name: string; description: string }>;
+    apps: Record<'hr-admin' | 'blogs-admin' | 'academy-admin', { name: string; description: string }>;
     roles: Record<'system-admin' | 'hr-admin' | 'hr-manager' | 'department-manager' | 'employee' | 'recruiter' | 'payroll-officer' | 'blogs-admin', string>;
   };
 }

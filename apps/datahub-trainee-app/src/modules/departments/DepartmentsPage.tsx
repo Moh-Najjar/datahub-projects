@@ -40,8 +40,8 @@ export default function DepartmentsPage() {
 
   const columns: Column<DepartmentDto>[] = [
     { id: 'name', header: t.departments.columns.name, sortKey: 'name', render: (d) => <strong>{d.name}</strong> },
-    { id: 'users', header: t.departments.columns.users, sortKey: 'users', hideBelow: 'sm', align: 'right', render: (d) => formatNumber(d.userCount, locale) },
-    { id: 'trainings', header: t.departments.columns.trainings, sortKey: 'trainings', hideBelow: 'sm', align: 'right', render: (d) => formatNumber(d.trainingCount, locale) },
+    { id: 'users', header: t.departments.columns.users, sortKey: 'users', hideBelow: 'sm', align: 'right', render: (d) => (d.userCount === null ? '—' : formatNumber(d.userCount, locale)) },
+    { id: 'trainings', header: t.departments.columns.trainings, sortKey: 'trainings', hideBelow: 'sm', align: 'right', render: (d) => (d.trainingCount === null ? '—' : formatNumber(d.trainingCount, locale)) },
     {
       id: 'actions',
       header: t.common.actions,

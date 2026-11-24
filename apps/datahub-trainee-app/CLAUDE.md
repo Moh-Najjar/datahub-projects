@@ -5,7 +5,8 @@ functionality, roles and rules of the original are preserved ([docs/PARITY.md](d
 lists every intentional deviation); the old UI is not reused.
 
 - **Sign-in is the DataHub Workspace only.** No login form, no passwords, no credentials of its own.
-- **All training data is a persistent MOCK API** (fictional data, `localStorage`, versioned). The original backend is never called.
+- **Data comes from the DataHub Analytics API** (`/api/v1/academy/…`, users, roles, organization departments) with the
+  Workspace access token. A simulated backend (fictional data, `localStorage`) stays available as a switch — see "Data source".
 
 ## Commands (from the monorepo root)
 
@@ -48,14 +49,16 @@ own module; modules reach each other only through `index.ts`; nothing imports an
 Component → useTrainings() → trainingsApi.list() → trainingsMock → core/api/mock/mockDatabase
 ```
 
-To switch to a real backend replace the bodies of `modules/*/api/*.ts` with HTTP calls returning the same types.
+Each `modules/*/api/<x>Api.ts` exports ONE object typed by the simulated implementation; it is the real HTTP implementation
+(`<x>Http.ts`) or the simulated one, chosen by `DATA_SOURCE` — hooks and components never know which runs.
 
 ## Two separate authorization layers (never mix them)
 
 1. **Workspace access** — may this signed-in Workspace user open the app? `core/auth/workspaceAccess.ts` +
-   the website's launcher (`apps/datahub-website/.../portals/data/applications.ts`): backend lists `trainee-app`, or a
-   `training.*` permission, or **INTERIM: any staff user with a backend role** (the backend issues neither yet — remove the
-   interim line in BOTH places once it does).
+   the website's launcher (`apps/datahub-website/.../portals/data/applications.ts`) opens it only when the backend lists
+   `academy-admin` (this app's portal key, `WORKSPACE_APP_ID`). In the app itself: a `training.*` permission, or **INTERIM:
+   any staff user with a backend role** (the app cannot call `/portals`: the API's CORS list lacks its origins — replace
+   the interim line with a portals check once it does).
 2. **Training business roles** — what can the user do inside the app? `SuperAdmin`, `DepartmentAdmin`, `Trainee`, `Employee`,
    `Intern` (original names; learners are identical in the original). `core/auth/trainingPolicy.ts` is the single table;
    guards, navigation and every mock handler use it. DepartmentAdmin is limited to their own department.
@@ -69,14 +72,31 @@ switches the business identity for testing — it never changes the session, tok
 
 `/sso#token=…` (base64url `WorkspaceHandoffPayload`: issuer, e-mail, ~2 min link expiry, backend access token) → parsed once,
 hash stripped, JWT claims decoded (not verified — the backend does) → session in this tab's `sessionStorage`
-(`datahub-trainee.session`), ends at token expiry. Signed-out → `/login` → Workspace `/workspace/open/trainee-app/`.
+(`datahub-trainee.session`), ends at token expiry. Signed-out → `/login` → Workspace `/workspace/open/academy-admin/`.
 Sign out → Workspace `/workspace/logout/`. While signed in, the hidden `/workspace-session.html` (embedded iframe) reports the
 central session; ended or another account → this session ends (loop guard after two endings in 30 s). Tokens are never logged
 or put in `localStorage`. `VITE_WORKSPACE_URL` (dev default `http://localhost:3000`). The website needs `VITE_TRAINEE_APP_URL`
 (dev default `http://localhost:3002`). Production values live in the git-ignored `.env.production` of each app; this app is
 deployed to Azure App Service (Windows/IIS) by uploading `dist/` (`public/web.config` = SPA fallback).
 
-## Mock API
+## Data source — real API (`*Http.ts`) or simulated backend
+
+- `core/config/api.ts`: `DATA_SOURCE` = `api` (default) or `mock` (tests always; or `VITE_TRAINEE_DATA=mock`). `API_BASE_URL` =
+  `VITE_API_URL` in production (the deployed origin must be in the API's CORS list — as of 2026-11-24 it is NOT); in
+  development requests stay on the dev origin and `vite.config.ts` proxies `/api` to `VITE_API_URL` (`.env.development`).
+- `core/api/http.ts` is the ONE HTTP client: Bearer token (read from this tab's session), envelope `{ success, data, error }`
+  unwrapped, failures → `ApiError` (`reason` = backend error code), multipart uploads (`file` part), 401 → sign-out.
+- Swagger documents request bodies but NO response models (2026-11-24): every `*Http.ts` mapper reads fields through
+  `core/api/read.ts` (tolerant, several likely names). When real responses differ, fix the mapper only. Statuses:
+  `core/api/academyStatus.ts`. Lists the backend does not page/filter are searched / sorted / paged by `core/api/listing.ts`.
+- Identity with the real API: `core/auth/apiIdentity.ts` maps the token's `academy.*` / `training.*` / `identity.*` /
+  `organization.*` permissions to the app's permissions and derives the role (system-admin → SuperAdmin, managers →
+  DepartmentAdmin without a known department, else Employee). "View as" exists only with the simulated backend.
+- Not in the backend (2026-11-24): training start/end dates and trainer, renaming one file of a material ("not supported"),
+  per-department user/training counts, dashboard filters (hidden with the real API). Live: `/academy/trainings` answers
+  500 and `/academy/certificates` 403 (backend issues).
+
+## Simulated backend (mock)
 
 `core/api/mock/`: `mockRequest` (latency, injected failures `failNextRequest`, deep clone, abortable), `queryCollection`
 (search → filter → sort → 1-based pagination), `mockDatabase` (in-memory + `localStorage` key `datahub-trainee.mock-db`,
