@@ -1,7 +1,9 @@
 {
   "app": {
     "name": "داتا هب للتدريب",
-    "byline": "تطبيق المتدربين"
+    "byline": "تطبيق المتدربين",
+    "wordmarkLead": "داتا هب",
+    "wordmarkAccent": "للتدريب"
   },
   "languages": { "en": "English", "ar": "العربية" },
   "roles": {
@@ -70,6 +72,7 @@
     "department.duplicate": "يوجد قسم بهذا الاسم بالفعل.",
     "department.inUse": "ما زال هذا القسم يضم مستخدمين أو تدريبات. انقلها أو احذفها أولًا.",
     "department.notFound": "هذا القسم غير موجود.",
+    "department.outsideScope": "هذا القسم خارج نطاق صلاحياتك.",
     "user.notFound": "هذا المستخدم غير موجود.",
     "user.emailDuplicate": "يوجد مستخدم بهذا البريد الإلكتروني بالفعل.",
     "user.roleInvalid": "اختر دورًا صالحًا.",
@@ -216,6 +219,9 @@
     "subtitleManager": "نظرة سريعة على برنامجك التدريبي.",
     "subtitleDepartment": "برنامجك التدريبي في {department}.",
     "subtitleLearner": "تدريباتك وتقدمك وما يستحق قريبًا.",
+    "title": "لوحة التدريب",
+    "filters": { "department": "القسم", "allDepartments": "كل الأقسام", "period": "الفترة", "periods": { "30": "آخر 30 يومًا", "90": "آخر 90 يومًا", "365": "آخر 12 شهرًا", "all": "كل الأوقات" } },
+    "tabs": { "label": "أقسام لوحة التحكم", "overview": "نظرة عامة", "deadlines": "المواعيد النهائية القادمة", "activity": "النشاط الأخير" },
     "stats": {
       "totalTrainings": "التدريبات",
       "publishedTrainings": "المنشورة",
@@ -225,7 +231,8 @@
       "completionRate": "نسبة الإكمال",
       "myTrainings": "تدريباتي",
       "inProgress": "قيد التنفيذ",
-      "certificates": "الشهادات"
+      "certificates": "الشهادات",
+      "dueSoon": "مستحق قريبًا"
     },
     "enrollmentsByStatus": "التسجيلات حسب الحالة",
     "progressByTraining": "متوسط التقدم حسب التدريب",
@@ -242,7 +249,23 @@
     "allDone": "أنجزت كل شيء",
     "averageProgress": "متوسط التقدم في تدريباتك: {value}.",
     "viewCertificates": "عرض شهاداتي",
-    "noCertificatesYet": "أكمل تدريبًا لتحصل على شهادة"
+    "noCertificatesYet": "أكمل تدريبًا لتحصل على شهادة",
+    "hints": { "published": "{count} منشورة", "completedOf": "{completed} من {total} تسجيلات مكتملة", "dueSoon": "تكليفات وتدريبات تُغلق قريبًا", "enrollments": "عبر {count} تسجيلات", "averageProgress": "متوسط التقدم {value}" },
+    "donutCenter": "تسجيل",
+    "insight": { "label": "ملاحظة", "lowest": "«{title}» صاحب أدنى متوسط تقدم ({value}). يُستحسن متابعة متدربيه.", "onTrack": "جميع التدريبات المعروضة بمتوسط تقدم {value} أو أكثر. البرنامج يسير على المسار الصحيح." },
+    "table": {
+      "title": "التدريبات الأكثر تسجيلًا",
+      "training": "التدريب",
+      "status": "الحالة",
+      "learners": "المتعلمون",
+      "completion": "الإكمال",
+      "endDate": "تاريخ الانتهاء",
+      "action": "إجراء",
+      "view": "عرض",
+      "learnersValue": "{count} متعلم",
+      "completionValue": "{completed} من {total} مكتمل ({value})",
+      "noEndDate": "بلا تاريخ انتهاء"
+    }
   },
   "departments": {
     "title": "الأقسام",

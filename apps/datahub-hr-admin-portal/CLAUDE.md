@@ -214,11 +214,16 @@ preference, not part of the URL.
 - **Light only** (since the DataHub admin apps share one look; the light/dark switch was removed). MUI colour scheme as CSS
   variables (`<html data-color-scheme="light">`). The chart builders still accept a `mode`, but only `light` is used; `chartColors.dark`
   is dormant.
-- **Shared design language:** this portal is the REFERENCE for the Trainee App and Blogs Admin. `core/theme/tokens.ts` and
-  `theme.ts` are mirrored in `apps/datahub-trainee-app/src/core/theme/` and `apps/datahub-website/src/modules/admin/adminTokens.ts` +
-  `adminTheme.ts` (apps never import each other, so the files are copies). Change a token, radius or component default here
-  and mirror it there. The shell (sidebar with group headings and start-edge marker, top bar with breadcrumbs, avatar menu,
-  account block) is mirrored too.
+- **Shared design language (violet, 2026-11-24):** identical to the Trainee App's and Blogs Admin's. `core/theme/theme.ts` is a
+  verbatim copy of `apps/datahub-trainee-app/src/core/theme/theme.ts`; `tokens.ts` = the Trainee App's tokens + this portal's
+  `dark` palette and `chartColors` (`primary` = the violet accent for main series; `blue`, `green`, `amber`, `red`, `teal`,
+  `slate` are categorical). Blogs Admin's `adminTokens.ts` / `adminTheme.ts` are the same, in standalone form. Change a token
+  or component default in one app and mirror it in the other two. Coloured filled chips are tonal pills (theme rule).
+- **Shell** (`modules/layout`): a full-width top bar ABOVE the sidebar — breadcrumbs "DataHub HR Admin › group › page (› trail)",
+  DataHub Portals (outlined), the primary action "New employee" (`organization.employees.manage` → `/employees/new`), the demo
+  badge, language, avatar menu; a compact sticky sidebar (240px) with the "DataHub HR" wordmark, uppercase group labels and
+  text-only 14px items (icons only in the collapsed rail, "Soon" chips kept; no account block — the avatar menu has it).
+  KPI cards: label + info on top, a large number, the coloured trend line. The printed report keeps DataHub blue.
 
 ## Dashboard (`modules/dashboard`)
 

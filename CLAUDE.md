@@ -29,7 +29,7 @@ all inside its own folder. There is deliberately **no** shared runtime package.
   permissions (backend names, e.g. `hr.leave.approve.team`) from it, and follows the central session through the
   website's hidden `/workspace-session.html` (contracts: `WorkspaceHandoffPayload`, `WorkspaceSessionStatus` in
   shared-types). Every Sign out goes to `/workspace/logout/`. HR data is still simulated — see both apps' CLAUDE.md.
-- **One admin design language:** the HR Admin Portal is the reference; the Trainee App and Blogs Admin mirror its design tokens, theme and shell (light only). Apps never import each other, so these are intentional copies — when you change tokens or shell conventions in one, mirror the change in the other two (see each app's CLAUDE.md).
+- **One admin design language (violet, since 2026-11-24):** the HR Admin Portal, the Trainee App and Blogs Admin share the same tokens, theme and shell (light only): violet accent, full-width top bar above a compact sidebar (text wordmark, uppercase group labels, text-only items, 14px), flat cards, large-number KPI cards, tonal pill chips, uppercase table headers. The Trainee App's `core/theme` is the source the others were generated from. Apps never import each other, so these are intentional copies — when you change tokens, theme or shell conventions in one, mirror the change in the other two (see each app's CLAUDE.md).
 - **Stay in scope:** when working on one app, do not modify the other. A change to shared-types must keep both
   apps building: run `npm run typecheck` afterwards.
 

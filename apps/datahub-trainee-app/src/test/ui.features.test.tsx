@@ -9,14 +9,15 @@ import { renderApp } from './renderApp';
 describe('English / Arabic and RTL', () => {
   it('starts in English (LTR) by default', async () => {
     renderApp('/dashboard', { as: U.superAdmin });
-    expect(await screen.findByRole('heading', { level: 1, name: /Welcome back, Layla/ })).toBeTruthy();
+    expect(await screen.findByRole('heading', { level: 1, name: 'Training dashboard' })).toBeTruthy();
+    expect(screen.getByText(/Welcome back, Layla/)).toBeTruthy();
     expect(document.documentElement.lang).toBe('en');
     expect(document.documentElement.dir).toBe('ltr');
   });
 
   it('renders Arabic with RTL direction, translated navigation and Latin digits', async () => {
     renderApp('/dashboard', { as: U.superAdmin, locale: 'ar' });
-    expect(await screen.findByRole('heading', { level: 1, name: /مرحبًا بعودتك/ })).toBeTruthy();
+    expect(await screen.findByRole('heading', { level: 1, name: 'لوحة التدريب' })).toBeTruthy();
     expect(document.documentElement.lang).toBe('ar');
     expect(document.documentElement.dir).toBe('rtl');
     const nav = await screen.findByRole('navigation', { name: 'التنقل الرئيسي' });
@@ -31,7 +32,7 @@ describe('English / Arabic and RTL', () => {
     await user.click(await screen.findByRole('menuitem', { name: 'العربية' }));
     await waitFor(() => expect(document.documentElement.dir).toBe('rtl'));
     expect(localStorage.getItem(LOCALE_STORAGE_KEY)).toBe('ar');
-    expect(await screen.findByRole('heading', { level: 1, name: /مرحبًا بعودتك/ })).toBeTruthy();
+    expect(await screen.findByRole('heading', { level: 1, name: 'لوحة التدريب' })).toBeTruthy();
     await user.click(screen.getByRole('button', { name: 'تغيير اللغة' }));
     await user.click(await screen.findByRole('menuitem', { name: 'English' }));
     await waitFor(() => expect(document.documentElement.dir).toBe('ltr'));
@@ -162,11 +163,31 @@ describe('learner experience', () => {
   });
 
   it('admins see programme figures and the recent activity timeline', async () => {
+    const user = userEvent.setup();
     renderApp('/dashboard', { as: U.superAdmin });
     expect(await screen.findByText('Enrollments by status')).toBeTruthy();
-    expect(await screen.findByText('Recent activity')).toBeTruthy();
-    expect(await screen.findByText(/Noor Aldeen completed “SQL & Data Modeling Foundations”/)).toBeTruthy();
     expect(screen.getByText('Completion rate')).toBeTruthy();
+    await user.click(screen.getByRole('tab', { name: 'Recent activity' }));
+    expect(await screen.findByText(/Noor Aldeen completed “SQL & Data Modeling Foundations”/)).toBeTruthy();
+  });
+
+  it('filters the admin dashboard by department and period (in the URL)', async () => {
+    const user = userEvent.setup();
+    const { router } = renderApp('/dashboard', { as: U.superAdmin });
+    await screen.findByText('Enrollments by status');
+    await user.click(screen.getByRole('combobox', { name: 'Period' }));
+    await user.click(await screen.findByRole('option', { name: 'Last 30 days' }));
+    await waitFor(() => expect(router.state.location.search).toContain('period=30'));
+    await user.click(screen.getByRole('combobox', { name: 'Department' }));
+    await user.click(await screen.findByRole('option', { name: 'Data Engineering' }));
+    await waitFor(() => expect(router.state.location.search).toMatch(/department=/));
+  });
+
+  it('opens the assign dialog from the top bar primary action', async () => {
+    const user = userEvent.setup();
+    renderApp('/dashboard', { as: U.superAdmin });
+    await user.click(await screen.findByRole('link', { name: 'Assign training' }));
+    expect(await screen.findByRole('dialog', { name: 'Assign training' })).toBeTruthy();
   });
 
   it('a learner reads content, then submits an assignment while it is open', async () => {

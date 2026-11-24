@@ -27,7 +27,7 @@ function AdminTheme({ children }: { children: ReactNode }) {
   return <ThemeProvider theme={adminTheme}>{children}</ThemeProvider>;
 }
 
-/** The signed-in shell (same structure as the HR Admin Portal): sidebar (a drawer on phones), top bar and the page. */
+/** The signed-in shell (DataHub admin design): a full-width top bar above a light sidebar (a drawer on phones) and the page. */
 function AdminShell({ session }: { session: WorkspaceSession }) {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'), { noSsr: true });
@@ -36,17 +36,19 @@ function AdminShell({ session }: { session: WorkspaceSession }) {
   const [openedOn, setOpenedOn] = useState<string | null>(null);
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
-      <AdminSidebar session={session} permanent={isDesktop} open={openedOn === pathname} onClose={() => setOpenedOn(null)} />
-      <Box sx={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
-        <AdminTopBar session={session} onOpenNavigation={isDesktop ? undefined : () => setOpenedOn(pathname)} />
-        <Box component="main" sx={{ flex: 1, width: '100%', maxWidth: layout.contentMax, mx: 'auto', px: { xs: 2, sm: 2.5, lg: 3.5 }, py: { xs: 2, md: 3 } }}>
-          <Alert severity="info" variant="outlined" sx={{ mb: 2.5, bgcolor: 'background.paper' }}>
-            {T.prototypeNotice} {T.sessionNotice(formatLocalTime(session.expiresAt))}
-          </Alert>
-          <Suspense fallback={<PageLoading />}>
-            <Outlet />
-          </Suspense>
+    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', bgcolor: 'background.default' }}>
+      <AdminTopBar session={session} onOpenNavigation={isDesktop ? undefined : () => setOpenedOn(pathname)} />
+      <Box sx={{ flex: 1, display: 'flex', minHeight: 0 }}>
+        <AdminSidebar permanent={isDesktop} open={openedOn === pathname} onClose={() => setOpenedOn(null)} />
+        <Box component="main" sx={{ flex: 1, minWidth: 0, px: { xs: 2, sm: 3, lg: 5 }, py: { xs: 2.5, md: 4 } }}>
+          <Box sx={{ width: '100%', maxWidth: layout.contentMax, mx: 'auto' }}>
+            <Alert severity="info" variant="outlined" sx={{ mb: 3, bgcolor: 'background.paper' }}>
+              {T.prototypeNotice} {T.sessionNotice(formatLocalTime(session.expiresAt))}
+            </Alert>
+            <Suspense fallback={<PageLoading />}>
+              <Outlet />
+            </Suspense>
+          </Box>
         </Box>
       </Box>
     </Box>
@@ -54,7 +56,7 @@ function AdminShell({ session }: { session: WorkspaceSession }) {
 }
 
 /**
- * Root of Blogs Admin (`/admin/…`): the DataHub admin look (same tokens and shell as the HR Admin Portal) in English,
+ * Root of Blogs Admin (`/admin/…`): the DataHub admin look (same tokens and shell as the HR Admin Portal and Trainee App) in English,
  * and the route guard. There is no separate admin sign-in: the guard uses the central Workspace session, which must be a
  * backend session whose applications include Blogs Admin (its access token authorises the admin API). Signed-out users —
  * also when the token expires or is refused — go to the Workspace sign-in (then back to the requested page); others go

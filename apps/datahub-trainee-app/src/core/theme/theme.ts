@@ -6,7 +6,7 @@ import { brand, breakpoints, control, fontFamily, fontSize, neutral, radius, sha
 export const COLOR_SCHEME_ATTRIBUTE = 'data-color-scheme';
 
 /**
- * MUI theme for one text direction (light only), served as CSS variables.
+ * MUI theme for one text direction (light only), served as CSS variables. Violet design language (see tokens.ts).
  *
  * Component defaults here are the portal-wide design system. Screens should not restyle MUI
  * primitives with one-off colours; they compose these defaults.
@@ -18,7 +18,7 @@ export function createAppTheme(direction: Direction): Theme {
     colorSchemes: {
       light: {
         palette: {
-          primary: { main: brand.blue, dark: brand.blueDark, light: brand.blueLight, contrastText: neutral[0] },
+          primary: { main: brand.violet, dark: brand.violetDark, light: brand.violetLight, contrastText: neutral[0] },
           secondary: { main: brand.greenDark, light: brand.greenLight, contrastText: neutral[0] },
           success: { main: status.success, light: tint.success },
           warning: { main: status.warning, light: tint.warning },
@@ -28,7 +28,7 @@ export function createAppTheme(direction: Direction): Theme {
           divider: neutral[200],
           background: { default: neutral[50], paper: neutral[0] },
           grey: neutral,
-          action: { hover: 'rgba(20, 27, 38, 0.04)', selected: 'rgba(20, 86, 200, 0.08)' },
+          action: { hover: 'rgba(30, 20, 60, 0.04)', selected: 'rgba(124, 58, 237, 0.08)' },
         },
       },
     },
@@ -38,9 +38,9 @@ export function createAppTheme(direction: Direction): Theme {
     typography: {
       fontFamily: direction === 'rtl' ? fontFamily.arabic : fontFamily.latin,
       fontSize: fontSize.body1,
-      h1: { fontSize: fontSize.h1, fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.02em' },
+      h1: { fontSize: fontSize.h1, fontWeight: 800, lineHeight: 1.2, letterSpacing: '-0.025em' },
       h2: { fontSize: fontSize.h2, fontWeight: 700, lineHeight: 1.25, letterSpacing: '-0.02em' },
-      h3: { fontSize: fontSize.h3, fontWeight: 700, lineHeight: 1.3, letterSpacing: '-0.015em' },
+      h3: { fontSize: 26, fontWeight: 800, lineHeight: 1.3, letterSpacing: '-0.02em' },
       h4: { fontSize: fontSize.h4, fontWeight: 700, lineHeight: 1.35 },
       h5: { fontSize: fontSize.h5, fontWeight: 700, lineHeight: 1.4 },
       h6: { fontSize: fontSize.h6, fontWeight: 600, lineHeight: 1.45 },
@@ -74,13 +74,22 @@ export function createAppTheme(direction: Direction): Theme {
           root: {
             borderRadius: radius.md,
             minHeight: control.md,
-            padding: '6px 14px',
+            padding: '6px 16px',
           },
+          // Primary actions get a soft violet glow.
+          contained: ({ theme, ownerState }) =>
+            ownerState.color === 'primary' || ownerState.color === undefined
+              ? {
+                  boxShadow: `0 4px 12px ${theme.alpha((theme.vars ?? theme).palette.primary.main, 0.25)}`,
+                  '&:hover': { boxShadow: `0 6px 16px ${theme.alpha((theme.vars ?? theme).palette.primary.main, 0.3)}` },
+                }
+              : {},
           sizeSmall: { minHeight: control.sm, padding: '4px 10px', fontSize: fontSize.body2 },
           sizeLarge: { minHeight: control.lg, padding: '8px 18px', fontSize: fontSize.subtitle },
           outlined: ({ theme }) => ({
             borderColor: (theme.vars ?? theme).palette.divider,
-            '&:hover': { borderColor: (theme.vars ?? theme).palette.text.secondary },
+            backgroundColor: (theme.vars ?? theme).palette.background.paper,
+            '&:hover': { borderColor: (theme.vars ?? theme).palette.primary.main },
           }),
         },
       },
@@ -96,6 +105,7 @@ export function createAppTheme(direction: Direction): Theme {
           root: { backgroundImage: 'none' },
           outlined: ({ theme }) => ({
             borderColor: (theme.vars ?? theme).palette.divider,
+            borderRadius: radius.card,
             boxShadow: shadows.sm,
           }),
         },
@@ -103,10 +113,11 @@ export function createAppTheme(direction: Direction): Theme {
       MuiCard: {
         styleOverrides: {
           root: ({ theme }) => ({
-            borderRadius: radius.md,
+            borderRadius: radius.card,
             border: '1px solid',
             borderColor: (theme.vars ?? theme).palette.divider,
-            boxShadow: shadows.sm,
+            // Flat cards: the hairline border separates them from the canvas.
+            boxShadow: 'none',
             backgroundImage: 'none',
           }),
         },
@@ -186,14 +197,14 @@ export function createAppTheme(direction: Direction): Theme {
       MuiTabs: {
         styleOverrides: {
           root: { minHeight: 42 },
-          indicator: { height: 2, borderRadius: 2 },
+          indicator: { height: 3, borderRadius: '3px 3px 0 0' },
         },
       },
       MuiTab: {
         styleOverrides: {
           root: ({ theme }) => ({
-            minHeight: 42,
-            padding: '8px 14px',
+            minHeight: 46,
+            padding: '10px 18px',
             textTransform: 'none',
             fontWeight: 600,
             fontSize: fontSize.body1,
@@ -204,7 +215,20 @@ export function createAppTheme(direction: Direction): Theme {
       },
       MuiChip: {
         styleOverrides: {
-          root: { borderRadius: radius.sm, fontWeight: 600 },
+          // Pills. Coloured filled chips are TONAL: the colour's light tint with its dark text (AA contrast).
+          root: ({ theme, ownerState }) => {
+            const color = ownerState.color;
+            if (ownerState.variant === 'outlined' || !color || color === 'default') return { borderRadius: 999, fontWeight: 600 };
+            const palette = (theme.vars ?? theme).palette[color];
+            return {
+              borderRadius: 999,
+              fontWeight: 600,
+              backgroundColor: palette.light,
+              color: color === 'primary' ? palette.dark : palette.main,
+              '&.MuiChip-clickable:hover': { backgroundColor: theme.alpha((theme.vars ?? theme).palette[color].main, 0.18) },
+              '& .MuiChip-icon, & .MuiChip-deleteIcon': { color: 'inherit' },
+            };
+          },
           sizeSmall: { height: 24, fontSize: fontSize.caption },
         },
       },
@@ -226,14 +250,16 @@ export function createAppTheme(direction: Direction): Theme {
         styleOverrides: {
           root: ({ theme }) => ({
             borderColor: (theme.vars ?? theme).palette.divider,
-            padding: '12px 16px',
-            fontSize: fontSize.body2,
+            padding: '14px 16px',
+            fontSize: fontSize.body1,
           }),
           head: ({ theme }) => ({
-            fontWeight: 600,
-            fontSize: fontSize.caption,
-            color: (theme.vars ?? theme).palette.text.secondary,
-            backgroundColor: (theme.vars ?? theme).palette.background.default,
+            fontWeight: 700,
+            fontSize: 11.5,
+            letterSpacing: '0.07em',
+            textTransform: 'uppercase',
+            color: (theme.vars ?? theme).palette.grey[500],
+            backgroundColor: 'transparent',
           }),
           sizeSmall: { padding: '8px 12px' },
         },
@@ -260,7 +286,10 @@ export function createAppTheme(direction: Direction): Theme {
         },
       },
       MuiLinearProgress: {
-        styleOverrides: { root: { borderRadius: 0 } },
+        styleOverrides: {
+          root: ({ theme }) => ({ borderRadius: 999, backgroundColor: (theme.vars ?? theme).palette.grey[100] }),
+          bar: { borderRadius: 999 },
+        },
       },
       MuiToggleButton: {
         styleOverrides: {

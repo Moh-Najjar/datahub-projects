@@ -19,7 +19,7 @@ export function statusColor(ctx: ChartContext, status: DecidedStatus): string {
 
 const categoryColors = (ctx: ChartContext) => {
   const c = palette(ctx);
-  return [c.blue, c.teal, c.purple, c.green, c.amber, c.red, c.slate, c.reference];
+  return [c.primary, c.teal, c.blue, c.green, c.amber, c.red, c.slate, c.reference];
 };
 
 function doughnut(ctx: ChartContext, data: Array<{ name: string; value: number; itemStyle?: { color: string } }>, unit: (v: number) => string): EChartsOption {
@@ -88,7 +88,7 @@ export function departmentOption(byDepartment: LeaveSummary['byDepartment'], ctx
   };
   return {
     ...base(ctx),
-    color: [c.blue],
+    color: [c.primary],
     grid: { ...grid, top: 16 },
     tooltip: tooltip(ctx, {
       trigger: 'axis',

@@ -1,7 +1,9 @@
 {
   "app": {
     "name": "DataHub Training",
-    "byline": "Trainee App"
+    "byline": "Trainee App",
+    "wordmarkLead": "DataHub",
+    "wordmarkAccent": "Training"
   },
   "languages": { "en": "English", "ar": "العربية" },
   "roles": {
@@ -70,6 +72,7 @@
     "department.duplicate": "A department with this name already exists.",
     "department.inUse": "This department still has users or trainings. Move or remove them first.",
     "department.notFound": "That department doesn't exist.",
+    "department.outsideScope": "That department is outside your scope.",
     "user.notFound": "That user doesn't exist.",
     "user.emailDuplicate": "A user with this e-mail already exists.",
     "user.roleInvalid": "Choose a valid role.",
@@ -216,6 +219,9 @@
     "subtitleManager": "Your training programme at a glance.",
     "subtitleDepartment": "Your training programme in {department}.",
     "subtitleLearner": "Your trainings, progress and what's due next.",
+    "title": "Training dashboard",
+    "filters": { "department": "Department", "allDepartments": "All departments", "period": "Period", "periods": { "30": "Last 30 days", "90": "Last 90 days", "365": "Last 12 months", "all": "All time" } },
+    "tabs": { "label": "Dashboard sections", "overview": "Overview", "deadlines": "Upcoming deadlines", "activity": "Recent activity" },
     "stats": {
       "totalTrainings": "Trainings",
       "publishedTrainings": "Published",
@@ -225,7 +231,8 @@
       "completionRate": "Completion rate",
       "myTrainings": "My trainings",
       "inProgress": "In progress",
-      "certificates": "Certificates"
+      "certificates": "Certificates",
+      "dueSoon": "Due soon"
     },
     "enrollmentsByStatus": "Enrollments by status",
     "progressByTraining": "Average progress by training",
@@ -242,7 +249,23 @@
     "allDone": "You're all caught up",
     "averageProgress": "Average progress across your trainings: {value}.",
     "viewCertificates": "View my certificates",
-    "noCertificatesYet": "Complete a training to earn one"
+    "noCertificatesYet": "Complete a training to earn one",
+    "hints": { "published": "{count} published", "completedOf": "{completed} of {total} enrollments completed", "dueSoon": "Assignments and trainings closing soon", "enrollments": "Across {count} enrollments", "averageProgress": "Average progress {value}" },
+    "donutCenter": "enrollments",
+    "insight": { "label": "Insight", "lowest": "“{title}” has the lowest average progress ({value}). Consider following up with its trainees.", "onTrack": "Every listed training is at {value} average progress or more. The programme is on track." },
+    "table": {
+      "title": "Most-enrolled trainings",
+      "training": "Training",
+      "status": "Status",
+      "learners": "Learners",
+      "completion": "Completion",
+      "endDate": "End date",
+      "action": "Action",
+      "view": "View",
+      "learnersValue": "{count} learners",
+      "completionValue": "{completed} of {total} complete ({value})",
+      "noEndDate": "No end date"
+    }
   },
   "departments": {
     "title": "Departments",

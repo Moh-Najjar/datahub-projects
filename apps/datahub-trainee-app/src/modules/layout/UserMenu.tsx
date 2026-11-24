@@ -35,7 +35,7 @@ export function UserMenu() {
   return (
     <>
       <IconButton onClick={(e) => setAnchor(e.currentTarget)} aria-label={t.shell.userMenu} aria-haspopup="menu" aria-expanded={!!anchor} sx={{ p: 0.5 }}>
-        <UserAvatar name={actor.fullName} size={34} />
+        <UserAvatar name={actor.fullName} size={36} />
       </IconButton>
       <Menu anchorEl={anchor} open={anchor !== null} onClose={() => setAnchor(null)} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} transformOrigin={{ vertical: 'top', horizontal: 'right' }}>
         <Box sx={{ px: 1.5, py: 1, minWidth: 240 }}>

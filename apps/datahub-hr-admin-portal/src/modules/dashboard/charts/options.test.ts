@@ -48,8 +48,8 @@ describe('employee growth (line)', () => {
   });
 
   it('uses the theme tokens for the active colour scheme', () => {
-    expect(employeeGrowthOption(growth, EN_LTR, growthLabels).color).toEqual([chartColors.light.blue, chartColors.light.reference]);
-    expect(employeeGrowthOption(growth, AR_DARK, growthLabels).color).toEqual([chartColors.dark.blue, chartColors.dark.reference]);
+    expect(employeeGrowthOption(growth, EN_LTR, growthLabels).color).toEqual([chartColors.light.primary, chartColors.light.reference]);
+    expect(employeeGrowthOption(growth, AR_DARK, growthLabels).color).toEqual([chartColors.dark.primary, chartColors.dark.reference]);
   });
 
   it('renders with ECharts, with Arabic month labels and Latin digits', () => {

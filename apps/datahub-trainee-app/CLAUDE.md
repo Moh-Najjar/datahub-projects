@@ -88,7 +88,18 @@ Files are simulated (name/type/size validated: ≤ 100 MB, original extension li
 
 ## UI conventions
 
-**Same design language as the HR Admin Portal (the reference)**: `core/theme/tokens.ts` + `theme.ts` mirror its tokens, radii, shadows and component defaults, and the shell (`modules/layout`) mirrors its sidebar, top bar and account menu. Light only. Keep them in step with `apps/datahub-hr-admin-portal/src/core/theme`. MUI v9: **`Stack`/`Grid`
+**DataHub admin design language (violet, 2026-11-24) — this app is its SOURCE.** The HR Admin Portal's `core/theme/theme.ts` is a
+verbatim copy of this one and Blogs Admin's `adminTheme.ts` a standalone conversion; mirror every token / theme / shell change in both. `core/theme/tokens.ts`
+(violet primary `#7c3aed`, soft canvas, card radius 14, categorical `chart` colours) + `theme.ts` (pill chips, uppercase table
+headers, 3px tab indicator, rounded progress bars, flat cards). Shell (`modules/layout`): a FULL-WIDTH top bar above the
+sidebar — breadcrumbs "app name › sidebar group › page", Workspace (outlined), the managers' primary action "Assign training"
+(`/enrollments?assign=1` opens the dialog), notifications, language, avatar; a compact light sticky sidebar (240px) with a text wordmark,
+uppercase group labels and text-only 14px items (icons only in the collapsed rail; no account block). Dashboard: big title,
+filters on the right (Department — SuperAdmin; Period — enrollments assigned in the last 30/90/365 days; both in the URL and
+applied by the mock), tabs Overview / Upcoming deadlines / Recent activity (`?tab=`); the overview's table sits on the canvas. KPI cards (`shared/StatCard`): label, large
+number, coloured supporting line (`tone`, `emphasis` for figures needing action). Status chips are tonal pills. Inspired by
+general learning-dashboard UX patterns only — never copy a vendor's branding, names or exact screens. Light only. The printed certificate keeps the DataHub
+brand blue on purpose. MUI v9: **`Stack`/`Grid`
 no longer accept system props** (`alignItems`, `justifyContent`, `flexWrap` → `sx`). RTL via `stylis-plugin-rtl`: write
 physical `left/right`; icons that point must flip with `theme.direction`. Every string is in `i18n/locales/{en,ar}.json`
 (`tsc` fails if keys differ; a test checks identical keys and placeholders). Dates/numbers via `i18n/format.ts` (Latin digits).

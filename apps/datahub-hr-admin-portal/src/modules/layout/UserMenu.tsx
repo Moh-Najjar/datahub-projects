@@ -34,7 +34,7 @@ export function UserMenu() {
   return (
     <>
       <IconButton onClick={(e) => setAnchor(e.currentTarget)} aria-label={t('shell.userMenu', { name })} aria-haspopup="menu" aria-expanded={!!anchor} sx={{ p: 0.5 }}>
-        <Avatar sx={{ width: 34, height: 34, fontSize: 13, fontWeight: 700, bgcolor: 'primary.main', color: 'primary.contrastText' }}>{accountInitials(name)}</Avatar>
+        <Avatar sx={{ width: 36, height: 36, fontSize: 13, fontWeight: 700, bgcolor: 'primary.main', color: 'primary.contrastText' }}>{accountInitials(name)}</Avatar>
       </IconButton>
       <Menu
         anchorEl={anchor}

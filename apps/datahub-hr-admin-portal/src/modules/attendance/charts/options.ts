@@ -15,7 +15,7 @@ export type StatusLabels = Record<AttendanceStatus, string>;
 /** Chart colour of each status (the same hue family as the status chips). */
 export function statusColor(ctx: ChartContext, status: AttendanceStatus): string {
   const c = palette(ctx);
-  return { present: c.green, late: c.amber, absent: c.red, 'on-leave': c.blue, 'half-day': c.purple, incomplete: c.slate, scheduled: c.reference }[status];
+  return { present: c.green, late: c.amber, absent: c.red, 'on-leave': c.primary, 'half-day': c.blue, incomplete: c.slate, scheduled: c.reference }[status];
 }
 
 /** Statuses drawn in the trend and distribution charts, in legend order. */
@@ -112,7 +112,7 @@ export function departmentOption(rowsData: AttendanceSummary['byDepartment'], ct
     { name: labels.onTime, color: c.green, data: sorted.map((d) => d.present - d.late) },
     { name: labels.late, color: c.amber, data: sorted.map((d) => d.late) },
     { name: labels.absent, color: c.red, data: sorted.map((d) => d.absent) },
-    { name: labels.onLeave, color: c.blue, data: sorted.map((d) => d.onLeave) },
+    { name: labels.onLeave, color: c.primary, data: sorted.map((d) => d.onLeave) },
   ];
   const legendNames = series.map((s) => s.name);
   const xAxis: XAXisComponentOption = { type: 'value', inverse: isRtl(ctx), ...valueAxisStyle(ctx) };
@@ -159,7 +159,7 @@ export function monthlyOption(monthly: AttendanceSummary['monthly'], ctx: ChartC
   const rtl = isRtl(ctx);
   return {
     ...base(ctx),
-    color: [c.blue, c.teal],
+    color: [c.primary, c.teal],
     legend: { ...legend(ctx, 'top'), data: rtl ? [...legendNames].reverse() : legendNames },
     grid: { ...grid, top: 44 },
     tooltip: tooltip(ctx, {

@@ -34,7 +34,7 @@ const swatch = (color: string) => `<span style="display:inline-block;width:8px;h
 
 export function reportChartOption(spec: ChartSpec, ctx: ChartContext, labels: ChartLabels): EChartsOption {
   const c = palette(ctx);
-  const colors = [c.blue, c.teal, c.amber, c.purple, c.green, c.red, c.slate];
+  const colors = [c.primary, c.teal, c.amber, c.blue, c.green, c.red, c.slate];
   const names = spec.series.map((s) => labels.series(s.key));
   const exact = spec.series.map((s) => s.values);
   const rows = (index: number, params: Array<{ seriesIndex: number; color: string }>) =>

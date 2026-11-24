@@ -13,6 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import AddIcon from '@mui/icons-material/Add';
 import AppsOutlinedIcon from '@mui/icons-material/AppsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
@@ -22,25 +23,26 @@ import { ADMIN_ROUTES, WORKSPACE_ROUTES } from '@/core/routes/paths';
 import { UI } from '@/i18n';
 import { layout } from '@/modules/admin/adminTokens';
 import { ADMIN_TEXT } from '@/modules/admin/data/adminText';
+import { useBlogPermissions } from '@/modules/admin/hooks/useBlogPermissions';
 import { accountInitials } from '@/modules/admin/utils/accountInitials';
 import { roleLabel, type WorkspaceSession } from '@/modules/portals';
 
 const T = ADMIN_TEXT.shell;
 
-/** Home › Blog posts › New post / Edit post — derived from the URL (the admin has three pages). */
+/** App name › Blog posts › New post / Edit post — derived from the URL (the admin has three pages). */
 function Crumbs() {
   const { pathname } = useLocation();
   const onList = pathname === ADMIN_ROUTES.blogs || pathname === ADMIN_ROUTES.blogs.replace(/\/$/, '');
   const tail = pathname.startsWith(ADMIN_ROUTES.newBlog) ? T.newPost : pathname.endsWith('/edit/') || pathname.endsWith('/edit') ? T.editPost : null;
   const current = (label: string) => (
-    <Typography color="text.primary" aria-current="page" noWrap sx={{ fontSize: 'inherit', fontWeight: 600 }}>
+    <Typography color="text.primary" aria-current="page" noWrap sx={{ fontSize: 'inherit', fontWeight: 700 }}>
       {label}
     </Typography>
   );
   return (
-    <Breadcrumbs aria-label={T.breadcrumb} separator={<NavigateNextIcon fontSize="small" />} sx={{ minWidth: 0, fontSize: 14 }}>
+    <Breadcrumbs aria-label={T.breadcrumb} separator={<NavigateNextIcon sx={{ fontSize: 16, color: 'grey.400' }} />} sx={{ minWidth: 0, fontSize: 14 }}>
       <Link component={RouterLink} to={WORKSPACE_ROUTES.root} underline="hover" color="text.secondary">
-        {T.home}
+        {T.appName}
       </Link>
       {onList ? (
         current(ADMIN_TEXT.nav.blogs)
@@ -61,7 +63,7 @@ function AccountMenu({ session }: { session: WorkspaceSession }) {
   return (
     <>
       <IconButton onClick={(e) => setAnchor(e.currentTarget)} aria-label={T.userMenu} aria-haspopup="menu" aria-expanded={!!anchor} sx={{ p: 0.5 }}>
-        <Avatar sx={{ width: 34, height: 34, fontSize: 13, fontWeight: 700, bgcolor: 'primary.main', color: 'primary.contrastText' }}>{accountInitials(name)}</Avatar>
+        <Avatar sx={{ width: 36, height: 36, fontSize: 13, fontWeight: 700, bgcolor: 'primary.main', color: 'primary.contrastText' }}>{accountInitials(name)}</Avatar>
       </IconButton>
       <Menu anchorEl={anchor} open={!!anchor} onClose={() => setAnchor(null)} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} transformOrigin={{ vertical: 'top', horizontal: 'right' }}>
         <Box sx={{ px: 1.5, py: 1, minWidth: 240 }}>
@@ -90,11 +92,15 @@ function AccountMenu({ session }: { session: WorkspaceSession }) {
   );
 }
 
-/** App bar: breadcrumbs, Portals (the Workspace) and the account menu — as in the HR Admin Portal. */
+/**
+ * Full-width app bar above the sidebar (DataHub admin design): breadcrumbs; Portals (secondary), "New post" (primary, for
+ * users who may create posts) and the account menu.
+ */
 export function AdminTopBar({ session, onOpenNavigation }: { session: WorkspaceSession; onOpenNavigation?: () => void }) {
+  const can = useBlogPermissions();
   return (
     <AppBar position="sticky" color="inherit" elevation={0} sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: 'background.paper' }}>
-      <Toolbar sx={{ gap: 0.5, minHeight: layout.header, px: { xs: 1.5, sm: 2.5 } }}>
+      <Toolbar sx={{ gap: 1, minHeight: { xs: 60, md: layout.header }, px: { xs: 1.5, sm: 3, md: 4 } }}>
         {onOpenNavigation && (
           <IconButton edge="start" color="inherit" aria-label={T.openMenu} onClick={onOpenNavigation}>
             <MenuOutlinedIcon />
@@ -104,7 +110,7 @@ export function AdminTopBar({ session, onOpenNavigation }: { session: WorkspaceS
           <Crumbs />
         </Box>
         <Box sx={{ flex: { xs: 1, sm: 0 } }} />
-        <Button component={RouterLink} to={WORKSPACE_ROUTES.root} color="inherit" size="small" startIcon={<AppsOutlinedIcon />} sx={{ display: { xs: 'none', md: 'inline-flex' }, color: 'text.secondary' }}>
+        <Button component={RouterLink} to={WORKSPACE_ROUTES.root} variant="outlined" startIcon={<AppsOutlinedIcon />} sx={{ display: { xs: 'none', md: 'inline-flex' }, color: 'primary.main', minHeight: 38, px: 1.75, borderRadius: 1.25, whiteSpace: 'nowrap' }}>
           {ADMIN_TEXT.nav.workspace}
         </Button>
         <Tooltip title={ADMIN_TEXT.nav.workspace}>
@@ -112,6 +118,18 @@ export function AdminTopBar({ session, onOpenNavigation }: { session: WorkspaceS
             <AppsOutlinedIcon />
           </IconButton>
         </Tooltip>
+        {can.create && (
+          <>
+            <Button component={RouterLink} to={ADMIN_ROUTES.newBlog} variant="contained" startIcon={<AddIcon />} sx={{ display: { xs: 'none', md: 'inline-flex' }, minHeight: 38, px: 2, borderRadius: 1.25, whiteSpace: 'nowrap' }}>
+              {T.newPost}
+            </Button>
+            <Tooltip title={T.newPost}>
+              <IconButton component={RouterLink} to={ADMIN_ROUTES.newBlog} aria-label={T.newPost} sx={{ display: { xs: 'inline-flex', md: 'none' }, color: 'primary.main' }}>
+                <AddIcon />
+              </IconButton>
+            </Tooltip>
+          </>
+        )}
         <AccountMenu session={session} />
       </Toolbar>
     </AppBar>

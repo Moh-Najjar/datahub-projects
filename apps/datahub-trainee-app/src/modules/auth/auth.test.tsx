@@ -40,7 +40,7 @@ describe('single sign-in from the DataHub Workspace (/sso)', () => {
     expect(document.querySelector('input[type=password]')).toBeNull();
     expect(storedSession()?.user.email).toBe('omar.nasser@example.test');
     // The Workspace e-mail matched a directory user, so the training identity is that DepartmentAdmin.
-    expect(await screen.findByRole('button', { name: 'Account menu' })).toBeTruthy();
+    await userEvent.setup().click(await screen.findByRole('button', { name: 'Account menu' }));
     expect((await screen.findAllByText('Department Admin')).length).toBeGreaterThan(0);
   });
 

@@ -1,6 +1,18 @@
-import type { ActivityType, EnrollmentStatus } from '@/core/domain/training';
+import type { ActivityType, EnrollmentStatus, TrainingStatus } from '@/core/domain/training';
 
 export type { ActivityType };
+
+/** Enrollments assigned within the last N days, or all. */
+export type DashboardPeriod = 'all' | '30' | '90' | '365';
+export const DASHBOARD_PERIODS: readonly DashboardPeriod[] = ['all', '30', '90', '365'];
+
+/** Managers' dashboard filters. Department: SuperAdmin only (a DepartmentAdmin always sees their own department). */
+export interface DashboardFilters {
+  departmentId: string | null;
+  period: DashboardPeriod;
+}
+
+export const NO_DASHBOARD_FILTERS: DashboardFilters = { departmentId: null, period: 'all' };
 
 export interface DeadlineDto {
   id: string;
@@ -34,6 +46,9 @@ export interface StatusBreakdown {
 export interface TrainingProgressEntry {
   trainingId: string;
   title: string;
+  status: TrainingStatus;
+  /** ISO date (`yyyy-MM-dd`), if the training has one. */
+  endDate: string | null;
   enrollments: number;
   completed: number;
   /** 0–100 average of the enrollments' progress. */
@@ -54,6 +69,8 @@ export interface ManagerDashboard {
     completedEnrollments: number;
     /** Completed ÷ total enrollments, 0–100. */
     completionRate: number;
+    /** All upcoming deadlines (open assignments closing within 14 days, published trainings ending within 30). */
+    dueSoon: number;
   };
   statusBreakdown: StatusBreakdown;
   trainingProgress: TrainingProgressEntry[];

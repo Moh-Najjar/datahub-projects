@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
@@ -20,13 +18,10 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/core/context/authContext';
 import { visibleNavGroups, type NavItem } from '@/core/routes/navigation';
 import { layout } from '@/core/theme/tokens';
-import { useLanguage } from '@/i18n/useLanguage';
-import { accountInitials } from '@/modules/shared/accountInitials';
-import { BrandMark } from '@/modules/shared/BrandMark';
-
-export const SIDEBAR_WIDTH = layout.sidebar;
 
 const SIDEBAR_KEY = 'datahub-hr-admin.sidebar';
+/** Sidebar surface: a touch lighter than the page canvas, separated by a hairline. */
+const SIDEBAR_BG = '#fbfbfd';
 
 function readCollapsed(): boolean {
   try {
@@ -44,60 +39,54 @@ function storeCollapsed(collapsed: boolean): void {
   }
 }
 
-function NavEntry({ item, selected, collapsed }: { item: NavItem; selected: boolean; collapsed: boolean }) {
+/** Typographic wordmark "DataHub HR" (a brand name: not translated). Collapsed: "HR" only. */
+function Wordmark({ compact }: { compact: boolean }) {
+  const { t } = useTranslation();
+  return (
+    <Typography component="span" aria-label={t('appName')} dir="ltr" sx={{ fontSize: compact ? 16 : 17, fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.2, color: 'text.primary' }} noWrap>
+      {!compact && 'DataHub '}
+      <Box component="span" sx={{ color: 'primary.main' }}>
+        HR
+      </Box>
+    </Typography>
+  );
+}
+
+function NavEntry({ item, selected, collapsed, onNavigate }: { item: NavItem; selected: boolean; collapsed: boolean; onNavigate?: () => void }) {
   const { t } = useTranslation();
   const theme = useTheme();
   const Icon = item.icon;
   const label = t(`nav.items.${item.key}`);
   const tooltipPlacement = theme.direction === 'rtl' ? 'left' : 'right';
+  const current = item.available && selected;
 
   const button = (
     <ListItemButton
-      {...(item.available ? { component: Link, to: item.path } : { disabled: true, 'aria-disabled': true as const, title: t('shell.comingSoonHint') })}
-      selected={item.available && selected}
-      aria-current={item.available && selected ? 'page' : undefined}
+      {...(item.available ? { component: Link, to: item.path, onClick: onNavigate } : { disabled: true, 'aria-disabled': true as const, title: t('shell.comingSoonHint') })}
+      selected={current}
+      aria-current={current ? 'page' : undefined}
       aria-label={label}
+      // Text-only items; the current page is a soft violet pill. Icons appear only in the collapsed rail.
       sx={(muiTheme) => ({
-        position: 'relative',
-        borderRadius: 1,
-        mx: collapsed ? 1 : 1.25,
+        borderRadius: 1.25,
+        mx: collapsed ? 1 : 1.5,
         mb: 0.25,
         minHeight: 40,
-        px: collapsed ? 1 : 1.25,
+        px: collapsed ? 1 : 1.5,
         justifyContent: collapsed ? 'center' : 'flex-start',
-        color: selected && item.available ? 'primary.main' : 'text.primary',
-        bgcolor: selected && item.available ? muiTheme.alpha((muiTheme.vars ?? muiTheme).palette.primary.main, 0.1) : 'transparent',
-        '&:hover': {
-          bgcolor: muiTheme.alpha((muiTheme.vars ?? muiTheme).palette.primary.main, selected ? 0.16 : 0.06),
-        },
-        '&.Mui-selected': {
-          bgcolor: muiTheme.alpha((muiTheme.vars ?? muiTheme).palette.primary.main, 0.1),
-        },
-        '&.Mui-selected:hover': {
-          bgcolor: muiTheme.alpha((muiTheme.vars ?? muiTheme).palette.primary.main, 0.16),
-        },
-        // Start-edge marker. `left` is mirrored in RTL by the Emotion cache.
-        ...(selected && item.available
-          ? {
-              '&::before': {
-                content: '""',
-                position: 'absolute',
-                left: 0,
-                top: 8,
-                bottom: 8,
-                width: 3,
-                borderRadius: 2,
-                bgcolor: 'primary.main',
-              },
-            }
-          : {}),
+        color: current ? 'primary.main' : 'text.secondary',
+        bgcolor: current ? 'primary.light' : 'transparent',
+        '&:hover': { bgcolor: current ? 'primary.light' : muiTheme.alpha((muiTheme.vars ?? muiTheme).palette.primary.main, 0.05), color: current ? 'primary.main' : 'text.primary' },
+        '&.Mui-selected, &.Mui-selected:hover': { bgcolor: 'primary.light' },
       })}
     >
-      <ListItemIcon sx={{ minWidth: collapsed ? 0 : 34, color: 'inherit', justifyContent: 'center' }}>
-        <Icon sx={{ fontSize: 20 }} />
-      </ListItemIcon>
-      {!collapsed && <ListItemText primary={label} slotProps={{ primary: { sx: { fontWeight: selected ? 600 : 500, fontSize: 14 } } }} />}
-      {!collapsed && !item.available && <Chip label={t('shell.comingSoon')} size="small" variant="outlined" sx={{ height: 20, fontSize: 11, fontWeight: 600 }} />}
+      {collapsed && (
+        <ListItemIcon sx={{ minWidth: 0, color: 'inherit', justifyContent: 'center' }}>
+          <Icon sx={{ fontSize: 20 }} />
+        </ListItemIcon>
+      )}
+      {!collapsed && <ListItemText primary={label} slotProps={{ primary: { sx: { fontWeight: current ? 600 : 500, fontSize: 14 } } }} />}
+      {!collapsed && !item.available && <Chip label={t('shell.comingSoon')} size="small" sx={{ height: 20, fontSize: 11, fontWeight: 600 }} />}
     </ListItemButton>
   );
 
@@ -110,125 +99,60 @@ function NavEntry({ item, selected, collapsed }: { item: NavItem; selected: bool
   );
 }
 
-function SidebarAccount({ collapsed }: { collapsed: boolean }) {
-  const { t } = useTranslation();
-  const { language } = useLanguage();
-  const { user } = useAuth();
-  if (!user) return null;
-  const name = user.name[language];
-  const role = t(`roles.${user.role}`);
-
-  return (
-    <Box sx={{ borderTop: 1, borderColor: 'divider', p: collapsed ? 1 : 1.5, flexShrink: 0 }}>
-      <Tooltip title={collapsed ? `${name} — ${role}` : ''}>
-        <Button
-          component={Link}
-          to="/profile"
-          aria-label={collapsed ? `${name}, ${role}` : undefined}
-          color="inherit"
-          sx={{
-            width: '100%',
-            justifyContent: collapsed ? 'center' : 'flex-start',
-            textTransform: 'none',
-            px: collapsed ? 0.5 : 1,
-            py: 0.75,
-            gap: 1.25,
-            borderRadius: 1,
-            minHeight: 48,
-          }}
-        >
-          <Avatar aria-hidden="true" sx={{ width: 34, height: 34, fontSize: 13, fontWeight: 700, bgcolor: 'primary.main', color: 'primary.contrastText' }}>{accountInitials(name)}</Avatar>
-          {!collapsed && (
-            <Box sx={{ minWidth: 0, textAlign: 'left' }}>
-              <Typography component="span" variant="body2" sx={{ display: 'block', fontWeight: 600 }} noWrap>
-                {name}
-              </Typography>
-              <Typography component="span" variant="caption" color="text.secondary" sx={{ display: 'block' }} noWrap>
-                {role}
-              </Typography>
-            </Box>
-          )}
-        </Button>
-      </Tooltip>
-    </Box>
-  );
-}
-
 /** Navigation for the signed-in role: allowed pages, plus planned areas shown disabled ("Soon"). */
-function SidebarContent({ permanent, collapsed, onToggle }: { permanent: boolean; collapsed: boolean; onToggle: () => void }) {
+function SidebarContent({ permanent, collapsed, onToggle, onNavigate }: { permanent: boolean; collapsed: boolean; onToggle: () => void; onNavigate?: () => void }) {
   const { t } = useTranslation();
   const theme = useTheme();
   const { canAny } = useAuth();
   const { pathname } = useLocation();
   const narrow = permanent && collapsed;
   // Point the chevron toward the content edge so "expand" and "collapse" read correctly in both directions.
-  const mirror = theme.direction === 'rtl';
-  const flipChevron = mirror !== collapsed;
+  const flipChevron = (theme.direction === 'rtl') !== collapsed;
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      <Box
-        sx={{
-          minHeight: layout.header,
-          display: 'flex',
-          flexDirection: narrow ? 'column' : 'row',
-          alignItems: 'center',
-          justifyContent: narrow ? 'center' : 'space-between',
-          gap: 0.5,
-          px: narrow ? 0.5 : 2,
-          py: narrow ? 1.25 : 0,
-          flexShrink: 0,
-        }}
-      >
-        <BrandMark compact={narrow} />
+      <Box sx={{ display: 'flex', flexDirection: narrow ? 'column' : 'row', alignItems: 'center', justifyContent: narrow ? 'center' : 'space-between', gap: 1, px: narrow ? 1 : 2.5, pt: 3, pb: 1, flexShrink: 0 }}>
+        <Wordmark compact={narrow} />
         {permanent && (
           <Tooltip title={collapsed ? t('shell.expandNavigation') : t('shell.collapseNavigation')}>
-            <IconButton
-              size="small"
-              aria-label={collapsed ? t('shell.expandNavigation') : t('shell.collapseNavigation')}
-              onClick={onToggle}
-              sx={{ color: 'text.secondary' }}
-            >
+            <IconButton size="small" aria-label={collapsed ? t('shell.expandNavigation') : t('shell.collapseNavigation')} onClick={onToggle} sx={{ color: 'grey.400' }}>
               <ChevronLeftOutlined sx={{ transform: flipChevron ? 'scaleX(-1)' : undefined }} />
             </IconButton>
           </Tooltip>
         )}
       </Box>
-      <Box component="nav" aria-label={t('shell.mainNavigation')} sx={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', pb: 1 }}>
+      <Box component="nav" aria-label={t('shell.mainNavigation')} sx={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', pb: 2 }}>
         {visibleNavGroups(canAny).map((group, index) => (
           <List
             key={group.key}
-            dense
             disablePadding
             subheader={
               narrow ? (
-                index === 0 ? undefined : <Divider component="li" sx={{ my: 1, mx: 1.5 }} />
+                index === 0 ? undefined : <Divider component="li" sx={{ my: 1.25, mx: 1.5 }} />
               ) : (
-                <ListSubheader
-                  disableSticky
-                  sx={{ bgcolor: 'transparent', lineHeight: '32px', mt: index === 0 ? 0.5 : 1.5, px: 2.75, fontSize: 12, fontWeight: 700, color: 'text.secondary' }}
-                >
+                <ListSubheader disableSticky sx={{ bgcolor: 'transparent', lineHeight: '28px', mt: index === 0 ? 1.5 : 2.5, mb: 0.25, px: 3, fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'grey.400' }}>
                   {t(`nav.groups.${group.key}`)}
                 </ListSubheader>
               )
             }
           >
             {group.items.map((item) => (
-              <NavEntry key={item.key} item={item} collapsed={narrow} selected={pathname === item.path || pathname.startsWith(`${item.path}/`)} />
+              <NavEntry key={item.key} item={item} collapsed={narrow} onNavigate={onNavigate} selected={pathname === item.path || pathname.startsWith(`${item.path}/`)} />
             ))}
           </List>
         ))}
       </Box>
-      <SidebarAccount collapsed={narrow} />
     </Box>
   );
 }
 
-/** Permanent drawer on desktop (collapsible); temporary overlay drawer on mobile. Mirrors to the right in RTL. */
+/**
+ * Desktop: a sticky column under the top bar (collapsible to an icon rail). Phones: a temporary drawer. Mirrors to the
+ * right in RTL (`borderRight` is flipped by the Emotion cache).
+ */
 export function Sidebar({ permanent, open, onClose }: { permanent: boolean; open: boolean; onClose: () => void }) {
   const theme = useTheme();
   const [collapsed, setCollapsed] = useState(readCollapsed);
-  const width = permanent && collapsed ? layout.sidebarCollapsed : layout.sidebar;
   const toggle = () => {
     setCollapsed((current) => {
       const next = !current;
@@ -236,33 +160,32 @@ export function Sidebar({ permanent, open, onClose }: { permanent: boolean; open
       return next;
     });
   };
-  const paperSx = {
-    width,
-    boxSizing: 'border-box' as const,
-    bgcolor: 'background.paper',
-    overflowX: 'hidden' as const,
-    transition: theme.transitions.create('width', { duration: theme.transitions.duration.shorter }),
-  };
 
   if (permanent) {
     return (
-      <Drawer
-        variant="permanent"
-        open
+      <Box
+        component="aside"
         sx={{
-          width,
+          width: collapsed ? layout.sidebarCollapsed : layout.sidebar,
           flexShrink: 0,
+          position: 'sticky',
+          top: layout.header,
+          height: `calc(100vh - ${layout.header}px)`,
+          bgcolor: SIDEBAR_BG,
+          borderRight: 1,
+          borderColor: 'divider',
+          overflow: 'hidden',
           transition: theme.transitions.create('width', { duration: theme.transitions.duration.shorter }),
-          '& .MuiDrawer-paper': paperSx,
+          '@media print': { display: 'none' },
         }}
       >
         <SidebarContent permanent collapsed={collapsed} onToggle={toggle} />
-      </Drawer>
+      </Box>
     );
   }
   return (
-    <Drawer variant="temporary" open={open} onClose={onClose} ModalProps={{ keepMounted: true }} sx={{ '& .MuiDrawer-paper': { ...paperSx, width: layout.sidebar } }}>
-      <SidebarContent permanent={false} collapsed={false} onToggle={toggle} />
+    <Drawer variant="temporary" open={open} onClose={onClose} ModalProps={{ keepMounted: true }} sx={{ '& .MuiDrawer-paper': { width: layout.sidebar, boxSizing: 'border-box', bgcolor: SIDEBAR_BG } }}>
+      <SidebarContent permanent={false} collapsed={false} onToggle={toggle} onNavigate={onClose} />
     </Drawer>
   );
 }

@@ -1,16 +1,14 @@
 /**
- * DataHub admin design tokens — the design language shared by the HR Admin Portal (the reference), the Trainee App and
- * Blogs Admin. Keep the three in step. The single source for colours, type, spacing, radius, shadows and
- * breakpoints. The palette starts from DataHub's brand blue and green; neutrals are a cool slate scale
- * suited to dense admin screens. Use these through the MUI theme (`theme.palette`, `theme.spacing`, …),
- * not by importing them in components.
+ * Blogs Admin design tokens — the DataHub admin design language (violet), intentional copies of the Trainee App's and the
+ * HR Admin Portal's tokens: keep the three in step. Used only under /admin/ (the public site keeps its own tokens).
  */
 
 export const brand = {
-  /** 6.57:1 with white — safe for text and filled buttons. */
-  blue: '#1456c8',
-  blueDark: '#0b3d91',
-  blueLight: '#e8f0fc',
+  /** Violet accent — 5.70:1 with white: safe for text and filled buttons. */
+  violet: '#7c3aed',
+  violetDark: '#5b21b6',
+  /** Selected nav items, tonal chips, insight callouts. */
+  violetLight: '#f1ebfe',
   /** DataHub brand green — 3.97:1 with white: decorative use and large text only. */
   green: '#2a9243',
   /** Accessible brand green (4.73:1 with white) for text and filled components. */
@@ -18,12 +16,15 @@ export const brand = {
   greenLight: '#e7f4ea',
 } as const;
 
+/** Categorical chart colours (bars, donut segments, legend dots). Always paired with text values. */
+export const chart = ['#7c3aed', '#2563eb', '#059669', '#ea580c', '#4f46e5', '#0891b2'] as const;
+
 /** Cool slate neutrals: 50 = app canvas … 900 = primary text. */
 export const neutral = {
   0: '#ffffff',
-  50: '#f4f6f9',
-  100: '#e8edf3',
-  200: '#d5dde8',
+  50: '#f6f6fa',
+  100: '#ececf3',
+  200: '#e2e2ec',
   300: '#c0c9d6',
   400: '#8e9aab',
   500: '#667386',
@@ -35,18 +36,19 @@ export const neutral = {
 
 /** Soft tints for tonal surfaces (icon tiles, avatars). */
 export const tint = {
-  success: '#e6f4ea',
-  warning: '#fff3df',
+  success: '#e3f6ee',
+  warning: '#fff1e6',
   error: '#fdecec',
-  info: '#e6f1fb',
+  info: '#e8f0fe',
 } as const;
 
 /** Status colours (form errors, approvals, alerts). Each passes WCAG AA (≥ 4.5:1) as text on white. */
 export const status = {
-  success: '#1f7a37',
-  warning: '#a35a00',
+  success: '#047857',
+  /** Orange: "needs action soon" (5.18:1 with white). */
+  warning: '#c2410c',
   error: '#c62828',
-  info: '#0b62b8',
+  info: '#1d4ed8',
 } as const;
 
 export const fontFamily = {
@@ -73,16 +75,17 @@ export const fontSize = {
 /** Base spacing unit (px): `theme.spacing(2)` = 16px. */
 export const spacingUnit = 8;
 
-/** Modest radii: controls stay crisp; dialogs are only slightly softer. */
+/** Soft radii: controls 10px, cards 14px, dialogs 16px. */
 export const radius = {
-  sm: 6,
-  md: 8,
-  lg: 12,
+  sm: 8,
+  md: 10,
+  card: 14,
+  lg: 16,
 } as const;
 
 export const shadows = {
   /** Resting cards. A hairline border does most of the work; the shadow only separates the surface. */
-  sm: '0 1px 2px rgba(20, 27, 38, 0.04), 0 1px 1px rgba(20, 27, 38, 0.03)',
+  sm: '0 1px 2px rgba(30, 20, 60, 0.03)',
   /** Menus and popovers. */
   md: '0 8px 24px rgba(20, 27, 38, 0.10)',
   /** Dialogs and drawers. */
@@ -91,9 +94,9 @@ export const shadows = {
 
 /** Shell dimensions in pixels. Content stays readable on wide monitors without stretching edge to edge. */
 export const layout = {
-  sidebar: 272,
+  sidebar: 240,
   sidebarCollapsed: 76,
-  header: 64,
+  header: 68,
   contentMax: 1440,
 } as const;
 

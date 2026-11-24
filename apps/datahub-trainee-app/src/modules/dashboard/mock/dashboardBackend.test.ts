@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { SEED_USERS as U } from '@/core/api/mock/seedData';
+import { SEED_DEPARTMENTS, SEED_USERS as U } from '@/core/api/mock/seedData';
 import { db } from '@/core/api/mock/mockDatabase';
 import { ApiError } from '@/core/api/types';
 import { setCurrentActor } from '@/core/auth/actor';
@@ -62,6 +62,44 @@ describe('manager dashboard', () => {
     expect(deadlines.map((d) => d.id)).not.toContain('assignment-asg-0002'); // not open yet
     const times = deadlines.map((d) => Date.parse(d.kind === 'training' ? `${d.dueAt}T23:59:59` : d.dueAt));
     expect(times).toEqual([...times].sort((a, b) => a - b));
+  });
+
+  it('counts every upcoming deadline ("due soon"), while the list shows the soonest six', () => {
+    actAs(U.superAdmin);
+    const data = manager();
+    expect(data.stats.dueSoon).toBeGreaterThanOrEqual(data.deadlines.length);
+    expect(data.deadlines.length).toBe(Math.min(6, data.stats.dueSoon));
+  });
+
+  it('filters by department (SuperAdmin) and by the period in which enrollments were assigned', () => {
+    actAs(U.superAdmin);
+    const dep = SEED_DEPARTMENTS.dataEngineering;
+    const byDepartment = dashboardMock.get({ departmentId: dep, period: 'all' });
+    if (byDepartment.kind !== 'manager') throw new Error('expected the manager dashboard');
+    expect(byDepartment.stats.totalTrainings).toBe(db().trainings.filter((t) => t.departmentId === dep).length);
+    const depTrainings = new Set(db().trainings.filter((t) => t.departmentId === dep).map((t) => t.id));
+    expect(byDepartment.stats.totalEnrollments).toBe(db().enrollments.filter((e) => depTrainings.has(e.trainingId)).length);
+    expect(dashboardMock.recentActivity(50, dep).every((a) => db().activities.find((x) => x.id === a.id)?.departmentId === dep)).toBe(true);
+
+    const now = Date.now();
+    const recent = dashboardMock.get({ departmentId: null, period: '30' }, now);
+    if (recent.kind !== 'manager') throw new Error('expected the manager dashboard');
+    expect(recent.stats.totalEnrollments).toBe(db().enrollments.filter((e) => Date.parse(e.assignedAt) >= now - 30 * 86_400_000).length);
+  });
+
+  it('refuses a DepartmentAdmin another department in the filter', () => {
+    actAs(U.adminDataEngineering);
+    expect(() => dashboardMock.get({ departmentId: SEED_DEPARTMENTS.cloud, period: 'all' })).toThrow(ApiError);
+    expect(() => dashboardMock.recentActivity(10, SEED_DEPARTMENTS.cloud)).toThrow(ApiError);
+  });
+
+  it('lists each training row with its status and end date (for the trainings table)', () => {
+    actAs(U.superAdmin);
+    for (const row of manager().trainingProgress) {
+      const training = db().trainings.find((t) => t.id === row.trainingId)!;
+      expect(row.status).toBe(training.status);
+      expect(row.endDate).toBe(training.endDate);
+    }
   });
 });
 

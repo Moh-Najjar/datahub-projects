@@ -56,7 +56,8 @@ describe('permission guards', () => {
   it('shows breadcrumbs for the current page', async () => {
     renderApp('/profile', { as: 'hr-admin' });
     const crumbs = within(await screen.findByRole('navigation', { name: 'Breadcrumb' }));
-    expect(crumbs.getByRole('link', { name: 'Home' }).getAttribute('href')).toBe('/dashboard');
+    expect(crumbs.getByRole('link', { name: 'DataHub HR Admin' }).getAttribute('href')).toBe('/dashboard');
+    expect(crumbs.getByText('Overview')).toBeTruthy();
     expect(crumbs.getByText('My profile').getAttribute('aria-current')).toBe('page');
   });
 });

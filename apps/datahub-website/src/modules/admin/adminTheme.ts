@@ -2,19 +2,15 @@ import { createTheme, type Theme, type ThemeOptions } from '@mui/material/styles
 import { brand, breakpoints, control, fontFamily, fontSize, neutral, radius, shadows, spacingUnit, status, tint } from './adminTokens';
 
 /*
- * Blogs Admin theme. It is the DataHub admin design language of the HR Admin Portal (the reference), Trainee App and
- * Blogs Admin: same palette, Inter, radii, shadows, control sizes and component defaults — generated from the HR
- * portal's theme and used only under /admin/ (the public site theme stays untouched for every other page).
- * Keep `adminTokens.ts` and this file in step with `apps/datahub-hr-admin-portal/src/core/theme`.
+ * Blogs Admin theme — the DataHub admin design language (violet) of the HR Admin Portal, Trainee App and Blogs Admin:
+ * same palette, Inter, radii, control sizes and component defaults, generated from the Trainee App's theme and used only
+ * under /admin/ (English only, LTR; the public site theme stays untouched). Keep it in step with the other two apps.
  */
 export function createAdminTheme(): Theme {
   const options: ThemeOptions = {
-    spacing: spacingUnit,
-    breakpoints: { values: breakpoints },
-    shape: { borderRadius: radius.md },
     palette: {
       mode: 'light',
-      primary: { main: brand.blue, dark: brand.blueDark, light: brand.blueLight, contrastText: neutral[0] },
+      primary: { main: brand.violet, dark: brand.violetDark, light: brand.violetLight, contrastText: neutral[0] },
       secondary: { main: brand.greenDark, light: brand.greenLight, contrastText: neutral[0] },
       success: { main: status.success, light: tint.success },
       warning: { main: status.warning, light: tint.warning },
@@ -24,14 +20,17 @@ export function createAdminTheme(): Theme {
       divider: neutral[200],
       background: { default: neutral[50], paper: neutral[0] },
       grey: neutral,
-      action: { hover: 'rgba(20, 27, 38, 0.04)', selected: 'rgba(20, 86, 200, 0.08)' },
+      action: { hover: 'rgba(30, 20, 60, 0.04)', selected: 'rgba(124, 58, 237, 0.08)' },
     },
+    breakpoints: { values: breakpoints },
+    spacing: spacingUnit,
+    shape: { borderRadius: radius.md },
     typography: {
       fontFamily: fontFamily.latin,
       fontSize: fontSize.body1,
-      h1: { fontSize: fontSize.h1, fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.02em' },
+      h1: { fontSize: fontSize.h1, fontWeight: 800, lineHeight: 1.2, letterSpacing: '-0.025em' },
       h2: { fontSize: fontSize.h2, fontWeight: 700, lineHeight: 1.25, letterSpacing: '-0.02em' },
-      h3: { fontSize: fontSize.h3, fontWeight: 700, lineHeight: 1.3, letterSpacing: '-0.015em' },
+      h3: { fontSize: 26, fontWeight: 800, lineHeight: 1.3, letterSpacing: '-0.02em' },
       h4: { fontSize: fontSize.h4, fontWeight: 700, lineHeight: 1.35 },
       h5: { fontSize: fontSize.h5, fontWeight: 700, lineHeight: 1.4 },
       h6: { fontSize: fontSize.h6, fontWeight: 600, lineHeight: 1.45 },
@@ -44,6 +43,11 @@ export function createAdminTheme(): Theme {
       overline: { fontSize: 11, fontWeight: 700, letterSpacing: '0.06em', lineHeight: 1.4 },
     },
     components: {
+      MuiCssBaseline: {
+        styleOverrides: {
+          body: { WebkitFontSmoothing: 'antialiased', textRendering: 'optimizeLegibility' },
+        },
+      },
       MuiButtonBase: {
         styleOverrides: {
           root: ({ theme }) => ({
@@ -60,13 +64,22 @@ export function createAdminTheme(): Theme {
           root: {
             borderRadius: radius.md,
             minHeight: control.md,
-            padding: '6px 14px',
+            padding: '6px 16px',
           },
+          // Primary actions get a soft violet glow.
+          contained: ({ theme, ownerState }) =>
+            ownerState.color === 'primary' || ownerState.color === undefined
+              ? {
+                  boxShadow: `0 4px 12px ${theme.alpha(theme.palette.primary.main, 0.25)}`,
+                  '&:hover': { boxShadow: `0 6px 16px ${theme.alpha(theme.palette.primary.main, 0.3)}` },
+                }
+              : {},
           sizeSmall: { minHeight: control.sm, padding: '4px 10px', fontSize: fontSize.body2 },
           sizeLarge: { minHeight: control.lg, padding: '8px 18px', fontSize: fontSize.subtitle },
           outlined: ({ theme }) => ({
             borderColor: theme.palette.divider,
-            '&:hover': { borderColor: theme.palette.text.secondary },
+            backgroundColor: theme.palette.background.paper,
+            '&:hover': { borderColor: theme.palette.primary.main },
           }),
         },
       },
@@ -82,6 +95,7 @@ export function createAdminTheme(): Theme {
           root: { backgroundImage: 'none' },
           outlined: ({ theme }) => ({
             borderColor: theme.palette.divider,
+            borderRadius: radius.card,
             boxShadow: shadows.sm,
           }),
         },
@@ -89,10 +103,11 @@ export function createAdminTheme(): Theme {
       MuiCard: {
         styleOverrides: {
           root: ({ theme }) => ({
-            borderRadius: radius.md,
+            borderRadius: radius.card,
             border: '1px solid',
             borderColor: theme.palette.divider,
-            boxShadow: shadows.sm,
+            // Flat cards: the hairline border separates them from the canvas.
+            boxShadow: 'none',
             backgroundImage: 'none',
           }),
         },
@@ -172,14 +187,14 @@ export function createAdminTheme(): Theme {
       MuiTabs: {
         styleOverrides: {
           root: { minHeight: 42 },
-          indicator: { height: 2, borderRadius: 2 },
+          indicator: { height: 3, borderRadius: '3px 3px 0 0' },
         },
       },
       MuiTab: {
         styleOverrides: {
           root: ({ theme }) => ({
-            minHeight: 42,
-            padding: '8px 14px',
+            minHeight: 46,
+            padding: '10px 18px',
             textTransform: 'none',
             fontWeight: 600,
             fontSize: fontSize.body1,
@@ -190,7 +205,20 @@ export function createAdminTheme(): Theme {
       },
       MuiChip: {
         styleOverrides: {
-          root: { borderRadius: radius.sm, fontWeight: 600 },
+          // Pills. Coloured filled chips are TONAL: the colour's light tint with its dark text (AA contrast).
+          root: ({ theme, ownerState }) => {
+            const color = ownerState.color;
+            if (ownerState.variant === 'outlined' || !color || color === 'default') return { borderRadius: 999, fontWeight: 600 };
+            const palette = theme.palette[color];
+            return {
+              borderRadius: 999,
+              fontWeight: 600,
+              backgroundColor: palette.light,
+              color: color === 'primary' ? palette.dark : palette.main,
+              '&.MuiChip-clickable:hover': { backgroundColor: theme.alpha(theme.palette[color].main, 0.18) },
+              '& .MuiChip-icon, & .MuiChip-deleteIcon': { color: 'inherit' },
+            };
+          },
           sizeSmall: { height: 24, fontSize: fontSize.caption },
         },
       },
@@ -212,14 +240,16 @@ export function createAdminTheme(): Theme {
         styleOverrides: {
           root: ({ theme }) => ({
             borderColor: theme.palette.divider,
-            padding: '12px 16px',
-            fontSize: fontSize.body2,
+            padding: '14px 16px',
+            fontSize: fontSize.body1,
           }),
           head: ({ theme }) => ({
-            fontWeight: 600,
-            fontSize: fontSize.caption,
-            color: theme.palette.text.secondary,
-            backgroundColor: theme.palette.background.default,
+            fontWeight: 700,
+            fontSize: 11.5,
+            letterSpacing: '0.07em',
+            textTransform: 'uppercase',
+            color: theme.palette.grey[500],
+            backgroundColor: 'transparent',
           }),
           sizeSmall: { padding: '8px 12px' },
         },
@@ -246,7 +276,10 @@ export function createAdminTheme(): Theme {
         },
       },
       MuiLinearProgress: {
-        styleOverrides: { root: { borderRadius: 0 } },
+        styleOverrides: {
+          root: ({ theme }) => ({ borderRadius: 999, backgroundColor: theme.palette.grey[100] }),
+          bar: { borderRadius: 999 },
+        },
       },
       MuiToggleButton: {
         styleOverrides: {

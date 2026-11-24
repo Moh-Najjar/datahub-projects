@@ -26,7 +26,7 @@ const axisTooltip = (ctx: ChartContext, titles: string[], format: (v: number) =>
 /** Completed reviews per rating value (current cycles). */
 export function distributionOption(distribution: PerformanceSummary['distribution'], ctx: ChartContext, label: (value: number) => string, seriesName: string): EChartsOption {
   const c = palette(ctx);
-  const colors = [c.red, c.amber, c.blue, c.teal, c.green];
+  const colors = [c.red, c.amber, c.primary, c.teal, c.green];
   const titles = distribution.map((d) => label(d.value));
   return {
     ...base(ctx),
@@ -34,7 +34,7 @@ export function distributionOption(distribution: PerformanceSummary['distributio
     tooltip: axisTooltip(ctx, titles),
     xAxis: categoryX(ctx, distribution.map((d) => String(d.value))),
     yAxis: valueYAxis(ctx),
-    series: [{ name: seriesName, type: 'bar', barMaxWidth: 40, data: distribution.map((d, i) => ({ value: d.count, itemStyle: { color: colors[i] ?? c.blue } })) }],
+    series: [{ name: seriesName, type: 'bar', barMaxWidth: 40, data: distribution.map((d, i) => ({ value: d.count, itemStyle: { color: colors[i] ?? c.primary } })) }],
   };
 }
 
@@ -74,7 +74,7 @@ export function departmentOption(rows: PerformanceSummary['byDepartment'], ctx: 
   const names = rows.map((r) => r.department.name[ctx.language]);
   return {
     ...base(ctx),
-    color: [c.blue],
+    color: [c.primary],
     grid: { ...grid, top: 16 },
     tooltip: axisTooltip(ctx, names, (v) => num(ctx, v)),
     xAxis: categoryX(ctx, names),

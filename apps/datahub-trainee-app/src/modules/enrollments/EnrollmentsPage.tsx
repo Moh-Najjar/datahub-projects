@@ -13,7 +13,7 @@ import TuneIcon from '@mui/icons-material/Tune';
 import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm, useWatch } from 'react-hook-form';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 import { ENROLLMENT_STATUSES, type EnrollmentStatus } from '@/core/domain/training';
 import { ROUTES } from '@/core/routes/paths';
 import { clampProgress, statusForProgress, withStatus } from '@/core/utils/enrollmentRules';
@@ -48,7 +48,22 @@ export default function EnrollmentsPage() {
   const list = useListState<EnrollmentFilters>({ pageSize: 10 });
   const query = useEnrollments(list.params);
   const trainings = useTrainingOptions();
-  const [assigning, setAssigning] = useState(false);
+  // The top bar's "Assign training" opens the dialog from any page with `?assign=1`.
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [assigningLocal, setAssigning] = useState(false);
+  const assigning = assigningLocal || searchParams.get('assign') === '1';
+  const closeAssign = () => {
+    setAssigning(false);
+    if (searchParams.has('assign')) {
+      setSearchParams(
+        (current) => {
+          current.delete('assign');
+          return current;
+        },
+        { replace: true },
+      );
+    }
+  };
   const [updating, setUpdating] = useState<EnrollmentDto | null>(null);
   const [removing, setRemoving] = useState<EnrollmentDto | null>(null);
   const remove = useDeleteEnrollment();
@@ -167,7 +182,7 @@ export default function EnrollmentsPage() {
         pagination={query.data ? { page: query.data.page, pageSize: query.data.pageSize, total: query.data.total, onPageChange: list.setPage, onPageSizeChange: list.setPageSize } : undefined}
         sort={{ sortBy: list.sortBy, direction: list.sortDirection, onSort: list.setSort }}
       />
-      {assigning && <AssignDialog onClose={() => setAssigning(false)} onSaved={() => feedback.success(t.enrollments.assigned)} />}
+      {assigning && <AssignDialog onClose={closeAssign} onSaved={() => feedback.success(t.enrollments.assigned)} />}
       {updating && <UpdateDialog enrollment={updating} onClose={() => setUpdating(null)} onSaved={() => feedback.success(t.enrollments.updated)} />}
       <ConfirmDialog
         open={removing !== null}

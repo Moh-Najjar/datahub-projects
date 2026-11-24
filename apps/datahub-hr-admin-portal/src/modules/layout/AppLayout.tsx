@@ -10,7 +10,10 @@ import { layout } from '@/core/theme/tokens';
 import { Sidebar } from './Sidebar';
 import { TopBar } from './TopBar';
 
-/** Signed-in shell: sidebar + top bar around the current page. Breadcrumbs live in the top bar. */
+/**
+ * Signed-in shell (DataHub admin design): a full-width top bar (breadcrumbs and the main actions) above a light sidebar
+ * (a drawer on phones) and the current page.
+ */
 export function AppLayout() {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -21,29 +24,21 @@ export function AppLayout() {
   const mobileOpen = openedOn === pathname;
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
-      <Sidebar permanent={isDesktop} open={mobileOpen} onClose={() => setOpenedOn(null)} />
-      <Box sx={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
-        {/* The provider wraps the bar and the page so detail screens can append crumbs. */}
-        <BreadcrumbProvider>
-          <TopBar onOpenNavigation={isDesktop ? undefined : () => setOpenedOn(pathname)} />
-          <Box
-            component="main"
-            sx={{
-              flex: 1,
-              width: '100%',
-              maxWidth: layout.contentMax,
-              mx: 'auto',
-              px: { xs: 2, sm: 2.5, lg: 3.5 },
-              py: { xs: 2, md: 3 },
-            }}
-          >
-            <Suspense fallback={<LinearProgress aria-label={t('shell.loading')} />}>
-              <Outlet />
-            </Suspense>
+    // The provider wraps the bar and the page so detail screens can append crumbs.
+    <BreadcrumbProvider>
+      <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', bgcolor: 'background.default' }}>
+        <TopBar onOpenNavigation={isDesktop ? undefined : () => setOpenedOn(pathname)} />
+        <Box sx={{ flex: 1, display: 'flex', minHeight: 0 }}>
+          <Sidebar permanent={isDesktop} open={mobileOpen} onClose={() => setOpenedOn(null)} />
+          <Box component="main" sx={{ flex: 1, minWidth: 0, px: { xs: 2, sm: 3, lg: 5 }, py: { xs: 2.5, md: 4 } }}>
+            <Box sx={{ width: '100%', maxWidth: layout.contentMax, mx: 'auto' }}>
+              <Suspense fallback={<LinearProgress aria-label={t('shell.loading')} />}>
+                <Outlet />
+              </Suspense>
+            </Box>
           </Box>
-        </BreadcrumbProvider>
+        </Box>
       </Box>
-    </Box>
+    </BreadcrumbProvider>
   );
 }

@@ -18,7 +18,6 @@ import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import AddIcon from '@mui/icons-material/Add';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
@@ -126,20 +125,11 @@ export default function AdminBlogsPage() {
   return (
     <>
       <title>{ADMIN_TEXT.pageTitle(T.title)}</title>
-      <AdminPageHeader
-        title={T.title}
-        subtitle={T.subtitle}
-        actions={
-          can.create ? (
-            <Button component={RouterLink} to={ADMIN_ROUTES.newBlog} variant="contained" startIcon={<AddIcon />}>
-              {T.newPost}
-            </Button>
-          ) : undefined
-        }
-      />
+      {/* "New post" is the top bar's primary action. */}
+      <AdminPageHeader title={T.title} subtitle={T.subtitle} />
 
       {totals && (
-        <Box component="ul" aria-label={T.counts(totals.all, totals.published, totals.drafts)} sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, minmax(0, 1fr))' }, gap: '12px', mb: '16px', p: 0, m: 0, listStyle: 'none' }}>
+        <Box component="ul" aria-label={T.counts(totals.all, totals.published, totals.drafts)} sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, minmax(0, 1fr))' }, gap: 3, p: 0, m: 0, mb: 3.5, listStyle: 'none' }}>
           {(
             [
               [T.metrics.total, totals.all],
@@ -147,11 +137,12 @@ export default function AdminBlogsPage() {
               [T.metrics.drafts, totals.drafts],
             ] as const
           ).map(([label, value]) => (
-            <Paper key={label} component="li" variant="outlined" sx={{ px: '16px', py: '14px' }}>
-              <Typography variant="body2" color="text.secondary">
+            // DataHub admin KPI card: label on top, a large number.
+            <Paper key={label} component="li" variant="outlined" sx={{ p: { xs: 2.5, md: 3 } }}>
+              <Typography color="text.secondary" sx={{ fontSize: 14, fontWeight: 500 }}>
                 {label}
               </Typography>
-              <Typography sx={{ mt: '2px', fontSize: 26, fontWeight: 700, lineHeight: 1.2, color: 'text.primary' }}>{value}</Typography>
+              <Typography sx={{ mt: 1, fontSize: { xs: 30, md: 34 }, fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.03em', fontVariantNumeric: 'tabular-nums', color: 'text.primary' }}>{value}</Typography>
             </Paper>
           ))}
         </Box>

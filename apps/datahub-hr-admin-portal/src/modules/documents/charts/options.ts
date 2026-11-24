@@ -31,7 +31,7 @@ export function categoryOption(rows: DocumentsOverview['byCategory'], ctx: Chart
   const top = rows.slice(0, 10);
   const rest = rows.slice(10).reduce((sum, r) => sum + r.count, 0);
   const names = [...top.map((r) => r.category.name[ctx.language]), ...(rest ? [otherLabel] : [])];
-  return horizontalBars(ctx, names, [...top.map((r) => r.count), ...(rest ? [rest] : [])], seriesName, palette(ctx).blue);
+  return horizontalBars(ctx, names, [...top.map((r) => r.count), ...(rest ? [rest] : [])], seriesName, palette(ctx).primary);
 }
 
 export function departmentOption(rows: DocumentsOverview['byDepartment'], ctx: ChartContext, seriesName: string): EChartsOption {
@@ -62,7 +62,7 @@ export function expiryOption(months: DocumentsOverview['expiry']['months'], ctx:
 /** Documents by overall status (donut). Zero slices are left out. */
 export function statusOption(rows: DocumentsOverview['byStatus'], ctx: ChartContext, label: (s: DocumentStatus) => string): EChartsOption {
   const c = palette(ctx);
-  const colors: Record<DocumentStatus, string> = { verified: c.green, 'pending-review': c.blue, rejected: c.red, expired: c.amber, archived: c.slate, superseded: c.purple };
+  const colors: Record<DocumentStatus, string> = { verified: c.green, 'pending-review': c.primary, rejected: c.red, expired: c.amber, archived: c.slate, superseded: c.blue };
   const data = rows.filter((r) => r.count > 0).map((r) => ({ name: label(r.status), value: r.count, itemStyle: { color: colors[r.status] } }));
   return {
     ...base(ctx),

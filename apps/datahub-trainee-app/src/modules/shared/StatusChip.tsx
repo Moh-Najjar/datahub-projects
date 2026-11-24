@@ -23,13 +23,17 @@ export function StatusChip(props: StatusChipProps) {
   const labels: Record<string, string> =
     props.kind === 'training' ? t.enums.trainingStatus : props.kind === 'enrollment' ? t.enums.enrollmentStatus : props.kind === 'assignment' ? t.enums.assignmentStatus : t.roles;
   const tone: Tone = (TONES[props.kind] as Record<string, Tone>)[props.value] ?? 'default';
+  // Tonal pills: a light tint with the tone's dark text (AA contrast), neutral grey for the default tone.
   return (
     <Chip
       size="small"
       label={labels[props.value] ?? props.value}
-      variant={tone === 'default' ? 'outlined' : 'filled'}
-      color={tone === 'default' ? 'default' : tone}
-      sx={{ fontWeight: 500 }}
+      sx={{
+        fontWeight: 700,
+        px: 0.5,
+        bgcolor: tone === 'default' ? 'grey.100' : `${tone}.light`,
+        color: tone === 'default' ? 'text.secondary' : tone === 'primary' ? 'primary.dark' : `${tone}.main`,
+      }}
     />
   );
 }

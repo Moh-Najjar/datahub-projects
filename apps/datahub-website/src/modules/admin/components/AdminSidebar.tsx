@@ -1,5 +1,4 @@
 import { useState, type ElementType } from 'react';
-import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
@@ -19,15 +18,14 @@ import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined';
 import OpenInNewOutlinedIcon from '@mui/icons-material/OpenInNewOutlined';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { ADMIN_ROUTES, ROUTES, WORKSPACE_ROUTES } from '@/core/routes/paths';
-import { UI } from '@/i18n';
 import { layout } from '@/modules/admin/adminTokens';
 import { ADMIN_TEXT } from '@/modules/admin/data/adminText';
 import { useBlogPermissions } from '@/modules/admin/hooks/useBlogPermissions';
-import { accountInitials } from '@/modules/admin/utils/accountInitials';
-import { roleLabel, type WorkspaceSession } from '@/modules/portals';
 
 const T = ADMIN_TEXT.shell;
 const SIDEBAR_KEY = 'datahub-blogs-admin.sidebar';
+/** Sidebar surface: a touch lighter than the page canvas, separated by a hairline. */
+const SIDEBAR_BG = '#fbfbfd';
 
 interface Entry {
   key: string;
@@ -48,29 +46,25 @@ function readCollapsed(): boolean {
   }
 }
 
-/** The DataHub monogram (typographic, like the other admin apps) with the app name. */
-export function AdminBrand({ compact = false }: { compact?: boolean }) {
+/** Typographic wordmark "DataHub Blogs" (like the other admin apps). Collapsed: "DH". */
+function Wordmark({ compact }: { compact: boolean }) {
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, minWidth: 0 }}>
-      <Box aria-hidden="true" dir="ltr" sx={{ width: 36, height: 36, flexShrink: 0, display: 'grid', placeItems: 'center', borderRadius: 1, bgcolor: 'primary.main', color: 'primary.contrastText', fontWeight: 700, fontSize: 13, letterSpacing: '0.04em' }}>
-        DH
-      </Box>
-      {!compact && (
-        <Box sx={{ minWidth: 0 }}>
-          <Typography component="span" sx={{ display: 'block', fontWeight: 700, lineHeight: 1.15, letterSpacing: '-0.01em' }} noWrap>
-            {T.appName}
-          </Typography>
-          <Typography component="span" variant="caption" color="text.secondary" sx={{ display: 'block', lineHeight: 1.3 }} noWrap>
-            {T.appByline}
-          </Typography>
-        </Box>
+    <Typography component="span" aria-label={T.appName} sx={{ fontSize: compact ? 16 : 17, fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.2, color: compact ? 'primary.main' : 'text.primary' }} noWrap>
+      {compact ? (
+        'DH'
+      ) : (
+        <>
+          DataHub{' '}
+          <Box component="span" sx={{ color: 'primary.main' }}>
+            Blogs
+          </Box>
+        </>
       )}
-    </Box>
+    </Typography>
   );
 }
 
 function NavEntry({ entry, selected, collapsed, onNavigate }: { entry: Entry; selected: boolean; collapsed: boolean; onNavigate?: () => void }) {
-  const theme = useTheme();
   const Icon = entry.icon;
   const link = entry.external ? { component: 'a', href: entry.to, target: '_blank', rel: 'noopener' } : { component: RouterLink, to: entry.to };
   const button = (
@@ -80,32 +74,31 @@ function NavEntry({ entry, selected, collapsed, onNavigate }: { entry: Entry; se
       selected={selected}
       aria-current={selected ? 'page' : undefined}
       aria-label={entry.label}
+      // Text-only items; the current page is a soft violet pill. Icons appear only in the collapsed rail.
       sx={(muiTheme) => ({
-        position: 'relative',
-        borderRadius: 1,
-        mx: collapsed ? 1 : 1.25,
+        borderRadius: 1.25,
+        mx: collapsed ? 1 : 1.5,
         mb: 0.25,
         minHeight: 40,
-        px: collapsed ? 1 : 1.25,
+        px: collapsed ? 1 : 1.5,
         justifyContent: collapsed ? 'center' : 'flex-start',
-        color: selected ? 'primary.main' : 'text.primary',
-        bgcolor: selected ? muiTheme.alpha(muiTheme.palette.primary.main, 0.1) : 'transparent',
-        '&:hover': { bgcolor: muiTheme.alpha(muiTheme.palette.primary.main, selected ? 0.16 : 0.06) },
-        '&.Mui-selected': { bgcolor: muiTheme.alpha(muiTheme.palette.primary.main, 0.1) },
-        '&.Mui-selected:hover': { bgcolor: muiTheme.alpha(muiTheme.palette.primary.main, 0.16) },
-        // Start-edge marker. `left` is mirrored in RTL by the Emotion cache (not used here: Blogs Admin is English only).
-        ...(selected ? { '&::before': { content: '""', position: 'absolute', left: 0, top: 8, bottom: 8, width: 3, borderRadius: 2, bgcolor: 'primary.main' } } : {}),
+        color: selected ? 'primary.main' : 'text.secondary',
+        bgcolor: selected ? 'primary.light' : 'transparent',
+        '&:hover': { bgcolor: selected ? 'primary.light' : muiTheme.alpha(muiTheme.palette.primary.main, 0.05), color: selected ? 'primary.main' : 'text.primary' },
+        '&.Mui-selected, &.Mui-selected:hover': { bgcolor: 'primary.light' },
       })}
     >
-      <ListItemIcon sx={{ minWidth: collapsed ? 0 : 34, color: 'inherit', justifyContent: 'center' }}>
-        <Icon sx={{ fontSize: 20 }} />
-      </ListItemIcon>
+      {collapsed && (
+        <ListItemIcon sx={{ minWidth: 0, color: 'inherit', justifyContent: 'center' }}>
+          <Icon sx={{ fontSize: 20 }} />
+        </ListItemIcon>
+      )}
       {!collapsed && <ListItemText primary={entry.label} slotProps={{ primary: { sx: { fontWeight: selected ? 600 : 500, fontSize: 14 } } }} />}
-      {!collapsed && entry.external && <OpenInNewOutlinedIcon sx={{ fontSize: 16, color: 'text.secondary' }} />}
+      {!collapsed && entry.external && <OpenInNewOutlinedIcon sx={{ fontSize: 15, color: 'grey.400' }} />}
     </ListItemButton>
   );
   return collapsed ? (
-    <Tooltip title={entry.label} placement={theme.direction === 'rtl' ? 'left' : 'right'}>
+    <Tooltip title={entry.label} placement="right">
       {button}
     </Tooltip>
   ) : (
@@ -113,8 +106,7 @@ function NavEntry({ entry, selected, collapsed, onNavigate }: { entry: Entry; se
   );
 }
 
-function SidebarContent({ session, permanent, collapsed, onToggle, onNavigate }: { session: WorkspaceSession; permanent: boolean; collapsed: boolean; onToggle: () => void; onNavigate?: () => void }) {
-  const theme = useTheme();
+function SidebarContent({ permanent, collapsed, onToggle, onNavigate }: { permanent: boolean; collapsed: boolean; onToggle: () => void; onNavigate?: () => void }) {
   const { pathname } = useLocation();
   const can = useBlogPermissions();
   const narrow = permanent && collapsed;
@@ -128,33 +120,29 @@ function SidebarContent({ session, permanent, collapsed, onToggle, onNavigate }:
     { key: 'content', title: T.groupContent, entries: entries.filter((e) => e.group === 'content') },
     { key: 'links', title: T.groupLinks, entries: entries.filter((e) => e.group === 'links') },
   ];
-  const flipChevron = (theme.direction === 'rtl') !== collapsed;
-  const name = session.name.en;
-  const role = roleLabel(session, UI.en.workspace.roles);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      <Box sx={{ minHeight: layout.header, display: 'flex', flexDirection: narrow ? 'column' : 'row', alignItems: 'center', justifyContent: narrow ? 'center' : 'space-between', gap: 0.5, px: narrow ? 0.5 : 2, py: narrow ? 1.25 : 0, flexShrink: 0 }}>
-        <AdminBrand compact={narrow} />
+      <Box sx={{ display: 'flex', flexDirection: narrow ? 'column' : 'row', alignItems: 'center', justifyContent: narrow ? 'center' : 'space-between', gap: 1, px: narrow ? 1 : 2.5, pt: 3, pb: 1, flexShrink: 0 }}>
+        <Wordmark compact={narrow} />
         {permanent && (
           <Tooltip title={collapsed ? T.expand : T.collapse}>
-            <IconButton size="small" aria-label={collapsed ? T.expand : T.collapse} onClick={onToggle} sx={{ color: 'text.secondary' }}>
-              <ChevronLeftOutlinedIcon sx={{ transform: flipChevron ? 'scaleX(-1)' : undefined }} />
+            <IconButton size="small" aria-label={collapsed ? T.expand : T.collapse} onClick={onToggle} sx={{ color: 'grey.400' }}>
+              <ChevronLeftOutlinedIcon sx={{ transform: collapsed ? 'scaleX(-1)' : undefined }} />
             </IconButton>
           </Tooltip>
         )}
       </Box>
-      <Box component="nav" aria-label={T.mainNavigation} sx={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', pb: 1 }}>
+      <Box component="nav" aria-label={T.mainNavigation} sx={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', pb: 2 }}>
         {groups.map((group, index) => (
           <List
             key={group.key}
-            dense
             disablePadding
             subheader={
               narrow ? (
-                index === 0 ? undefined : <Divider component="li" sx={{ my: 1, mx: 1.5 }} />
+                index === 0 ? undefined : <Divider component="li" sx={{ my: 1.25, mx: 1.5 }} />
               ) : (
-                <ListSubheader disableSticky sx={{ bgcolor: 'transparent', lineHeight: '32px', mt: index === 0 ? 0.5 : 1.5, px: 2.75, fontSize: 12, fontWeight: 700, color: 'text.secondary' }}>
+                <ListSubheader disableSticky sx={{ bgcolor: 'transparent', lineHeight: '28px', mt: index === 0 ? 1.5 : 2.5, mb: 0.25, px: 3, fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'grey.400' }}>
                   {group.title}
                 </ListSubheader>
               )
@@ -166,34 +154,14 @@ function SidebarContent({ session, permanent, collapsed, onToggle, onNavigate }:
           </List>
         ))}
       </Box>
-      <Box sx={{ borderTop: 1, borderColor: 'divider', p: narrow ? 1 : 1.5, flexShrink: 0 }}>
-        <Tooltip title={narrow ? `${name} — ${role}` : ''}>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: narrow ? 'center' : 'flex-start', gap: 1.25, px: narrow ? 0.5 : 1, py: 0.75, minHeight: 48 }}>
-            <Avatar aria-hidden="true" sx={{ width: 34, height: 34, fontSize: 13, fontWeight: 700, bgcolor: 'primary.main', color: 'primary.contrastText' }}>
-              {accountInitials(name)}
-            </Avatar>
-            {!narrow && (
-              <Box sx={{ minWidth: 0 }}>
-                <Typography component="span" variant="body2" sx={{ display: 'block', fontWeight: 600 }} noWrap>
-                  {name}
-                </Typography>
-                <Typography component="span" variant="caption" color="text.secondary" sx={{ display: 'block' }} noWrap>
-                  {role}
-                </Typography>
-              </Box>
-            )}
-          </Box>
-        </Tooltip>
-      </Box>
     </Box>
   );
 }
 
-/** Permanent drawer on desktop (collapsible); temporary overlay drawer on phones. */
-export function AdminSidebar({ session, permanent, open, onClose }: { session: WorkspaceSession; permanent: boolean; open: boolean; onClose: () => void }) {
+/** Desktop: a sticky column under the top bar (collapsible to an icon rail). Phones: a temporary drawer. */
+export function AdminSidebar({ permanent, open, onClose }: { permanent: boolean; open: boolean; onClose: () => void }) {
   const theme = useTheme();
   const [collapsed, setCollapsed] = useState(readCollapsed);
-  const width = permanent && collapsed ? layout.sidebarCollapsed : layout.sidebar;
   const toggle = () =>
     setCollapsed((current) => {
       try {
@@ -203,18 +171,31 @@ export function AdminSidebar({ session, permanent, open, onClose }: { session: W
       }
       return !current;
     });
-  const paperSx = { width, boxSizing: 'border-box' as const, bgcolor: 'background.paper', overflowX: 'hidden' as const, transition: theme.transitions.create('width', { duration: theme.transitions.duration.shorter }) };
 
   if (permanent) {
     return (
-      <Drawer variant="permanent" open sx={{ width, flexShrink: 0, transition: theme.transitions.create('width', { duration: theme.transitions.duration.shorter }), '& .MuiDrawer-paper': paperSx }}>
-        <SidebarContent session={session} permanent collapsed={collapsed} onToggle={toggle} />
-      </Drawer>
+      <Box
+        component="aside"
+        sx={{
+          width: collapsed ? layout.sidebarCollapsed : layout.sidebar,
+          flexShrink: 0,
+          position: 'sticky',
+          top: layout.header,
+          height: `calc(100vh - ${layout.header}px)`,
+          bgcolor: SIDEBAR_BG,
+          borderRight: 1,
+          borderColor: 'divider',
+          overflow: 'hidden',
+          transition: theme.transitions.create('width', { duration: theme.transitions.duration.shorter }),
+        }}
+      >
+        <SidebarContent permanent collapsed={collapsed} onToggle={toggle} />
+      </Box>
     );
   }
   return (
-    <Drawer variant="temporary" open={open} onClose={onClose} sx={{ '& .MuiDrawer-paper': { ...paperSx, width: layout.sidebar } }}>
-      <SidebarContent session={session} permanent={false} collapsed={false} onToggle={toggle} onNavigate={onClose} />
+    <Drawer variant="temporary" open={open} onClose={onClose} sx={{ '& .MuiDrawer-paper': { width: layout.sidebar, boxSizing: 'border-box', bgcolor: SIDEBAR_BG } }}>
+      <SidebarContent permanent={false} collapsed={false} onToggle={toggle} onNavigate={onClose} />
     </Drawer>
   );
 }

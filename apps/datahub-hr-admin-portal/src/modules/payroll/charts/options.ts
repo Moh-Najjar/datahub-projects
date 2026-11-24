@@ -44,7 +44,7 @@ export function costTrendOption(monthly: PayrollSummary['monthly'], currency: Cu
   const c = palette(ctx);
   const months = monthly.map((m) => m.month);
   const series = [
-    { name: labels.basic, color: c.blue, exact: monthly.map((m) => m.basic) },
+    { name: labels.basic, color: c.primary, exact: monthly.map((m) => m.basic) },
     { name: labels.allowances, color: c.teal, exact: monthly.map((m) => m.allowances) },
   ];
   const names = series.map((s) => s.name);
@@ -71,7 +71,7 @@ export function grossNetOption(monthly: PayrollSummary['monthly'], currency: Cur
   const c = palette(ctx);
   const months = monthly.map((m) => m.month);
   const series = [
-    { name: labels.gross, color: c.blue, exact: monthly.map((m) => m.gross) },
+    { name: labels.gross, color: c.primary, exact: monthly.map((m) => m.gross) },
     { name: labels.net, color: c.green, exact: monthly.map((m) => m.net) },
   ];
   const names = series.map((s) => s.name);
@@ -100,7 +100,7 @@ export function departmentCostOption(rows: PayrollSummary['byDepartment'], curre
   const yAxis: YAXisComponentOption = { type: 'category', data: names, inverse: true, position: isRtl(ctx) ? 'right' : 'left', axisLine: { lineStyle: { color: c.axisLine } }, axisTick: { show: false }, axisLabel: { color: c.mutedText, width: 120, overflow: 'truncate' } };
   return {
     ...base(ctx),
-    color: [c.blue],
+    color: [c.primary],
     grid: { ...grid, top: 8 },
     tooltip: exactTooltip(
       ctx,

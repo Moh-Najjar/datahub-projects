@@ -40,7 +40,7 @@ export function employeeGrowthOption(data: EmployeeGrowth, ctx: ChartContext, la
   const months = data.months.map((m) => m.month);
   return {
     ...base(ctx),
-    color: [c.blue, c.reference],
+    color: [c.primary, c.reference],
     // In RTL the first series should sit on the right.
     legend: { ...legend(ctx, 'top'), data: isRtl(ctx) ? [labels.previousYear, labels.headcount] : [labels.headcount, labels.previousYear] },
     grid,
@@ -85,7 +85,7 @@ export function attendanceOption(data: AttendanceOverview, ctx: ChartContext, la
     { key: 'present', name: labels.present, value: data.present, color: c.green },
     { key: 'late', name: labels.late, value: data.late, color: c.amber },
     { key: 'absent', name: labels.absent, value: data.absent, color: c.red },
-    { key: 'onLeave', name: labels.onLeave, value: data.onLeave, color: c.blue },
+    { key: 'onLeave', name: labels.onLeave, value: data.onLeave, color: c.primary },
   ];
   const byName = new Map(slices.map((s) => [s.name, s]));
   const share = (value: number) => percent(ctx, total ? value / total : 0);

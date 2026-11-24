@@ -9,7 +9,7 @@ import type { CandidateStage, FunnelStep, RecruitmentSummary } from '@/modules/r
 
 export function stageColor(ctx: ChartContext, stage: CandidateStage): string {
   const c = palette(ctx);
-  return { new: c.teal, screening: c.slate, shortlisted: c.purple, interview: c.blue, assessment: c.blue, offer: c.amber, hired: c.green, rejected: c.red }[stage];
+  return { new: c.teal, screening: c.slate, shortlisted: c.blue, interview: c.primary, assessment: c.primary, offer: c.amber, hired: c.green, rejected: c.red }[stage];
 }
 
 function horizontal(ctx: ChartContext, names: string[]): { xAxis: XAXisComponentOption; yAxis: YAXisComponentOption } {
@@ -56,7 +56,7 @@ export function activityOption(monthly: RecruitmentSummary['monthly'], ctx: Char
   const months = monthly.map((m) => m.month);
   const series = [
     { name: labels.applications, color: c.teal, data: monthly.map((m) => m.applications) },
-    { name: labels.interviews, color: c.blue, data: monthly.map((m) => m.interviews) },
+    { name: labels.interviews, color: c.primary, data: monthly.map((m) => m.interviews) },
     { name: labels.offers, color: c.amber, data: monthly.map((m) => m.offers) },
     { name: labels.hires, color: c.green, data: monthly.map((m) => m.hires) },
   ];
@@ -78,7 +78,7 @@ export function requisitionOption(rows: RecruitmentSummary['byRequisition'], ctx
   const c = palette(ctx);
   const names = rows.map((r) => r.requisition.title[ctx.language]);
   const series = [
-    { name: labels.active, color: c.blue, data: rows.map((r) => r.active) },
+    { name: labels.active, color: c.primary, data: rows.map((r) => r.active) },
     { name: labels.hired, color: c.green, data: rows.map((r) => r.hired) },
     { name: labels.other, color: c.slate, data: rows.map((r) => r.total - r.active - r.hired) },
   ];
@@ -99,7 +99,7 @@ export function funnelOption(funnel: RecruitmentSummary['funnel'], ctx: ChartCon
   const c = palette(ctx);
   const names = funnel.map((f) => label(f.step));
   const first = funnel[0]?.count ?? 0;
-  const colors = [c.teal, c.slate, c.blue, c.amber, c.green];
+  const colors = [c.teal, c.slate, c.primary, c.amber, c.green];
   return {
     ...base(ctx),
     grid: { ...grid, top: 12, right: isRtl(ctx) ? 8 : 64, left: isRtl(ctx) ? 64 : 8 },
