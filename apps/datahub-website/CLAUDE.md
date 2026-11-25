@@ -245,6 +245,17 @@ application. Every account is a backend account (`api/workspaceAuth.ts`); there 
   (JWT, ~15 min), its expiry (`exp`), the backend roles (`role` = the first one with a label in `data/roles.ts`), the known
   portal keys and the token's `permission` claims (re-read from the token on every load, so storage can't grant more).
   Passwords are never stored.
+- **Invitation activation** (`ActivateInvitationPage`, `ACCOUNT_ROUTES.activate` = `/activate/` + `/ar/activate/`, Workspace
+  layout, anonymous, `activate` is a reserved blog slug): the backend's invitation e-mail links to `/activate?token=…`.
+  New password (≥ 12, `MIN_PASSWORD_LENGTH`) + confirmation → `POST /api/v1/auth/activate-invitation` `{ token, newPassword }`
+  (`core/api/auth.ts` → `core/hooks/useActivateInvitation.ts`, never retried) → 204 = activated → success message, then
+  the Workspace sign-in (button, or by itself after 6 s). Errors (verified 2026-11-25): 400 `Authentication.InvalidToken`
+  (also an empty token) → "invalid or expired" message; 400 `Authentication.WeakPassword` → password field; anything else
+  → "could not activate" (`activationFailureOf`). The token is only read from the URL (spaces → `+`: an unencoded `+`
+  arrives as a space) and sent to the API — never logged or stored; the page sets `referrer: no-referrer`. The language
+  switch keeps the query string. Shares `components/AuthCard` with the sign-in page. Tests:
+  `ActivateInvitationPage.test.tsx` (real page + HTTP client; only `fetch` is mocked). The backend must put this site's
+  origin in the invitation link (and allow it in CORS).
 - **No refresh, no backend logout (backend blocker):** `/api/v1/auth/refresh` and `/api/v1/auth/logout` answer 403 to
   every request form tried (refresh cookie, allowed origin, Bearer — 2026-11-22). So the session ends when the token
   expires (the admin shows the time) or on a 401, and sign-out only forgets the token. The HttpOnly refresh cookie is

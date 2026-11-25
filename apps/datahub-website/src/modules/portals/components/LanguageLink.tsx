@@ -5,15 +5,15 @@ import { UI } from '@/i18n';
 import { useLocale } from '@/i18n/LocaleContext';
 import { localizePath, stripLocale } from '@/i18n/paths';
 
-/** Switches the Workspace page to the other language (same page, other URL prefix). */
+/** Switches the Workspace page to the other language (same page and query string — e.g. an activation token — other URL prefix). */
 export function LanguageLink() {
   const { locale } = useLocale();
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
   const other = locale === 'en' ? 'ar' : 'en';
   return (
     <Button
       component={RouterLink}
-      to={localizePath(stripLocale(pathname), other)}
+      to={{ pathname: localizePath(stripLocale(pathname), other), search }}
       replace
       color="inherit"
       startIcon={<TranslateIcon />}

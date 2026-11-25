@@ -8,7 +8,7 @@ import { ADMIN_ENABLED } from '@/core/config/admin';
 import { PAGES } from '@/core/config/pages';
 import type { RouteHandle } from '@/i18n/useAlternateHref';
 import { RouteError } from '@/modules/errors/RouteError';
-import { ADMIN_ROUTES, LEGACY_REDIRECTS, ROUTES, WORKSPACE_ROUTES, type RouteKey } from '@/core/routes/paths';
+import { ACCOUNT_ROUTES, ADMIN_ROUTES, LEGACY_REDIRECTS, ROUTES, WORKSPACE_ROUTES, type RouteKey } from '@/core/routes/paths';
 import type { PageHandle } from '@/core/hooks/useRouteKey';
 
 /** A page file loaded only when its route renders. `SiteLayout` supplies the Suspense boundary. */
@@ -30,6 +30,8 @@ const WorkspaceLoginPage: LazyPage = lazy(() => import('@/modules/portals/Worksp
 const WorkspacePage: LazyPage = lazy(() => import('@/modules/portals/WorkspacePage'));
 const WorkspaceLogoutPage: LazyPage = lazy(() => import('@/modules/portals/WorkspaceLogoutPage'));
 const WorkspaceOpenPage: LazyPage = lazy(() => import('@/modules/portals/WorkspaceOpenPage'));
+/** Invitation activation (anonymous; the backend's invitation e-mail links to `/activate?token=…`). */
+const ActivateInvitationPage: LazyPage = lazy(() => import('@/modules/portals/ActivateInvitationPage'));
 
 /** Admin area (blog management): its own layout and lazy pages, never loaded by public pages. */
 const AdminLayout: LazyPage = lazy(() => import('@/modules/admin/AdminLayout'));
@@ -91,6 +93,18 @@ const workspaceRoutes: RouteObject[] = ['', 'ar/'].map((prefix) => ({
   ],
 }));
 
+/** `/activate/` and `/ar/activate/`: the Workspace layout (site theme, URL language, noindex), no session needed. */
+const accountRoutes: RouteObject[] = ['', 'ar/'].map((prefix) => ({
+  path: `${prefix}${toRelative(ACCOUNT_ROUTES.activate)}`,
+  errorElement: <RouteError />,
+  element: (
+    <Suspense fallback={null}>
+      <WorkspaceLayout />
+    </Suspense>
+  ),
+  children: [{ index: true, element: <ActivateInvitationPage /> }],
+}));
+
 /**
  * `/admin/…` (Blogs Admin; English only, outside the site layout). The layout guards every page with the Workspace
  * session; the former admin sign-in address forwards to the Workspace sign-in.
@@ -124,6 +138,7 @@ const notFound: RouteObject = {
 
 export const router = createBrowserRouter([
   ...workspaceRoutes,
+  ...accountRoutes,
   ...adminRoutes,
   {
     element: <SiteLayout />,

@@ -6,6 +6,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/core/auth/authContext';
+import { clearReturnTo, readReturnTo } from '@/core/auth/returnTo';
 import { readHandoffToken } from '@/core/auth/workspaceHandoff';
 import { ROUTES } from '@/core/routes/paths';
 import { useT } from '@/i18n/useT';
@@ -31,6 +32,8 @@ export default function SsoPage() {
   // Read during the first render, before the effect below strips the hash.
   const [token] = useState(() => readHandoffToken(location.hash));
   const started = useRef(false);
+  // The page asked for before the Workspace round trip (read once), else the landing page.
+  const [returnTo] = useState(readReturnTo);
 
   const exchange = useMutation({
     mutationFn: (value: string | null) => authApi.exchangeHandoff(value),
@@ -47,7 +50,10 @@ export default function SsoPage() {
     mutate(token);
   }, [mutate, token, navigate, location.pathname, location.search]);
 
-  if (exchange.isSuccess) return <Navigate to={ROUTES.root} replace />;
+  if (exchange.isSuccess) {
+    clearReturnTo();
+    return <Navigate to={returnTo ?? ROUTES.root} replace />;
+  }
   if (exchange.isError) return <Navigate to={ROUTES.login} replace state={{ handoffFailed: true } satisfies HandoffFailedState} />;
 
   return (

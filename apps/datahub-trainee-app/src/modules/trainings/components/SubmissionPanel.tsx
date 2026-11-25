@@ -6,12 +6,11 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import CloseIcon from '@mui/icons-material/Close';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { isApiError } from '@/core/api/types';
 import { fill } from '@/i18n';
-import { formatDateTime, formatFileSize } from '@/i18n/format';
+import { formatDateTime } from '@/i18n/format';
 import { useLocale } from '@/i18n/LocaleContext';
 import { useT } from '@/i18n/useT';
 import { useFeedback } from '@/modules/shared/hooks/feedbackContext';
@@ -21,6 +20,7 @@ import { submissionSchema, type SubmissionFormValues } from '../schemas/training
 import type { AssignmentDto } from '../types/content';
 import { filesAreValid, toFileInputs } from '../utils/files';
 import { FilePicker } from './FilePicker';
+import { FileList } from './FileList';
 
 /**
  * The learner's submission for one assignment: their text and files, editable only while the assignment is Open
@@ -75,11 +75,9 @@ export function SubmissionPanel({ trainingId, assignment }: { trainingId: string
       </Stack>
 
       {mine && mine.attachments.length > 0 && (
-        <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: 'wrap', mb: 1.5 }}>
-          {mine.attachments.map((file) => (
-            <Chip key={file.id} size="small" variant="outlined" label={`${file.fileName} · ${formatFileSize(file.fileSizeBytes, locale)}`} onDelete={open ? () => removeAttachment(file.id) : undefined} deleteIcon={<CloseIcon aria-label={fill(t.files.remove, { name: file.fileName })} />} />
-          ))}
-        </Stack>
+        <Box sx={{ mb: 1.5 }}>
+          <FileList files={mine.attachments} kind="submission" label={t.assignments.attachments} onRemove={open ? (file) => removeAttachment(file.id) : undefined} />
+        </Box>
       )}
 
       {open ? (

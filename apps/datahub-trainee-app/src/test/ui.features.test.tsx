@@ -1,6 +1,6 @@
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { db } from '@/core/api/mock/mockDatabase';
 import { SEED_USERS as U } from '@/core/api/mock/seedData';
 import { LOCALE_STORAGE_KEY } from '@/i18n/languages';
@@ -234,11 +234,23 @@ describe('training content management', () => {
     expect(await within(links).findByText('Enter a full web address that starts with http:// or https://.')).toBeTruthy();
   });
 
-  it('shows seeded file content without a download (simulated files)', async () => {
+  it('lists files with open / download actions; a demo file explains it has no content', async () => {
+    const user = userEvent.setup();
+    const tab = { close: vi.fn(), location: { href: '' } };
+    const open = vi.spyOn(window, 'open').mockReturnValue(tab as unknown as Window);
     renderApp('/trainings/trn-0001/content', { as: U.adminDataEngineering });
-    expect(await screen.findByText('lab-instructions.pdf · 1.1 MB')).toBeTruthy();
-    expect(screen.getAllByText('Preview only').length).toBeGreaterThan(0);
-    expect(screen.queryByRole('link', { name: /lab-instructions/ })).toBeNull();
+    expect(await screen.findByText('PDF · 1.1 MB')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Download: lab-instructions.pdf' })).toBeTruthy();
+    // A PDF opens in a new tab (opened during the click); the simulated backend has no bytes → the tab closes again.
+    const pdf = screen.getByRole('button', { name: 'lab-instructions.pdf' });
+    await user.click(pdf);
+    expect(open).toHaveBeenCalledWith('', '_blank');
+    expect(await screen.findByText(/sample file of the demo data/)).toBeTruthy();
+    expect(tab.close).toHaveBeenCalled();
+    // A spreadsheet cannot be shown by the browser: clicking its name downloads it (no tab).
+    open.mockClear();
+    await user.click(screen.getByRole('button', { name: 'Sample sales dataset' }));
+    expect(open).not.toHaveBeenCalled();
   });
 
   it('reorders content with the move buttons and persists the order', async () => {

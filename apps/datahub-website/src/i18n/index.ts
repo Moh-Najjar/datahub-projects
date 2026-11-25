@@ -91,6 +91,27 @@ export interface UiStrings {
       signedOut: string;
       backToSite: string;
     };
+    /** Invitation activation (`/activate?token=…`). */
+    activate: {
+      title: string;
+      subtitle: string;
+      newPassword: string;
+      confirmPassword: string;
+      passwordHint: string;
+      submit: string;
+      submitting: string;
+      missingToken: string;
+      passwordRequired: string;
+      passwordTooShort: string;
+      confirmRequired: string;
+      mismatch: string;
+      invalidToken: string;
+      weakPassword: string;
+      failed: string;
+      success: string;
+      successNext: string;
+      continue: string;
+    };
     home: {
       title: string;
       subtitle: string;

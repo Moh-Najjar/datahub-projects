@@ -28,7 +28,8 @@ all inside its own folder. There is deliberately **no** shared runtime package.
   Portal and the Trainee App have no sign-in form — it receives the access token in a short-lived handoff at `/sso`, reads the user, role and
   permissions (backend names, e.g. `hr.leave.approve.team`) from it, and follows the central session through the
   website's hidden `/workspace-session.html` (contracts: `WorkspaceHandoffPayload`, `WorkspaceSessionStatus` in
-  shared-types). Every Sign out goes to `/workspace/logout/`. HR data is still simulated — see both apps' CLAUDE.md.
+  shared-types). Every Sign out goes to `/workspace/logout/`. Invited accounts are activated on the website's
+  `/activate?token=…` (anonymous `POST /api/v1/auth/activate-invitation`), then sign in at the Workspace. HR data is still simulated — see both apps' CLAUDE.md.
 - **One admin design language (violet, since 2026-11-24):** the HR Admin Portal, the Trainee App and Blogs Admin share the same tokens, theme and shell (light only): violet accent, full-width top bar above a compact sidebar (text wordmark, uppercase group labels, text-only items, 14px), flat cards, large-number KPI cards, tonal pill chips, uppercase table headers. The Trainee App's `core/theme` is the source the others were generated from. Apps never import each other, so these are intentional copies — when you change tokens, theme or shell conventions in one, mirror the change in the other two (see each app's CLAUDE.md).
 - **Stay in scope:** when working on one app, do not modify the other. A change to shared-types must keep both
   apps building: run `npm run typecheck` afterwards.
@@ -62,13 +63,13 @@ all inside its own folder. There is deliberately **no** shared runtime package.
 | Task | Command |
 | --- | --- |
 | Install everything | `npm install` |
-| Website | `npm run dev:website` · `build:website` · `preview:website` · `lint:website` |
+| Website | `npm run dev:website` · `build:website` · `preview:website` · `lint:website` · `test:website` |
 | DataHubHR | `npm run dev:hr` · `android:hr` · `ios:hr` · `lint:hr` · `config:hr` · `doctor:hr` |
 | Admin Portal | `npm run dev:admin` · `build:admin` · `lint:admin` · `test:admin` |
 | Trainee App | `npm run dev:trainee` · `build:trainee` · `lint:trainee` · `test:trainee` |
 | TypeScript | `npm run typecheck` (all) · `npm run typecheck:packages` (shared-types) |
 | Lint everything | `npm run lint` |
-| Full verification | `npm run verify` (typecheck → lint → website build → admin build + tests → trainee build + tests → Expo config → expo-doctor) |
+| Full verification | `npm run verify` (typecheck → lint → website build + tests → admin build + tests → trainee build + tests → Expo config → expo-doctor) |
 | Any workspace script | `npm run <script> --workspace=<path>` |
 
 Run `npm run verify` before declaring repository-wide work done.

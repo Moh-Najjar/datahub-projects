@@ -1,8 +1,9 @@
 import { fileURLToPath, URL } from 'node:url';
 import react from '@vitejs/plugin-react';
-import { defineConfig, loadEnv } from 'vite';
+import { loadEnv } from 'vite';
+import { defineConfig } from 'vitest/config';
 
-// https://vite.dev/config/
+// https://vite.dev/config/ — the `test` block configures Vitest (same file, one source of truth).
 export default defineConfig(({ mode }) => {
   // The backend API origin (VITE_API_URL). Development proxies `/api` to it: the backend's CORS policy does not allow
   // the dev origin (http://localhost:3000) yet. Remove the proxy once it does (and point core/config/api.ts at it).
@@ -20,6 +21,12 @@ export default defineConfig(({ mode }) => {
       port: 3000,
       strictPort: true,
       proxy: apiUrl ? { '/api': { target: apiUrl, changeOrigin: true, secure: true } } : undefined,
+    },
+    test: {
+      environment: 'jsdom',
+      setupFiles: ['./src/test/setup.ts'],
+      include: ['src/**/*.test.{ts,tsx}'],
+      css: false,
     },
     css: {
       modules: {

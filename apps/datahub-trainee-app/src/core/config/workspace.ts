@@ -44,5 +44,11 @@ export const workspaceOpenUrl = (language: Locale) => workspacePage(`open/${WORK
 /** Ends the central session and shows the Workspace sign-in. */
 export const workspaceLogoutUrl = (language: Locale) => workspacePage('logout/', language);
 
+/**
+ * The website's invitation activation page with this URL's query string (`?token=…`, passed on as received).
+ * Invitation e-mails whose link was built with this app's origin (`/activate?token=…`) are forwarded there.
+ */
+export const workspaceActivateUrl = (search: string) => WORKSPACE_URL && `${WORKSPACE_URL}/activate/${search}`;
+
 /** The hidden session check page (see `core/auth/WorkspaceSessionCheck.tsx`). */
 export const WORKSPACE_SESSION_CHECK_URL = WORKSPACE_URL && `${WORKSPACE_URL}/workspace-session.html`;

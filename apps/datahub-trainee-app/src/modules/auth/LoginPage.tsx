@@ -11,6 +11,7 @@ import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined';
 import { useLocation } from 'react-router-dom';
+import { rememberReturnTo } from '@/core/auth/returnTo';
 import { workspaceCheckLooping } from '@/core/auth/workspaceEnded';
 import { workspaceOpenUrl } from '@/core/config/workspace';
 import { useLocale } from '@/i18n/LocaleContext';
@@ -30,13 +31,30 @@ export default function LoginPage() {
   const t = useT();
   const { locale } = useLocale();
   const target = workspaceOpenUrl(locale);
-  const handoffFailed = (useLocation().state as Partial<HandoffFailedState> | null)?.handoffFailed === true;
+  const state = useLocation().state as (Partial<HandoffFailedState> & { from?: unknown }) | null;
+  const handoffFailed = state?.handoffFailed === true;
+  const from = state?.from;
   const [looping] = useState(() => workspaceCheckLooping());
   const autoRedirect = Boolean(target) && !handoffFailed && !looping;
 
   useEffect(() => {
-    if (autoRedirect && target) window.location.replace(target);
-  }, [autoRedirect, target]);
+    if (!autoRedirect || !target) return;
+    // Come back to the page that was asked for after signing in.
+    rememberReturnTo(from);
+    window.location.replace(target);
+  }, [autoRedirect, target, from]);
+
+  // Normally this page is never really shown: only a short "redirecting" while the browser goes to the Workspace.
+  if (autoRedirect) {
+    return (
+      <Box component="main" role="status" sx={{ minHeight: '100vh', display: 'grid', placeItems: 'center', bgcolor: 'background.default', px: 2 }}>
+        <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
+          <CircularProgress size={22} />
+          <Typography>{t.auth.login.redirecting}</Typography>
+        </Stack>
+      </Box>
+    );
+  }
 
   const highlights = [
     { icon: <SchoolOutlinedIcon />, text: t.auth.login.highlightTrainings },

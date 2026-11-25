@@ -27,6 +27,8 @@ function toDto(user: DbUser): UserDto {
     fullName: user.fullName,
     email: user.email,
     role: user.role,
+    roleId: user.role,
+    roleName: null,
     isActive: user.isActive,
     departmentId: user.departmentId,
     departmentName: db().departments.find((d) => d.id === user.departmentId)?.name ?? null,
@@ -45,9 +47,9 @@ function managedDepartment(actor: TrainingActor): string {
   return actor.departmentId ?? forbidden('user.noDepartment');
 }
 
-function assertRole(actor: TrainingActor, role: Role): void {
-  if (!ROLES.includes(role)) invalid('role', 'user.roleInvalid');
-  if (isDepartmentScoped(actor) && !DEPARTMENT_ASSIGNABLE_ROLES.includes(role)) forbidden('user.roleNotAllowed');
+function assertRole(actor: TrainingActor, role: string): asserts role is Role {
+  if (!ROLES.includes(role as Role)) invalid('role', 'user.roleInvalid');
+  if (isDepartmentScoped(actor) && !DEPARTMENT_ASSIGNABLE_ROLES.includes(role as Role)) forbidden('user.roleNotAllowed');
 }
 
 /** The department a saved user ends up in: forced to the DepartmentAdmin's own, otherwise as requested (must exist). */

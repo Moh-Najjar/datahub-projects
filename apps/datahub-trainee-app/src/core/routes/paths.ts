@@ -5,6 +5,8 @@ export const ROUTES = {
   login: '/login',
   /** Public: Workspace single sign-in (`/sso#token=…`). */
   sso: '/sso',
+  /** Public: forwards an invitation link (`/activate?token=…`) to the website's activation page. */
+  activate: '/activate',
   dashboard: '/dashboard',
   trainings: '/trainings',
   training: (id: string, tab?: 'overview' | 'content' | 'assignments' | 'trainees') => (tab && tab !== 'overview' ? `/trainings/${encodeURIComponent(id)}/${tab}` : `/trainings/${encodeURIComponent(id)}`),

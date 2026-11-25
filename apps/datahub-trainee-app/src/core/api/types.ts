@@ -50,14 +50,17 @@ export class ApiError extends Error {
   readonly reason?: string;
   /** Field-level reasons for `VALIDATION` errors (field name → reason ids). */
   readonly fieldErrors?: Readonly<Record<string, string[]>>;
+  /** The real backend's own message (untranslated); shown when the app has no translation for `reason`. */
+  readonly detail?: string;
 
-  constructor(code: ApiErrorCode, reason?: string, fieldErrors?: Record<string, string[]>) {
+  constructor(code: ApiErrorCode, reason?: string, fieldErrors?: Record<string, string[]>, detail?: string) {
     super(reason ?? code);
     this.name = 'ApiError';
     this.code = code;
     this.status = STATUS[code];
     this.reason = reason;
     this.fieldErrors = fieldErrors;
+    this.detail = detail;
   }
 }
 

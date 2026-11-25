@@ -80,6 +80,26 @@
       "signedOut": "You have signed out.",
       "backToSite": "Back to website"
     },
+    "activate": {
+      "title": "Activate your account",
+      "subtitle": "Choose a password to finish setting up your DataHub account.",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm password",
+      "passwordHint": "At least 12 characters.",
+      "submit": "Activate account",
+      "submitting": "Activating…",
+      "missingToken": "This invitation link is invalid because the token is missing.",
+      "passwordRequired": "Enter a new password.",
+      "passwordTooShort": "Password must contain at least 12 characters.",
+      "confirmRequired": "Confirm your new password.",
+      "mismatch": "The passwords do not match.",
+      "invalidToken": "This invitation link is invalid or has expired. Please request a new invitation.",
+      "weakPassword": "Password must contain at least 12 characters.",
+      "failed": "We could not activate your account. Please try again.",
+      "success": "Your account has been activated successfully.",
+      "successNext": "You can now sign in with your email and new password. You will be taken to the sign-in page shortly.",
+      "continue": "Continue to sign in"
+    },
     "home": {
       "title": "My applications",
       "subtitle": "Signed in as {role}. Choose an application to open it.",

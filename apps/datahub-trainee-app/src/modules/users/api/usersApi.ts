@@ -1,7 +1,8 @@
 import { mockRequest } from '@/core/api/mock/mockRequest';
 import type { ListParams, Paginated } from '@/core/api/types';
 import { usersMock } from '../mock/usersMock';
-import type { CreateUserInput, UpdateUserInput, UserDto, UserFilters } from '../types/user';
+import { ROLES } from '@/core/domain/training';
+import type { CreateUserInput, RoleOption, UpdateUserInput, UserDto, UserFilters } from '../types/user';
 import { usesMockData } from '@/core/config/api';
 import { usersHttpApi } from './usersHttp';
 
@@ -13,6 +14,8 @@ const mockUsersApi = {
   create: (input: CreateUserInput): Promise<UserDto> => mockRequest(() => usersMock.create(input)),
   update: (id: string, input: UpdateUserInput): Promise<UserDto> => mockRequest(() => usersMock.update(id, input)),
   remove: (id: string): Promise<void> => mockRequest(() => usersMock.remove(id)),
+  /** The choices of the user form's Role field: the app roles (labels translated by the UI). */
+  roleOptions: (signal?: AbortSignal): Promise<RoleOption[]> => mockRequest(() => ROLES.map((value) => ({ value, label: null })), { signal }),
 };
 
 // Real backend by default; the simulated one in tests and with `VITE_TRAINEE_DATA=mock` (core/config/api.ts).

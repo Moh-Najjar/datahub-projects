@@ -14,6 +14,8 @@ export const apiPaths = {
     login: '/api/v1/auth/login',
     /** `GET` applications the signed-in user may open. Send the new token explicitly. */
     portals: '/api/v1/auth/portals',
+    /** `POST` (anonymous) `{ token, newPassword }` → 204. Activates an invited account (single-use, expiring token). */
+    activateInvitation: '/api/v1/auth/activate-invitation',
   },
   blogs: {
     /** `GET` published posts. Query: `pageNumber`, `pageSize`. */

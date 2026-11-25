@@ -1,5 +1,5 @@
 import { apiPaths } from '@/core/api/paths';
-import { http } from '@/core/helpers/http';
+import { http, HttpError } from '@/core/helpers/http';
 
 /*
  * Layer 2 — Authentication API functions. The access token is a JWT (~15 min). The refresh / logout endpoints answer
@@ -25,7 +25,26 @@ export interface Portal {
 export const authApi = {
   login: (email: string, password: string) => http.post<LoginResult>(apiPaths.auth.login, { email, password }),
   getPortals: (token: string) => http.get<Portal[]>(apiPaths.auth.portals, { token }),
+  /** Anonymous. 204 = activated (e-mail verified, password set, account Active). The token is single-use and expires. */
+  activateInvitation: (token: string, newPassword: string) => http.post<void>(apiPaths.auth.activateInvitation, { token, newPassword }),
 };
+
+/** Passwords of activated accounts: at least this many characters (backend rule). */
+export const MIN_PASSWORD_LENGTH = 12;
+
+/**
+ * Why an activation failed. Backend codes verified 2026-11-25 (400): `Authentication.InvalidToken` (unknown, used or
+ * expired token — also for an empty one) and `Authentication.WeakPassword`. No answer / 5xx / anything else → `failed`.
+ */
+export type ActivationFailure = 'invalidToken' | 'weakPassword' | 'failed';
+
+export function activationFailureOf(error: unknown): ActivationFailure {
+  if (!(error instanceof HttpError) || error.status === 0 || error.status >= 500) return 'failed';
+  const mentions = (pattern: RegExp) => pattern.test(error.code ?? '') || error.errors.some((e) => pattern.test(`${e.code} ${e.description}`));
+  if (mentions(/password/i)) return 'weakPassword';
+  if (mentions(/token|invitation/i) || error.status === 404 || error.status === 410) return 'invalidToken';
+  return 'failed';
+}
 
 /** What the UI needs from the access token. Decoded only — the backend verifies it on every request. */
 export interface AccessTokenClaims {

@@ -15,6 +15,7 @@ export const RESERVED_SLUGS: ReadonlySet<string> = new Set([
   'ar',
   'admin',
   'workspace',
+  'activate',
   'assets',
   'api',
   // `/api/blogs/tags` and `/api/blogs/categories` are the backend's lists, not posts.

@@ -17,6 +17,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { Link as RouterLink } from 'react-router-dom';
 import { ROLES, type Role } from '@/core/domain/training';
+import { usesMockData } from '@/core/config/api';
 import { useAuth } from '@/core/auth/authContext';
 import { DEPARTMENT_ASSIGNABLE_ROLES, EVALUABLE_ROLES, isDepartmentScoped } from '@/core/auth/trainingPolicy';
 import { ROUTES } from '@/core/routes/paths';
@@ -35,7 +36,7 @@ import { SelectField } from '@/modules/shared/SelectField';
 import { StatusChip } from '@/modules/shared/StatusChip';
 import { UserAvatar } from '@/modules/shared/UserAvatar';
 import { applyServerErrors, apiErrorMessage } from '@/modules/shared/utils/apiMessage';
-import { useCreateUser, useDeleteUser, useUpdateUser, useUsers } from './hooks/useUsers';
+import { useCreateUser, useDeleteUser, useRoleOptions, useUpdateUser, useUsers } from './hooks/useUsers';
 import { userSchema, type UserFormValues } from './schemas/userSchema';
 import type { UserDto, UserFilters } from './types/user';
 
@@ -51,6 +52,9 @@ export default function UsersPage() {
   const list = useListState<UserFilters>({ pageSize: 10, initialSort: { sortBy: 'name', sortDirection: 'asc' } });
   const query = useUsers(list.params);
   const departments = useDepartmentOptions();
+  // The roles that exist (real API: `GET /api/v1/roles`).
+  const roleOptions = useRoleOptions();
+  const roleFilterOptions = (roleOptions.data ?? []).map((r) => ({ value: r.value, label: r.label ?? t.roles[r.value as Role] ?? r.value }));
   const update = useUpdateUser();
   const [editing, setEditing] = useState<UserDto | 'new' | null>(null);
   const [deleting, setDeleting] = useState<UserDto | null>(null);
@@ -58,7 +62,7 @@ export default function UsersPage() {
 
   const toggleActive = async (user: UserDto, isActive: boolean) => {
     try {
-      await update.mutateAsync({ id: user.id, input: { fullName: user.fullName, email: user.email, role: user.role, departmentId: user.departmentId, isActive } });
+      await update.mutateAsync({ id: user.id, input: { fullName: user.fullName, email: user.email, role: user.roleId, departmentId: user.departmentId, isActive } });
       feedback.success(isActive ? t.users.activated : t.users.deactivated);
     } catch (error) {
       feedback.error(apiErrorMessage(t, error));
@@ -84,7 +88,7 @@ export default function UsersPage() {
         </Stack>
       ),
     },
-    { id: 'role', header: t.users.columns.role, sortKey: 'role', render: (u) => <StatusChip kind="role" value={u.role} /> },
+    { id: 'role', header: t.users.columns.role, sortKey: 'role', render: (u) => <StatusChip kind="role" value={u.role} label={u.roleName} /> },
     { id: 'department', header: t.users.columns.department, sortKey: 'department', hideBelow: 'md', render: (u) => u.departmentName ?? t.common.noDepartment },
     {
       id: 'status',
@@ -144,7 +148,7 @@ export default function UsersPage() {
         search={<SearchInput value={list.searchInput} onChange={list.setSearchInput} placeholder={t.users.search} />}
         filters={
           <>
-            <FilterSelect label={t.users.columns.role} value={list.filters.role} options={ROLES.map((r) => ({ value: r, label: t.roles[r] }))} onChange={(v) => list.setFilter('role', v)} />
+            <FilterSelect label={t.users.columns.role} value={list.filters.role} options={roleFilterOptions} onChange={(v) => list.setFilter('role', v)} />
             {!scoped && <FilterSelect label={t.users.columns.department} value={list.filters.departmentId} options={(departments.data ?? []).map((d) => ({ value: d.id, label: d.name }))} onChange={(v) => list.setFilter('departmentId', v)} />}
             <FilterSelect label={t.users.columns.active} value={list.filters.isActive} options={[{ value: 'true', label: t.users.active }, { value: 'false', label: t.users.inactive }]} onChange={(v) => list.setFilter('isActive', v)} minWidth={150} />
           </>
@@ -192,10 +196,17 @@ function UserFormDialog({ user, onClose, onSaved }: { user: UserDto | null; onCl
   const create = useCreateUser();
   const update = useUpdateUser();
   const [failure, setFailure] = useState<unknown>(null);
-  const roles: readonly Role[] = scoped ? DEPARTMENT_ASSIGNABLE_ROLES : ROLES;
+  // Role choices come from the backend's roles (`GET /api/v1/roles`); the simulated backend offers the app roles,
+  // limited for department admins.
+  const roleOptions = useRoleOptions();
+  const allowed: readonly string[] = scoped ? DEPARTMENT_ASSIGNABLE_ROLES : ROLES;
+  const roles = (roleOptions.data ?? [])
+    .filter((r) => !usesMockData || allowed.includes(r.value))
+    .sort((a, b) => (usesMockData ? allowed.indexOf(a.value) - allowed.indexOf(b.value) : 0))
+    .map((r) => ({ value: r.value, label: r.label ?? t.roles[r.value as Role] ?? r.value }));
   const { register, control, handleSubmit, setError, setFocus, formState: { errors, isSubmitting } } = useForm<UserFormValues>({
     resolver: zodResolver(userSchema(t)),
-    defaultValues: { fullName: user?.fullName ?? '', email: user?.email ?? '', role: user?.role ?? roles[0] ?? 'Trainee', departmentId: user?.departmentId ?? (scoped ? (actor?.departmentId ?? '') : ''), isActive: user?.isActive ?? true },
+    defaultValues: { fullName: user?.fullName ?? '', email: user?.email ?? '', role: user?.roleId ?? (usesMockData ? (scoped ? 'Intern' : 'SuperAdmin') : ''), departmentId: user?.departmentId ?? (scoped ? (actor?.departmentId ?? '') : ''), isActive: user?.isActive ?? true },
   });
 
   useEffect(() => setFocus('fullName'), [setFocus]);
@@ -218,7 +229,7 @@ function UserFormDialog({ user, onClose, onSaved }: { user: UserDto | null; onCl
       <Stack spacing={2.5} sx={{ pt: 1 }}>
         <TextField label={t.users.fields.fullName} required autoComplete="off" error={!!errors.fullName} helperText={errors.fullName?.message} {...register('fullName')} slotProps={{ inputLabel: { shrink: true } }} />
         <TextField label={t.users.fields.email} type="email" required autoComplete="off" error={!!errors.email} helperText={errors.email?.message} {...register('email')} slotProps={{ inputLabel: { shrink: true } }} />
-        <SelectField control={control} name="role" label={t.users.fields.role} required options={roles.map((r) => ({ value: r, label: t.roles[r] }))} helperText={scoped ? t.users.roleLimited : undefined} />
+        <SelectField control={control} name="role" label={t.users.fields.role} required options={roles} disabled={roleOptions.isLoading} helperText={scoped ? t.users.roleLimited : undefined} />
         <SelectField control={control} name="departmentId" label={t.users.fields.department} disabled={scoped} emptyLabel={t.common.noDepartment} options={(departments.data ?? []).map((d) => ({ value: d.id, label: d.name }))} helperText={scoped ? t.users.departmentLocked : undefined} />
         {user && (
           <Controller

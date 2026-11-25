@@ -94,6 +94,14 @@ export const LEGACY_REDIRECTS: Readonly<Record<string, AppPath>> = {
  * Admin area (blog management). English only, outside the public site layout, and not part of `ROUTES`
  * (public pages are generated from `ROUTES`). Available only when `ADMIN_ENABLED` (core/config/admin.ts).
  */
+/**
+ * Account pages reached from backend e-mails (anonymous, English + Arabic, outside the page catalogue).
+ * `activate`: the invitation e-mail links to `/activate?token=<invitation token>`.
+ */
+export const ACCOUNT_ROUTES = {
+  activate: '/activate/',
+} as const;
+
 /** The DataHub Workspace — central staff sign-in and application launcher (English + Arabic, outside the page catalogue). */
 export const WORKSPACE_ROUTES = {
   root: '/workspace/',

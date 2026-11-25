@@ -9,7 +9,14 @@ export const userKeys = {
   list: (actor: string, params: ListParams<UserFilters>) => ['users', actor, 'list', params] as const,
   assignable: (actor: string) => ['users', actor, 'assignable'] as const,
   detail: (actor: string, id: string) => ['users', actor, 'detail', id] as const,
+  roleOptions: (actor: string) => ['users', actor, 'role-options'] as const,
 };
+
+/** The Role field's choices (real API: the backend roles from `GET /api/v1/roles`). */
+export function useRoleOptions() {
+  const actor = useActorKey();
+  return useQuery({ queryKey: userKeys.roleOptions(actor), queryFn: ({ signal }) => usersApi.roleOptions(signal), staleTime: 5 * 60_000 });
+}
 
 export function useUsers(params: ListParams<UserFilters>) {
   const actor = useActorKey();

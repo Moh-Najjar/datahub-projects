@@ -14,20 +14,19 @@ import AddIcon from '@mui/icons-material/Add';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined';
 import LinkIcon from '@mui/icons-material/Link';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { safeHttpUrl } from '@/core/utils/safeUrl';
 import { fill } from '@/i18n';
-import { formatFileSize } from '@/i18n/format';
-import { useLocale } from '@/i18n/LocaleContext';
 import { useT } from '@/i18n/useT';
 import { ConfirmDialog } from '@/modules/shared/ConfirmDialog';
 import { useFeedback } from '@/modules/shared/hooks/feedbackContext';
 import { EmptyState, ErrorState, SkeletonBlock } from '@/modules/shared/states';
 import { useMaterials, useMaterialMutations } from '../hooks/useTrainings';
 import type { FileItemDto, MaterialDto, MaterialType } from '../types/content';
+import { FileList } from './FileList';
 import { AddFilesDialog, FileMaterialDialog, FileTitleDialog, LinkMaterialDialog, TextMaterialDialog } from './MaterialDialogs';
 import { SortableList } from './SortableList';
 
@@ -166,7 +165,6 @@ interface MaterialCardProps {
 
 function MaterialCard({ material, canAuthor, onEdit, onDelete, onAddFiles, onEditFile, onDeleteFile }: MaterialCardProps) {
   const t = useT();
-  const { locale } = useLocale();
   return (
     <Card sx={{ p: 2.5, height: '100%' }} component="article" aria-label={material.title}>
       <Stack direction="row" spacing={1.5} sx={{ alignItems: 'flex-start' }}>
@@ -187,10 +185,17 @@ function MaterialCard({ material, canAuthor, onEdit, onDelete, onAddFiles, onEdi
             <Stack component="ul" spacing={0.75} sx={{ mt: 1, p: 0, m: 0, listStyle: 'none' }} aria-label={material.title}>
               {material.links.map((link) => (
                 <li key={link.id}>
-                  <Link href={link.url} target="_blank" rel="noopener noreferrer" sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5, overflowWrap: 'anywhere' }}>
-                    {link.title || link.url}
-                    <OpenInNewIcon sx={{ fontSize: 15 }} aria-hidden />
-                  </Link>
+                  {safeHttpUrl(link.url) ? (
+                    <Link href={safeHttpUrl(link.url)!} target="_blank" rel="noopener noreferrer" sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5, overflowWrap: 'anywhere' }}>
+                      {link.title || link.url}
+                      <OpenInNewIcon sx={{ fontSize: 15 }} aria-hidden />
+                    </Link>
+                  ) : (
+                    // No usable address: plain text, never a link that would reopen this app.
+                    <Typography component="span" color="text.secondary" sx={{ overflowWrap: 'anywhere' }}>
+                      {link.title || link.url || t.content.linkUnavailable}
+                    </Typography>
+                  )}
                   {link.title && (
                     <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }} dir="ltr">
                       {link.url}
@@ -201,43 +206,14 @@ function MaterialCard({ material, canAuthor, onEdit, onDelete, onAddFiles, onEdi
             </Stack>
           )}
           {material.type === 'file' && (
-            <Stack component="ul" spacing={1} sx={{ mt: 1, p: 0, m: 0, listStyle: 'none' }} aria-label={material.title}>
-              {material.files.map((file) => (
-                <Stack component="li" key={file.id} direction="row" spacing={1.5} sx={{ alignItems: 'center', p: 1, borderRadius: 1, bgcolor: 'grey.50', border: 1, borderColor: 'divider' }}>
-                  <DescriptionOutlinedIcon fontSize="small" color="action" aria-hidden />
-                  <Box sx={{ flex: 1, minWidth: 0 }}>
-                    <Typography variant="body2" sx={{ fontWeight: 600, overflowWrap: 'anywhere' }}>
-                      {file.title || file.fileName}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary" dir="ltr" sx={{ display: 'block', textAlign: 'start' }}>
-                      {file.fileName} · {formatFileSize(file.fileSizeBytes, locale)}
-                    </Typography>
-                  </Box>
-                  <Chip size="small" variant="outlined" label={t.files.previewOnly} />
-                  {canAuthor && (
-                    <>
-                      <Tooltip title={t.common.edit}>
-                        <IconButton size="small" aria-label={`${t.common.edit}: ${file.fileName}`} onClick={() => onEditFile(file)}>
-                          <EditOutlinedIcon fontSize="small" />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title={t.common.delete}>
-                        <IconButton size="small" color="error" aria-label={`${t.common.delete}: ${file.fileName}`} onClick={() => onDeleteFile(file)}>
-                          <DeleteOutlinedIcon fontSize="small" />
-                        </IconButton>
-                      </Tooltip>
-                    </>
-                  )}
-                </Stack>
-              ))}
+            <Box sx={{ mt: 1 }}>
+              <FileList files={material.files} kind="material" label={material.title} onEdit={canAuthor ? onEditFile : undefined} onRemove={canAuthor ? onDeleteFile : undefined} />
               {canAuthor && (
-                <Box component="li">
-                  <Button size="small" startIcon={<AddIcon />} onClick={onAddFiles}>
-                    {t.content.addMoreFiles}
-                  </Button>
-                </Box>
+                <Button size="small" startIcon={<AddIcon />} onClick={onAddFiles} sx={{ mt: 1 }}>
+                  {t.content.addMoreFiles}
+                </Button>
               )}
-            </Stack>
+            </Box>
           )}
         </Box>
         {canAuthor && (

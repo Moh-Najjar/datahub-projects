@@ -14,6 +14,9 @@ export interface FileInput {
   file?: File;
 }
 
+/** Where a stored file belongs (each kind has its own download endpoint). */
+export type FileKind = 'material' | 'assignment' | 'submission';
+
 export interface FileItemDto {
   id: string;
   title: string | null;

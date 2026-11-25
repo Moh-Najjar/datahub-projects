@@ -43,8 +43,22 @@ function codeFor(status: number): ApiErrorCode {
 
 interface ProblemBody {
   error?: { code?: string; message?: string } | null;
-  errors?: Record<string, string[]> | { code?: string; field?: string; message?: string }[];
+  errors?: Record<string, string[]> | { code?: string; field?: string; message?: string; description?: string }[];
   title?: string;
+  detail?: string;
+}
+
+/**
+ * The backend's own explanation: the validation descriptions (e.g. "'Preferred Language Code' must not be empty."),
+ * else `error.message` / ProblemDetails `detail` (e.g. "The user was created, but invitation delivery is …").
+ */
+function detailOf(body: ProblemBody | null): string | undefined {
+  const errors = body?.errors;
+  const texts = Array.isArray(errors)
+    ? errors.map((e) => e.description ?? e.message).filter((s): s is string => !!s)
+    : Object.values(errors ?? {}).flat();
+  if (texts.length) return texts.join(' ');
+  return body?.error?.message ?? body?.detail ?? undefined;
 }
 
 /** Field errors of an ASP.NET ProblemDetails / envelope answer, as field → messages. */
@@ -66,6 +80,72 @@ function url(path: string, query?: Query): string {
   return `${API_BASE_URL}${path}${qs ? `?${qs}` : ''}`;
 }
 
+/** A failed answer as `ApiError` (a 401 also ends the session). */
+function failureOf(status: number, json: unknown): ApiError {
+  if (status === 401) auth.onUnauthorized();
+  const problem = json as ProblemBody | null;
+  const fieldErrors = fieldErrorsOf(problem);
+  const code = status === 400 && fieldErrors ? 'VALIDATION' : codeFor(status);
+  return new ApiError(code, problem?.error?.code ?? undefined, fieldErrors, detailOf(problem));
+}
+
+function parseJson(text: string): unknown {
+  try {
+    return text ? JSON.parse(text) : null;
+  } catch {
+    return null;
+  }
+}
+
+const unwrap = (json: unknown): unknown => (json && typeof json === 'object' && 'success' in json && 'data' in json ? (json as { data: unknown }).data : json);
+
+/** A downloaded file: its bytes, or — when the API answers with a link (e.g. a storage URL) — that link. */
+export type DownloadedFile = { kind: 'blob'; blob: Blob; contentType: string | null } | { kind: 'url'; url: string };
+
+/** `filename` / `filename*` of a Content-Disposition header (readable cross-origin only when the API exposes it). */
+function fileNameOf(disposition: string | null): string | null {
+  if (!disposition) return null;
+  const star = /filename*s*=s*(?:UTF-8'')?([^;]+)/i.exec(disposition)?.[1];
+  if (star) return decodeURIComponent(star.trim().replace(/^"|"$/g, ''));
+  return /filenames*=s*"?([^";]+)"?/i.exec(disposition)?.[1]?.trim() ?? null;
+}
+
+/**
+ * GET a file with the Bearer token (a plain link cannot carry it). Swagger documents no response body for the
+ * download endpoints (2026-11-25), so every likely answer is accepted: the file's bytes; JSON (envelope or bare) with a
+ * link (`downloadUrl` / `url` / `sasUrl` / `fileUrl`); or JSON with base64 `content`.
+ */
+async function download(path: string, signal?: AbortSignal): Promise<DownloadedFile & { fileName: string | null }> {
+  const token = auth.getAccessToken();
+  if (!token) throw new ApiError('UNAUTHORIZED');
+  let response: Response;
+  try {
+    response = await fetch(url(path), { method: 'GET', signal, credentials: 'omit', headers: { Accept: '*/*', Authorization: `Bearer ${token}` } });
+  } catch (error) {
+    if (signal?.aborted) throw error;
+    throw new ApiError('NETWORK');
+  }
+  if (!response.ok) throw failureOf(response.status, parseJson(await response.text()));
+
+  const contentType = response.headers.get('Content-Type');
+  const fileName = fileNameOf(response.headers.get('Content-Disposition'));
+  if (contentType?.includes('json')) {
+    const data = unwrap(parseJson(await response.text()));
+    const o = (data && typeof data === 'object' ? data : {}) as Record<string, unknown>;
+    const pick = (...keys: string[]) => keys.map((k) => o[k]).find((v): v is string => typeof v === 'string' && v.length > 0);
+    const link = pick('downloadUrl', 'url', 'sasUrl', 'fileUrl', 'blobUrl');
+    if (link) return { kind: 'url', url: link, fileName: pick('fileName') ?? fileName };
+    const base64 = pick('content', 'base64', 'contentBase64', 'data');
+    if (base64) {
+      const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
+      const type = pick('contentType') ?? null;
+      return { kind: 'blob', blob: new Blob([bytes], type ? { type } : undefined), contentType: type, fileName: pick('fileName') ?? fileName };
+    }
+    throw new ApiError('SERVER', 'file.unavailable');
+  }
+  return { kind: 'blob', blob: await response.blob(), contentType, fileName };
+}
+
 async function request<T>(method: string, path: string, body: unknown, options: RequestOptions = {}): Promise<T> {
   const token = auth.getAccessToken();
   if (!token) throw new ApiError('UNAUTHORIZED');
@@ -84,27 +164,10 @@ async function request<T>(method: string, path: string, body: unknown, options: 
     throw new ApiError('NETWORK');
   }
 
-  const text = response.status === 204 ? '' : await response.text();
-  let json: unknown = null;
-  if (text) {
-    try {
-      json = JSON.parse(text);
-    } catch {
-      json = null;
-    }
-  }
-
-  if (!response.ok) {
-    if (response.status === 401) auth.onUnauthorized();
-    const problem = json as ProblemBody | null;
-    const fieldErrors = fieldErrorsOf(problem);
-    const code = response.status === 400 && fieldErrors ? 'VALIDATION' : codeFor(response.status);
-    throw new ApiError(code, problem?.error?.code ?? undefined, fieldErrors);
-  }
-
+  const json = parseJson(response.status === 204 ? '' : await response.text());
+  if (!response.ok) throw failureOf(response.status, json);
   // Envelope `{ success, data, … }`; a bare body is returned as is.
-  if (json && typeof json === 'object' && 'success' in json && 'data' in json) return (json as { data: T }).data;
-  return json as T;
+  return unwrap(json) as T;
 }
 
 export const http = {
@@ -112,6 +175,8 @@ export const http = {
   post: <T>(path: string, body?: unknown, options?: RequestOptions) => request<T>('POST', path, body ?? {}, options),
   put: <T>(path: string, body?: unknown, options?: RequestOptions) => request<T>('PUT', path, body ?? {}, options),
   delete: <T = void>(path: string, body?: unknown, options?: RequestOptions) => request<T>('DELETE', path, body, options),
+  /** A file (bytes or a link) — see `download`. */
+  download,
   /** Multipart upload: one `file` part per file (the field name the API expects). */
   upload: <T>(path: string, files: readonly File[], fields: Record<string, string> = {}) => {
     const form = new FormData();

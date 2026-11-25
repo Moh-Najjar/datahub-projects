@@ -8,6 +8,7 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { usesMockData } from '@/core/config/api';
 import { useT } from '@/i18n/useT';
 import { FormDialog } from '@/modules/shared/FormDialog';
 import { applyServerErrors, reasonMessage } from '@/modules/shared/utils/apiMessage';
@@ -142,7 +143,7 @@ export function FileMaterialDialog({ trainingId, material, onClose, onSaved }: B
   });
 
   return (
-    <FormDialog open title={material ? t.content.renameFiles : t.content.addFiles} description={material ? undefined : t.files.simulated} submitLabel={material ? t.common.save : t.common.add} isSubmitting={isSubmitting} error={failure} onClose={onClose} onSubmit={submit} maxWidth="sm">
+    <FormDialog open title={material ? t.content.renameFiles : t.content.addFiles} description={material || !usesMockData ? undefined : t.files.simulated} submitLabel={material ? t.common.save : t.common.add} isSubmitting={isSubmitting} error={failure} onClose={onClose} onSubmit={submit} maxWidth="sm">
       <Stack spacing={2.5} sx={{ pt: 1 }}>
         <TextField label={t.content.fields.title} required error={!!errors.title} helperText={errors.title?.message} {...register('title')} slotProps={{ inputLabel: { shrink: true } }} />
         {!material && <FilePicker files={files} onChange={setFiles} label={t.files.choose} required error={filesError} />}

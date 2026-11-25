@@ -29,7 +29,7 @@ describe('SuperAdmin manages everyone', () => {
 
   it('keeps no password and no Workspace link on a user record', () => {
     const created = usersMock.create(newUser());
-    expect(Object.keys(created).sort()).toEqual(['createdAt', 'departmentId', 'departmentName', 'email', 'fullName', 'id', 'isActive', 'role']);
+    expect(Object.keys(created).sort()).toEqual(['createdAt', 'departmentId', 'departmentName', 'email', 'fullName', 'id', 'isActive', 'role', 'roleId', 'roleName']);
     expect(JSON.stringify(db().users.find((u) => u.id === created.id))).not.toMatch(/password|token/i);
   });
 

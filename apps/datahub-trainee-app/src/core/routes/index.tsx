@@ -1,6 +1,7 @@
-import { Suspense, lazy, type ComponentType, type ReactNode } from 'react';
-import { Navigate, createBrowserRouter, type RouteObject } from 'react-router-dom';
+import { Suspense, lazy, useEffect, type ComponentType, type ReactNode } from 'react';
+import { Navigate, createBrowserRouter, useLocation, type RouteObject } from 'react-router-dom';
 import { useAuth } from '@/core/auth/authContext';
+import { workspaceActivateUrl } from '@/core/config/workspace';
 import type { TrainingPermission } from '@/core/auth/trainingPolicy';
 import { BreadcrumbProvider } from '@/core/hooks/BreadcrumbProvider';
 import { RedirectIfAuthenticated, RequireAuth } from '@/core/guards/RequireAuth';
@@ -55,7 +56,21 @@ function LoginRoute() {
   return <RedirectIfAuthenticated fallback={landingPath(can)}>{suspended(LoginPage)}</RedirectIfAuthenticated>;
 }
 
+/**
+ * `/activate?token=…` — invitation links built with this app's origin. Activation (choosing a password) is the
+ * website's page: forward the browser there with the query string unchanged (the token is never read or logged here).
+ */
+function ActivateForward() {
+  const { search } = useLocation();
+  const target = workspaceActivateUrl(search);
+  useEffect(() => {
+    if (target) window.location.replace(target);
+  }, [target]);
+  return target ? <LoadingState /> : <NotFoundPage />;
+}
+
 export const routes: RouteObject[] = [
+  { path: ROUTES.activate, element: <ActivateForward /> },
   { path: ROUTES.login, element: <LoginRoute /> },
   { path: ROUTES.sso, element: suspended(SsoPage) },
   {

@@ -44,6 +44,22 @@ describe('single sign-in from the DataHub Workspace (/sso)', () => {
     expect((await screen.findAllByText('Department Admin')).length).toBeGreaterThan(0);
   });
 
+  it('comes back to the page that was asked for after the Workspace round trip (not the dashboard)', async () => {
+    const { replace } = stubLocation();
+    const first = renderApp('/trainings?search=sql');
+    await waitFor(() => expect(replace).toHaveBeenCalledWith(`${WORKSPACE}/workspace/open/academy-admin/`));
+    // Only a short "redirecting" status, not a sign-in page.
+    expect(screen.getByRole('status').textContent).toMatch(/Workspace/);
+    expect(screen.queryByRole('heading', { level: 1 })).toBeNull();
+    first.unmount();
+
+    const token = testHandoffToken({ claims: { email: 'omar.nasser@example.test', display_name: 'Omar Nasser', role: 'employee' } });
+    const { router } = renderApp(`/sso#token=${token}`);
+    await waitFor(() => expect(router.state.location.pathname).toBe('/trainings'));
+    expect(router.state.location.search).toBe('?search=sql');
+    expect(sessionStorage.getItem('datahub-trainee.return-to')).toBeNull();
+  });
+
   it('never stores a password and keeps the access token only in this tab\'s sessionStorage', async () => {
     const token = testHandoffToken({ claims: { email: 'omar.nasser@example.test' } });
     renderApp(`/sso#token=${token}`);
@@ -105,6 +121,13 @@ describe('signed-out visitors and the central login', () => {
     expect(document.querySelector('input')).toBeNull();
     expect(screen.queryByLabelText(/password/i)).toBeNull();
     expect(screen.queryByText(/username|e-mail address/i)).toBeNull();
+  });
+
+  it('forwards an invitation link (/activate?token=…) to the website activation page, token unchanged', async () => {
+    const { replace } = stubLocation();
+    renderApp('/activate?token=Duvex%2Bmkj9yC5');
+    await waitFor(() => expect(replace).toHaveBeenCalledWith(`${WORKSPACE}/activate/?token=Duvex%2Bmkj9yC5`));
+    expect(replace).toHaveBeenCalledTimes(1);
   });
 
   it('goes to the Workspace in the user\'s language (Arabic pages are under /ar)', async () => {

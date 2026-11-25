@@ -12,7 +12,8 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { formatDateTime, formatFileSize, toDateTimeInputValue } from '@/i18n/format';
+import { usesMockData } from '@/core/config/api';
+import { formatDateTime, toDateTimeInputValue } from '@/i18n/format';
 import { useLocale } from '@/i18n/LocaleContext';
 import { useT } from '@/i18n/useT';
 import { FormDialog } from '@/modules/shared/FormDialog';
@@ -25,6 +26,7 @@ import { assignmentSchema, type AssignmentFormValues } from '../schemas/training
 import type { AssignmentDto } from '../types/content';
 import { filesAreValid, toFileInputs } from '../utils/files';
 import { FilePicker } from './FilePicker';
+import { FileList } from './FileList';
 
 interface BaseProps {
   trainingId: string;
@@ -167,11 +169,9 @@ export function SubmissionsDialog({ trainingId, assignment, onClose }: { trainin
                       <Typography color="text.secondary">{t.assignments.submissions.noText}</Typography>
                     )}
                     {entry.submission.attachments.length > 0 && (
-                      <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: 'wrap', mt: 1 }}>
-                        {entry.submission.attachments.map((file) => (
-                          <Chip key={file.id} size="small" variant="outlined" label={`${file.fileName} · ${formatFileSize(file.fileSizeBytes, locale)}`} />
-                        ))}
-                      </Stack>
+                      <Box sx={{ mt: 1.5 }}>
+                        <FileList files={entry.submission.attachments} kind="submission" label={t.assignments.attachments} />
+                      </Box>
                     )}
                   </Box>
                 )}
@@ -179,9 +179,11 @@ export function SubmissionsDialog({ trainingId, assignment, onClose }: { trainin
             ))}
           </Stack>
         )}
-        <Alert severity="info" sx={{ mt: 2 }}>
-          {t.files.simulated}
-        </Alert>
+        {usesMockData && (
+          <Alert severity="info" sx={{ mt: 2 }}>
+            {t.files.simulated}
+          </Alert>
+        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>{t.common.close}</Button>

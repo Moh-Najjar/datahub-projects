@@ -15,11 +15,14 @@ import type {
   SubmissionOverviewEntry,
   TextMaterialInput,
   UpdateAssignmentInput,
+  FileKind,
 } from '../types/content';
 import type { CreateTrainingInput, ReorderInput, TrainingDto, TrainingFilters, TrainingOption, TrainingRosterEntry, UpdateTrainingInput } from '../types/training';
 import { usesMockData } from '@/core/config/api';
 import { trainingsHttpApi } from './trainingsHttp';
-import { materialsHttpApi, assignmentsHttpApi } from './contentHttp';
+import { materialsHttpApi, assignmentsHttpApi, filesHttpApi } from './contentHttp';
+import type { DownloadedFile } from '@/core/api/http';
+import { ApiError } from '@/core/api/types';
 
 /**
  * The ONLY data entry points of the Trainings module (the real backend over HTTP, or the simulated one — same types).
@@ -63,7 +66,16 @@ const mockAssignmentsApi = {
   deleteSubmissionAttachment: (trainingId: string, assignmentId: string, attachmentId: string): Promise<void> => mockRequest(() => assignmentsMock.deleteSubmissionAttachment(trainingId, assignmentId, attachmentId)),
 };
 
+/** Stored files. The simulated backend keeps file names and sizes only — there is nothing to open. */
+const mockFilesApi = {
+  download: (_kind: FileKind, _fileId: string, signal?: AbortSignal): Promise<DownloadedFile> =>
+    mockRequest(() => {
+      throw new ApiError('NOT_FOUND', 'file.simulated');
+    }, { signal }),
+};
+
 // Real backend by default; the simulated one in tests and with `VITE_TRAINEE_DATA=mock` (core/config/api.ts).
 export const trainingsApi: typeof mockTrainingsApi = usesMockData ? mockTrainingsApi : trainingsHttpApi;
 export const materialsApi: typeof mockMaterialsApi = usesMockData ? mockMaterialsApi : materialsHttpApi;
 export const assignmentsApi: typeof mockAssignmentsApi = usesMockData ? mockAssignmentsApi : assignmentsHttpApi;
+export const filesApi: typeof mockFilesApi = usesMockData ? mockFilesApi : filesHttpApi;

@@ -1,4 +1,4 @@
-import { createdId, http } from '@/core/api/http';
+import { createdId, http, type DownloadedFile } from '@/core/api/http';
 import { arr, asRaw, bool, listOf, num, str, token, type Raw } from '@/core/api/read';
 import { ApiError } from '@/core/api/types';
 import { currentTrainingPermissions } from '@/core/auth/apiIdentity';
@@ -10,6 +10,7 @@ import type {
   CreateAssignmentInput,
   FileInput,
   FileItemDto,
+  FileKind,
   FileMaterialInput,
   LinkItemDto,
   LinkMaterialInput,
@@ -52,6 +53,14 @@ function materialTypeOf(value: string | null): MaterialType {
   return 'text';
 }
 
+/** Download endpoints (Bearer). */
+const FILE_PATHS: Record<FileKind, string> = { material: 'material-files', assignment: 'assignment-attachments', submission: 'submission-attachments' };
+
+export const filesHttpApi = {
+  /** A stored file's content (or a link to it) — see `http.download`. */
+  download: (kind: FileKind, fileId: string, signal?: AbortSignal): Promise<DownloadedFile> => http.download(`${A}/${FILE_PATHS[kind]}/${encodeURIComponent(fileId)}`, signal),
+};
+
 const backendMaterialType: Record<MaterialType, string> = { text: 'Text', link: 'Link', file: 'File' };
 
 async function upload(path: string, files: readonly FileInput[]): Promise<void> {
@@ -66,13 +75,29 @@ async function upload(path: string, files: readonly FileInput[]): Promise<void> 
 /** materialId → { trainingId, raw record } from the latest list read. */
 const materialRecords = new Map<string, { trainingId: string; raw: Raw }>();
 
+/**
+ * A material's links. Verified 2026-11-25: `links` is an array of plain address strings (no id, no label) —
+ * `"links": ["https://…"]`. Objects (`{ id, title, url }`) are read too, in case the backend adds them later.
+ */
+function linksOf(o: Raw, materialId: string): LinkItemDto[] {
+  const items = Array.isArray(o.links) ? (o.links as unknown[]) : [];
+  const links = items.flatMap((item): LinkItemDto[] => {
+    if (typeof item === 'string') return item.trim() ? [{ id: '', title: null, url: item.trim() }] : [];
+    const l = asRaw(item);
+    const url = str(l, 'url', 'uri', 'linkUrl', 'href', 'address');
+    return url ? [{ id: str(l, 'id', 'linkId') ?? '', title: str(l, 'title', 'name', 'label'), url }] : [];
+  });
+  const single = str(o, 'url');
+  if (links.length === 0 && single) links.push({ id: materialId, title: null, url: single });
+  return links;
+}
+
 async function toMaterial(trainingId: string, o: Raw): Promise<MaterialDto> {
   const id = str(o, 'id', 'materialId') ?? '';
   const type = materialTypeOf(str(o, 'type', 'materialType'));
   let files = arr(o, 'files', 'attachments').map(fileOf);
   if (type === 'file' && files.length === 0 && !Array.isArray(o.files)) files = listOf(await http.get(`${A}/materials/${id}/files`).catch(() => [])).map(fileOf);
-  const links: LinkItemDto[] = arr(o, 'links').map((l) => ({ id: str(l, 'id') ?? '', title: str(l, 'title'), url: str(l, 'url') ?? '' }));
-  if (type === 'link' && links.length === 0 && str(o, 'url')) links.push({ id, title: null, url: str(o, 'url')! });
+  const links = linksOf(o, id);
   materialRecords.set(id, { trainingId, raw: o });
   return {
     id,
@@ -156,10 +181,23 @@ export const materialsHttpApi = {
     const { trainingId } = materialRecord(materialId);
     const current = await reloadMaterial(trainingId, materialId);
     await putMaterial(materialId, { title: input.title });
-    // Replace the links: remove the old ones, add the new list in order.
-    for (const link of current.links) if (link.id && link.id !== materialId) await http.delete(`${A}/material-links/${link.id}`);
-    await addLinks(materialId, input.links);
-    return reloadMaterial(trainingId, materialId);
+    const sameAddresses = JSON.stringify(current.links.map((l) => l.url)) === JSON.stringify(input.links.map((l) => l.url.trim()));
+    if (sameAddresses) return reloadMaterial(trainingId, materialId);
+    if (current.links.every((l) => l.id && l.id !== materialId)) {
+      // Links with ids: remove the old ones, add the new list in order.
+      for (const link of current.links) await http.delete(`${A}/material-links/${link.id}`);
+      await addLinks(materialId, input.links);
+      return reloadMaterial(trainingId, materialId);
+    }
+    // The backend lists links without ids (2026-11-25), so they cannot be removed one by one: replace the material —
+    // a new links material at the same place, then the old one is deleted.
+    const order = (await listMaterials(trainingId)).map((m) => m.id);
+    const replacement = await createMaterial(trainingId, 'link', input.title, null);
+    await addLinks(replacement, input.links);
+    await http.put(`${A}/trainings/${trainingId}/materials/order`, { materialIds: order.map((id) => (id === materialId ? replacement : id)) });
+    await http.delete(`${A}/materials/${materialId}`);
+    materialRecords.delete(materialId);
+    return reloadMaterial(trainingId, replacement);
   },
   async renameFiles(materialId: string, title: string): Promise<MaterialDto> {
     const { trainingId } = materialRecord(materialId);

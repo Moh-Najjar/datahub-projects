@@ -15,7 +15,7 @@ type StatusChipProps =
   | { kind: 'training'; value: TrainingStatus }
   | { kind: 'enrollment'; value: EnrollmentStatus }
   | { kind: 'assignment'; value: AssignmentStatus }
-  | { kind: 'role'; value: Role };
+  | { kind: 'role'; value: Role; /** The backend role's own name, shown instead of the translated app role. */ label?: string | null };
 
 /** A translated, colour-coded status label. The colour is never the only signal: the text is always shown. */
 export function StatusChip(props: StatusChipProps) {
@@ -27,7 +27,7 @@ export function StatusChip(props: StatusChipProps) {
   return (
     <Chip
       size="small"
-      label={labels[props.value] ?? props.value}
+      label={(props.kind === 'role' && props.label) || (labels[props.value] ?? props.value)}
       sx={{
         fontWeight: 700,
         px: 0.5,

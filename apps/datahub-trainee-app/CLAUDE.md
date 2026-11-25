@@ -72,8 +72,11 @@ switches the business identity for testing — it never changes the session, tok
 
 `/sso#token=…` (base64url `WorkspaceHandoffPayload`: issuer, e-mail, ~2 min link expiry, backend access token) → parsed once,
 hash stripped, JWT claims decoded (not verified — the backend does) → session in this tab's `sessionStorage`
-(`datahub-trainee.session`), ends at token expiry. Signed-out → `/login` → Workspace `/workspace/open/academy-admin/`.
-Sign out → Workspace `/workspace/logout/`. While signed in, the hidden `/workspace-session.html` (embedded iframe) reports the
+(`datahub-trainee.session`), ends at token expiry. Signed-out → `/login` (only a "redirecting" status, no page) → Workspace `/workspace/open/academy-admin/`; the page asked
+for is kept in this tab (`core/auth/returnTo.ts`) and `/sso` returns there instead of the landing page. Material links
+render only `http(s)` addresses (`core/utils/safeUrl.ts`) — an empty `href` would reopen this app in a new tab.
+Sign out → Workspace `/workspace/logout/`. `/activate?token=…` (public; invitation e-mails built with this app's origin)
+forwards unchanged to the website's activation page `<VITE_WORKSPACE_URL>/activate/?token=…` — activation is the website's. While signed in, the hidden `/workspace-session.html` (embedded iframe) reports the
 central session; ended or another account → this session ends (loop guard after two endings in 30 s). Tokens are never logged
 or put in `localStorage`. `VITE_WORKSPACE_URL` (dev default `http://localhost:3000`). The website needs `VITE_TRAINEE_APP_URL`
 (dev default `http://localhost:3002`). Production values live in the git-ignored `.env.production` of each app; this app is
@@ -89,6 +92,11 @@ deployed to Azure App Service (Windows/IIS) by uploading `dist/` (`public/web.co
 - Swagger documents request bodies but NO response models (2026-11-24): every `*Http.ts` mapper reads fields through
   `core/api/read.ts` (tolerant, several likely names). When real responses differ, fix the mapper only. Statuses:
   `core/api/academyStatus.ts`. Lists the backend does not page/filter are searched / sorted / paged by `core/api/listing.ts`.
+- Files (materials, assignment attachments, submissions): `trainings/components/FileList` (type icon, name = open, Download,
+  optional edit/remove) → `hooks/useFileOpener` → `filesApi.download(kind, id)` → `http.download` (Bearer; GET
+  `material-files` / `assignment-attachments` / `submission-attachments/{id}`; bytes, or JSON with a link / base64 —
+  Swagger documents no body). PDF/images/text/video open in a tab opened during the click; other types are saved under
+  their name (`utils/openFile.ts`). The simulated backend has no bytes → `file.simulated` message.
 - Identity with the real API: `core/auth/apiIdentity.ts` maps the token's `academy.*` / `training.*` / `identity.*` /
   `organization.*` permissions to the app's permissions and derives the role (system-admin → SuperAdmin, managers →
   DepartmentAdmin without a known department, else Employee). "View as" exists only with the simulated backend.

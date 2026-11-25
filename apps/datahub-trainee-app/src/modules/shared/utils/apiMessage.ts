@@ -13,6 +13,8 @@ const codes = (t: UiStrings): Record<string, string> => t.errors;
 export function apiErrorMessage(t: UiStrings, error: unknown): string {
   if (isApiError(error)) {
     if (error.reason && reasons(t)[error.reason]) return reasons(t)[error.reason]!;
+    // No translation for it: the real backend's actual message (untranslated), else the generic text for the code.
+    if (error.detail) return error.detail;
     return codes(t)[error.code] ?? t.errors.generic;
   }
   return t.errors.generic;
