@@ -20,7 +20,8 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 3000,
       strictPort: true,
-      proxy: apiUrl ? { '/api': { target: apiUrl, changeOrigin: true, secure: true } } : undefined,
+      // `cookieDomainRewrite`: the refresh-token cookie (HttpOnly, path /api/v1/auth) is then kept for the dev origin.
+      proxy: apiUrl ? { '/api': { target: apiUrl, changeOrigin: true, secure: true, cookieDomainRewrite: { '*': '' } } } : undefined,
     },
     test: {
       environment: 'jsdom',

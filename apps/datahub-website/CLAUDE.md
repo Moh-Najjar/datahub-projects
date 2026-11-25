@@ -267,14 +267,16 @@ application. Every account is a backend account (`api/workspaceAuth.ts`); there 
   switch keeps the query string. Shares `components/AuthCard` with the sign-in page. Tests:
   `ActivateInvitationPage.test.tsx` (real page + HTTP client; only `fetch` is mocked). The backend must put this site's
   origin in the invitation link (and allow it in CORS).
-- **Refresh and logout** (`api/workspaceAuth.ts`): the login's `refreshToken` (body; login / refresh / logout also send
-  cookies — `credentials: 'include'` — in case the backend keeps it in an HttpOnly cookie) is stored with the session.
-  `refreshSession()` → `POST /api/v1/auth/refresh` `{ refreshToken }` runs 60 s before the access token expires, on a 401
-  (the HTTP client then repeats the request once) and when the page is reopened after expiry; one tab at a time (Web
-  Locks), the others read the new token from storage. Sign-out also calls `POST /api/v1/auth/logout` `{ refreshToken }`
-  (best effort). **Backend status (2026-11-25): both answer 403 to every request** (even an empty body, before any token
-  check; CORS is fine) — then nothing breaks: refresh is not retried for that token and the session ends at expiry.
-  Tests: `api/workspaceAuth.test.ts`.
+- **Refresh and logout** (`api/workspaceAuth.ts`, backend contract confirmed 2026-11-25): the refresh token is an HttpOnly
+  cookie `__Secure-datahub-refresh-token` (path `/api/v1/auth`, Secure, SameSite=None) set by the login — the JSON has only
+  the access token and the site never stores or reads the refresh token. Login, `POST /api/v1/auth/refresh` and
+  `POST /api/v1/auth/logout` use `credentials: 'include'`; refresh / logout send body `{}` and
+  `X-Requested-With: XMLHttpRequest` (without it: 403). `refreshSession()` runs 60 s before expiry, on a 401 (the request
+  is repeated once) and when the page is reopened after expiry; one tab at a time (Web Locks). No cookie / ended
+  session → 400 `SystemUser.SessionExpired` → not retried for that token, the session ends at expiry. Dev: the Vite proxy
+  drops the cookie's Domain (`cookieDomainRewrite`). Production is cross-site (both on azurewebsites.net, a public
+  suffix): browsers that block third-party cookies (e.g. Incognito) will not send it — then the session just ends at
+  expiry; serving the site and the API under one domain fixes that. Tests: `api/workspaceAuth.test.ts`.
 - Session storage: `localStorage` (`datahub-website.workspace-session`, shared by the site's tabs; sign-out in one tab
   signs out all). The access token is therefore readable by scripts of this origin (accepted for now).
 - **Applications and access** (`data/applications.ts`): exactly the portals the backend lists — ids are its keys

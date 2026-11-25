@@ -48,10 +48,12 @@ interface RequestOptions {
   /** Send this token instead (e.g. right after login). */
   token?: string;
   /**
-   * Send / accept cookies. Default `omit`; only the sign-in endpoints (login, refresh, logout) use `include`, in case the
-   * backend keeps the refresh token in an HttpOnly cookie as well as in the body.
+   * Send / accept cookies. Default `omit`; only the sign-in endpoints (login, refresh, logout) use `include`: the backend
+   * keeps the refresh token in an HttpOnly cookie (`__Secure-datahub-refresh-token`, path `/api/v1/auth`).
    */
   credentials?: RequestCredentials;
+  /** Extra request headers (e.g. `X-Requested-With`, which the refresh / logout endpoints require). */
+  headers?: Record<string, string>;
   /** Internal: this request is the retry after a refresh. */
   retried?: boolean;
 }
@@ -74,8 +76,8 @@ function toUrl(path: string, query: RequestOptions['query'] = {}): string {
 }
 
 async function request<T>(method: string, path: string, body?: unknown, options: RequestOptions = {}): Promise<T> {
-  const { query, signal, auth, token, credentials = 'omit', retried } = options;
-  const headers: Record<string, string> = { Accept: 'application/json' };
+  const { query, signal, auth, token, credentials = 'omit', retried, headers: extraHeaders } = options;
+  const headers: Record<string, string> = { Accept: 'application/json', ...extraHeaders };
   if (body !== undefined) headers['Content-Type'] = 'application/json';
   if (auth || token) {
     const bearer = token ?? authProvider?.getAccessToken();

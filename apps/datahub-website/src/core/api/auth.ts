@@ -2,15 +2,15 @@ import { apiPaths } from '@/core/api/paths';
 import { http, HttpError } from '@/core/helpers/http';
 
 /*
- * Layer 2 — Authentication API functions. The access token is a JWT (~15 min); `refresh` exchanges the refresh token
- * for a new one and `logout` ends it (both answered 403 to every request on 2026-11-22 and 2026-11-25 — the Workspace
- * then simply ends the session when the access token expires).
+ * Layer 2 — Authentication API functions. The access token is a JWT (~15 min). The refresh token is an HttpOnly cookie
+ * (`__Secure-datahub-refresh-token`, path `/api/v1/auth`, Secure, SameSite=None) set by `login`: `refresh` (body `{}`)
+ * returns a new access token, `logout` ends it. Both need cookies (`credentials: 'include'`) and
+ * `X-Requested-With: XMLHttpRequest`.
  */
 
 export interface LoginResult {
+  /** The login also sets the refresh token as an HttpOnly cookie: never in the body, never read by the site. */
   accessToken: string;
-  /** Present when the backend returns it in the body (it may also keep it in an HttpOnly cookie). */
-  refreshToken?: string | null;
   userId: string;
   displayName: string;
   email: string;
@@ -25,12 +25,15 @@ export interface Portal {
   description: string;
 }
 
+/** Required by the refresh / logout endpoints (without it they answer 403; verified 2026-11-25). */
+const REFRESH_HEADERS = { 'X-Requested-With': 'XMLHttpRequest' };
+
 export const authApi = {
   login: (email: string, password: string) => http.post<LoginResult>(apiPaths.auth.login, { email, password }, { credentials: 'include' }),
-  /** A new access token. The answer is read like the login's (`accessToken`, maybe a new `refreshToken`). */
-  refresh: (refreshToken: string | null) => http.post<Partial<LoginResult> | null>(apiPaths.auth.refresh, { refreshToken }, { credentials: 'include' }),
-  /** Ends the backend session of this refresh token. */
-  logout: (refreshToken: string | null) => http.post<void>(apiPaths.auth.logout, { refreshToken }, { credentials: 'include' }),
+  /** A new access token; the browser sends the refresh-token cookie (and stores a renewed one). */
+  refresh: () => http.post<Partial<LoginResult> | null>(apiPaths.auth.refresh, {}, { credentials: 'include', headers: REFRESH_HEADERS }),
+  /** Ends the backend session (the refresh-token cookie stops working). */
+  logout: () => http.post<void>(apiPaths.auth.logout, {}, { credentials: 'include', headers: REFRESH_HEADERS }),
   getPortals: (token: string) => http.get<Portal[]>(apiPaths.auth.portals, { token }),
   /** Anonymous. 204 = activated (e-mail verified, password set, account Active). The token is single-use and expires. */
   activateInvitation: (token: string, newPassword: string) => http.post<void>(apiPaths.auth.activateInvitation, { token, newPassword }),

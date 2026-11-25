@@ -9,10 +9,11 @@ import { isWorkspaceRole, type WorkspaceRole } from '@/modules/portals/data/role
  * (`POST /api/v1/auth/login`). The session holds the access token (JWT, ~15 minutes), the roles and permissions it
  * carries, and the applications the backend lists (`GET /api/v1/auth/portals`).
  *
- * Refresh: shortly before the access token expires (and when a request answers 401) the session is renewed with
- * `POST /api/v1/auth/refresh` `{ refreshToken }` — once for all tabs (Web Locks), the result shared through storage.
- * When refresh is refused (the backend answered 403 to every request on 2026-11-22 and 2026-11-25) nothing breaks: the
- * session ends when the token expires, as before. Sign-out also ends the backend session (`POST /api/v1/auth/logout`).
+ * Refresh: the refresh token is an HttpOnly cookie the browser keeps (this site never sees it). Shortly before the access
+ * token expires, when a request answers 401, and when the page is reopened after expiry, the session is renewed with
+ * `POST /api/v1/auth/refresh`, once for all tabs (Web Locks), the result shared through storage. When refresh is refused
+ * (e.g. 400 `SystemUser.SessionExpired`) it is not retried for that token and the session ends at expiry. Sign-out also
+ * ends the backend session (`POST /api/v1/auth/logout`).
  *
  * Kept in `localStorage` (shared by this site's tabs: signing out in one tab signs out all). The access token is
  * therefore readable by scripts of this origin — accepted for now; the password is never stored.
@@ -34,8 +35,6 @@ export interface WorkspaceSession {
   accessToken: string;
   /** Epoch milliseconds (the token's expiry). */
   expiresAt: number;
-  /** From the login / refresh answer when the backend returns it (it may also be an HttpOnly cookie). */
-  refreshToken?: string | null;
 }
 
 /** Wrong email or password. */
@@ -130,11 +129,11 @@ function storedSession(): WorkspaceSession | null {
   return cached.session;
 }
 
-/** The fields of a login / refresh answer, whatever their exact names. */
-function tokensOf(answer: unknown): { accessToken: string | null; refreshToken: string | null } {
+/** The access token of a refresh answer. */
+function accessTokenOf(answer: unknown): string | null {
   const o = (answer && typeof answer === 'object' ? answer : {}) as Record<string, unknown>;
-  const text = (key: string) => (typeof o[key] === 'string' && o[key] ? (o[key] as string) : null);
-  return { accessToken: text('accessToken') ?? text('token'), refreshToken: text('refreshToken') };
+  const value = o.accessToken ?? o.token;
+  return typeof value === 'string' && value ? value : null;
 }
 
 async function withRefreshLock<T>(task: () => Promise<T>): Promise<T> {
@@ -161,10 +160,10 @@ export function refreshSession(): Promise<boolean> {
     }
     if (refusedFor === before.accessToken) return false;
     try {
-      const { accessToken, refreshToken } = tokensOf(await authApi.refresh(before.refreshToken ?? null));
+      const accessToken = accessTokenOf(await authApi.refresh());
       if (!accessToken) throw new Error('No access token in the refresh answer');
       const claims = decodeAccessToken(accessToken);
-      save({ ...before, accessToken, refreshToken: refreshToken ?? before.refreshToken ?? null, permissions: claims.permissions, roles: claims.roles.length ? claims.roles : before.roles, expiresAt: claims.exp * 1000 });
+      save({ ...before, accessToken, permissions: claims.permissions, roles: claims.roles.length ? claims.roles : before.roles, expiresAt: claims.exp * 1000 });
       return true;
     } catch {
       refusedFor = before.accessToken;
@@ -196,7 +195,6 @@ export async function signIn(email: string, password: string): Promise<Workspace
     permissions: claims.permissions,
     accessToken: login.accessToken,
     expiresAt: claims.exp * 1000,
-    refreshToken: tokensOf(login).refreshToken,
   };
   refusedFor = null;
   save(session);
@@ -205,12 +203,10 @@ export async function signIn(email: string, password: string): Promise<Workspace
 
 /**
  * Ends the central session: this site's tabs at once, the HR portal through the session bridge, and the backend's
- * session (`POST /api/v1/auth/logout` with the refresh token; best effort — when it is refused, the access token stays
- * valid until it expires but is forgotten here).
+ * session (`POST /api/v1/auth/logout`, which ends the refresh-token cookie; best effort).
  */
 export function signOut(): void {
-  const session = storedSession();
-  if (session) void authApi.logout(session.refreshToken ?? null).catch(() => undefined);
+  if (storedSession()) void authApi.logout().catch(() => undefined);
   save(null);
 }
 
@@ -232,8 +228,8 @@ export const getAccessToken = (): string | null => getSession()?.accessToken ?? 
 // Backend requests made with `auth: true` use the session's token; a 401 first tries a refresh, then ends the session.
 configureHttpAuth({ getAccessToken, onUnauthorized: signOut, refresh: refreshSession });
 
-// The page was reopened after the access token expired: try to renew it (the refresh token usually lives longer).
+// The page was reopened after the access token expired: try to renew it (the refresh-token cookie lives longer).
 {
   const stored = typeof window !== 'undefined' ? storedSession() : null;
-  if (stored && stored.expiresAt <= Date.now() && stored.refreshToken) void refreshSession();
+  if (stored && stored.expiresAt <= Date.now()) void refreshSession();
 }

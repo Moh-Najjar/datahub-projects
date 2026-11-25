@@ -32,32 +32,35 @@ const load = async () => {
   return import('./workspaceAuth');
 };
 
-const LOGIN = { accessToken: '', refreshToken: 'refresh-1', userId: 'u1', displayName: 'Admin', email: 'admin@example.test', roles: ['system-admin'], preferredLanguage: 'en' };
+const LOGIN = { accessToken: '', userId: 'u1', displayName: 'Admin', email: 'admin@example.test', roles: ['system-admin'], preferredLanguage: 'en' };
 
 beforeEach(() => localStorage.clear());
 afterEach(() => vi.unstubAllGlobals());
 
 describe('Workspace session refresh', () => {
-  it('keeps the refresh token from the login and renews the access token with it', async () => {
+  it('renews the access token with the refresh-token cookie (X-Requested-With, empty body, cookies sent)', async () => {
     const first = jwt(30);
     const renewed = jwt(900, ['cms.blogs.view', 'cms.blogs.publish']);
     const calls = backend((path) => {
       if (path.endsWith('/auth/login')) return json({ ...LOGIN, accessToken: first });
       if (path.endsWith('/auth/portals')) return json([{ key: 'blogs-admin', name: 'Blogs', description: '' }]);
-      if (path.endsWith('/auth/refresh')) return json({ accessToken: renewed, refreshToken: 'refresh-2' });
+      if (path.endsWith('/auth/refresh')) return json({ accessToken: renewed });
       return json(null, 404);
     });
     const auth = await load();
     await auth.signIn('admin@example.test', 'secret');
-    expect(auth.getSession()?.refreshToken).toBe('refresh-1');
+    // The login sets the cookie: it is sent with the login request too.
+    expect(calls.find((c) => c.path.endsWith('/auth/login'))!.init.credentials).toBe('include');
 
     expect(await auth.refreshSession()).toBe(true);
     const refresh = calls.find((c) => c.path.endsWith('/auth/refresh'))!;
-    expect(refresh.body).toEqual({ refreshToken: 'refresh-1' });
+    expect(refresh.body).toEqual({});
     expect(refresh.init.credentials).toBe('include');
+    expect(new Headers(refresh.init.headers).get('X-Requested-With')).toBe('XMLHttpRequest');
     const session = auth.getSession()!;
     expect(session.accessToken).toBe(renewed);
-    expect(session.refreshToken).toBe('refresh-2');
+    // The refresh token is never stored by the site (it stays an HttpOnly cookie).
+    expect(localStorage.getItem('datahub-website.workspace-session')).not.toMatch(/refresh/i);
     expect(session.permissions).toContain('cms.blogs.publish');
     expect(session.expiresAt).toBeGreaterThan(Date.now() + 800_000);
     // The password is never stored.
@@ -82,12 +85,12 @@ describe('Workspace session refresh', () => {
     expect(auth.getSession()?.accessToken).toBe(renewed);
   });
 
-  it('when refresh is refused (403) the session stays until it expires, and refresh is not retried for that token', async () => {
+  it('when refresh is refused (400 SessionExpired) the session stays until it expires, and refresh is not retried for that token', async () => {
     const token = jwt(600);
     const calls = backend((path) => {
       if (path.endsWith('/auth/login')) return json({ ...LOGIN, accessToken: token });
       if (path.endsWith('/auth/portals')) return json([]);
-      return json(null, 403);
+      return json(null, 400);
     });
     const auth = await load();
     await auth.signIn('admin@example.test', 'secret');
@@ -97,7 +100,7 @@ describe('Workspace session refresh', () => {
     expect(auth.getSession()?.accessToken).toBe(token);
   });
 
-  it('sign-out ends the backend session with the refresh token and forgets the session', async () => {
+  it('sign-out ends the backend session (cookie + X-Requested-With) and forgets the session', async () => {
     const calls = backend((path) => {
       if (path.endsWith('/auth/login')) return json({ ...LOGIN, accessToken: jwt(600) });
       if (path.endsWith('/auth/portals')) return json([]);
@@ -107,6 +110,9 @@ describe('Workspace session refresh', () => {
     await auth.signIn('admin@example.test', 'secret');
     auth.signOut();
     expect(auth.getSession()).toBeNull();
-    await vi.waitFor(() => expect(calls.find((c) => c.path.endsWith('/auth/logout'))?.body).toEqual({ refreshToken: 'refresh-1' }));
+    await vi.waitFor(() => expect(calls.find((c) => c.path.endsWith('/auth/logout'))?.body).toEqual({}));
+    const logout = calls.find((c) => c.path.endsWith('/auth/logout'))!;
+    expect(logout.init.credentials).toBe('include');
+    expect(new Headers(logout.init.headers).get('X-Requested-With')).toBe('XMLHttpRequest');
   });
 });
