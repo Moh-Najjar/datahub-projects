@@ -1,5 +1,5 @@
 import { backendTrainingStatus, enrollmentStatusOf, trainingStatusOf } from '@/core/api/academyStatus';
-import { createdId, http } from '@/core/api/http';
+import { createdId, emptyIfForbidden, http } from '@/core/api/http';
 import { queryCollection } from '@/core/api/listing';
 import { asRaw, bool, listOf, num, str, type Raw } from '@/core/api/read';
 import { currentTrainingPermissions } from '@/core/auth/apiIdentity';
@@ -51,10 +51,19 @@ export function toTrainingDto(o: Raw, mine?: Raw): TrainingDto {
 
 const staffList = async (signal?: AbortSignal) => listOf(await http.get(BASE, { query: { includeDrafts: true, languageCode: LANGUAGE }, signal }));
 
-/** Learners: their trainings, each with their own enrollment. */
+/**
+ * Learners: their PUBLISHED trainings (the original rule — `/me/trainings` also answers drafts, 2026-11-25), each with
+ * their own enrollment (progress, status). The enrollments only add detail: when they are refused (403) the trainings
+ * are still listed, without progress.
+ */
 async function learnerList(signal?: AbortSignal): Promise<TrainingDto[]> {
-  const [trainings, enrollments] = await Promise.all([http.get('/api/v1/academy/me/trainings', { signal }).then(listOf), http.get('/api/v1/academy/me/enrollments', { signal }).then(listOf)]);
-  return trainings.map((t) => toTrainingDto(t, enrollments.find((e) => str(e, 'trainingId') === str(t, 'id', 'trainingId'))));
+  const [trainings, enrollments] = await Promise.all([
+    http.get('/api/v1/academy/me/trainings', { signal }).then(listOf),
+    emptyIfForbidden(http.get('/api/v1/academy/me/enrollments', { signal })).then(listOf),
+  ]);
+  return trainings
+    .map((t) => toTrainingDto(t, enrollments.find((e) => str(e, 'trainingId') === str(t, 'id', 'trainingId'))))
+    .filter((t) => t.status === 'published');
 }
 
 /** Staff (people who manage trainings) read every training; everyone else reads their own. */

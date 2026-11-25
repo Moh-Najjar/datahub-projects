@@ -17,6 +17,10 @@ export const apiPaths = {
     /** `POST` (anonymous) `{ token, newPassword }` → 204. Activates an invited account (single-use, expiring token). */
     activateInvitation: '/api/v1/auth/activate-invitation',
   },
+  contact: {
+    /** `POST` (anonymous) `{ name, email, inquiryType, message }` — the site's contact / appointment forms. */
+    inquiries: '/api/v1/contact/inquiries',
+  },
   blogs: {
     /** `GET` published posts. Query: `pageNumber`, `pageSize`. */
     list: '/api/v1/blogs',

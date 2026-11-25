@@ -32,7 +32,6 @@
     "summary": "One or more fields have an error. Please check and try again."
   },
   "submission": {
-    "notConfigured": "Your message was not sent: this site has no form backend configured yet. Please email info@datahubanalytics.com or call (+962) 78 1005100.",
     "success": "Thank you for your message. It has been sent.",
     "failure": "There was an error trying to send your message. Please try again later."
   },

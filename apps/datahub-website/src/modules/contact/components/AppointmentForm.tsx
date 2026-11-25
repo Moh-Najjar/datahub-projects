@@ -9,9 +9,11 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Controller, useForm } from 'react-hook-form';
+import { INQUIRY_TYPES, type InquiryType } from '@/core/api/contact';
+import { useSubmitInquiry } from '@/core/hooks/useSubmitInquiry';
 import { useLocalized } from '@/i18n/LocaleContext';
 import { UI } from '@/i18n';
-import { submitAppointment } from '@/modules/contact/api/appointment';
+import { APPOINTMENT_FORM_MESSAGE } from '@/modules/contact/data/contact';
 import { createAppointmentSchema, type AppointmentValues } from '@/modules/contact/schemas/appointmentSchema';
 
 /** Contact Form 7 field look on the original: grey filled box, 56px high, 5px radius. */
@@ -39,7 +41,7 @@ const Tip = ({ id, children }: { id: string; children?: string }) =>
     </Typography>
   ) : null;
 
-type Status = 'idle' | 'invalid' | 'not-configured' | 'sent' | 'failed';
+type Status = 'idle' | 'invalid' | 'sent' | 'failed';
 
 interface AppointmentFormProps {
   /** Contact page variant adds a free-text message field. */
@@ -60,8 +62,9 @@ interface AppointmentFormProps {
 }
 
 /**
- * "Book appointment" form from the original footer. Validates on the client (React Hook Form + Zod)
- * and reports truthfully what happened to the submission.
+ * "Book appointment" form from the original footer (and the Contact page variant with a message). Validates on the
+ * client (React Hook Form + Zod), sends the inquiry to the backend (`POST /api/v1/contact/inquiries`) and reports
+ * truthfully what happened: "sent" only when the API accepted it.
  */
 export function AppointmentForm({ withMessage = false, messagePlaceholder, showHeader = true, overrides, submitAlign = 'center' }: AppointmentFormProps) {
   const ui = useLocalized(UI);
@@ -72,8 +75,12 @@ export function AppointmentForm({ withMessage = false, messagePlaceholder, showH
     inquiryOptions: overrides?.inquiryOptions?.length ? overrides.inquiryOptions : ui.appointment.inquiryOptions,
     submit: overrides?.submit ?? ui.appointment.submit,
   };
+  // The options keep the page's labels (translated, or spelled as on the original — "Datauhb Analytics") and send the
+  // backend's inquiry type in the same position.
+  const options = labels.inquiryOptions.slice(0, INQUIRY_TYPES.length).map((label, i) => ({ label, value: INQUIRY_TYPES[i]! }));
   const uid = useId();
   const [status, setStatus] = useState<Status>('idle');
+  const submitInquiry = useSubmitInquiry();
 
   const {
     control,
@@ -81,16 +88,22 @@ export function AppointmentForm({ withMessage = false, messagePlaceholder, showH
     reset,
     formState: { errors, isSubmitting },
   } = useForm<AppointmentValues>({
-    resolver: zodResolver(createAppointmentSchema(ui.validation)),
+    resolver: zodResolver(createAppointmentSchema(ui.validation, { requireMessage: withMessage })),
     defaultValues: { name: '', email: '', inquiry: '', message: '', website: '' },
     mode: 'onTouched',
   });
 
   const onValid = async (values: AppointmentValues) => {
     try {
-      const result = await submitAppointment(values);
-      setStatus(result);
-      if (result === 'sent') reset();
+      await submitInquiry.mutateAsync({
+        name: values.name.trim(),
+        email: values.email.trim(),
+        inquiryType: values.inquiry as InquiryType,
+        // The footer form has no message field; the API requires one.
+        message: withMessage ? (values.message ?? '').trim() : APPOINTMENT_FORM_MESSAGE,
+      });
+      setStatus('sent');
+      reset();
     } catch {
       setStatus('failed');
     }
@@ -99,7 +112,6 @@ export function AppointmentForm({ withMessage = false, messagePlaceholder, showH
   const response = {
     idle: null,
     invalid: { text: ui.validation.summary, color: '#ffb900' },
-    'not-configured': { text: ui.submission.notConfigured, color: '#ffb900' },
     sent: { text: ui.submission.success, color: '#46b450' },
     failed: { text: ui.submission.failure, color: '#dc3232' },
   }[status];
@@ -175,9 +187,9 @@ export function AppointmentForm({ withMessage = false, messagePlaceholder, showH
                 sx={{ '& .MuiNativeSelect-icon': { right: 14, color: 'text.secondary' }, '& select': { pr: '44px !important' } }}
               >
                 <option value="">{labels.inquiry}</option>
-                {labels.inquiryOptions.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt}
+                {options.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
                   </option>
                 ))}
               </NativeSelect>
@@ -187,37 +199,47 @@ export function AppointmentForm({ withMessage = false, messagePlaceholder, showH
         </Box>
 
         {withMessage && (
-          <Controller
-            name="message"
-            control={control}
-            render={({ field }) => (
-              <Field {...field} multiline minRows={5} placeholder={messagePlaceholder} inputProps={{ 'aria-label': messagePlaceholder }} />
-            )}
-          />
+          <Box>
+            <Controller
+              name="message"
+              control={control}
+              render={({ field }) => (
+                <Field
+                  {...field}
+                  multiline
+                  minRows={5}
+                  placeholder={messagePlaceholder}
+                  error={Boolean(errors.message)}
+                  inputProps={{ 'aria-label': messagePlaceholder, 'aria-invalid': Boolean(errors.message), 'aria-describedby': errors.message ? `${ids.message}-tip` : undefined }}
+                />
+              )}
+            />
+            <Tip id={`${ids.message}-tip`}>{errors.message?.message}</Tip>
+          </Box>
         )}
       </Stack>
 
       <Box sx={{ textAlign: submitAlign === 'start' ? 'left' : 'center' }}>
-      <Button
-        type="submit"
-        disabled={isSubmitting}
-        sx={{
-          mt: submitAlign === 'start' ? '30px' : '27px',
-          width: submitAlign === 'start' ? 'auto' : 220,
-          px: submitAlign === 'start' ? '41px' : undefined,
-          maxWidth: '100%',
-          height: 56,
-          fontWeight: 600,
-          color: 'common.white',
-          bgcolor: 'primary.main',
-          border: 1,
-          borderColor: 'primary.main',
-          '&:hover': { bgcolor: 'primary.dark', borderColor: 'primary.dark' },
-          '&.Mui-disabled': { color: 'common.white', opacity: 0.7 },
-        }}
-      >
-        {isSubmitting ? ui.appointment.sending : labels.submit}
-      </Button>
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          sx={{
+            mt: submitAlign === 'start' ? '30px' : '27px',
+            width: submitAlign === 'start' ? 'auto' : 220,
+            px: submitAlign === 'start' ? '41px' : undefined,
+            maxWidth: '100%',
+            height: 56,
+            fontWeight: 600,
+            color: 'common.white',
+            bgcolor: 'primary.main',
+            border: 1,
+            borderColor: 'primary.main',
+            '&:hover': { bgcolor: 'primary.dark', borderColor: 'primary.dark' },
+            '&.Mui-disabled': { color: 'common.white', opacity: 0.7 },
+          }}
+        >
+          {isSubmitting ? ui.appointment.sending : labels.submit}
+        </Button>
       </Box>
 
       {response && (

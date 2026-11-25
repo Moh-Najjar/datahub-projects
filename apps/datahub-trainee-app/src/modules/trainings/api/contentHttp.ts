@@ -194,9 +194,15 @@ export const materialsHttpApi = {
     const order = (await listMaterials(trainingId)).map((m) => m.id);
     const replacement = await createMaterial(trainingId, 'link', input.title, null);
     await addLinks(replacement, input.links);
-    await http.put(`${A}/trainings/${trainingId}/materials/order`, { materialIds: order.map((id) => (id === materialId ? replacement : id)) });
+    // Delete the old one BEFORE reordering: the order must list exactly the training's current materials.
     await http.delete(`${A}/materials/${materialId}`);
     materialRecords.delete(materialId);
+    const existing = new Set((await listMaterials(trainingId)).map((m) => m.id));
+    const wanted = order.map((id) => (id === materialId ? replacement : id)).filter((id) => existing.has(id));
+    // Anything added meanwhile goes last; if the order is still refused, the links are saved anyway (the item stays last).
+    await http
+      .put(`${A}/trainings/${trainingId}/materials/order`, { materialIds: [...wanted, ...[...existing].filter((id) => !wanted.includes(id))] })
+      .catch(() => undefined);
     return reloadMaterial(trainingId, replacement);
   },
   async renameFiles(materialId: string, title: string): Promise<MaterialDto> {

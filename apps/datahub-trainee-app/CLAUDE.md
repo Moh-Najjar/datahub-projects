@@ -98,8 +98,9 @@ deployed to Azure App Service (Windows/IIS) by uploading `dist/` (`public/web.co
   Swagger documents no body). PDF/images/text/video open in a tab opened during the click; other types are saved under
   their name (`utils/openFile.ts`). The simulated backend has no bytes → `file.simulated` message.
 - Identity with the real API: `core/auth/apiIdentity.ts` maps the token's `academy.*` / `training.*` / `identity.*` /
-  `organization.*` permissions to the app's permissions and derives the role (system-admin → SuperAdmin, managers →
-  DepartmentAdmin without a known department, else Employee). "View as" exists only with the simulated backend.
+  `organization.*` permissions to the app's permissions and derives the role from the token's role names (system-admin →
+  SuperAdmin; `trainee` / `intern` / `employee` / `department-admin` → that role, most privileged wins; otherwise
+  managers → DepartmentAdmin without a known department, else Employee). "View as" exists only with the simulated backend.
 - Not in the backend (2026-11-24): training start/end dates and trainer, renaming one file of a material ("not supported"),
   per-department user/training counts, dashboard filters (hidden with the real API). Live: `/academy/trainings` answers
   500 and `/academy/certificates` 403 (backend issues).

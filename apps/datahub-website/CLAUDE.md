@@ -32,7 +32,7 @@ Run `npm run typecheck && npm run lint && npm test && npm run build` before cons
    `src/core/theme/tokens.ts`.
 4. **Content is data.** Copy lives in typed data files (`src/core/config/`, `src/modules/*/data/`), the UI translations
    (`src/i18n/locales/`) and the generated `src/content/` — never hard-coded in components. Components receive typed props.
-5. **Forms never fake success.** Without `VITE_FORM_ENDPOINT` the form must say the message was not sent.
+5. **Forms never fake success.** The appointment / contact forms say "sent" only when the API accepted the inquiry.
 
 ## Styling (MUI)
 
@@ -102,7 +102,7 @@ src/
 │   ├── portals/             /workspace/ — central staff sign-in (backend) + application launcher: WorkspaceLayout,
 │   │                        Workspace{Login,Logout,Open}Page, WorkspacePage; api/ (workspaceAuth, hrHandoff, sessionBridge),
 │   │                        data/ (accounts, applications), components/, hooks/
-│   ├── contact/             api/appointment.ts, components/ (AppointmentForm, ConsultationSection), schemas/, data/
+│   ├── contact/             components/ (AppointmentForm, ConsultationSection), schemas/, data/ — inquiries via core/api/contact.ts
 │   ├── page-blocks/         BlockPage.tsx — renders every generated page (about-us, services, solutions, contact,
 │   │                        careers, blog list…) from src/content/pages; components/ + widgets/, types/, utils/
 │   └── errors/              NotFoundPage.tsx, RouteError.tsx
@@ -119,7 +119,7 @@ Images and fonts stay in `public/` (generated content references them by URL). C
 | See how a URL is rendered | `src/core/routes/index.tsx`: `home` → `modules/home/HomePage`, every other route → `modules/page-blocks/BlockPage` (document `src/content/pages/<routeKey>.<locale>.json`), `/<slug>/` → `modules/blog/BlogPostPage` |
 | Manage blog posts | `/admin/` (see "Blog & admin" below); data only through `core/hooks/useAdminBlogs.ts` (backend API) |
 | Change who may open an internal application | `src/modules/portals/data/applications.ts` (see "Portals" below) |
-| Write an API call | Backend API: `core/api/<resource>.ts` + a hook in `core/hooks/` (see Rules). Other endpoints: the module's `api/` (e.g. `modules/contact/api/appointment.ts`) |
+| Write an API call | Backend API: `core/api/<resource>.ts` + a hook in `core/hooks/` (see Rules). Other endpoints: the module's `api/` |
 | Change a translation | `src/i18n/locales/en.json` + `ar.json` (same key in both; add new keys to `UiStrings` in `i18n/index.ts`) |
 | Change page copy | Generated pages: regenerate (`npm run pages:convert`). Homepage: `modules/home/data/homeContent.ts` |
 | Change the menus / footer links | `src/core/config/navigation.ts` (data) and `src/modules/layout/` (components) |
@@ -154,7 +154,12 @@ Images and fonts stay in `public/` (generated content references them by URL). C
   API's CORS list** (as of 2026-11-22 it allows `http://localhost:3000` only — not `datahubanalytics.com`). Defaults
   (`queryClient.ts`): 5 min freshness, no refetch on focus, 2 retries for network/5xx, 3 for 429 (the API rate-limits
   per IP, ~30 s window, no `Retry-After`), none for other 4xx.
-- Other requests (the appointment form's `VITE_FORM_ENDPOINT`) stay in their module's `api/`.
+- **Contact inquiries** (`core/api/contact.ts` → `core/hooks/useSubmitInquiry.ts` → `modules/contact/components/AppointmentForm`,
+  footer + Contact page): anonymous `POST /api/v1/contact/inquiries` `{ name, email, inquiryType, message }`, all required,
+  never retried. `inquiryType` must be one of `INQUIRY_TYPES` (`Datahub Analytics` / `Datahub Infrastructure` / `Datahub
+  Security`; verified 2026-11-25, case-insensitive): each option shows the page's label (Arabic, or the original's "Datauhb"
+  typo) and sends the value in the same position. The Contact page's message is required; the footer form has no message
+  field and sends `APPOINTMENT_FORM_MESSAGE` (`modules/contact/data/contact.ts`). The deployed origin is in the API's CORS list.
 - All boundaries are enforced by `no-restricted-imports` overrides in `.oxlintrc.json` (`npm run lint`).
 
 ### Import conventions

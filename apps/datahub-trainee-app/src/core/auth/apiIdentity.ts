@@ -1,4 +1,5 @@
-import type { Role } from '@/core/domain/training';
+import { token } from '@/core/api/read';
+import { ROLES, type Role } from '@/core/domain/training';
 import { SESSION_STORAGE_KEY, type Session } from './authContext';
 import type { TrainingActor, TrainingPermission } from './trainingPolicy';
 
@@ -32,12 +33,19 @@ export function trainingPermissionsFromToken(permissions: readonly string[]): Tr
 }
 
 /**
- * The business role shown in the UI and used for learner/manager screens. The backend does not expose the original
- * portal's Academy roles per user yet, so: Workspace `system-admin` → SuperAdmin; other people who manage trainings →
- * DepartmentAdmin (department unknown → not scoped in the UI; the backend scopes); everyone else → Employee (a learner).
+ * The business role shown in the UI and used for learner/manager screens, from the token's `role` claims:
+ * 1. Workspace `system-admin` (or `super-admin`) → SuperAdmin;
+ * 2. a role named like one of the app's roles — `trainee`, `intern`, `employee`, `department-admin` (case, `-`, `_`
+ *    and spaces ignored; the most privileged one wins) → that role;
+ * 3. otherwise: people who manage trainings → DepartmentAdmin (department unknown → not scoped in the UI; the backend
+ *    scopes); everyone else → Employee (a learner).
  */
 export function roleFromToken(workspaceRoles: readonly string[], permissions: readonly TrainingPermission[]): Role {
-  if (workspaceRoles.includes('system-admin')) return 'SuperAdmin';
+  const names = workspaceRoles.map(token);
+  if (names.includes('systemadmin') || names.includes('superadmin')) return 'SuperAdmin';
+  // ROLES is ordered from most to least privileged.
+  const named = ROLES.find((role) => names.includes(token(role)));
+  if (named) return named;
   if (permissions.includes('trainings.manage')) return 'DepartmentAdmin';
   return 'Employee';
 }

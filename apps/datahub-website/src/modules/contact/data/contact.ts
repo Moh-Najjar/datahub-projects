@@ -29,3 +29,9 @@ export const OFFICES: Localized<Office[]> = {
     { address: 'الطابق 6, العقارية بلازا, الجناح الشمالي, البوابة(د), شارع العليا الرياض, المملكة العربية السعودية', ...ksaPhone },
   ],
 };
+
+/**
+ * The footer's "Book appointment" form has no message field (as on the original), but the API requires one: this note
+ * tells the staff reading the inquiry where it came from. Sent, never shown on the site; English for the staff.
+ */
+export const APPOINTMENT_FORM_MESSAGE = 'Appointment request from the website’s “Book appointment” form (this form has no message field).';

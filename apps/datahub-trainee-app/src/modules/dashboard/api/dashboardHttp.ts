@@ -1,5 +1,5 @@
 import { enrollmentStatusOf, trainingStatusOf } from '@/core/api/academyStatus';
-import { http } from '@/core/api/http';
+import { emptyIfForbidden, http } from '@/core/api/http';
 import { arr, asRaw, listOf, num, str, token, type Raw } from '@/core/api/read';
 import { currentTrainingPermissions } from '@/core/auth/apiIdentity';
 import { ACTIVITY_TYPES, type ActivityType } from '@/core/domain/training';
@@ -79,7 +79,8 @@ async function managerDashboard(signal?: AbortSignal): Promise<ManagerDashboard>
 }
 
 async function learnerDashboard(signal?: AbortSignal): Promise<LearnerDashboard> {
-  const [enrollments, trainings] = await Promise.all([http.get(`${A}/me/enrollments`, { signal }).then(listOf), http.get(`${A}/me/trainings`, { signal }).then(listOf)]);
+  // Enrollments refused (403) → an empty dashboard rather than an error.
+  const [enrollments, trainings] = await Promise.all([emptyIfForbidden(http.get(`${A}/me/enrollments`, { signal })).then(listOf), http.get(`${A}/me/trainings`, { signal }).then(listOf)]);
   const mine = enrollments.map((e) => ({
     trainingId: str(e, 'trainingId') ?? '',
     status: enrollmentStatusOf(str(e, 'status')),
@@ -118,7 +119,8 @@ export const dashboardHttpApi = {
     return currentTrainingPermissions().includes('trainings.manage') ? managerDashboard(signal) : learnerDashboard(signal);
   },
   async recentActivity(limit: number, _departmentId: string | null, signal?: AbortSignal): Promise<ActivityDto[]> {
-    const rows = listOf(await http.get(`${A}/recent-activity`, { query: { limit }, signal }));
+    // Learners may not be allowed to read the activity feed (403): then it is simply empty.
+    const rows = listOf(await emptyIfForbidden(http.get(`${A}/recent-activity`, { query: { limit }, signal })));
     return rows.flatMap((o, i) => {
       const type = activityTypeOf(str(o, 'type', 'activityType', 'eventType'));
       if (!type) return [];

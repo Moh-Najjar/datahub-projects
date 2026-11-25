@@ -1,8 +1,6 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  /** Optional endpoint that receives appointment/contact form submissions as JSON. */
-  readonly VITE_FORM_ENDPOINT?: string;
   /** Base URL of the DataHub HR Admin Portal (public; the Workspace's HR Admin card opens `<url>/sso#token=…`). Dev default: http://localhost:3001. */
   readonly VITE_HR_ADMIN_PORTAL_URL?: string;
   /** Base URL of the DataHub Trainee App (public; the Workspace's Trainee App card opens `<url>/sso#token=…`). Dev default: http://localhost:3002. */

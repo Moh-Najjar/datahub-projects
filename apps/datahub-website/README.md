@@ -17,7 +17,7 @@ QA: `npm run check:links`, `npm run compare -- http://localhost:3000 1440 [ar]`.
 Configure the host to serve `index.html` for unknown paths (e.g. Netlify `/* /index.html 200`, Nginx
 `try_files $uri $uri/ /index.html`). `dist/` is ~56 MB, mostly blog WebP images.
 
-Optional: set `VITE_FORM_ENDPOINT` to a URL that accepts JSON POSTs to make the appointment/contact forms deliver
-messages. Without it, the forms validate input and clearly report that nothing was sent.
+The appointment / contact forms send inquiries to the backend API (`POST /api/v1/contact/inquiries`, base URL
+`VITE_API_URL`) and report "sent" only when the API accepted them.
 
 See [docs/PLAN.md](docs/PLAN.md) for the implementation plan and [CLAUDE.md](CLAUDE.md) for development rules.

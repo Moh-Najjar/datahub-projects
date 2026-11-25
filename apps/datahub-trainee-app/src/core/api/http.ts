@@ -186,6 +186,17 @@ export const http = {
   },
 };
 
+/**
+ * For lists that only ADD detail to a page (e.g. a learner's own enrollments next to their trainings): a refusal (403)
+ * becomes an empty list so the page still works; every other failure is still thrown.
+ */
+export function emptyIfForbidden<T>(request: Promise<T>): Promise<T | []> {
+  return request.catch((error: unknown) => {
+    if (error instanceof ApiError && error.code === 'FORBIDDEN') return [];
+    throw error;
+  });
+}
+
 /** The id a create endpoint answers with: a bare id string, or an object with `id`. */
 export function createdId(data: unknown): string {
   if (typeof data === 'string') return data;

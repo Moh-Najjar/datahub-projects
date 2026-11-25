@@ -38,7 +38,6 @@ export interface UiStrings {
     summary: string;
   };
   submission: {
-    notConfigured: string;
     success: string;
     failure: string;
   };

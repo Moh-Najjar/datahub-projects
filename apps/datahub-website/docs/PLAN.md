@@ -106,5 +106,5 @@ The homepage remains hand-built.
 
 - Desktop dropdown hover can't be triggered on the original in headless mode; menus were measured by forcing them visible.
 - Industry/contact icons on the original are Font Awesome 5 **Pro Light** (licensed) → closest `@mui/icons-material` outlined equivalents.
-- No form backend: the form validates and clearly reports that nothing was sent unless `VITE_FORM_ENDPOINT` is set.
+- Forms: inquiries go to the backend (`POST /api/v1/contact/inquiries`, since 2026-11-25); success is shown only when the API accepted them.
 - `case_study` entries on the original are theme demo content and are intentionally not recreated.
