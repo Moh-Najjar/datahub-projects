@@ -2,12 +2,15 @@ import { apiPaths } from '@/core/api/paths';
 import { http, HttpError } from '@/core/helpers/http';
 
 /*
- * Layer 2 — Authentication API functions. The access token is a JWT (~15 min). The refresh / logout endpoints answer
- * 403 for now, so they are not used.
+ * Layer 2 — Authentication API functions. The access token is a JWT (~15 min); `refresh` exchanges the refresh token
+ * for a new one and `logout` ends it (both answered 403 to every request on 2026-11-22 and 2026-11-25 — the Workspace
+ * then simply ends the session when the access token expires).
  */
 
 export interface LoginResult {
   accessToken: string;
+  /** Present when the backend returns it in the body (it may also keep it in an HttpOnly cookie). */
+  refreshToken?: string | null;
   userId: string;
   displayName: string;
   email: string;
@@ -23,7 +26,11 @@ export interface Portal {
 }
 
 export const authApi = {
-  login: (email: string, password: string) => http.post<LoginResult>(apiPaths.auth.login, { email, password }),
+  login: (email: string, password: string) => http.post<LoginResult>(apiPaths.auth.login, { email, password }, { credentials: 'include' }),
+  /** A new access token. The answer is read like the login's (`accessToken`, maybe a new `refreshToken`). */
+  refresh: (refreshToken: string | null) => http.post<Partial<LoginResult> | null>(apiPaths.auth.refresh, { refreshToken }, { credentials: 'include' }),
+  /** Ends the backend session of this refresh token. */
+  logout: (refreshToken: string | null) => http.post<void>(apiPaths.auth.logout, { refreshToken }, { credentials: 'include' }),
   getPortals: (token: string) => http.get<Portal[]>(apiPaths.auth.portals, { token }),
   /** Anonymous. 204 = activated (e-mail verified, password set, account Active). The token is single-use and expires. */
   activateInvitation: (token: string, newPassword: string) => http.post<void>(apiPaths.auth.activateInvitation, { token, newPassword }),

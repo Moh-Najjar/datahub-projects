@@ -206,7 +206,7 @@ Images and fonts stay in `public/` (generated content references them by URL). C
   shown after 200px of scrolling, arrow slides up on hover, smooth scroll (instant with reduced motion), mirrored in Arabic.
 - **Slugs** must match `SLUG_PATTERN` and may not reuse a site URL's first segment (`RESERVED_SLUGS`,
   `admin/schemas/blogPostSchema.ts`; includes `tags` / `categories`, the API's list routes); uniqueness is the backend's (409 `Cms.DuplicateSlug` → slug field error).
-- **Blogs Admin design:** `/admin/` uses the DataHub admin design language (violet) shared with the HR Admin Portal and the Trainee App, NOT the public site's Satoshi/5px theme: `modules/admin/adminTokens.ts` + `adminTheme.ts` are generated from the Trainee App's `core/theme` (tokens copied; theme converted to a standalone, English-only `createTheme(options)` — `createTheme(base, …)` cannot change spacing or breakpoints). Shell: full-width `AdminTopBar` (breadcrumbs "DataHub Blogs › Blog posts › …", Portals outlined, the primary action "New post" for `cms.blogs.create`, account menu) above a compact `AdminSidebar` ("DataHub Blogs" wordmark, uppercase groups, text-only items; no account block). Inter is imported only by the admin chunk. Mirror token / theme / shell changes in the other two apps.
+- **Blogs Admin design:** `/admin/` uses the DataHub admin design language (violet) shared with the HR Admin Portal and the Trainee App, NOT the public site's Satoshi/5px theme: `modules/admin/adminTokens.ts` + `adminTheme.ts` are generated from the Trainee App's `core/theme` (tokens copied; theme converted to a standalone, English-only `createTheme(options)` — `createTheme(base, …)` cannot change spacing or breakpoints). Shell: full-width `AdminTopBar` (breadcrumbs "DataHub CMS › Blog posts › …", Portals outlined, the primary action "New post" for `cms.blogs.create`, account menu) above a compact `AdminSidebar` ("DataHub CMS" wordmark — the app is shown as **DataHub CMS** / Portals card "DataHub CMS" ("إدارة المحتوى"); one "Content" group: Blog posts, Contact inquiries; text-only items; no account block; "New post" only in the top bar and the list). Inter is imported only by the admin chunk. Mirror token / theme / shell changes in the other two apps.
 - **Admin = "Blogs Admin"** (`/admin/blogs/`, `/admin/blogs/new/`, `/admin/blogs/:id/edit/`, `ADMIN_ROUTES`): English
   only, own layout (not `SiteLayout`), lazy-loaded, `noindex`. **No separate sign-in:** `AdminLayout` requires a
   **backend** Workspace session whose portals include `blogs-admin` and whose token has `cms.blogs.view`; signed-out
@@ -215,7 +215,7 @@ Images and fonts stay in `public/` (generated content references them by URL). C
   (publish / unpublish, status field), `.delete`. The backend enforces them anyway (403 → message). Sign-out is
   `/workspace/logout/`. Available in development; production builds only with `VITE_ENABLE_ADMIN=true`.
 - **List:** search (debounced), status filter and paging run on the server; totals come from three one-row requests.
-- **Contact inquiries** (`/admin/inquiries/`, `ADMIN_ROUTES.inquiries`, sidebar group "Website", `AdminInquiriesPage`):
+- **Contact inquiries** (`/admin/inquiries/`, `ADMIN_ROUTES.inquiries`, sidebar "Content" group, `AdminInquiriesPage`):
   read-only list of what the site's forms sent — `GET /api/v1/admin/contact/inquiries?pageNumber&pageSize` (Bearer;
   `core/api/contact.ts` `adminContactApi` → `core/hooks/useAdminInquiries.ts`), paged on the server, newest first as the API
   returns them. Shown for `crm.inquiries.view` / `.manage` (`useCanViewInquiries`); the row / "Read" opens the full
@@ -267,11 +267,14 @@ application. Every account is a backend account (`api/workspaceAuth.ts`); there 
   switch keeps the query string. Shares `components/AuthCard` with the sign-in page. Tests:
   `ActivateInvitationPage.test.tsx` (real page + HTTP client; only `fetch` is mocked). The backend must put this site's
   origin in the invitation link (and allow it in CORS).
-- **No refresh, no backend logout (backend blocker):** `/api/v1/auth/refresh` and `/api/v1/auth/logout` answer 403 to
-  every request form tried (refresh cookie, allowed origin, Bearer — 2026-11-22). So the session ends when the token
-  expires (the admin shows the time) or on a 401, and sign-out only forgets the token. The HttpOnly refresh cookie is
-  never read or sent (`credentials: 'omit'`). When the backend fixes refresh: call it with `credentials: 'include'` from
-  `workspaceAuth.ts` (CORS must allow credentials for the site's origin), nothing else changes.
+- **Refresh and logout** (`api/workspaceAuth.ts`): the login's `refreshToken` (body; login / refresh / logout also send
+  cookies — `credentials: 'include'` — in case the backend keeps it in an HttpOnly cookie) is stored with the session.
+  `refreshSession()` → `POST /api/v1/auth/refresh` `{ refreshToken }` runs 60 s before the access token expires, on a 401
+  (the HTTP client then repeats the request once) and when the page is reopened after expiry; one tab at a time (Web
+  Locks), the others read the new token from storage. Sign-out also calls `POST /api/v1/auth/logout` `{ refreshToken }`
+  (best effort). **Backend status (2026-11-25): both answer 403 to every request** (even an empty body, before any token
+  check; CORS is fine) — then nothing breaks: refresh is not retried for that token and the session ends at expiry.
+  Tests: `api/workspaceAuth.test.ts`.
 - Session storage: `localStorage` (`datahub-website.workspace-session`, shared by the site's tabs; sign-out in one tab
   signs out all). The access token is therefore readable by scripts of this origin (accepted for now).
 - **Applications and access** (`data/applications.ts`): exactly the portals the backend lists — ids are its keys

@@ -14,6 +14,10 @@ export const apiPaths = {
     login: '/api/v1/auth/login',
     /** `GET` applications the signed-in user may open. Send the new token explicitly. */
     portals: '/api/v1/auth/portals',
+    /** `POST` `{ refreshToken }` → a new access token (and possibly a new refresh token). */
+    refresh: '/api/v1/auth/refresh',
+    /** `POST` `{ refreshToken }` → ends the backend session (the refresh token stops working). */
+    logout: '/api/v1/auth/logout',
     /** `POST` (anonymous) `{ token, newPassword }` → 204. Activates an invited account (single-use, expiring token). */
     activateInvitation: '/api/v1/auth/activate-invitation',
   },

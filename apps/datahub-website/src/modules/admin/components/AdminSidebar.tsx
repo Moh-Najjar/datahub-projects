@@ -14,12 +14,11 @@ import { useTheme } from '@mui/material/styles';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import ChevronLeftOutlinedIcon from '@mui/icons-material/ChevronLeftOutlined';
 import MailOutlineIcon from '@mui/icons-material/EmailOutlined';
-import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { ADMIN_ROUTES } from '@/core/routes/paths';
 import { layout } from '@/modules/admin/adminTokens';
 import { ADMIN_TEXT } from '@/modules/admin/data/adminText';
-import { useBlogPermissions, useCanViewInquiries } from '@/modules/admin/hooks/useBlogPermissions';
+import { useCanViewInquiries } from '@/modules/admin/hooks/useBlogPermissions';
 
 const T = ADMIN_TEXT.shell;
 const SIDEBAR_KEY = 'datahub-blogs-admin.sidebar';
@@ -42,7 +41,7 @@ function readCollapsed(): boolean {
   }
 }
 
-/** Typographic wordmark "DataHub Blogs" (like the other admin apps). Collapsed: "DH". */
+/** Typographic wordmark "DataHub CMS" (like the other admin apps). Collapsed: "DH". */
 function Wordmark({ compact }: { compact: boolean }) {
   return (
     <Typography component="span" aria-label={T.appName} sx={{ fontSize: compact ? 16 : 17, fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.2, color: compact ? 'primary.main' : 'text.primary' }} noWrap>
@@ -52,7 +51,7 @@ function Wordmark({ compact }: { compact: boolean }) {
         <>
           DataHub{' '}
           <Box component="span" sx={{ color: 'primary.main' }}>
-            Blogs
+            CMS
           </Box>
         </>
       )}
@@ -103,19 +102,14 @@ function NavEntry({ entry, selected, collapsed, onNavigate }: { entry: Entry; se
 
 function SidebarContent({ permanent, collapsed, onToggle, onNavigate }: { permanent: boolean; collapsed: boolean; onToggle: () => void; onNavigate?: () => void }) {
   const { pathname } = useLocation();
-  const can = useBlogPermissions();
   const canViewInquiries = useCanViewInquiries();
   const narrow = permanent && collapsed;
+  // One group. "New post" is the top bar's primary action (and the list's), Portals is in the top bar too.
   const entries: Entry[] = [
-    { key: 'blogs', label: ADMIN_TEXT.nav.blogs, icon: ArticleOutlinedIcon, to: ADMIN_ROUTES.blogs, match: (p) => p.startsWith(ADMIN_ROUTES.blogs) && !p.startsWith(ADMIN_ROUTES.newBlog) },
-    ...(can.create ? [{ key: 'new', label: T.newPost, icon: NoteAddOutlinedIcon, to: ADMIN_ROUTES.newBlog }] : []),
+    { key: 'blogs', label: ADMIN_TEXT.nav.blogs, icon: ArticleOutlinedIcon, to: ADMIN_ROUTES.blogs, match: (p) => p.startsWith(ADMIN_ROUTES.blogs) },
+    ...(canViewInquiries ? [{ key: 'inquiries', label: ADMIN_TEXT.nav.inquiries, icon: MailOutlineIcon, to: ADMIN_ROUTES.inquiries, match: (p: string) => p.startsWith(ADMIN_ROUTES.inquiries) }] : []),
   ];
-  const websiteEntries: Entry[] = canViewInquiries ? [{ key: 'inquiries', label: ADMIN_TEXT.nav.inquiries, icon: MailOutlineIcon, to: ADMIN_ROUTES.inquiries, match: (p) => p.startsWith(ADMIN_ROUTES.inquiries) }] : [];
-  // Portals is in the top bar.
-  const groups = [
-    { key: 'content', title: T.groupContent, entries },
-    ...(websiteEntries.length ? [{ key: 'website', title: T.groupWebsite, entries: websiteEntries }] : []),
-  ];
+  const groups = [{ key: 'content', title: T.groupContent, entries }];
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
