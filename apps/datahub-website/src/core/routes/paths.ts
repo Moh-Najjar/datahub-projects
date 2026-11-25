@@ -118,4 +118,6 @@ export const ADMIN_ROUTES = {
   blogs: '/admin/blogs/',
   newBlog: '/admin/blogs/new/',
   editBlog: (postId: string) => `/admin/blogs/${encodeURIComponent(postId)}/edit/`,
+  /** Contact inquiries sent through the website's forms. */
+  inquiries: '/admin/inquiries/',
 } as const;

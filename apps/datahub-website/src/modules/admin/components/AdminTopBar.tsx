@@ -29,16 +29,26 @@ import { roleLabel, type WorkspaceSession } from '@/modules/portals';
 
 const T = ADMIN_TEXT.shell;
 
-/** App name › Blog posts › New post / Edit post — derived from the URL (the admin has three pages). */
+/** App name › Blog posts › New post / Edit post, or App name › Contact inquiries — derived from the URL. */
 function Crumbs() {
   const { pathname } = useLocation();
-  const onList = pathname === ADMIN_ROUTES.blogs || pathname === ADMIN_ROUTES.blogs.replace(/\/$/, '');
-  const tail = pathname.startsWith(ADMIN_ROUTES.newBlog) ? T.newPost : pathname.endsWith('/edit/') || pathname.endsWith('/edit') ? T.editPost : null;
   const current = (label: string) => (
     <Typography color="text.primary" aria-current="page" noWrap sx={{ fontSize: 'inherit', fontWeight: 700 }}>
       {label}
     </Typography>
   );
+  if (pathname.startsWith(ADMIN_ROUTES.inquiries)) {
+    return (
+      <Breadcrumbs aria-label={T.breadcrumb} separator={<NavigateNextIcon sx={{ fontSize: 16, color: 'grey.400' }} />} sx={{ minWidth: 0, fontSize: 14 }}>
+        <Link component={RouterLink} to={WORKSPACE_ROUTES.root} underline="hover" color="text.secondary">
+          {T.appName}
+        </Link>
+        {current(ADMIN_TEXT.nav.inquiries)}
+      </Breadcrumbs>
+    );
+  }
+  const onList = pathname === ADMIN_ROUTES.blogs || pathname === ADMIN_ROUTES.blogs.replace(/\/$/, '');
+  const tail = pathname.startsWith(ADMIN_ROUTES.newBlog) ? T.newPost : pathname.endsWith('/edit/') || pathname.endsWith('/edit') ? T.editPost : null;
   return (
     <Breadcrumbs aria-label={T.breadcrumb} separator={<NavigateNextIcon sx={{ fontSize: 16, color: 'grey.400' }} />} sx={{ minWidth: 0, fontSize: 14 }}>
       <Link component={RouterLink} to={WORKSPACE_ROUTES.root} underline="hover" color="text.secondary">

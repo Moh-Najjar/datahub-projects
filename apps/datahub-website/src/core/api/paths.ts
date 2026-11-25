@@ -20,6 +20,8 @@ export const apiPaths = {
   contact: {
     /** `POST` (anonymous) `{ name, email, inquiryType, message }` — the site's contact / appointment forms. */
     inquiries: '/api/v1/contact/inquiries',
+    /** `GET` (Bearer) received inquiries. Query: `pageNumber`, `pageSize`. */
+    adminInquiries: '/api/v1/admin/contact/inquiries',
   },
   blogs: {
     /** `GET` published posts. Query: `pageNumber`, `pageSize`. */

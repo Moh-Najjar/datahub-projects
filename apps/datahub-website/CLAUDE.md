@@ -215,6 +215,12 @@ Images and fonts stay in `public/` (generated content references them by URL). C
   (publish / unpublish, status field), `.delete`. The backend enforces them anyway (403 → message). Sign-out is
   `/workspace/logout/`. Available in development; production builds only with `VITE_ENABLE_ADMIN=true`.
 - **List:** search (debounced), status filter and paging run on the server; totals come from three one-row requests.
+- **Contact inquiries** (`/admin/inquiries/`, `ADMIN_ROUTES.inquiries`, sidebar group "Website", `AdminInquiriesPage`):
+  read-only list of what the site's forms sent — `GET /api/v1/admin/contact/inquiries?pageNumber&pageSize` (Bearer;
+  `core/api/contact.ts` `adminContactApi` → `core/hooks/useAdminInquiries.ts`), paged on the server, newest first as the API
+  returns them. Shown for `crm.inquiries.view` / `.manage` (`useCanViewInquiries`); the row / "Read" opens the full
+  message, "Reply by email" is a `mailto:`. Swagger documents no response body (2026-11-25): items are read tolerantly
+  (`name`, `email`, `inquiryType`, `message`, `createdAtUtc`/`submittedAtUtc`, `status`); paged object or bare array.
 - **rowVersion:** the editor sends the `rowVersion` it was opened with (captured once by `BlogForm`), so a change made
   meanwhile is refused (409 `Cms.ConcurrencyConflict`) — shown with "Load the latest version", never retried. List
   actions have no rowVersion in the list: they read the post's current one right before the change. After every change

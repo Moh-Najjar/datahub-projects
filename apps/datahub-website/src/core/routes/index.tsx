@@ -37,6 +37,7 @@ const ActivateInvitationPage: LazyPage = lazy(() => import('@/modules/portals/Ac
 const AdminLayout: LazyPage = lazy(() => import('@/modules/admin/AdminLayout'));
 const AdminBlogsPage: LazyPage = lazy(() => import('@/modules/admin/AdminBlogsPage'));
 const AdminBlogEditorPage: LazyPage = lazy(() => import('@/modules/admin/AdminBlogEditorPage'));
+const AdminInquiriesPage: LazyPage = lazy(() => import('@/modules/admin/AdminInquiriesPage'));
 
 /** Pages with dedicated React implementations. */
 const DEDICATED_PAGES: Partial<Record<RouteKey, LazyPage>> = {
@@ -125,6 +126,7 @@ const adminRoutes: RouteObject[] = ADMIN_ENABLED
           { path: 'blogs', element: <AdminBlogsPage /> },
           { path: 'blogs/new', element: <AdminBlogEditorPage /> },
           { path: 'blogs/:postId/edit', element: <AdminBlogEditorPage /> },
+          { path: 'inquiries', element: <AdminInquiriesPage /> },
           { path: '*', element: <Navigate to={ADMIN_ROUTES.blogs} replace /> },
         ],
       },

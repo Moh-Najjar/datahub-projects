@@ -15,6 +15,15 @@ export type BlogPermissions = Record<keyof typeof BLOG_PERMISSIONS, boolean>;
  * What the signed-in user may do in Blogs Admin, from the backend's permissions. It only decides what the screens
  * offer: the backend authorises every request itself (403 otherwise).
  */
+/** The backend's permissions for the contact inquiries (CRM). */
+export const INQUIRY_PERMISSIONS = { view: 'crm.inquiries.view', manage: 'crm.inquiries.manage' } as const;
+
+/** May the signed-in user read the website's contact inquiries? (The backend authorises the request itself.) */
+export function useCanViewInquiries(): boolean {
+  const session = useWorkspaceSession();
+  return hasPermission(session, INQUIRY_PERMISSIONS.view) || hasPermission(session, INQUIRY_PERMISSIONS.manage);
+}
+
 export function useBlogPermissions(): BlogPermissions {
   const session = useWorkspaceSession();
   return {
